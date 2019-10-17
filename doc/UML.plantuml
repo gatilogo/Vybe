@@ -260,7 +260,7 @@ UsersAdapter -- User
 ' ------------------- Others -------------------
 MainActivity -- Database: create >
 CUDVibeActivity -- Vibe
-Vibe -- Emoticon
+Vibe -- EmotionalState
 Profile -- ViewProfileActivity
     
 @enduml
