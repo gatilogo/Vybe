@@ -120,7 +120,7 @@ Class Profile {
 }
 
 Class Vibe {
-    - emotion: Emotion
+    - emotionalState: EmotionalState
     - date: Date
     - reason: String
     - socialSituation: String
