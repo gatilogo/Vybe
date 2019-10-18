@@ -125,12 +125,12 @@ Class Vibe {
     - reason: String
     - socialSituation: String
 
-    + getEmotion()
+    + getEmotionalState()
     + getDate()
     + getReason()
     + getSocialSituation()
     
-    + setEmotion(emotion: Emotion)
+    + setEmotionalState(emotionalState: EmotionalState)
     + setDate(date: Date)
     + setReason(reason: String)
     + setSocialSituation(socialSituation: String)
