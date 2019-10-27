@@ -4,7 +4,7 @@ import com.example.vybe.R;
 
 public class Surprise extends AbstractVibe {
 
-    Surprise() {
+    public Surprise() {
         this.color = R.color.Orange;
         this.emoticon = R.drawable.surprise;
     }
