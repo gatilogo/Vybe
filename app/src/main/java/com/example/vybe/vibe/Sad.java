@@ -4,7 +4,7 @@ import com.example.vybe.R;
 
 public class Sad extends AbstractVibe {
 
-    Sad() {
+    public Sad() {
         this.color = R.color.Gray;
         this.emoticon = R.drawable.sad;
     }

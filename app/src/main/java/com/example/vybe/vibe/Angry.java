@@ -4,7 +4,7 @@ import com.example.vybe.R;
 
 public class Angry extends AbstractVibe {
 
-    Angry() {
+    public Angry() {
         this.color = R.color.Red;
         this.emoticon = R.drawable.angry;
     }
