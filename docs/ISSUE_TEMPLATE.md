@@ -1,9 +1,11 @@
 [//]: # (These are comments and are used for reference and will not show up in the PR)
 
 User Requirement:
+
 [//]: # (Please Add labels for type of issue)
 
 Description:
+
 [//]: # (If an issue is a bug or defect, please list steps to be able to reproduce bug and a screenshot of the defect (terminal message))
 
 Story Points:
