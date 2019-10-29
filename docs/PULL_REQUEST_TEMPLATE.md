@@ -3,14 +3,13 @@
 
 [//]: # (Please include a summary of the change and which issue is fixed. Please also include relevant motivation and context. List any dependencies that are required for this change)
 
-Closes # (issue)
+[//]: # (automatically closes given issue number)
+Closes # (issue)  
 
-# Proof of Concept 
+
+# Proof of Concept
 [//]: # (Attach Image of feature added or fix applied and working)
-
-# Testing
-
-[//]: # (Please describe the tests that you ran to verify your changes. Provide instructions that can be reproduced and provide images of tests passing)
+[//]: # (Please provide images of tests passing)
 
 # Checklist:
 [//]: # (Add an x between square brackets to mark item as done)
