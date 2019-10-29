@@ -6,7 +6,7 @@ User Requirement:
 
 Description:
 
-[//]: # (If an issue is a bug or defect, please list steps to be able to reproduce bug and a screenshot of the defect (terminal message))
+[//]: # (If an issue is a bug or defect, please list steps to be able to reproduce bug and a screenshot of the defect i.e terminal message)
 
 Story Points:
 
