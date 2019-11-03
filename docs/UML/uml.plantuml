@@ -1,0 +1,95 @@
+@startuml UML
+
+' skinparam class {
+' 	BackgroundColor PaleGreen
+' 	ArrowColor SeaGreen
+' 	BorderColor SpringGreen
+
+' 	BackgroundColor<<View>> Wheat
+' 	BorderColor<<View>> Tomato
+
+' 	BackgroundColor<<Controller>> BlueViolet
+' 	BorderColor<<Controller>> White
+'     FontColor<<Controller>> White
+
+' 	BackgroundColor<<Model>> Wheat
+' 	BorderColor<<Model>> Tomato
+
+
+' }
+' skinparam stereotypeCBackgroundColor YellowGreen
+' skinparam stereotypeCBackgroundColor<< View >> DimGra
+' skinparam stereotypeCBackgroundColor<< Controller >> DimGra
+' skinparam stereotypeCBackgroundColor<< Model >> Purple
+
+skinparam ClassAttributeIconSize 0
+
+class MainActivity <<View>> {
+    
+}
+
+class Vibe <<Model>> {
+
+}
+
+class VibeEventController <<Controller>> {
+
+}
+
+MainActivity -- CreateProfileFragment
+MainActivity -- MyVibesActivity
+
+MyVibesActivity -- ViewVibeEventActivity
+MyVibesActivity -- ViewProfileActivity
+MyVibesActivity -- EditVibeEventActivity
+MyVibesActivity -- VibeEventsAdapter
+MyVibesActivity -- FollowerVibesActivity
+MyVibesActivity -- MapActivity
+MyVibesActivity -- SocialActivity
+
+ViewVibeEventActivity -- EditVibeEventActivity
+
+EditVibeEventActivity -- VibePickerFragment
+EditVibeEventActivity -- VibeEventController
+
+VibeEventsAdapter -- VibeEventListController
+
+FollowerVibesActivity -- VibeEventsAdapter
+FollowerVibesActivity -- MapActivity
+
+SocialActivity -- FollowersFragment
+SocialActivity -- FollowingFragment
+SocialActivity -- RequestsFragment
+SocialActivity -- SearchUsersActivity
+SocialActivity -- MapActivity
+
+VibePickerFragment -- Vibe
+
+VibeEventController -- AddVibeEventController
+VibeEventController -- EditVibeEventController
+
+VibeEventListController -- Vibe
+
+MapActivity -- VibeEventListController
+
+FollowersFragment -- ProfileAdapter
+FollowingFragment -- ProfileAdapter
+RequestsFragment -- ProfileAdapter
+SearchUsersActivity -- ProfileAdapter
+
+Vibe <|-- ClowneryVibe
+Vibe <|-- HappyVibe
+Vibe <|-- SadVibe
+Vibe <|-- FearVibe
+Vibe <|-- DisgustVibe
+Vibe <|-- SupriseVibe
+Vibe <|-- AngerVibe
+
+ProfileAdapter -- ProfileController
+
+ProfileController -- Profile
+
+Profile -- Followers
+Profile -- Following
+    
+@enduml
