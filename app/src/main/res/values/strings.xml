@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Vybe</string>
+
+    <string name="view_vybe_name">View Vybe</string>
+    <string name="view_date_time_label">Date/Time</string>
+    <string name="view_reason_label">Reason</string>
+    <string name="view_location_label">Location</string>
+    <string name="view_social_situation_label">Social Situation</string>
 </resources>
