@@ -9,7 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ViewVibeActivity"></activity>
+        <activity
+            android:name=".ViewVibeActivity"
+            android:label="@string/view_vybe_name"
+            android:parentActivityName=".MyVibesActivity"></activity>
         <activity android:name=".CUDVibeActivity" />
         <activity android:name=".MyVibesActivity" />
         <activity android:name=".MainActivity">
