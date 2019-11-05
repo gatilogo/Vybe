@@ -1,5 +1,6 @@
 package com.example.vybe;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -10,9 +11,18 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class MyVibesActivity extends AppCompatActivity {
 
@@ -25,6 +35,7 @@ public class MyVibesActivity extends AppCompatActivity {
     private Button addVibeEventBtn;
     private Button myMapBtn;
     private Button socialBtn;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +57,24 @@ public class MyVibesActivity extends AppCompatActivity {
 
         myVibesAdapter = new MyVibesAdapter(this, R.layout.my_vibe_item, vibeEventList);
         vibesListView.setAdapter(myVibesAdapter);
+
+        final CollectionReference collectionReference = db.collection("VibeEvent");
+
+        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                vibeEventList.clear();
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
+                    LocalDateTime ldt = LocalDateTime.ofInstant(Instant.ofEpochMilli(doc.getDate("datetime").getTime()),
+                            TimeZone.getDefault().toZoneId());
+                    Log.d(TAG, ldt.toString());
+                    String reason = (String) doc.getData().get("reason");
+                    String socSit = (String) doc.getData().get("socSit");
+                    vibeEventList.add(new VibeEvent(new Vibe(), ldt, reason, socSit));
+                }
+                myVibesAdapter.notifyDataSetChanged();
+            }
+        });
 
         vibesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
