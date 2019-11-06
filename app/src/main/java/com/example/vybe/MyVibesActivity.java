@@ -3,6 +3,8 @@ package com.example.vybe;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -85,10 +87,40 @@ public class MyVibesActivity extends AppCompatActivity {
             }
         });
 
+        vibesListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MyVibesActivity.this);
+                builder.setMessage("yay");
+                builder.setCancelable(true);
+
+                // Delete ride if user clicks on "Yes" button
+                builder.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Intent intent = new Intent(MyVibesActivity.this, AddEditVibeActivity.class);
+                        VibeEvent vibeEvent = vibeEventList.get(position);
+                        intent.putExtra("vibeEvent", vibeEvent);
+                        startActivity(intent);
+                    }
+                });
+
+                // Close dialog if user clicks on "No" button
+                builder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+                return true;
+            }
+        });
+
         addVibeEventBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MyVibesActivity.this, AddVibeActivity.class);
+                Intent intent = new Intent(MyVibesActivity.this, AddEditVibeActivity.class);
                 startActivity(intent);
             }
         });

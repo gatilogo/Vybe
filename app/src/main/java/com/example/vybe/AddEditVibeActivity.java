@@ -16,14 +16,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 
-public class AddVibeActivity extends AppCompatActivity {
+public class AddEditVibeActivity extends AppCompatActivity {
 
-    private static final String TAG = "AddVibeActivity";
+    private static final String TAG = "AddEditVibeActivity";
 
     // --- XML Elements ---
     private Spinner vibeDropdown;
@@ -39,8 +38,8 @@ public class AddVibeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_addvibe);
-        Log.d(TAG, "onCreate: In Add vibes");
+        setContentView(R.layout.activity_add_edit_vibe);
+        Log.d(TAG, "onCreate: In Add/Edit vibes");
 
         vibeDropdown = findViewById(R.id.vibe_dropdown);
         datetimeField = findViewById(R.id.date_time_edit_text);
@@ -90,7 +89,7 @@ public class AddVibeActivity extends AppCompatActivity {
                 int currMonth = c.get(Calendar.MONTH);
                 int currDay = c.get(Calendar.DAY_OF_MONTH);
 
-                DatePickerDialog dpd = new DatePickerDialog(AddVibeActivity.this, new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog dpd = new DatePickerDialog(AddEditVibeActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                         month += 1; // since indexing starts at 0
@@ -131,7 +130,7 @@ public class AddVibeActivity extends AppCompatActivity {
     public void timeSelector() {
 
         // initialize and display time picker dialog
-        TimePickerDialog tpd = new TimePickerDialog(AddVibeActivity.this, new TimePickerDialog.OnTimeSetListener() {
+        TimePickerDialog tpd = new TimePickerDialog(AddEditVibeActivity.this, new TimePickerDialog.OnTimeSetListener() {
             @Override
                 public void onTimeSet(TimePicker timePicker, int hour, int min) {
                     String timeString = hour + ":" + min;
