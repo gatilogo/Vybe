@@ -8,16 +8,6 @@
     tools:context=".AddVibeActivity">
 
     <EditText
-        android:id="@+id/vibe_edit_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Vibe"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
         android:id="@+id/date_time_edit_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -26,7 +16,7 @@
         android:text="Date/Time"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/vibe_edit_text" />
+        app:layout_constraintTop_toBottomOf="@+id/vibe_dropdown" />
 
     <EditText
         android:id="@+id/reason_edit_text"
@@ -35,20 +25,10 @@
         android:layout_marginTop="16dp"
         android:ems="10"
         android:inputType="textPersonName"
+        android:maxLength="20"
         android:text="Reason"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/date_time_edit_text" />
-
-    <EditText
-        android:id="@+id/social_situation_edit_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:ems="10"
-        android:text="Social Situation"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/reason_edit_text" />
 
     <Button
         android:id="@+id/add_btn"
@@ -75,37 +55,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/social_situation_edit_text"
-        tools:layout_editor_absoluteX="1dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:padding="8dp"
-        android:layout_height="match_parent">
-
-        <DatePicker
-            android:id="@+id/date_picker"
-            android:layout_width="match_parent"
-            android:calendarViewShown="true"
-            android:spinnersShown="false"
-            android:layout_weight="4"
-            android:layout_height="0dp" />
-
-        <TimePicker
-            android:id="@+id/time_picker"
-            android:layout_weight="4"
-            android:layout_width="match_parent"
-            android:layout_height="0dp" />
-
-        <Button
-            android:id="@+id/date_time_set"
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:text="Set"
-            android:layout_height="0dp" />
-
-    </LinearLayout>
+    <Spinner
+        android:id="@+id/social_situation_dropdown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reason_edit_text" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

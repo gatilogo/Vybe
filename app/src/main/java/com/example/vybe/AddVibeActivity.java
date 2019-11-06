@@ -18,55 +18,64 @@ public class AddVibeActivity extends AppCompatActivity {
 
     private static final String TAG = "AddVibeActivity";
 
-    EditText vibeField;
+    // --- XML Elements ---
+    Spinner vibeDropdown;
     EditText datetimeField;
     EditText reasonField;
-    EditText socialSituationField;
+    Spinner socialSituationDropdown;
     Button addBtn;
-
-    Spinner vibeDropdown;
-
     TextView outputBox;
+    // -------------------
+
     VibeEvent newVibeEvent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addvibe);
-
         Log.d(TAG, "onCreate: In Add vibes");
 
-        vibeField = findViewById(R.id.vibe_edit_text);
+        vibeDropdown = findViewById(R.id.vibe_dropdown);
         datetimeField = findViewById(R.id.date_time_edit_text);
         reasonField = findViewById(R.id.reason_edit_text);
-        socialSituationField = findViewById(R.id.social_situation_edit_text);
+        socialSituationDropdown = findViewById(R.id.social_situation_dropdown);
         addBtn = findViewById(R.id.add_btn);
-
-        vibeDropdown = findViewById(R.id.vibe_dropdown);
-
         outputBox = findViewById(R.id.textView);
 
         newVibeEvent = new VibeEvent();
 
-//        final String selectedVibe = new String("");
-        String[] vibes = new String[]{"Happy", "Sad", "Spicy"};
+        // --- Vibes Dropdown ---
+        String[] vibes = new String[]{"Select a vibe", "Happy", "Sad", "Spicy"};
         ArrayAdapter<String> vibesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, vibes);
         vibeDropdown.setAdapter(vibesAdapter);
         vibeDropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                newVibeEvent.setVibe(new Vibe(vibes[i]));
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                newVibeEvent.setVibe(new Vibe(vibes[position]));
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {}
         });
 
+        // --- Social Situation Dropdown ---
+        String[] socialSituations = new String[]{"Select a Social Situation", "Alone", "In a group", "Alone in a group"};
+        ArrayAdapter<String> socialSituationAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, socialSituations);
+        socialSituationDropdown.setAdapter(socialSituationAdapter);
+        socialSituationDropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                newVibeEvent.setSocialSituation(socialSituations[position]);
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {}
+        });
+
+        // --- Show Output on button click ---
         addBtn.setOnClickListener(view -> {
             newVibeEvent.setDateTime(LocalDateTime.now());
             newVibeEvent.setReason(reasonField.getText().toString());
-            newVibeEvent.setSocialSituation(socialSituationField.getText().toString());
 
             String output = "";
             output += "Vibe: " + newVibeEvent.getVibe().getName() + "\n";
