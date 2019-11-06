@@ -76,7 +76,7 @@ public class AddVibeActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> adapterView) {}
         });
 
-        // --- Date/Time Picker ---
+        // --- Date Picker ---
         datetimeField.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -102,8 +102,11 @@ public class AddVibeActivity extends AppCompatActivity {
 
         // --- Show Output on button click ---
         addBtn.setOnClickListener(view -> { // Integer.parseInt(dateArr[0]), Integer.parseInt(dateArr[1]), Integer.parseInt(dateArr[2])
-            //String[] dateArr = datetimeField.getText().toString().split("-");
-            LocalDateTime selectedDate = LocalDateTime.parse(datetimeField.getText().toString());
+            //String[] dateArr = datetimeField.getText().toString().split("-");"
+            if (datetimeField.getText().toString() == null) {
+                datetimeField.setText("2019-11-06");
+            }
+            LocalDateTime selectedDate = LocalDateTime.parse(datetimeField.getText().toString()); // "2019-11-06"
             newVibeEvent.setDateTime(selectedDate);
             newVibeEvent.setReason(reasonField.getText().toString());
 
