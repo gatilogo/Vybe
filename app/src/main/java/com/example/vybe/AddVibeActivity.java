@@ -3,6 +3,7 @@ package com.example.vybe;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -92,13 +94,18 @@ public class AddVibeActivity extends AppCompatActivity {
                     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                         month += 1; // since indexing starts at 0
                         String dateString = year + "-" + month + "-" + day;
-                        datetimeField.setText(dateString);
-                        datetimeField.clearFocus();
+                        int[] selectedTime = new int[2];
+                        timeSelector(selectedTime);
+                        String timeString = selectedTime[0] + ":" + selectedTime[1];
 
-                        newVibeEvent.setDateTime(LocalDateTime.of(year, month, day, 0, 0));
+                        datetimeField.setText(dateString + " " + timeString);
+                        //datetimeField.clearFocus();
+
+                        newVibeEvent.setDateTime(LocalDateTime.of(year, month, day, selectedTime[0], selectedTime[1]));
                     }
                 }, currYear, currMonth, currDay);
                 dpd.show();
+                outputBox.setText("HERE");
             }
         });
 
@@ -116,6 +123,23 @@ public class AddVibeActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    public void timeSelector(int[] selectedTime) {
+
+        // initialize and display time picker dialog
+        TimePickerDialog tpd = new TimePickerDialog(AddVibeActivity.this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+                public void onTimeSet(TimePicker timePicker, int hour, int min) {
+                    String timeString = hour + ":" + min;
+                    //text.setText(timeString);
+                    datetimeField.clearFocus();
+                    outputBox.setText(timeString);
+                    selectedTime[0] = hour;
+                    selectedTime[1] = min;
+                }
+                }, 0, 0, true);
+        tpd.show();
     }
 
 }
