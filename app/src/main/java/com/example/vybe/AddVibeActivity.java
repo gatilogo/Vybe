@@ -94,18 +94,18 @@ public class AddVibeActivity extends AppCompatActivity {
                     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                         month += 1; // since indexing starts at 0
                         String dateString = year + "-" + month + "-" + day;
-                        int[] selectedTime = new int[2];
-                        timeSelector(selectedTime);
-                        String timeString = selectedTime[0] + ":" + selectedTime[1];
+                        newVibeEvent.setDateTime(LocalDateTime.of(year, month, day, 0, 0));
+//                        int[] selectedTime = new int[2];
+                        timeSelector();
+//                        String timeString = selectedTime[0] + ":" + selectedTime[1];
 
-                        datetimeField.setText(dateString + " " + timeString);
+//                        datetimeField.setText(dateString + " " + timeString);
                         //datetimeField.clearFocus();
 
-                        newVibeEvent.setDateTime(LocalDateTime.of(year, month, day, selectedTime[0], selectedTime[1]));
+
                     }
                 }, currYear, currMonth, currDay);
                 dpd.show();
-                outputBox.setText("HERE");
             }
         });
 
@@ -125,7 +125,7 @@ public class AddVibeActivity extends AppCompatActivity {
 
     }
 
-    public void timeSelector(int[] selectedTime) {
+    public void timeSelector() {
 
         // initialize and display time picker dialog
         TimePickerDialog tpd = new TimePickerDialog(AddVibeActivity.this, new TimePickerDialog.OnTimeSetListener() {
@@ -135,10 +135,11 @@ public class AddVibeActivity extends AppCompatActivity {
                     //text.setText(timeString);
                     datetimeField.clearFocus();
                     outputBox.setText(timeString);
-                    selectedTime[0] = hour;
-                    selectedTime[1] = min;
+
+                    LocalDateTime datetime = newVibeEvent.getDateTime().plusHours(hour).plusMinutes(min);
+                    newVibeEvent.setDateTime(datetime);
                 }
-                }, 0, 0, true);
+        }, 0, 0, true);
         tpd.show();
     }
 
