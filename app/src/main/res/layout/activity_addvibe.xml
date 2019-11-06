@@ -20,6 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:ems="10"
+        android:focusableInTouchMode="false"
         android:hint="Date and Time"
         android:textSize="18sp" />
 
