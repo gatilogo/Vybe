@@ -107,7 +107,8 @@ public class MyVibesActivity extends AppCompatActivity {
                 // Close dialog if user clicks on "No" button
                 builder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
+                        vibeEventList.remove(position);
+                        myVibesAdapter.notifyDataSetChanged();
                     }
                 });
 
