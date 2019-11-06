@@ -2,17 +2,21 @@ package com.example.vybe;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Calendar;
 
 public class AddVibeActivity extends AppCompatActivity {
 
@@ -72,9 +76,35 @@ public class AddVibeActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> adapterView) {}
         });
 
+        // --- Date/Time Picker ---
+        datetimeField.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Calendar c = Calendar.getInstance();
+                int currYear = c.get(Calendar.YEAR);
+                int currMonth = c.get(Calendar.MONTH);
+                int currDay = c.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog dpd = new DatePickerDialog(AddVibeActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                        month += 1; // since indexing starts at 0
+                        String dateString = year + "-" + month + "-" + day;
+                        datetimeField.setText(dateString);
+                        datetimeField.clearFocus();
+                    }
+                }, currYear, currMonth, currDay);
+                dpd.show();
+            }
+        });
+
+
         // --- Show Output on button click ---
-        addBtn.setOnClickListener(view -> {
-            newVibeEvent.setDateTime(LocalDateTime.now());
+        addBtn.setOnClickListener(view -> { // Integer.parseInt(dateArr[0]), Integer.parseInt(dateArr[1]), Integer.parseInt(dateArr[2])
+            //String[] dateArr = datetimeField.getText().toString().split("-");
+            LocalDateTime selectedDate = LocalDateTime.parse(datetimeField.getText().toString());
+            newVibeEvent.setDateTime(selectedDate);
             newVibeEvent.setReason(reasonField.getText().toString());
 
             String output = "";
@@ -87,4 +117,5 @@ public class AddVibeActivity extends AppCompatActivity {
 
 
     }
+
 }
