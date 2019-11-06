@@ -18,6 +18,7 @@ import android.widget.TimePicker;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 
 public class AddVibeActivity extends AppCompatActivity {
@@ -137,6 +138,8 @@ public class AddVibeActivity extends AppCompatActivity {
                     outputBox.setText(timeString);
 
                     LocalDateTime datetime = newVibeEvent.getDateTime().plusHours(hour).plusMinutes(min);
+
+                    datetimeField.setText(datetime.format(DateTimeFormatter.ofPattern("MMM dd yyyy HH mm")));
                     newVibeEvent.setDateTime(datetime);
                 }
         }, 0, 0, true);
