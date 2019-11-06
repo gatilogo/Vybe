@@ -21,7 +21,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.TimeZone;
 
 public class MyVibesActivity extends AppCompatActivity {
@@ -89,7 +88,7 @@ public class MyVibesActivity extends AppCompatActivity {
         addVibeEventBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MyVibesActivity.this, CUDVibeActivity.class);
+                Intent intent = new Intent(MyVibesActivity.this, AddVibeActivity.class);
                 startActivity(intent);
             }
         });

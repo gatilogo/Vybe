@@ -16,6 +16,10 @@ public class VibeEvent implements Serializable {
     private String socialSituation;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+    public VibeEvent() {
+
+    }
+
 
     public VibeEvent(Vibe vibe, LocalDateTime dateTime, String reason, String socialSituation) {
         this.vibe = vibe;
