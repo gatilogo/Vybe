@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:ems="10"
-        android:text="Date/Time"
+        android:hint="Date (yyyy-mm-dd)"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/vibe_dropdown" />
@@ -24,11 +24,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:ems="10"
+        android:hint="Reason (20 char max)"
         android:inputType="textPersonName"
         android:maxLength="20"
-        android:text="Reason"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/date_time_edit_text" />
+        app:layout_constraintTop_toBottomOf="@+id/time_edit_text" />
 
     <Button
         android:id="@+id/add_btn"
