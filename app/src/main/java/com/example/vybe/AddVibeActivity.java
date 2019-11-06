@@ -77,6 +77,7 @@ public class AddVibeActivity extends AppCompatActivity {
         });
 
         // --- Date Picker ---
+        newVibeEvent.setDateTime(LocalDateTime.now());
         datetimeField.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -93,6 +94,8 @@ public class AddVibeActivity extends AppCompatActivity {
                         String dateString = year + "-" + month + "-" + day;
                         datetimeField.setText(dateString);
                         datetimeField.clearFocus();
+
+                        newVibeEvent.setDateTime(LocalDateTime.of(year, month, day, 0, 0));
                     }
                 }, currYear, currMonth, currDay);
                 dpd.show();
@@ -101,13 +104,7 @@ public class AddVibeActivity extends AppCompatActivity {
 
 
         // --- Show Output on button click ---
-        addBtn.setOnClickListener(view -> { // Integer.parseInt(dateArr[0]), Integer.parseInt(dateArr[1]), Integer.parseInt(dateArr[2])
-            //String[] dateArr = datetimeField.getText().toString().split("-");"
-            if (datetimeField.getText().toString() == null) {
-                datetimeField.setText("2019-11-06");
-            }
-            LocalDateTime selectedDate = LocalDateTime.parse(datetimeField.getText().toString()); // "2019-11-06"
-            newVibeEvent.setDateTime(selectedDate);
+        addBtn.setOnClickListener(view -> {
             newVibeEvent.setReason(reasonField.getText().toString());
 
             String output = "";
