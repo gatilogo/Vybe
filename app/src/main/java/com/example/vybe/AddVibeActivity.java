@@ -3,6 +3,7 @@ package com.example.vybe;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -77,6 +79,7 @@ public class AddVibeActivity extends AppCompatActivity {
         });
 
         // --- Date Picker ---
+        newVibeEvent.setDateTime(LocalDateTime.now());
         datetimeField.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -91,8 +94,15 @@ public class AddVibeActivity extends AppCompatActivity {
                     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                         month += 1; // since indexing starts at 0
                         String dateString = year + "-" + month + "-" + day;
-                        datetimeField.setText(dateString);
-                        datetimeField.clearFocus();
+                        newVibeEvent.setDateTime(LocalDateTime.of(year, month, day, 0, 0));
+//                        int[] selectedTime = new int[2];
+                        timeSelector();
+//                        String timeString = selectedTime[0] + ":" + selectedTime[1];
+
+//                        datetimeField.setText(dateString + " " + timeString);
+                        //datetimeField.clearFocus();
+
+
                     }
                 }, currYear, currMonth, currDay);
                 dpd.show();
@@ -101,13 +111,7 @@ public class AddVibeActivity extends AppCompatActivity {
 
 
         // --- Show Output on button click ---
-        addBtn.setOnClickListener(view -> { // Integer.parseInt(dateArr[0]), Integer.parseInt(dateArr[1]), Integer.parseInt(dateArr[2])
-            //String[] dateArr = datetimeField.getText().toString().split("-");"
-            if (datetimeField.getText().toString() == null) {
-                datetimeField.setText("2019-11-06");
-            }
-            LocalDateTime selectedDate = LocalDateTime.parse(datetimeField.getText().toString()); // "2019-11-06"
-            newVibeEvent.setDateTime(selectedDate);
+        addBtn.setOnClickListener(view -> {
             newVibeEvent.setReason(reasonField.getText().toString());
 
             String output = "";
@@ -119,6 +123,24 @@ public class AddVibeActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    public void timeSelector() {
+
+        // initialize and display time picker dialog
+        TimePickerDialog tpd = new TimePickerDialog(AddVibeActivity.this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+                public void onTimeSet(TimePicker timePicker, int hour, int min) {
+                    String timeString = hour + ":" + min;
+                    //text.setText(timeString);
+                    datetimeField.clearFocus();
+                    outputBox.setText(timeString);
+
+                    LocalDateTime datetime = newVibeEvent.getDateTime().plusHours(hour).plusMinutes(min);
+                    newVibeEvent.setDateTime(datetime);
+                }
+        }, 0, 0, true);
+        tpd.show();
     }
 
 }
