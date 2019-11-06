@@ -14,8 +14,6 @@ public class VibeEvent implements Serializable {
     private LocalDateTime dateTime;
     private String reason;
     private String socialSituation;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-
 
     public VibeEvent(Vibe vibe, LocalDateTime dateTime, String reason, String socialSituation) {
         this.vibe = vibe;
@@ -54,18 +52,5 @@ public class VibeEvent implements Serializable {
 
     public void setSocialSituation(String socialSituation) {
         this.socialSituation = socialSituation;
-    }
-
-
-    public void addVibe(VibeEvent vb, CollectionReference cr){
-        HashMap<String, Object> data = new HashMap<>();
-        long seconds = vb.getDateTime().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
-        Date date = new Date(seconds);
-        data.put("vibe", "whatever");
-        data.put("datetime", date);
-        data.put("reason", vb.getReason());
-        data.put("socSit", vb.getSocialSituation());
-
-        cr.document("no").set(data);
     }
 }
