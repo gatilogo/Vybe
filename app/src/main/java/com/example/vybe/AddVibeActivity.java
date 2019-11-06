@@ -113,14 +113,16 @@ public class AddVibeActivity extends AppCompatActivity {
 
         // --- Show Output on button click ---
         addBtn.setOnClickListener(view -> {
-            newVibeEvent.setReason(reasonField.getText().toString());
-
-            String output = "";
-            output += "Vibe: " + newVibeEvent.getVibe().getName() + "\n";
-            output += "DateTime: " + newVibeEvent.getDateTime() + "\n";
-            output += "Reason: " + newVibeEvent.getReason() + "\n";
-            output += "Social Situation: " + newVibeEvent.getSocialSituation() + "\n";
-            outputBox.setText(output);
+            //TODO: integrate firestore stuff here i guess
+//            newVibeEvent.setReason(reasonField.getText().toString());
+//
+//            String output = "";
+//            output += "Vibe: " + newVibeEvent.getVibe().getName() + "\n";
+//            output += "DateTime: " + newVibeEvent.getDateTime() + "\n";
+//            output += "Reason: " + newVibeEvent.getReason() + "\n";
+//            output += "Social Situation: " + newVibeEvent.getSocialSituation() + "\n";
+//            outputBox.setText(output);
+            finish();
         });
 
 
