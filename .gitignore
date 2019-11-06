@@ -15,3 +15,6 @@
 
 # VS Code
 *.code-workspace
+
+# Project files
+.project

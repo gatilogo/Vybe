@@ -15,6 +15,10 @@ public class VibeEvent implements Serializable {
     private String reason;
     private String socialSituation;
 
+    public VibeEvent() {
+
+    }
+
     public VibeEvent(Vibe vibe, LocalDateTime dateTime, String reason, String socialSituation) {
         this.vibe = vibe;
         this.dateTime = dateTime;

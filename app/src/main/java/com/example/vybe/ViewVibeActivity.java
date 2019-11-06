@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.time.LocalDateTime;
@@ -45,7 +44,7 @@ public class ViewVibeActivity extends AppCompatActivity {
         if (extras.containsKey("vibeEvent")) {
             vibeEvent = (VibeEvent) extras.getSerializable("vibeEvent");
 
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(" MM YYYY h:mm a", Locale.ENGLISH);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(" MM, YYYY h:mm a", Locale.ENGLISH);
             LocalDateTime dateTime = vibeEvent.getDateTime();
             String month = dateTime.getMonth().getDisplayName(TextStyle.FULL_STANDALONE, Locale.ENGLISH);
 
