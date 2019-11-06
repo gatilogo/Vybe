@@ -15,6 +15,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -58,8 +59,9 @@ public class MyVibesActivity extends AppCompatActivity {
         vibesListView.setAdapter(myVibesAdapter);
 
         final CollectionReference collectionReference = db.collection("VibeEvent");
+        Query query = collectionReference.orderBy("datetime", Query.Direction.DESCENDING);
 
-        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+        query.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 vibeEventList.clear();
