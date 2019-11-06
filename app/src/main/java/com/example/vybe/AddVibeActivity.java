@@ -25,15 +25,15 @@ public class AddVibeActivity extends AppCompatActivity {
     private static final String TAG = "AddVibeActivity";
 
     // --- XML Elements ---
-    Spinner vibeDropdown;
-    EditText datetimeField;
-    EditText reasonField;
-    Spinner socialSituationDropdown;
-    Button addBtn;
-    TextView outputBox;
+    private Spinner vibeDropdown;
+    private EditText datetimeField;
+    private EditText reasonField;
+    private Spinner socialSituationDropdown;
+    private Button addBtn;
+    private TextView outputBox;
     // -------------------
 
-    VibeEvent newVibeEvent;
+    private VibeEvent newVibeEvent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
