@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -42,6 +43,7 @@ public class MyVibesAdapter extends ArrayAdapter<VibeEvent> {
 
         TextView dateField = view.findViewById(R.id.view_date_text_view);
         TextView reasonField = view.findViewById(R.id.my_reason_text_view);
+        ImageView vibeImage = view.findViewById(R.id.imageView);
 
         VibeEvent vibeEvent = vibeEventList.get(position);
 
@@ -50,6 +52,12 @@ public class MyVibesAdapter extends ArrayAdapter<VibeEvent> {
         String month = dateTime.getMonth().getDisplayName(TextStyle.FULL_STANDALONE, Locale.ENGLISH);
 
         dateField.setText(month + dateTime.format(formatter));
+
+        if (vibeEvent.getVibe() != null) {
+            vibeImage.setImageResource(vibeEvent.getVibe().getEmoticon());
+        } else {
+            vibeImage.setImageResource(R.drawable.ic_vibeless);
+        }
 
         if (vibeEvent.getReason() == null) {
             reasonField.setVisibility(View.GONE);

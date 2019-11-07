@@ -78,13 +78,13 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
 
 
         // --- Vibes Dropdown ---
-        String[] vibes = new String[]{"Select a vibe", "Happy", "Sad", "Spicy"};
+        String[] vibes = new String[]{"Select a vibe", "Angry", "Disgusted", "Happy", "Sad", "Scared", "Surprised"};
         ArrayAdapter<String> vibesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, vibes);
         vibeDropdown.setAdapter(vibesAdapter);
         vibeDropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                vibeEvent.setVibe(new Vibe(vibes[position]));
+                vibeEvent.setVibe(vibes[position]);
             }
 
             @Override
