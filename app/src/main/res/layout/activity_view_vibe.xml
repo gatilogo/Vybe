@@ -1,32 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/view_view_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".ViewVibeActivity">
 
-    <TextView
-        android:id="@+id/view_date_text_view"
-        android:layout_width="wrap_content"
+    <ImageView
+        android:id="@+id/view_vibe_image_view"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Date"
-        tools:layout_editor_absoluteX="248dp"
-        tools:layout_editor_absoluteY="107dp" />
+        app:srcCompat="@android:drawable/btn_star_big_on" />  <!-- Placeholder till we get emoticons to work-->
 
-    <TextView
-        android:id="@+id/view_reason_text_view"
-        android:layout_width="wrap_content"
+    <TableLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Reason"
-        tools:layout_editor_absoluteX="88dp"
-        tools:layout_editor_absoluteY="253dp" />
+        android:padding="16dp" >
 
-    <TextView
-        android:id="@+id/view_social_situation_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Social Situation"
-        tools:layout_editor_absoluteX="211dp"
-        tools:layout_editor_absoluteY="351dp" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TableRow
+            android:id="@+id/view_date_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp">
+
+            <TextView
+                android:id="@+id/view_date_time_label"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/view_date_time_label"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/view_date_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textSize="14sp" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/view_reason_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp">
+
+            <TextView
+                android:id="@+id/view_reason_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/view_reason_label"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/view_reason_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="14sp" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/view_social_situation_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp">
+
+            <TextView
+                android:id="@+id/view_social_situation_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/view_social_situation_label"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/view_social_situation_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="14sp" />
+        </TableRow>
+
+    </TableLayout>
+
+</LinearLayout>

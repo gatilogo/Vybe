@@ -12,3 +12,9 @@
 /captures
 .externalNativeBuild
 .cxx
+
+# VS Code
+*.code-workspace
+
+# Project files
+.project

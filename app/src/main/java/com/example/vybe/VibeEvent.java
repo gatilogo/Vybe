@@ -1,14 +1,23 @@
 package com.example.vybe;
 
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
+import java.util.HashMap;
 
 public class VibeEvent implements Serializable {
     private Vibe vibe;
     private LocalDateTime dateTime;
     private String reason;
     private String socialSituation;
+
+    public VibeEvent() {
+
+    }
 
     public VibeEvent(Vibe vibe, LocalDateTime dateTime, String reason, String socialSituation) {
         this.vibe = vibe;
@@ -48,6 +57,4 @@ public class VibeEvent implements Serializable {
     public void setSocialSituation(String socialSituation) {
         this.socialSituation = socialSituation;
     }
-
-
 }
