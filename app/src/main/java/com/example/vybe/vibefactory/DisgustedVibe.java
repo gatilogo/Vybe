@@ -20,7 +20,7 @@ public class DisgustedVibe implements Vibe {
      * The string that describes the Vibe selected
      */
     public String getName() {
-        return "Disgusted";
+        return "disgusted";
     }
 
     @Override

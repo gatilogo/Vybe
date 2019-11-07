@@ -20,7 +20,7 @@ public class VibeFactoryTest {
         VibeFactory vibeFactory = mockVibeFactory();
         Vibe angry = vibeFactory.getVibe("angry");
 
-        assertEquals("Angry", angry.getVibe());
+        assertEquals("angry", angry.getName());
         assertEquals(R.color.Red, angry.getColor());
         assertEquals(R.drawable.ic_angry, angry.getEmoticon());
 
@@ -31,7 +31,7 @@ public class VibeFactoryTest {
         VibeFactory vibeFactory = mockVibeFactory();
         Vibe Disgusted = vibeFactory.getVibe("disgusted");
 
-        assertEquals("Disgusted", Disgusted.getVibe());
+        assertEquals("disgusted", Disgusted.getName());
         assertEquals(R.color.Green, Disgusted.getColor());
         assertEquals(R.drawable.ic_disgusted, Disgusted.getEmoticon());
 
@@ -42,7 +42,7 @@ public class VibeFactoryTest {
         VibeFactory vibeFactory = mockVibeFactory();
         Vibe Scared = vibeFactory.getVibe("scared");
 
-        assertEquals("Scared", Scared.getVibe());
+        assertEquals("scared", Scared.getName());
         assertEquals(R.color.Blue, Scared.getColor());
         assertEquals(R.drawable.ic_scared, Scared.getEmoticon());
 
@@ -53,7 +53,7 @@ public class VibeFactoryTest {
         VibeFactory vibeFactory = mockVibeFactory();
         Vibe happy = vibeFactory.getVibe("happy");
 
-        assertEquals("Happy", happy.getVibe());
+        assertEquals("happy", happy.getName());
         assertEquals(R.color.Yellow, happy.getColor());
         assertEquals(R.drawable.ic_happy, happy.getEmoticon());
 
@@ -64,7 +64,7 @@ public class VibeFactoryTest {
         VibeFactory vibeFactory = mockVibeFactory();
         Vibe sad = vibeFactory.getVibe("sad");
 
-        assertEquals("Sad", sad.getVibe());
+        assertEquals("sad", sad.getName());
         assertEquals(R.color.Gray, sad.getColor());
         assertEquals(R.drawable.ic_sad, sad.getEmoticon());
 
@@ -75,7 +75,7 @@ public class VibeFactoryTest {
         VibeFactory vibeFactory = mockVibeFactory();
         Vibe Surprised = vibeFactory.getVibe("surprised");
 
-        assertEquals("Surprised", Surprised.getVibe());
+        assertEquals("surprised", Surprised.getName());
         assertEquals(R.color.Orange, Surprised.getColor());
         assertEquals(R.drawable.ic_surprised, Surprised.getEmoticon());
 

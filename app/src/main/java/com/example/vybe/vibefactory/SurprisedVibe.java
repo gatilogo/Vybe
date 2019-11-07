@@ -20,7 +20,7 @@ public class SurprisedVibe implements Vibe {
      * The string that describes the Vibe selected
      */
     public String getName() {
-        return "Surprised";
+        return "surprised";
     }
 
     @Override

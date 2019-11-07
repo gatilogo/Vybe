@@ -20,7 +20,7 @@ public class ScaredVibe implements Vibe {
      * The string that describes the Vibe selected
      */
     public String getName() {
-        return "Scared";
+        return "scared";
     }
 
     @Override
