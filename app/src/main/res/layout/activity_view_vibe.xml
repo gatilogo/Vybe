@@ -12,7 +12,7 @@
         android:id="@+id/view_vibe_image_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:srcCompat="@android:drawable/btn_star_big_on" />  <!-- Placeholder till we get emoticons to work-->
+        android:src="@drawable/ic_vibeless" />  <!-- Placeholder till we get emoticons to work-->
 
     <TableLayout
         android:layout_width="match_parent"
