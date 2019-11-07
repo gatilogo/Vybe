@@ -1,11 +1,16 @@
 package com.example.vybe.vibefactory;
 
-public interface Vibe {
+import java.io.Serializable;
+
+public interface Vibe extends Serializable {
 
     /**
      * This gets the string value of the Vibe class selected by a user
      * @return
      * The string that describes the Vibe selected
      */
-    public String getVibe();
+    String getVibe();
+
+    int getEmoticon();
+    int getColor();
 }

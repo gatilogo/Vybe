@@ -8,7 +8,9 @@ import com.example.vybe.vibefactory.HappyVibe;
 import com.example.vybe.vibefactory.SadVibe;
 import com.example.vybe.vibefactory.SurpriseVibe;
 
-public class VibeFactory {
+import java.io.Serializable;
+
+public class VibeFactory implements Serializable {
 
     public static Vibe getVibe(String selectedVibe) {
         selectedVibe = selectedVibe.toLowerCase();

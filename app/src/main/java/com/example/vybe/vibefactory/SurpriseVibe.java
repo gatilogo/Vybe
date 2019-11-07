@@ -11,7 +11,7 @@ public class SurpriseVibe implements Vibe {
      */
     public SurpriseVibe() {
         this.color = R.color.Orange;
-        this.emoticon = R.drawable.surprise;
+        this.emoticon = R.drawable.ic_surprised;
     }
 
     /**
@@ -21,5 +21,15 @@ public class SurpriseVibe implements Vibe {
      */
     public String getVibe() {
         return "Surprise";
+    }
+
+    @Override
+    public int getEmoticon() {
+        return this.emoticon;
+    }
+
+    @Override
+    public int getColor() {
+        return this.color;
     }
 }

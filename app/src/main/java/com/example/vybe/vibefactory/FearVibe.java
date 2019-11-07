@@ -11,7 +11,7 @@ public class FearVibe implements Vibe {
      */
     public FearVibe() {
         this.color = R.color.Blue;
-        this.emoticon = R.drawable.fear;
+        this.emoticon = R.drawable.ic_fear;
     }
 
     /**
@@ -21,5 +21,15 @@ public class FearVibe implements Vibe {
      */
     public String getVibe() {
         return "Fear";
+    }
+
+    @Override
+    public int getEmoticon() {
+        return this.emoticon;
+    }
+
+    @Override
+    public int getColor() {
+        return this.color;
     }
 }

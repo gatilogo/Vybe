@@ -11,7 +11,7 @@ public class SadVibe implements Vibe {
      */
     public SadVibe() {
         this.color = R.color.Gray;
-        this.emoticon = R.drawable.sad;
+        this.emoticon = R.drawable.ic_sad;
     }
 
     /**
@@ -21,5 +21,15 @@ public class SadVibe implements Vibe {
      */
     public String getVibe() {
         return "Sad";
+    }
+
+    @Override
+    public int getEmoticon() {
+        return this.emoticon;
+    }
+
+    @Override
+    public int getColor() {
+        return this.color;
     }
 }

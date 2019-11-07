@@ -11,7 +11,7 @@ public class DisgustVibe implements Vibe {
      */
     public DisgustVibe() {
         this.color = R.color.Green;
-        this.emoticon = R.drawable.disgust;
+        this.emoticon = R.drawable.ic_disgusted;
     }
 
     /**
@@ -21,5 +21,15 @@ public class DisgustVibe implements Vibe {
      */
     public String getVibe() {
         return "Disgust";
+    }
+
+    @Override
+    public int getEmoticon() {
+        return this.emoticon;
+    }
+
+    @Override
+    public int getColor() {
+        return this.color;
     }
 }

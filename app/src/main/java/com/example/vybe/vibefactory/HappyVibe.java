@@ -11,7 +11,7 @@ public class HappyVibe implements Vibe {
      */
     public HappyVibe() {
         this.color = R.color.Yellow;
-        this.emoticon = R.drawable.happy;
+        this.emoticon = R.drawable.ic_happy;
     }
 
     /**
@@ -21,5 +21,15 @@ public class HappyVibe implements Vibe {
      */
     public String getVibe() {
         return "Happy";
+    }
+
+    @Override
+    public int getEmoticon() {
+        return this.emoticon;
+    }
+
+    @Override
+    public int getColor() {
+        return this.color;
     }
 }

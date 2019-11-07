@@ -11,7 +11,7 @@ public class AngryVibe implements Vibe {
      */
     public AngryVibe() {
         this.color = R.color.Red;
-        this.emoticon = R.drawable.angry;
+        this.emoticon = R.drawable.ic_angry;
     }
 
     /**
@@ -21,5 +21,15 @@ public class AngryVibe implements Vibe {
      */
     public String getVibe() {
         return "Angry";
+    }
+
+    @Override
+    public int getEmoticon() {
+        return this.emoticon;
+    }
+
+    @Override
+    public int getColor() {
+        return this.color;
     }
 }
