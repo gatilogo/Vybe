@@ -57,4 +57,10 @@ public class VibeEvent implements Serializable {
     public void setSocialSituation(String socialSituation) {
         this.socialSituation = socialSituation;
     }
+
+    public Date getDateTimeFormat(){
+        long seconds = this.dateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+        Date date = new Date(seconds);
+        return date;
+    }
 }
