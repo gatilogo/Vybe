@@ -10,8 +10,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
@@ -33,6 +35,7 @@ public class MyVibesActivity extends AppCompatActivity {
     ArrayList<VibeEvent> vibeEventList;
     MyVibesAdapter myVibesAdapter;
 
+    private Spinner filterSpinner;
     private ListView vibesListView;
     private Button addVibeEventBtn;
     private Button myMapBtn;
@@ -46,10 +49,23 @@ public class MyVibesActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Log.d(TAG, "onCreate: In my vibes");
 
+        filterSpinner = findViewById(R.id.filter_spinner);
         vibesListView = findViewById(R.id.my_vibe_list);
         addVibeEventBtn = findViewById(R.id.add_vibe_event_btn);
         myMapBtn = findViewById(R.id.my_map_btn);
         socialBtn = findViewById(R.id.social_btn);
+
+        // --- Vibes Dropdown ---
+        String[] vibes = new String[]{"Filter vibe", "Happy", "Sad", "Spicy"};
+        ArrayAdapter<String> vibesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, vibes);
+        filterSpinner.setAdapter(vibesAdapter);
+        filterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {}
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {}
+        });
 
 //        Vibe vibe, Date date, String reason, String socialSituation
         vibeEventList = new ArrayList<VibeEvent>();
