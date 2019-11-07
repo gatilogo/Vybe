@@ -196,7 +196,7 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
     }
 
     public String formatDateTime(LocalDateTime dateTime) {
-        return dateTime.format(DateTimeFormatter.ofPattern("MMM dd yyyy, HH:mm"));
+        return dateTime.format(DateTimeFormatter.ofPattern("MMM dd yyyy, hh:mm a"));
     }
 
 }
