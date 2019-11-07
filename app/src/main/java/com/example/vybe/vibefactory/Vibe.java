@@ -9,7 +9,7 @@ public interface Vibe extends Serializable {
      * @return
      * The string that describes the Vibe selected
      */
-    String getVibe();
+    String getName();
 
     int getEmoticon();
     int getColor();

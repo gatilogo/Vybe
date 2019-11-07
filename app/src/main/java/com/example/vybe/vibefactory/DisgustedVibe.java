@@ -19,7 +19,7 @@ public class DisgustedVibe implements Vibe {
      * @return
      * The string that describes the Vibe selected
      */
-    public String getVibe() {
+    public String getName() {
         return "Disgusted";
     }
 

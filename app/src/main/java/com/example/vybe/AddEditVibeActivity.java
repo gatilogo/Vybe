@@ -116,7 +116,7 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
             vibeEvent.setReason(reasonField.getText().toString());
 
             String output = "";
-            output += "Vibe: " + vibeEvent.getVibe().getVibe() + "\n";
+            output += "Vibe: " + vibeEvent.getVibe().getName() + "\n";
             output += "DateTime: " + vibeEvent.getDateTime() + "\n";
             output += "Reason: " + vibeEvent.getReason() + "\n";
             output += "Social Situation: " + vibeEvent.getSocialSituation() + "\n";

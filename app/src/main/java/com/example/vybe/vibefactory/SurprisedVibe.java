@@ -19,7 +19,7 @@ public class SurprisedVibe implements Vibe {
      * @return
      * The string that describes the Vibe selected
      */
-    public String getVibe() {
+    public String getName() {
         return "Surprised";
     }
 
