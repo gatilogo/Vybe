@@ -45,7 +45,7 @@ public class MyVibesAdapter extends ArrayAdapter<VibeEvent> {
 
         VibeEvent vibeEvent = vibeEventList.get(position);
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(" MM, YYYY h:mm a", Locale.ENGLISH);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(" d, YYYY h:mm a", Locale.ENGLISH);
         LocalDateTime dateTime = vibeEvent.getDateTime();
         String month = dateTime.getMonth().getDisplayName(TextStyle.FULL_STANDALONE, Locale.ENGLISH);
 
