@@ -6,11 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".MyVibesActivity">
 
+    <Spinner
+        android:id="@+id/filter_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true" />
+
     <ListView
         android:id="@+id/my_vibe_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/my_vibe_menu_layout" />
+        android:layout_height="wrap_content"
+        android:layout_above="@id/my_vibe_menu_layout"
+        android:layout_below="@id/filter_spinner" />
 
     <LinearLayout
         android:id="@+id/my_vibe_menu_layout"
