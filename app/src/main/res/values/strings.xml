@@ -1,9 +1,14 @@
 <resources>
     <string name="app_name">Vybe</string>
 
+    <string name="add_vybe_name">Add Vybe</string>
     <string name="view_vybe_name">View Vybe</string>
-    <string name="view_date_time_label">Date/Time</string>
-    <string name="view_reason_label">Reason</string>
-    <string name="view_location_label">Location</string>
-    <string name="view_social_situation_label">Social Situation</string>
+    <string name="edit_vybe_name">Edit Vybe</string>
+
+    <string name="date_time">Date/Time</string>
+    <string name="reason">Reason</string>
+    <string name="reason_hint">Reason (20 char max)</string>
+    <string name="location">Location</string>
+    <string name="social_situation">Social Situation</string>
+    <string name="save">Save</string>
 </resources>
