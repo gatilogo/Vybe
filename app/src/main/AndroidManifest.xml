@@ -12,8 +12,11 @@
         <activity
             android:name=".ViewVibeActivity"
             android:label="@string/view_vybe_name"
-            android:parentActivityName=".MyVibesActivity"></activity>
-        <activity android:name=".AddEditVibeActivity" />
+            android:parentActivityName=".MyVibesActivity" />
+        <activity
+            android:name=".AddEditVibeActivity"
+            android:label="@string/add_vybe_name"
+            android:parentActivityName=".MyVibesActivity" />
         <activity android:name=".MyVibesActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
