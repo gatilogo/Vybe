@@ -12,7 +12,6 @@ import java.util.HashMap;
 
 public class VibeEvent implements Serializable {
     private Vibe vibe;
-    private VibeFactory vibeFactory = new VibeFactory();
     private LocalDateTime dateTime;
     private String reason;
     private String socialSituation;
@@ -22,7 +21,7 @@ public class VibeEvent implements Serializable {
     }
 
     public VibeEvent(String vibe, LocalDateTime dateTime, String reason, String socialSituation) {
-        this.vibe = vibeFactory.getVibe(vibe);
+        this.vibe = VibeFactory.getVibe(vibe);
         this.dateTime = dateTime;
         this.reason = reason;
         this.socialSituation = socialSituation;
@@ -33,7 +32,7 @@ public class VibeEvent implements Serializable {
     }
 
     public void setVibe(String vibe) {
-        this.vibe = vibeFactory.getVibe(vibe);
+        this.vibe = VibeFactory.getVibe(vibe);
     }
 
     public LocalDateTime getDateTime() {
