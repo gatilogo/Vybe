@@ -22,6 +22,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 
 public class AddEditVibeActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
@@ -70,8 +71,6 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
         selectedTime = currDateTime.toLocalTime();
         datetimeField.setText(formatDateTime(currDateTime));
 
-
-
         // --- Vibes Dropdown ---
         String[] vibes = new String[]{"Select a vibe", "Happy", "Sad", "Spicy"};
         ArrayAdapter<String> vibesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, vibes);
@@ -87,13 +86,12 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
         });
 
         // --- Social Situation Dropdown ---
-        String[] socialSituations = new String[]{"Select a Social Situation", "Alone", "In a group", "Alone in a group"};
-        ArrayAdapter<String> socialSituationAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, socialSituations);
+        ArrayAdapter<String> socialSituationAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, SocialSituation.getAll());
         socialSituationDropdown.setAdapter(socialSituationAdapter);
         socialSituationDropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                vibeEvent.setSocialSituation(socialSituations[position]);
+                vibeEvent.setSocialSituation(SocialSituation.at(position).toString());
             }
 
             @Override
