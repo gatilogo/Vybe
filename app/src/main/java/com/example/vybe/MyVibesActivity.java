@@ -21,6 +21,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.TimeZone;
 
@@ -66,8 +67,9 @@ public class MyVibesActivity extends AppCompatActivity {
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 vibeEventList.clear();
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
-                    LocalDateTime ldt = LocalDateTime.ofInstant(Instant.ofEpochMilli(doc.getDate("datetime").getTime()),
-                            TimeZone.getDefault().toZoneId());
+//                    LocalDateTime ldt = LocalDateTime.ofInstant(Instant.ofEpochMilli(doc.getDate("datetime").getTime()),
+//                            TimeZone.getDefault().toZoneId());
+                    LocalDateTime ldt = doc.getDate("datetime").toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
                     Log.d(TAG, ldt.toString());
                     String reason = (String) doc.getData().get("reason");
                     String socSit = (String) doc.getData().get("socSit");
