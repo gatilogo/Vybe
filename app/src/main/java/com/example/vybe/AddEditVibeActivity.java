@@ -60,6 +60,7 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
             vibeEvent = (VibeEvent) extras.getSerializable("vibeEvent");
             reasonField.setText(vibeEvent.getReason());
 
+            setTitle(getString(R.string.edit_vybe_name));
         } else {
             vibeEvent = new VibeEvent();
             vibeEvent.setDateTime(LocalDateTime.now());
