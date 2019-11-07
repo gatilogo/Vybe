@@ -48,6 +48,16 @@ public class AddEditVibeActivity extends AppCompatActivity {
         addBtn = findViewById(R.id.add_btn);
         outputBox = findViewById(R.id.textView);
 
+        Bundle extras = getIntent().getExtras();
+
+        if (extras != null) {
+            //TODO: set vibe and socsit dropdrowns
+            VibeEvent vibeEvent = (VibeEvent) extras.getSerializable("vibeEvent");
+            LocalDateTime datetime = vibeEvent.getDateTime();
+            datetimeField.setText(datetime.format(DateTimeFormatter.ofPattern("MMM dd yyyy HH mm")));
+            reasonField.setText(vibeEvent.getReason());
+        }
+
         newVibeEvent = new VibeEvent();
 
         // --- Vibes Dropdown ---
