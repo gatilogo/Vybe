@@ -2,16 +2,16 @@ package com.example.vybe.vibefactory;
 
 import com.example.vybe.R;
 
-public class SurpriseVibe implements Vibe {
+public class DisgustedVibe implements Vibe {
     private int color;
     private int emoticon;
 
     /**
      * This Constructor sets the new vibe's color and emoticon
      */
-    public SurpriseVibe() {
-        this.color = R.color.Orange;
-        this.emoticon = R.drawable.ic_surprised;
+    public DisgustedVibe() {
+        this.color = R.color.Green;
+        this.emoticon = R.drawable.ic_disgusted;
     }
 
     /**
@@ -20,7 +20,7 @@ public class SurpriseVibe implements Vibe {
      * The string that describes the Vibe selected
      */
     public String getVibe() {
-        return "Surprise";
+        return "Disgusted";
     }
 
     @Override

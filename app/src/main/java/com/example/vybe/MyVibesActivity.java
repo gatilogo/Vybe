@@ -54,7 +54,7 @@ public class MyVibesActivity extends AppCompatActivity {
 //        Vibe vibe, Date date, String reason, String socialSituation
         vibeEventList = new ArrayList<VibeEvent>();
         vibeEventList.add(new VibeEvent("sad", LocalDateTime.now(), "Didn't study for final", "Alone :("));
-        vibeEventList.add(new VibeEvent("disgust", LocalDateTime.of(2019, 05, 18, 10, 10), "Worked on CMPUT 301 Project", "With Team Vybe :((("));
+        vibeEventList.add(new VibeEvent("disgusted", LocalDateTime.of(2019, 05, 18, 10, 10), "Worked on CMPUT 301 Project", "With Team Vybe :((("));
         vibeEventList.add(new VibeEvent("happy", LocalDateTime.now(), "Failed CMPUT 301", "With Everyone :)))"));
         vibeEventList.add(new VibeEvent("huh", LocalDateTime.now(), "anti-vibe", "With Everyone :)))"));
 

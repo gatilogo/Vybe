@@ -196,12 +196,12 @@ class SadVibe <<Model>> {
     <<get>> - name: String   
 }
 
-class FearVibe <<Model>> {
+class ScaredVibe <<Model>> {
     <<get>> - emoticon: ImageView
     <<get>> - name: String   
 }
 
-class DisgustVibe <<Model>> {
+class DisgustedVibe <<Model>> {
     <<get>> - emoticon: ImageView
     <<get>> - name: String   
 }
@@ -278,8 +278,8 @@ SearchProfilesActivity "1" -- "1" ProfileAdapter
 Vibe <|.. ClowneryVibe
 Vibe <|.. HappyVibe
 Vibe <|.. SadVibe
-Vibe <|.. FearVibe
-Vibe <|.. DisgustVibe
+Vibe <|.. ScaredVibe
+Vibe <|.. DisgustedVibe
 Vibe <|.. SupriseVibe
 Vibe <|.. AngerVibe
 

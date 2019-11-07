@@ -27,24 +27,24 @@ public class VibeFactoryTest {
     }
 
     @Test
-    public void testGetDisgustVibe() {
+    public void testGetDisgustedVibe() {
         VibeFactory vibeFactory = mockVibeFactory();
-        Vibe disgust = vibeFactory.getVibe("disgust");
+        Vibe Disgusted = vibeFactory.getVibe("disgusted");
 
-        assertEquals("Disgust", disgust.getVibe());
-        assertEquals(R.color.Green, disgust.getColor());
-        assertEquals(R.drawable.ic_disgusted, disgust.getEmoticon());
+        assertEquals("Disgusted", Disgusted.getVibe());
+        assertEquals(R.color.Green, Disgusted.getColor());
+        assertEquals(R.drawable.ic_disgusted, Disgusted.getEmoticon());
 
     }
 
     @Test
-    public void testGetFearVibe() {
+    public void testGetScaredVibe() {
         VibeFactory vibeFactory = mockVibeFactory();
-        Vibe fear = vibeFactory.getVibe("fear");
+        Vibe Scared = vibeFactory.getVibe("scared");
 
-        assertEquals("Fear", fear.getVibe());
-        assertEquals(R.color.Blue, fear.getColor());
-        assertEquals(R.drawable.ic_fear, fear.getEmoticon());
+        assertEquals("Scared", Scared.getVibe());
+        assertEquals(R.color.Blue, Scared.getColor());
+        assertEquals(R.drawable.ic_scared, Scared.getEmoticon());
 
     }
 
@@ -71,13 +71,13 @@ public class VibeFactoryTest {
     }
 
     @Test
-    public void testGetSurpriseVibe() {
+    public void testGetSurprisedVibe() {
         VibeFactory vibeFactory = mockVibeFactory();
-        Vibe surprise = vibeFactory.getVibe("surprise");
+        Vibe Surprised = vibeFactory.getVibe("surprised");
 
-        assertEquals("Surprise", surprise.getVibe());
-        assertEquals(R.color.Orange, surprise.getColor());
-        assertEquals(R.drawable.ic_surprised, surprise.getEmoticon());
+        assertEquals("Surprised", Surprised.getVibe());
+        assertEquals(R.color.Orange, Surprised.getColor());
+        assertEquals(R.drawable.ic_surprised, Surprised.getEmoticon());
 
     }
 
