@@ -44,6 +44,8 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
     private LocalTime selectedTime;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+    private boolean editFlag = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +65,7 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
             //TODO: set vibe and socsit dropdrowns
             vibeEvent = (VibeEvent) extras.getSerializable("vibeEvent");
             reasonField.setText(vibeEvent.getReason());
+            editFlag = true;
 
             setTitle(getString(R.string.edit_vybe_name));
         } else {
@@ -125,8 +128,13 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
             output += "Reason: " + vibeEvent.getReason() + "\n";
             output += "Social Situation: " + vibeEvent.getSocialSituation() + "\n";
             outputBox.setText(output);
-            addVibeEvent(vibeEvent);
-//            finish();
+
+            if (editFlag){
+                editVibeEvent(vibeEvent);
+            } else {
+                addVibeEvent(vibeEvent);
+            }
+            finish();
         });
 
     }
@@ -142,7 +150,6 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
     }
 
     public void editVibeEvent(VibeEvent vibeEvent){
-        // TODO: Add ID to VibeEvent class
         HashMap<String, Object> data = createVibeEventData(vibeEvent);
         db.collection("VibeEvent").document(vibeEvent.getId()).set(data);
     }

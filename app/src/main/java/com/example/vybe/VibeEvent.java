@@ -21,11 +21,12 @@ public class VibeEvent implements Serializable {
 
     }
 
-    public VibeEvent(String vibe, LocalDateTime dateTime, String reason, String socialSituation) {
+    public VibeEvent(String vibe, LocalDateTime dateTime, String reason, String socialSituation, String id) {
         this.vibe = VibeFactory.getVibe(vibe);
         this.dateTime = dateTime;
         this.reason = reason;
         this.socialSituation = socialSituation;
+        this.id = id;
     }
 
     public Vibe getVibe() {
