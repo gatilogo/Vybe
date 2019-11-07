@@ -16,11 +16,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
+import java.util.Date;
 
-public class AddEditVibeActivity extends AppCompatActivity {
+public class AddEditVibeActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
     private static final String TAG = "AddEditVibeActivity";
 
@@ -33,7 +36,9 @@ public class AddEditVibeActivity extends AppCompatActivity {
     private TextView outputBox;
     // -------------------
 
-    private VibeEvent newVibeEvent;
+    private VibeEvent vibeEvent;
+    private LocalDate selectedDate;
+    private LocalTime selectedTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,13 +57,20 @@ public class AddEditVibeActivity extends AppCompatActivity {
 
         if (extras != null) {
             //TODO: set vibe and socsit dropdrowns
-            VibeEvent vibeEvent = (VibeEvent) extras.getSerializable("vibeEvent");
-            LocalDateTime datetime = vibeEvent.getDateTime();
-            datetimeField.setText(datetime.format(DateTimeFormatter.ofPattern("MMM dd yyyy HH mm")));
+            vibeEvent = (VibeEvent) extras.getSerializable("vibeEvent");
             reasonField.setText(vibeEvent.getReason());
+
+        } else {
+            vibeEvent = new VibeEvent();
+            vibeEvent.setDateTime(LocalDateTime.now());
         }
 
-        newVibeEvent = new VibeEvent();
+        LocalDateTime currDateTime = vibeEvent.getDateTime();
+        selectedDate = currDateTime.toLocalDate();
+        selectedTime = currDateTime.toLocalTime();
+        datetimeField.setText(formatDateTime(currDateTime));
+
+
 
         // --- Vibes Dropdown ---
         String[] vibes = new String[]{"Select a vibe", "Happy", "Sad", "Spicy"};
@@ -67,7 +79,7 @@ public class AddEditVibeActivity extends AppCompatActivity {
         vibeDropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                newVibeEvent.setVibe(new Vibe(vibes[position]));
+                vibeEvent.setVibe(new Vibe(vibes[position]));
             }
 
             @Override
@@ -81,7 +93,7 @@ public class AddEditVibeActivity extends AppCompatActivity {
         socialSituationDropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                newVibeEvent.setSocialSituation(socialSituations[position]);
+                vibeEvent.setSocialSituation(socialSituations[position]);
             }
 
             @Override
@@ -89,72 +101,63 @@ public class AddEditVibeActivity extends AppCompatActivity {
         });
 
         // --- Date Picker ---
-        newVibeEvent.setDateTime(LocalDateTime.now());
-        datetimeField.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Calendar c = Calendar.getInstance();
-                int currYear = c.get(Calendar.YEAR);
-                int currMonth = c.get(Calendar.MONTH);
-                int currDay = c.get(Calendar.DAY_OF_MONTH);
-
-                DatePickerDialog dpd = new DatePickerDialog(AddEditVibeActivity.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                        month += 1; // since indexing starts at 0
-                        String dateString = year + "-" + month + "-" + day;
-                        newVibeEvent.setDateTime(LocalDateTime.of(year, month, day, 0, 0));
-//                        int[] selectedTime = new int[2];
-                        timeSelector();
-//                        String timeString = selectedTime[0] + ":" + selectedTime[1];
-
-//                        datetimeField.setText(dateString + " " + timeString);
-                        //datetimeField.clearFocus();
-
-
-                    }
-                }, currYear, currMonth, currDay);
-                dpd.show();
-            }
+        datetimeField.setOnClickListener((View view) -> {
+            openDatePickerDialog(selectedDate);
         });
 
 
         // --- Show Output on button click ---
         addBtn.setOnClickListener(view -> {
-            //TODO: integrate firestore stuff here i guess
-//            newVibeEvent.setReason(reasonField.getText().toString());
-//
-//            String output = "";
-//            output += "Vibe: " + newVibeEvent.getVibe().getName() + "\n";
-//            output += "DateTime: " + newVibeEvent.getDateTime() + "\n";
-//            output += "Reason: " + newVibeEvent.getReason() + "\n";
-//            output += "Social Situation: " + newVibeEvent.getSocialSituation() + "\n";
-//            outputBox.setText(output);
-            finish();
-        });
 
+            //TODO: integrate firestore stuff here i guess
+
+            vibeEvent.setDateTime(LocalDateTime.of(selectedDate, selectedTime));
+            vibeEvent.setReason(reasonField.getText().toString());
+
+            String output = "";
+            output += "Vibe: " + vibeEvent.getVibe().getName() + "\n";
+            output += "DateTime: " + vibeEvent.getDateTime() + "\n";
+            output += "Reason: " + vibeEvent.getReason() + "\n";
+            output += "Social Situation: " + vibeEvent.getSocialSituation() + "\n";
+            outputBox.setText(output);
+//            finish();
+        });
 
     }
 
-    public void timeSelector() {
+    private void openDatePickerDialog(LocalDate currDate) {
+        int currYear = currDate.getYear();
+        int currMonth = currDate.getMonthValue() - 1; // Since indexing starts at 0
+        int currDay = currDate.getDayOfMonth();
 
-        // initialize and display time picker dialog
-        TimePickerDialog tpd = new TimePickerDialog(AddEditVibeActivity.this, new TimePickerDialog.OnTimeSetListener() {
-            @Override
-                public void onTimeSet(TimePicker timePicker, int hour, int min) {
-                    String timeString = hour + ":" + min;
-                    //text.setText(timeString);
-                    datetimeField.clearFocus();
-                    outputBox.setText(timeString);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(AddEditVibeActivity.this, AddEditVibeActivity.this, currYear, currMonth, currDay);
+        datePickerDialog.show();
+    }
 
-                    LocalDateTime datetime = newVibeEvent.getDateTime().plusHours(hour).plusMinutes(min);
+    @Override
+    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+        month += 1; // since indexing starts at 0
+        selectedDate = LocalDate.of(year, month, day);
 
-                    datetimeField.setText(datetime.format(DateTimeFormatter.ofPattern("MMM dd yyyy HH mm")));
-                    newVibeEvent.setDateTime(datetime);
-                }
-        }, 0, 0, true);
+        openTimePickerDialog(selectedTime);
+    }
+
+    private void openTimePickerDialog(LocalTime currTime) {
+        int currHour = currTime.getHour();
+        int currMin = currTime.getMinute();
+
+        TimePickerDialog tpd = new TimePickerDialog(AddEditVibeActivity.this, AddEditVibeActivity.this, currHour, currMin, true);
         tpd.show();
+    }
+
+    @Override
+    public void onTimeSet(TimePicker timePicker, int hour, int min) {
+        selectedTime = LocalTime.of(hour, min);
+        datetimeField.setText(formatDateTime(LocalDateTime.of(selectedDate, selectedTime)));
+    }
+
+    public String formatDateTime(LocalDateTime dateTime) {
+        return dateTime.format(DateTimeFormatter.ofPattern("MMM dd yyyy, HH:mm"));
     }
 
 }
