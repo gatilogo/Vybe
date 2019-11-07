@@ -53,11 +53,7 @@ public class MyVibesActivity extends AppCompatActivity {
         socialBtn = findViewById(R.id.social_btn);
 
 //        Vibe vibe, Date date, String reason, String socialSituation
-        vibeEventList = new ArrayList<VibeEvent>();
-        vibeEventList.add(new VibeEvent("sad", LocalDateTime.now(), "Didn't study for final", "Alone :(", "something"));
-        vibeEventList.add(new VibeEvent("disgusted", LocalDateTime.of(2019, 05, 18, 10, 10), "Worked on CMPUT 301 Project", "With Team Vybe :(((", "something"));
-        vibeEventList.add(new VibeEvent("happy", LocalDateTime.now(), "Failed CMPUT 301", "With Everyone :)))", "something"));
-        vibeEventList.add(new VibeEvent("huh", LocalDateTime.now(), "anti-vibe", "With Everyone :)))", "something"));
+        vibeEventList = new ArrayList<>();
 
         myVibesAdapter = new MyVibesAdapter(this, R.layout.my_vibe_item, vibeEventList);
         vibesListView.setAdapter(myVibesAdapter);
@@ -116,8 +112,6 @@ public class MyVibesActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int id) {
                         VibeEvent vibeEvent = vibeEventList.get(position);
                         db.collection("VibeEvent").document(vibeEvent.getId()).delete();
-                        vibeEventList.remove(position);
-
                         myVibesAdapter.notifyDataSetChanged();
                     }
                 });
