@@ -1,5 +1,6 @@
 package com.example.vybe;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
@@ -16,10 +17,15 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
+import java.util.HashMap;
 
 public class AddVibeActivity extends AppCompatActivity {
 
@@ -35,6 +41,7 @@ public class AddVibeActivity extends AppCompatActivity {
     // -------------------
 
     private VibeEvent newVibeEvent;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,7 +121,7 @@ public class AddVibeActivity extends AppCompatActivity {
         // --- Show Output on button click ---
         addBtn.setOnClickListener(view -> {
             //TODO: integrate firestore stuff here i guess
-//            newVibeEvent.setReason(reasonField.getText().toString());
+            newVibeEvent.setReason(reasonField.getText().toString());
 //
 //            String output = "";
 //            output += "Vibe: " + newVibeEvent.getVibe().getName() + "\n";
@@ -122,11 +129,38 @@ public class AddVibeActivity extends AppCompatActivity {
 //            output += "Reason: " + newVibeEvent.getReason() + "\n";
 //            output += "Social Situation: " + newVibeEvent.getSocialSituation() + "\n";
 //            outputBox.setText(output);
+            addVibeEvent(newVibeEvent);
             finish();
         });
 
 
     }
+    // TODO: Move to Controller Class
+    public void addVibeEvent(VibeEvent vibeEvent){
+        // TODO: Put as private attribute in Controller class if we use one
+
+        String id = db.collection("VibeEvent").document().getId();
+        newVibeEvent.setId(id);
+        HashMap<String, Object> data = createVibeEventData(vibeEvent);
+        db.collection("VibeEvent").document(id).set(data);
+    }
+
+    public void editVibeEvent(VibeEvent vibeEvent){
+        // TODO: Add ID to VibeEvent class
+        HashMap<String, Object> data = createVibeEventData(vibeEvent);
+        db.collection("VibeEvent").document(vibeEvent.getId()).set(data);
+    }
+
+    public HashMap<String, Object> createVibeEventData(VibeEvent vibeEvent){
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("ID", vibeEvent.getId());
+        data.put("vibe", vibeEvent.getVibe().getName());
+        data.put("datetime", vibeEvent.getDateTimeFormat());
+        data.put("reason", vibeEvent.getReason());
+        data.put("socSit", vibeEvent.getSocialSituation());
+        return data;
+    };
+
 
     public void timeSelector() {
 

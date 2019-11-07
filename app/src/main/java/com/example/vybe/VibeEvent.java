@@ -14,6 +14,7 @@ public class VibeEvent implements Serializable {
     private LocalDateTime dateTime;
     private String reason;
     private String socialSituation;
+    private String id;
 
     public VibeEvent() {
 
@@ -57,6 +58,10 @@ public class VibeEvent implements Serializable {
     public void setSocialSituation(String socialSituation) {
         this.socialSituation = socialSituation;
     }
+
+    public String getId() { return id; }
+
+    public void setId(String id) { this.id = id; }
 
     public Date getDateTimeFormat(){
         long seconds = this.dateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
