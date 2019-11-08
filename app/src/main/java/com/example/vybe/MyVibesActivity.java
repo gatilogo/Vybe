@@ -57,7 +57,7 @@ public class MyVibesActivity extends AppCompatActivity {
         socialBtn = findViewById(R.id.social_btn);
 
         // --- Vibes Dropdown ---
-        String[] vibes = new String[]{"Filter vibe", "Happy", "Sad", "Spicy"};
+        String[] vibes = new String[]{"Filter Vibe", "Angry", "Disgusted", "Happy", "Sad", "Scared", "Surprised"};
         ArrayAdapter<String> vibesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, vibes);
         filterSpinner.setAdapter(vibesAdapter);
         filterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
