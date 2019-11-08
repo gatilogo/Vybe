@@ -14,22 +14,19 @@ import static org.junit.Assert.*;
 
 public class VibeEventTest {
 
-    LocalDateTime ldt = LocalDateTime.now();
+    private LocalDateTime ldt = LocalDateTime.now();
 
     private VibeEvent mockEmptyVibeEvent() {
-        VibeEvent vibeEvent = new VibeEvent();
-        return vibeEvent;
+        return new VibeEvent();
     }
 
     private VibeEvent mockVibeEvent() {
-        VibeEvent vibeEvent = new VibeEvent(mockVibe().getName(), ldt,
+        return new VibeEvent(mockVibe().getName(), ldt,
                 "just really happy", "Alone", "", "image");
-        return vibeEvent;
     }
 
     private Vibe mockVibe() {
-        Vibe vibe = VibeFactory.getVibe("happy");
-        return vibe;
+        return VibeFactory.getVibe("happy");
     }
 
     @Test
