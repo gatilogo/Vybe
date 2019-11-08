@@ -45,7 +45,7 @@ public class ViewVibeActivity extends AppCompatActivity {
         if (extras.containsKey("vibeEvent")) {
             vibeEvent = (VibeEvent) extras.getSerializable("vibeEvent");
 
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(" MM, YYYY h:mm a", Locale.ENGLISH);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(" d, YYYY h:mm a", Locale.ENGLISH);
             LocalDateTime dateTime = vibeEvent.getDateTime();
             String month = dateTime.getMonth().getDisplayName(TextStyle.FULL_STANDALONE, Locale.ENGLISH);
             dateField.setText(month + dateTime.format(formatter));

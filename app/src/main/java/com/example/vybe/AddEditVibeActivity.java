@@ -16,12 +16,15 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 
 public class AddEditVibeActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
@@ -39,6 +42,9 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
     private VibeEvent vibeEvent;
     private LocalDate selectedDate;
     private LocalTime selectedTime;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    private boolean editFlag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +65,7 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
             //TODO: set vibe and socsit dropdrowns
             vibeEvent = (VibeEvent) extras.getSerializable("vibeEvent");
             reasonField.setText(vibeEvent.getReason());
+            editFlag = true;
 
             setTitle(getString(R.string.edit_vybe_name));
         } else {
@@ -121,10 +128,41 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
             output += "Reason: " + vibeEvent.getReason() + "\n";
             output += "Social Situation: " + vibeEvent.getSocialSituation() + "\n";
             outputBox.setText(output);
-//            finish();
+
+            if (editFlag){
+                editVibeEvent(vibeEvent);
+            } else {
+                addVibeEvent(vibeEvent);
+            }
+            finish();
         });
 
     }
+
+    // TODO: Move to Controller Class
+    public void addVibeEvent(VibeEvent vibeEvent){
+        // TODO: Put as private attribute in Controller class if we use one
+
+        String id = db.collection("VibeEvent").document().getId();
+        vibeEvent.setId(id);
+        HashMap<String, Object> data = createVibeEventData(vibeEvent);
+        db.collection("VibeEvent").document(id).set(data);
+    }
+
+    public void editVibeEvent(VibeEvent vibeEvent){
+        HashMap<String, Object> data = createVibeEventData(vibeEvent);
+        db.collection("VibeEvent").document(vibeEvent.getId()).set(data);
+    }
+
+    public HashMap<String, Object> createVibeEventData(VibeEvent vibeEvent){
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("ID", vibeEvent.getId());
+        data.put("vibe", vibeEvent.getVibe().getName());
+        data.put("datetime", vibeEvent.getDateTimeFormat());
+        data.put("reason", vibeEvent.getReason());
+        data.put("socSit", vibeEvent.getSocialSituation());
+        return data;
+    };
 
     private void openDatePickerDialog(LocalDate currDate) {
         int currYear = currDate.getYear();
@@ -158,7 +196,7 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
     }
 
     public String formatDateTime(LocalDateTime dateTime) {
-        return dateTime.format(DateTimeFormatter.ofPattern("MMM dd yyyy, HH:mm"));
+        return dateTime.format(DateTimeFormatter.ofPattern("MMM dd yyyy, hh:mm a"));
     }
 
 }

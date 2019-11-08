@@ -23,6 +23,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.TimeZone;
 
@@ -52,11 +53,7 @@ public class MyVibesActivity extends AppCompatActivity {
         socialBtn = findViewById(R.id.social_btn);
 
 //        Vibe vibe, Date date, String reason, String socialSituation
-        vibeEventList = new ArrayList<VibeEvent>();
-        vibeEventList.add(new VibeEvent("sad", LocalDateTime.now(), "Didn't study for final", "Alone :("));
-        vibeEventList.add(new VibeEvent("disgusted", LocalDateTime.of(2019, 05, 18, 10, 10), "Worked on CMPUT 301 Project", "With Team Vybe :((("));
-        vibeEventList.add(new VibeEvent("happy", LocalDateTime.now(), "Failed CMPUT 301", "With Everyone :)))"));
-        vibeEventList.add(new VibeEvent("huh", LocalDateTime.now(), "anti-vibe", "With Everyone :)))"));
+        vibeEventList = new ArrayList<>();
 
         myVibesAdapter = new MyVibesAdapter(this, R.layout.my_vibe_item, vibeEventList);
         vibesListView.setAdapter(myVibesAdapter);
@@ -69,12 +66,15 @@ public class MyVibesActivity extends AppCompatActivity {
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 vibeEventList.clear();
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
-                    LocalDateTime ldt = LocalDateTime.ofInstant(Instant.ofEpochMilli(doc.getDate("datetime").getTime()),
-                            TimeZone.getDefault().toZoneId());
+//                    LocalDateTime ldt = LocalDateTime.ofInstant(Instant.ofEpochMilli(doc.getDate("datetime").getTime()),
+//                            TimeZone.getDefault().toZoneId());
+                    LocalDateTime ldt = doc.getDate("datetime").toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
                     Log.d(TAG, ldt.toString());
                     String reason = (String) doc.getData().get("reason");
                     String socSit = (String) doc.getData().get("socSit");
-                    vibeEventList.add(new VibeEvent("angry", ldt, reason, socSit));
+                    String id = (String) doc.getData().get("ID");
+                    String vibe = (String) doc.getData().get("vibe");
+                    vibeEventList.add(new VibeEvent(vibe, ldt, reason, socSit, id));
                 }
                 myVibesAdapter.notifyDataSetChanged();
             }
@@ -110,7 +110,8 @@ public class MyVibesActivity extends AppCompatActivity {
                 // Close dialog if user clicks on "No" button
                 builder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        vibeEventList.remove(position);
+                        VibeEvent vibeEvent = vibeEventList.get(position);
+                        db.collection("VibeEvent").document(vibeEvent.getId()).delete();
                         myVibesAdapter.notifyDataSetChanged();
                     }
                 });
