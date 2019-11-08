@@ -58,7 +58,7 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
     private Spinner socialSituationDropdown;
     private Button addBtn;
     private Button pickImageBtn;
-    private TextView outputBox;
+    //private TextView outputBox;
     private TextView pageTitle;
     private ImageView imageView;
     // -------------------
@@ -84,7 +84,7 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
         reasonField = findViewById(R.id.reason_edit_text);
         socialSituationDropdown = findViewById(R.id.social_situation_dropdown);
         addBtn = findViewById(R.id.add_btn);
-        outputBox = findViewById(R.id.textView);
+        // outputBox = findViewById(R.id.textView);
         pickImageBtn = findViewById(R.id.pickImageBtn);
         imageView = findViewById(R.id.imageView);
         pageTitle = findViewById(R.id.add_edit_vybe_title);
@@ -165,12 +165,12 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
 
 
 
-            String output = "";
-            output += "Vibe: " + vibeEvent.getVibe().getName() + "\n";
-            output += "DateTime: " + vibeEvent.getDateTime() + "\n";
-            output += "Reason: " + vibeEvent.getReason() + "\n";
-            output += "Social Situation: " + vibeEvent.getSocialSituation() + "\n";
-            outputBox.setText(output);
+//            String output = "";
+//            output += "Vibe: " + vibeEvent.getVibe().getName() + "\n";
+//            output += "DateTime: " + vibeEvent.getDateTime() + "\n";
+//            output += "Reason: " + vibeEvent.getReason() + "\n";
+//            output += "Social Situation: " + vibeEvent.getSocialSituation() + "\n";
+//            outputBox.setText(output);
 
             if (editFlag) {
                 editVibeEvent(vibeEvent);
