@@ -73,7 +73,7 @@ public class MyVibesActivity extends AppCompatActivity {
         profileBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MyVibesActivity.this, AddEditVibeActivity.class);
+                Intent intent = new Intent(MyVibesActivity.this, ViewProfileActivity.class);
                 startActivity(intent);
             }
         });
