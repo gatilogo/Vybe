@@ -1,5 +1,6 @@
 package com.example.vybe;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,6 +16,9 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -62,7 +66,35 @@ public class MyVibesActivity extends AppCompatActivity {
         filterSpinner.setAdapter(vibesAdapter);
         filterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {}
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                if (position != 0){
+                    String filterVibe = vibes[position].toLowerCase();
+                    db.collection("VibeEvent")
+                            .whereEqualTo("vibe", filterVibe)
+                            .get()
+                            .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                @Override
+                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                    // TODO: Stub out with other query below
+                                    vibeEventList.clear();
+                                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
+//                    LocalDateTime ldt = LocalDateTime.ofInstant(Instant.ofEpochMilli(doc.getDate("datetime").getTime()),
+//                            TimeZone.getDefault().toZoneId());
+                                        LocalDateTime ldt = doc.getDate("datetime").toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+                                        Log.d(TAG, ldt.toString());
+                                        String reason = (String) doc.getData().get("reason");
+                                        String socSit = (String) doc.getData().get("socSit");
+                                        String id = (String) doc.getData().get("ID");
+                                        String vibe = (String) doc.getData().get("vibe");
+                                        vibeEventList.add(new VibeEvent(vibe, ldt, reason, socSit, id));
+                                    }
+                                    myVibesAdapter.notifyDataSetChanged();
+                                }
+                            });
+
+
+                }
+            }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {}
@@ -80,6 +112,7 @@ public class MyVibesActivity extends AppCompatActivity {
         query.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                // TODO: Stub out with other query above
                 vibeEventList.clear();
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
 //                    LocalDateTime ldt = LocalDateTime.ofInstant(Instant.ofEpochMilli(doc.getDate("datetime").getTime()),
