@@ -6,11 +6,30 @@
     android:layout_height="match_parent"
     tools:context=".MyVibesActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/my_vibes_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        app:contentInsetStart="0dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/app_name"
+            android:textColor="@android:color/white"
+            android:textSize="30sp" />
+    </androidx.appcompat.widget.Toolbar>
+
     <Spinner
         android:id="@+id/filter_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true" />
+        android:layout_below="@id/my_vibes_toolbar"
+        android:layout_alignParentTop="false" />
 
     <ListView
         android:id="@+id/my_vibe_list"

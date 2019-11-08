@@ -8,6 +8,22 @@
     android:orientation="vertical"
     tools:context=".ViewVibeActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/view_vibes_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        app:contentInsetStart="0dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/view_vybe_name"
+            android:textColor="@android:color/white"
+            android:textSize="30sp" />
+    </androidx.appcompat.widget.Toolbar>
+
     <ImageView
         android:id="@+id/view_vibe_image_view"
         android:layout_width="match_parent"
