@@ -23,7 +23,6 @@ public class VibeEvent implements Serializable {
     private String id;
     private String image;
 
-
     /**
      * Default constructor called for serialization
      */
@@ -143,12 +142,11 @@ public class VibeEvent implements Serializable {
      */
     public void setImage(String image) { this.image = image; }
 
-
      /**
      * This gets a Date object from the VibeEvent's date and time attribute
      * @return A Date object representing the date and time which a vibe event occurred
      **/
-    public Date getDateTimeFormat(){
+    public Date getDateTimeFormat() {
         long seconds = this.dateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
         Date date = new Date(seconds);
         return date;
