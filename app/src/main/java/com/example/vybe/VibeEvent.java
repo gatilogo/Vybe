@@ -9,7 +9,7 @@ import java.util.Date;
 
 /**
  * A class that implements Serializable and keeps track of vibe events. A vibe event is an event
- * triggered by a particular vibe in the form of an {@link Vibe} at a particular Date and Time,
+ * triggered by a particular vibe in the form of a {@link Vibe} at a particular Date and Time,
  * in the form of a {@link java.time.LocalDate} object. Every vibe event is kept track of through
  * a unique ID which is passed into and from the FireStore database and also optionally
  * keeps track of other details including a reasoning (in the form of text or a photograph) for
@@ -132,10 +132,15 @@ public class VibeEvent implements Serializable {
     public void setId(String id) { this.id = id; }
 
     /**
-     *
+     * This gets the path to the image for the VibeEvent
+     * @return The path to the image for the event
      */
     public String getImage() { return image; }
 
+    /**
+     * This sets the path to the image for the VibeEvent
+     * @param image The path to the image for the event
+     */
     public void setImage(String image) { this.image = image; }
 
 
