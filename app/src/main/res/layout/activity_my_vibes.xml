@@ -23,7 +23,7 @@
                 android:layout_width="49dp"
                 android:layout_height="48dp"
                 android:layout_alignParentStart="true"
-                android:background="@drawable/ic_disgusted" />
+                android:background="@drawable/ic_vibeless" />
 
             <TextView
                 android:id="@+id/my_vybe_title"
