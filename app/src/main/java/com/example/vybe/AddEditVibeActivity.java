@@ -59,8 +59,8 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
     private Button addBtn;
     private Button pickImageBtn;
     private TextView outputBox;
-    private ImageView imageView;
     private TextView pageTitle;
+    private ImageView imageView;
     // -------------------
 
     private VibeEvent vibeEvent;
@@ -87,6 +87,7 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
         outputBox = findViewById(R.id.textView);
         pickImageBtn = findViewById(R.id.pickImageBtn);
         imageView = findViewById(R.id.imageView);
+        pageTitle = findViewById(R.id.add_edit_vybe_title);
         pageTitle = findViewById(R.id.add_edit_vybe_title);
 
         imageView.setDrawingCacheEnabled(true);
