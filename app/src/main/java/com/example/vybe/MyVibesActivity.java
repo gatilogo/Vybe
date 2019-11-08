@@ -46,7 +46,7 @@ public class MyVibesActivity extends AppCompatActivity {
     private Button myMapBtn;
     private Button socialBtn;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-
+    private boolean allFlag;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +60,8 @@ public class MyVibesActivity extends AppCompatActivity {
         myMapBtn = findViewById(R.id.my_map_btn);
         socialBtn = findViewById(R.id.social_btn);
 
+        allFlag = true; // Ask jakey
+
         // --- Vibes Dropdown ---
         String[] vibes = new String[]{"Filter Vibe", "Angry", "Disgusted", "Happy", "Sad", "Scared", "Surprised"};
         ArrayAdapter<String> vibesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, vibes);
@@ -67,10 +69,11 @@ public class MyVibesActivity extends AppCompatActivity {
         filterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                if (position != 0){
                     String filterVibe = vibes[position].toLowerCase();
+                    allFlag = true;
+                    if (position != 0){ allFlag = false;}
                     db.collection("VibeEvent")
-                            .whereEqualTo("vibe", filterVibe)
+                            .orderBy("datetime", Query.Direction.DESCENDING)
                             .get()
                             .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                 @Override
@@ -78,22 +81,24 @@ public class MyVibesActivity extends AppCompatActivity {
                                     // TODO: Stub out with other query below
                                     vibeEventList.clear();
                                     for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
-//                    LocalDateTime ldt = LocalDateTime.ofInstant(Instant.ofEpochMilli(doc.getDate("datetime").getTime()),
-//                            TimeZone.getDefault().toZoneId());
-                                        LocalDateTime ldt = doc.getDate("datetime").toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-                                        Log.d(TAG, ldt.toString());
-                                        String reason = (String) doc.getData().get("reason");
-                                        String socSit = (String) doc.getData().get("socSit");
-                                        String id = (String) doc.getData().get("ID");
-                                        String vibe = (String) doc.getData().get("vibe");
-                                        vibeEventList.add(new VibeEvent(vibe, ldt, reason, socSit, id));
+
+                                            LocalDateTime ldt = doc.getDate("datetime").toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+                                            Log.d(TAG, ldt.toString());
+                                            String reason = (String) doc.getData().get("reason");
+                                            String socSit = (String) doc.getData().get("socSit");
+                                            String id = (String) doc.getData().get("ID");
+                                            String vibe = (String) doc.getData().get("vibe");
+                                        if (allFlag) {
+                                            vibeEventList.add(new VibeEvent(vibe, ldt, reason, socSit, id));
+                                        } else {
+                                            if (filterVibe.equals(vibe)){
+                                                vibeEventList.add(new VibeEvent(vibe, ldt, reason, socSit, id));
+                                            }
+                                        }
                                     }
                                     myVibesAdapter.notifyDataSetChanged();
                                 }
                             });
-
-
-                }
             }
 
             @Override
