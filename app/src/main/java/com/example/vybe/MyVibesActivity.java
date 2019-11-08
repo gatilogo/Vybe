@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 
@@ -45,6 +46,7 @@ public class MyVibesActivity extends AppCompatActivity {
     private Button addVibeEventBtn;
     private Button myMapBtn;
     private Button socialBtn;
+    private ImageButton profileBtn;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private boolean allFlag;
     @Override
@@ -59,8 +61,17 @@ public class MyVibesActivity extends AppCompatActivity {
         addVibeEventBtn = findViewById(R.id.add_vibe_event_btn);
         myMapBtn = findViewById(R.id.my_map_btn);
         socialBtn = findViewById(R.id.social_btn);
+        profileBtn = findViewById(R.id.profile_btn);
 
         allFlag = true; // Ask jakey
+
+        profileBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MyVibesActivity.this, AddEditVibeActivity.class);
+                startActivity(intent);
+            }
+        });
 
         // --- Vibes Dropdown ---
         String[] vibes = new String[]{"Filter Vibe", "Angry", "Disgusted", "Happy", "Sad", "Scared", "Surprised"};
