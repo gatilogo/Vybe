@@ -1,10 +1,16 @@
 package com.example.vybe;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -12,12 +18,22 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -29,6 +45,7 @@ import java.util.HashMap;
 public class AddEditVibeActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
     private static final String TAG = "AddEditVibeActivity";
+    private static final int GET_FROM_GALLERY = 1000;
 
     // --- XML Elements ---
     private Spinner vibeDropdown;
@@ -37,6 +54,8 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
     private Spinner socialSituationDropdown;
     private Button addBtn;
     private TextView outputBox;
+    private Button pickImageBtn;
+    private ImageView imageView;
     // -------------------
 
     private VibeEvent vibeEvent;
@@ -45,6 +64,9 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private boolean editFlag = false;
+    private boolean imageIsSelected = false;
+    private Bitmap imageBitmap;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +80,11 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
         socialSituationDropdown = findViewById(R.id.social_situation_dropdown);
         addBtn = findViewById(R.id.add_btn);
         outputBox = findViewById(R.id.textView);
+        pickImageBtn = findViewById(R.id.pickImageBtn);
+        imageView = findViewById(R.id.imageView);
+
+        imageView.setDrawingCacheEnabled(true);
+        imageView.buildDrawingCache();
 
         Bundle extras = getIntent().getExtras();
 
@@ -79,7 +106,6 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
         datetimeField.setText(formatDateTime(currDateTime));
 
 
-
         // --- Vibes Dropdown ---
         String[] vibes = new String[]{"Select a vibe", "Angry", "Disgusted", "Happy", "Sad", "Scared", "Surprised"};
         ArrayAdapter<String> vibesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, vibes);
@@ -91,7 +117,8 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {}
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
         });
 
         // --- Social Situation Dropdown ---
@@ -105,7 +132,8 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {}
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
         });
 
         // --- Date Picker ---
@@ -113,6 +141,12 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
             openDatePickerDialog(selectedDate);
         });
 
+
+        // --- Image Picker ---
+        pickImageBtn.setOnClickListener((View view) -> {
+            Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+            startActivityForResult(galleryIntent, GET_FROM_GALLERY);
+        });
 
         // --- Show Output on button click ---
         addBtn.setOnClickListener(view -> {
@@ -122,6 +156,10 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
             vibeEvent.setDateTime(LocalDateTime.of(selectedDate, selectedTime));
             vibeEvent.setReason(reasonField.getText().toString());
 
+            if (imageIsSelected) {
+                uploadImage(imageBitmap);
+            }
+
             String output = "";
             output += "Vibe: " + vibeEvent.getVibe().getName() + "\n";
             output += "DateTime: " + vibeEvent.getDateTime() + "\n";
@@ -129,18 +167,62 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
             output += "Social Situation: " + vibeEvent.getSocialSituation() + "\n";
             outputBox.setText(output);
 
-            if (editFlag){
+            if (editFlag) {
                 editVibeEvent(vibeEvent);
             } else {
                 addVibeEvent(vibeEvent);
             }
-            finish();
+//            finish();
+        });
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == GET_FROM_GALLERY && resultCode == RESULT_OK && data != null) {
+            Uri selectedImageUri = data.getData();
+            try {
+                imageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
+                imageIsSelected = true;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return;
+            }
+
+            imageView.setImageBitmap(imageBitmap);
+
+        }
+    }
+
+    public void uploadImage(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] byteArray = baos.toByteArray();
+
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+        StorageReference mountainsRef = storageRef.child("mountains.jpg");
+
+        UploadTask uploadTask = mountainsRef.putBytes(byteArray);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Toast.makeText(getApplicationContext(), "Failed", Toast.LENGTH_LONG).show();
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Toast.makeText(getApplicationContext(), "Succ", Toast.LENGTH_LONG).show();
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                // ...
+            }
         });
 
     }
 
     // TODO: Move to Controller Class
-    public void addVibeEvent(VibeEvent vibeEvent){
+    public void addVibeEvent(VibeEvent vibeEvent) {
         // TODO: Put as private attribute in Controller class if we use one
 
         String id = db.collection("VibeEvent").document().getId();
@@ -149,12 +231,12 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
         db.collection("VibeEvent").document(id).set(data);
     }
 
-    public void editVibeEvent(VibeEvent vibeEvent){
+    public void editVibeEvent(VibeEvent vibeEvent) {
         HashMap<String, Object> data = createVibeEventData(vibeEvent);
         db.collection("VibeEvent").document(vibeEvent.getId()).set(data);
     }
 
-    public HashMap<String, Object> createVibeEventData(VibeEvent vibeEvent){
+    public HashMap<String, Object> createVibeEventData(VibeEvent vibeEvent) {
         HashMap<String, Object> data = new HashMap<>();
         data.put("ID", vibeEvent.getId());
         data.put("vibe", vibeEvent.getVibe().getName());
