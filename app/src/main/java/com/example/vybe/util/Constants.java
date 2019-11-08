@@ -1,5 +1,9 @@
 package com.example.vybe.util;
 
+/**
+ * This class holds various constant values to be used for
+ * Google Maps API functionality
+ */
 public class Constants {
 
     public static final int ERROR_DIALOG_REQUEST = 9001;

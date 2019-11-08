@@ -19,6 +19,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import static com.example.vybe.util.Constants.MAPVIEW_BUNDLE_KEY;
 
+/**
+ * Placeholder activity for where the map fragment is displayed.
+ * In the future, this activity will allow for switching between
+ * a user's personal vibe event history or their social vibe history
+ */
 public class MapViewActivity extends AppCompatActivity {
 
     private static final String TAG = "MapViewActivity";

@@ -27,6 +27,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import static com.example.vybe.util.Constants.MAPVIEW_BUNDLE_KEY;
 
+/**
+ * This fragment displays the map view for your personal vibes. Will
+ * be changed in the future to specify so.
+ */
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private static final String TAG = "UserListFragment";

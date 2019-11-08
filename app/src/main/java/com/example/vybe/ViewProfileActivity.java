@@ -4,6 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
+/**
+ * This activity still does nothing but will be fixed later
+ */
 public class ViewProfileActivity extends AppCompatActivity {
 
     @Override

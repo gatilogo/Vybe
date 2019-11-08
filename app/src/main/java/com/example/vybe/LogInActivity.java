@@ -10,6 +10,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+/**
+ * This activity gets the username and password and validates said fields
+ * with Firestore. Still WIP
+ */
 public class LogInActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
