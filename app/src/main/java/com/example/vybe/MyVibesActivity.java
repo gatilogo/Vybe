@@ -1,5 +1,6 @@
 package com.example.vybe;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,9 +11,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Spinner;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -34,12 +40,13 @@ public class MyVibesActivity extends AppCompatActivity {
     ArrayList<VibeEvent> vibeEventList;
     MyVibesAdapter myVibesAdapter;
 
+    private Spinner filterSpinner;
     private ListView vibesListView;
     private Button addVibeEventBtn;
     private Button myMapBtn;
     private Button socialBtn;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-
+    private boolean allFlag;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,10 +54,56 @@ public class MyVibesActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Log.d(TAG, "onCreate: In my vibes");
 
+        filterSpinner = findViewById(R.id.filter_spinner);
         vibesListView = findViewById(R.id.my_vibe_list);
         addVibeEventBtn = findViewById(R.id.add_vibe_event_btn);
         myMapBtn = findViewById(R.id.my_map_btn);
         socialBtn = findViewById(R.id.social_btn);
+
+        allFlag = true; // Ask jakey
+
+        // --- Vibes Dropdown ---
+        String[] vibes = new String[]{"Filter Vibe", "Angry", "Disgusted", "Happy", "Sad", "Scared", "Surprised"};
+        ArrayAdapter<String> vibesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, vibes);
+        filterSpinner.setAdapter(vibesAdapter);
+        filterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                    String filterVibe = vibes[position].toLowerCase();
+                    allFlag = true;
+                    if (position != 0){ allFlag = false;}
+                    db.collection("VibeEvent")
+                            .orderBy("datetime", Query.Direction.DESCENDING)
+                            .get()
+                            .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                @Override
+                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                    // TODO: Stub out with other query below
+                                    vibeEventList.clear();
+                                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
+
+                                            LocalDateTime ldt = doc.getDate("datetime").toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+                                            Log.d(TAG, ldt.toString());
+                                            String reason = (String) doc.getData().get("reason");
+                                            String socSit = (String) doc.getData().get("socSit");
+                                            String id = (String) doc.getData().get("ID");
+                                            String vibe = (String) doc.getData().get("vibe");
+                                        if (allFlag) {
+                                            vibeEventList.add(new VibeEvent(vibe, ldt, reason, socSit, id));
+                                        } else {
+                                            if (filterVibe.equals(vibe)){
+                                                vibeEventList.add(new VibeEvent(vibe, ldt, reason, socSit, id));
+                                            }
+                                        }
+                                    }
+                                    myVibesAdapter.notifyDataSetChanged();
+                                }
+                            });
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {}
+        });
 
 //        Vibe vibe, Date date, String reason, String socialSituation
         vibeEventList = new ArrayList<>();
@@ -64,6 +117,7 @@ public class MyVibesActivity extends AppCompatActivity {
         query.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                // TODO: Stub out with other query above
                 vibeEventList.clear();
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
 //                    LocalDateTime ldt = LocalDateTime.ofInstant(Instant.ofEpochMilli(doc.getDate("datetime").getTime()),
