@@ -57,8 +57,9 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
     private EditText reasonField;
     private Spinner socialSituationDropdown;
     private Button addBtn;
-    private TextView outputBox;
     private Button pickImageBtn;
+    private TextView outputBox;
+    private TextView pageTitle;
     private ImageView imageView;
     // -------------------
 
@@ -86,6 +87,8 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
         outputBox = findViewById(R.id.textView);
         pickImageBtn = findViewById(R.id.pickImageBtn);
         imageView = findViewById(R.id.imageView);
+        pageTitle = findViewById(R.id.add_edit_vybe_title);
+        pageTitle = findViewById(R.id.add_edit_vybe_title);
 
         imageView.setDrawingCacheEnabled(true);
         imageView.buildDrawingCache();
@@ -98,7 +101,7 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
             reasonField.setText(vibeEvent.getReason());
             editFlag = true;
 
-            setTitle(getString(R.string.edit_vybe_name));
+            pageTitle.setText(getString(R.string.edit_vybe_name));
         } else {
             vibeEvent = new VibeEvent();
             vibeEvent.setDateTime(LocalDateTime.now());
