@@ -200,7 +200,7 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
         byte[] byteArray = baos.toByteArray();
 
 //        Log.d(TAG, id + ".jpg");
-        String imgPath = "reason" + id + ".jpg";
+        String imgPath = "reasons/" + id + ".jpg";
         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
         StorageReference mountainsRef = storageRef.child(imgPath);
 
@@ -229,6 +229,7 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
         vibeEvent.setId(id);
         if (imageIsSelected) {
             uploadImage(imageBitmap, id);
+            vibeEvent.setImage("reasons/" + id + ".jpg");
         }
         HashMap<String, Object> data = createVibeEventData(vibeEvent);
         db.collection("VibeEvent").document(id).set(data);
@@ -237,6 +238,7 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
     public void editVibeEvent(VibeEvent vibeEvent) {
         if (imageIsSelected) {
             uploadImage(imageBitmap, vibeEvent.getId());
+            vibeEvent.setImage("reasons/" + vibeEvent.getId() + ".jpg");
         }
         HashMap<String, Object> data = createVibeEventData(vibeEvent);
         db.collection("VibeEvent").document(vibeEvent.getId()).set(data);
@@ -249,6 +251,7 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
         data.put("datetime", vibeEvent.getDateTimeFormat());
         data.put("reason", vibeEvent.getReason());
         data.put("socSit", vibeEvent.getSocialSituation());
+        data.put("image", vibeEvent.getImage());
         return data;
     };
 
