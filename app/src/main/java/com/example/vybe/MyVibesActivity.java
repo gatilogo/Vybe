@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -148,8 +149,12 @@ public class MyVibesActivity extends AppCompatActivity {
         myMapBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MyVibesActivity.this, MapViewActivity.class);
-                startActivity(intent);
+                if (mLocationPermissionGranted) {
+                    Intent intent = new Intent(MyVibesActivity.this, MapViewActivity.class);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(MyVibesActivity.this, "Please enable GPS services", Toast.LENGTH_SHORT);
+                }
             }
         });
     }
@@ -157,6 +162,7 @@ public class MyVibesActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        //this is just the easiest way to consistently make sure the user has gps enabled
         if (checkMapServices()) {
             if (mLocationPermissionGranted){
                 //do stuff
@@ -177,6 +183,7 @@ public class MyVibesActivity extends AppCompatActivity {
     }
 
     public boolean GoogleServicesWorks(){
+        //Makes sure that google api services are installed and enabled
         int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(MyVibesActivity.this);
 
         if (available == ConnectionResult.SUCCESS) {
@@ -190,6 +197,7 @@ public class MyVibesActivity extends AppCompatActivity {
     }
 
     public boolean isMapsEnabled() {
+        //Makes sure user has gps services enabled
         final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
@@ -200,6 +208,7 @@ public class MyVibesActivity extends AppCompatActivity {
     }
 
     private void NoGpsMessage() {
+        //alert for if user does not have gps enabled
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("We need you to vybe with us using your GPS services, please enable it for us")
                 .setCancelable(false)
@@ -230,7 +239,7 @@ public class MyVibesActivity extends AppCompatActivity {
     }
 
     private void getLocationPermission() {
-
+        //asks user for permission
         if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -247,6 +256,7 @@ public class MyVibesActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String permissions[],
                                            @NonNull int[] grantResults) {
+        //method ran after user closes the get permission window
         mLocationPermissionGranted = false;
         switch (requestCode) {
             case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {

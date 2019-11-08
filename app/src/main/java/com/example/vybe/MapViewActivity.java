@@ -12,11 +12,11 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import static com.example.vybe.util.Constants.MAPVIEW_BUNDLE_KEY;
+
 public class MapViewActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private MapView mMapView;
-
-    private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
