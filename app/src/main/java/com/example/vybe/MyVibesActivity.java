@@ -93,11 +93,12 @@ public class MyVibesActivity extends AppCompatActivity {
                                             String socSit = (String) doc.getData().get("socSit");
                                             String id = (String) doc.getData().get("ID");
                                             String vibe = (String) doc.getData().get("vibe");
+                                            String image = (String) doc.getData().get("image");
                                         if (allFlag) {
-                                            vibeEventList.add(new VibeEvent(vibe, ldt, reason, socSit, id));
+                                            vibeEventList.add(new VibeEvent(vibe, ldt, reason, socSit, id, image));
                                         } else {
                                             if (filterVibe.equals(vibe)){
-                                                vibeEventList.add(new VibeEvent(vibe, ldt, reason, socSit, id));
+                                                vibeEventList.add(new VibeEvent(vibe, ldt, reason, socSit, id, image));
                                             }
                                         }
                                     }
@@ -133,7 +134,8 @@ public class MyVibesActivity extends AppCompatActivity {
                     String socSit = (String) doc.getData().get("socSit");
                     String id = (String) doc.getData().get("ID");
                     String vibe = (String) doc.getData().get("vibe");
-                    vibeEventList.add(new VibeEvent(vibe, ldt, reason, socSit, id));
+                    String image = (String) doc.getData().get("image");
+                    vibeEventList.add(new VibeEvent(vibe, ldt, reason, socSit, id, image));
                 }
                 myVibesAdapter.notifyDataSetChanged();
             }

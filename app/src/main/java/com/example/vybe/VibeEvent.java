@@ -21,6 +21,7 @@ public class VibeEvent implements Serializable {
     private String reason;
     private String socialSituation;
     private String id;
+    private String image;
 
 
     /**
@@ -42,13 +43,16 @@ public class VibeEvent implements Serializable {
      *      This is the social situation in which a vibe event occurred
      * @param id
      *      This is the unique identifier for a particular instance of a vibe event
+     * @param image
+     *      This is a photograph expressing the reason a vibe event occurred
      */
-    public VibeEvent(String vibe, LocalDateTime dateTime, String reason, String socialSituation, String id) {
+    public VibeEvent(String vibe, LocalDateTime dateTime, String reason, String socialSituation, String id, String image) {
         this.vibe = VibeFactory.getVibe(vibe);
         this.dateTime = dateTime;
         this.reason = reason;
         this.socialSituation = socialSituation;
         this.id = id;
+        this.image = image;
     }
 
     /**
@@ -128,9 +132,17 @@ public class VibeEvent implements Serializable {
     public void setId(String id) { this.id = id; }
 
     /**
+     *
+     */
+    public String getImage() { return image; }
+
+    public void setImage(String image) { this.image = image; }
+
+
+     /**
      * This gets a Date object from the VibeEvent's date and time attribute
      * @return A Date object representing the date and time which a vibe event occurred
-     */
+     **/
     public Date getDateTimeFormat(){
         long seconds = this.dateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
         Date date = new Date(seconds);
