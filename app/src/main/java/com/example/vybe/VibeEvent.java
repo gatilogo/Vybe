@@ -18,9 +18,7 @@ public class VibeEvent implements Serializable {
     private String id;
     private String image;
 
-    public VibeEvent() {
-
-    }
+    public VibeEvent() {}
 
     public VibeEvent(String vibe, LocalDateTime dateTime, String reason, String socialSituation, String id, String image) {
         this.vibe = VibeFactory.getVibe(vibe);
@@ -71,7 +69,7 @@ public class VibeEvent implements Serializable {
 
     public void setImage(String image) { this.image = image; }
 
-    public Date getDateTimeFormat(){
+    public Date getDateTimeFormat() {
         long seconds = this.dateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
         Date date = new Date(seconds);
         return date;
