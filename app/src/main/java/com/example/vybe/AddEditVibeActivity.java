@@ -177,7 +177,7 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
             } else {
                 addVibeEvent(vibeEvent);
             }
-//            finish();
+            finish();
         });
 
     }
