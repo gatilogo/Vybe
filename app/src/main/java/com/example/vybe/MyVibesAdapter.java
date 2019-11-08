@@ -17,6 +17,10 @@ import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Locale;
 
+/**
+ * MyVibesAdapter is a CustomList used for the ListAdapter in the main activity that serves as the
+ * list for storing vibe events
+ */
 public class MyVibesAdapter extends ArrayAdapter<VibeEvent> {
 
     private static final String TAG = "MyVibesAdapter";

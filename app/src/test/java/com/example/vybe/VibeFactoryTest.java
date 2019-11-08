@@ -10,15 +10,9 @@ import static org.junit.Assert.assertNull;
 
 public class VibeFactoryTest {
 
-    private VibeFactory mockVibeFactory() {
-        VibeFactory vibeFactory = new VibeFactory();
-        return vibeFactory;
-    }
-
     @Test
     public void testGetAngryVibe() {
-        VibeFactory vibeFactory = mockVibeFactory();
-        Vibe angry = vibeFactory.getVibe("angry");
+        Vibe angry = VibeFactory.getVibe("angry");
 
         assertEquals("angry", angry.getName());
         assertEquals(R.color.Red, angry.getColor());
@@ -28,30 +22,27 @@ public class VibeFactoryTest {
 
     @Test
     public void testGetDisgustedVibe() {
-        VibeFactory vibeFactory = mockVibeFactory();
-        Vibe Disgusted = vibeFactory.getVibe("disgusted");
+        Vibe disgusted = VibeFactory.getVibe("disgusted");
 
-        assertEquals("disgusted", Disgusted.getName());
-        assertEquals(R.color.Green, Disgusted.getColor());
-        assertEquals(R.drawable.ic_disgusted, Disgusted.getEmoticon());
+        assertEquals("disgusted", disgusted.getName());
+        assertEquals(R.color.Green, disgusted.getColor());
+        assertEquals(R.drawable.ic_disgusted, disgusted.getEmoticon());
 
     }
 
     @Test
     public void testGetScaredVibe() {
-        VibeFactory vibeFactory = mockVibeFactory();
-        Vibe Scared = vibeFactory.getVibe("scared");
+        Vibe scared = VibeFactory.getVibe("scared");
 
-        assertEquals("scared", Scared.getName());
-        assertEquals(R.color.Blue, Scared.getColor());
-        assertEquals(R.drawable.ic_scared, Scared.getEmoticon());
+        assertEquals("scared", scared.getName());
+        assertEquals(R.color.Blue, scared.getColor());
+        assertEquals(R.drawable.ic_scared, scared.getEmoticon());
 
     }
 
     @Test
     public void testGetHappyVibe() {
-        VibeFactory vibeFactory = mockVibeFactory();
-        Vibe happy = vibeFactory.getVibe("happy");
+        Vibe happy = VibeFactory.getVibe("happy");
 
         assertEquals("happy", happy.getName());
         assertEquals(R.color.Yellow, happy.getColor());
@@ -61,8 +52,7 @@ public class VibeFactoryTest {
 
     @Test
     public void testGetSadVibe() {
-        VibeFactory vibeFactory = mockVibeFactory();
-        Vibe sad = vibeFactory.getVibe("sad");
+        Vibe sad = VibeFactory.getVibe("sad");
 
         assertEquals("sad", sad.getName());
         assertEquals(R.color.Gray, sad.getColor());
@@ -72,27 +62,24 @@ public class VibeFactoryTest {
 
     @Test
     public void testGetSurprisedVibe() {
-        VibeFactory vibeFactory = mockVibeFactory();
-        Vibe Surprised = vibeFactory.getVibe("surprised");
+        Vibe surprised = VibeFactory.getVibe("surprised");
 
-        assertEquals("surprised", Surprised.getName());
-        assertEquals(R.color.Orange, Surprised.getColor());
-        assertEquals(R.drawable.ic_surprised, Surprised.getEmoticon());
+        assertEquals("surprised", surprised.getName());
+        assertEquals(R.color.Orange, surprised.getColor());
+        assertEquals(R.drawable.ic_surprised, surprised.getEmoticon());
 
     }
 
     @Test
     public void testGetNullVibe_Empty() {
-        VibeFactory vibeFactory = mockVibeFactory();
-        Vibe vibeless = vibeFactory.getVibe("");
+        Vibe vibeless = VibeFactory.getVibe("");
 
         assertNull(vibeless);
     }
 
     @Test
     public void testGetNullVibe_NonEmpty() {
-        VibeFactory vibeFactory = mockVibeFactory();
-        Vibe antivibe = vibeFactory.getVibe("Antivibe");
+        Vibe antivibe = VibeFactory.getVibe("Antivibe");
 
         assertNull(antivibe);
     }
