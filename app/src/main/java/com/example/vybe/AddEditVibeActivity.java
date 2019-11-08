@@ -156,9 +156,7 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
             vibeEvent.setDateTime(LocalDateTime.of(selectedDate, selectedTime));
             vibeEvent.setReason(reasonField.getText().toString());
 
-            if (imageIsSelected) {
-                uploadImage(imageBitmap);
-            }
+
 
             String output = "";
             output += "Vibe: " + vibeEvent.getVibe().getName() + "\n";
@@ -196,13 +194,15 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
         }
     }
 
-    public void uploadImage(Bitmap bitmap) {
+    public void uploadImage(Bitmap bitmap, String id) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] byteArray = baos.toByteArray();
 
+//        Log.d(TAG, id + ".jpg");
+        String imgPath = "reason" + id + ".jpg";
         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-        StorageReference mountainsRef = storageRef.child("mountains.jpg");
+        StorageReference mountainsRef = storageRef.child(imgPath);
 
         UploadTask uploadTask = mountainsRef.putBytes(byteArray);
         uploadTask.addOnFailureListener(new OnFailureListener() {
@@ -227,11 +227,17 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
 
         String id = db.collection("VibeEvent").document().getId();
         vibeEvent.setId(id);
+        if (imageIsSelected) {
+            uploadImage(imageBitmap, id);
+        }
         HashMap<String, Object> data = createVibeEventData(vibeEvent);
         db.collection("VibeEvent").document(id).set(data);
     }
 
     public void editVibeEvent(VibeEvent vibeEvent) {
+        if (imageIsSelected) {
+            uploadImage(imageBitmap, vibeEvent.getId());
+        }
         HashMap<String, Object> data = createVibeEventData(vibeEvent);
         db.collection("VibeEvent").document(vibeEvent.getId()).set(data);
     }
