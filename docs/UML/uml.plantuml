@@ -63,6 +63,7 @@ class MyVibesActivity <<View>> {
     - viewVibeEvent(vibeEvent: VibeEvent)
     - editVibeEvent(vibeEvent: VibeEvent)
     - filterVibes(text: String)
+    - getLocationPermission()
 }
 
 class ViewVibeEventActivity <<View>> {
@@ -79,7 +80,7 @@ class ViewProfileActivity <<View>> {
     - logoutBtn: Button
 }
 
-class EditVibeEventActivity <<View>> {
+class AddEditVibeEventActivity <<View>> {
     - vibePicker: VibePickerFragment
     - dateField: DatePicker
     - reasonField: EditText
@@ -108,6 +109,13 @@ class FollowingVibesActivity <<Controller>> {
 
 class MapActivity <<View>> {
     - vibeEventsAdapter: VibeEventsAdapter
+}
+
+class MyVibeEventsMapFragment <<View>> {
+    - map: GoogleMap
+    - db: FirebaseFirestore
+
+    - addVibeMarkers(map: GoogleMap)
 }
 
 class SocialActivity <<View>> {
@@ -161,6 +169,10 @@ class SearchProfilesActivity <<View>> {
 interface Vibe <<Model>> {
     <<get>> - emoticon: ImageView
     <<get>> - name: String
+}
+
+class VibeFactory <<Controller>> {
+    + getVibe(selectedVibe: String)
 }
 
 class AddVibeEventController <<Controller>> {
@@ -237,16 +249,16 @@ MainActivity "1"-- "1" MyVibesActivity
 
 MyVibesActivity "1" -- "1" ViewVibeEventActivity
 MyVibesActivity "1" -- "1" ViewProfileActivity
-MyVibesActivity "1" -- "1" EditVibeEventActivity
+MyVibesActivity "1" -- "1" AddEditVibeEventActivity
 MyVibesActivity "1" o-- "1" VibeEventsAdapter
 MyVibesActivity "1" -- "1" FollowingVibesActivity
 MyVibesActivity "1" -- "1" MapActivity
 MyVibesActivity "1" -- "1" SocialActivity
 
-ViewVibeEventActivity "1" -- "1" EditVibeEventActivity
+ViewVibeEventActivity "1" -- "1" AddEditVibeEventActivity
 
-EditVibeEventActivity "1" o-- "1" VibePickerFragment
-EditVibeEventActivity "1" o-- "1" VibeEventController
+AddEditVibeEventActivity "1" o-- "1" VibePickerFragment
+AddEditVibeEventActivity "1" o-- "1" VibeEventController
 
 VibeEventsAdapter "1" o-- "1" VibeEventListController
 VibeEventsAdapter "1" o-- "1" VibePickerAdapter
@@ -260,20 +272,23 @@ SocialActivity "1" -- "1" RequestsFragment
 SocialActivity "1" -- "1" SearchProfilesActivity
 SocialActivity "1" -- "1" MapActivity
 
-VibePickerFragment "1" -- "0..*" Vibe
+VibePickerFragment "1" -- "0..*" VibeFactory
 VibePickerFragment "1" o-- "1" VibePickerAdapter
 
 VibeEventController <|-- AddVibeEventController
 VibeEventController <|-- EditVibeEventController
 
-VibeEventListController "1" -- "0..*" Vibe
+VibeEventListController "1" -- "0..*" VibeFactory
 
 MapActivity "1" -- "1" VibeEventListController
+MapActivity "1" o-- "1" MyVibeEventsMapFragment
 
 FollowersFragment "1" -- "1" ProfileAdapter
 FollowingFragment "1" -- "1" ProfileAdapter
 RequestsFragment "1" -- "1" ProfileAdapter
 SearchProfilesActivity "1" -- "1" ProfileAdapter
+
+VibeFactory "1" o-- "0..*" Vibe
 
 Vibe <|.. ClowneryVibe
 Vibe <|.. HappyVibe
