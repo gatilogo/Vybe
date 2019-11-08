@@ -17,6 +17,13 @@ import androidx.fragment.app.Fragment;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import static com.example.vybe.util.Constants.MAPVIEW_BUNDLE_KEY;
 
@@ -26,6 +33,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     //widgets
     private MapView mMapView;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 
     @Override
@@ -99,6 +107,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             return;
         }
         map.setMyLocationEnabled(true);
+        addVibeLocations(map);
+
     }
 
     @Override
@@ -117,5 +127,24 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onLowMemory() {
         super.onLowMemory();
         mMapView.onLowMemory();
+    }
+
+    public void addVibeLocations(GoogleMap map) {
+        // TODO:
+        // add condition for user ID
+        db.collection("VibeEvent").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for (QueryDocumentSnapshot doc: queryDocumentSnapshots) {
+                    GeoPoint gp = (GeoPoint) doc.getGeoPoint("location");
+                    if (gp != null) {
+                        double lat = gp.getLatitude();
+                        double lng = gp.getLongitude();
+                        map.addMarker(new MarkerOptions().position(new LatLng(lat, lng)));
+                    }
+                }
+            }
+        });
+
     }
 }
