@@ -182,7 +182,7 @@ public class MyVibesActivity extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MyVibesActivity.this);
-                builder.setMessage("yay");
+                
                 builder.setCancelable(true);
 
                 // Delete ride if user clicks on "Yes" button
