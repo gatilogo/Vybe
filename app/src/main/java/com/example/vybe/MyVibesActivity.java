@@ -33,6 +33,11 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.TimeZone;
 
+/**
+ * This Activity displays the screen for a user to view a list of their
+ * vibe event history, sorted by date and time in reverse chronological
+ * order
+ */
 public class MyVibesActivity extends AppCompatActivity {
 
     private static final String TAG = "MyVibesActivity";

@@ -26,6 +26,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
+/**
+ * This Activity displays the screen for a user to add a vibe event, or
+ * edit an existing vibe event by adding or modifying the different vibe attributes
+ */
 public class AddEditVibeActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
     private static final String TAG = "AddEditVibeActivity";
