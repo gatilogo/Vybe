@@ -3,19 +3,30 @@ package com.example.vybe;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import android.widget.Spinner;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -33,6 +44,15 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.TimeZone;
 
+import static com.example.vybe.util.Constants.*;
+
+
+/**
+ * This Activity displays the screen for a user to view a list of their
+ * vibe event history, sorted by date and time in reverse chronological
+ * order
+ */
+
 public class MyVibesActivity extends AppCompatActivity {
 
     private static final String TAG = "MyVibesActivity";
@@ -40,11 +60,14 @@ public class MyVibesActivity extends AppCompatActivity {
     ArrayList<VibeEvent> vibeEventList;
     MyVibesAdapter myVibesAdapter;
 
+    private boolean mLocationPermissionGranted = false;
+
     private Spinner filterSpinner;
     private ListView vibesListView;
     private Button addVibeEventBtn;
     private Button myMapBtn;
     private Button socialBtn;
+    private ImageButton profileBtn;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private boolean allFlag;
     @Override
@@ -59,8 +82,17 @@ public class MyVibesActivity extends AppCompatActivity {
         addVibeEventBtn = findViewById(R.id.add_vibe_event_btn);
         myMapBtn = findViewById(R.id.my_map_btn);
         socialBtn = findViewById(R.id.social_btn);
+        profileBtn = findViewById(R.id.profile_btn);
 
         allFlag = true; // Ask jakey
+
+        profileBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MyVibesActivity.this, ViewProfileActivity.class);
+                startActivity(intent);
+            }
+        });
 
         // --- Vibes Dropdown ---
         String[] vibes = new String[]{"Filter Vibe", "Angry", "Disgusted", "Happy", "Sad", "Scared", "Surprised"};
@@ -88,11 +120,12 @@ public class MyVibesActivity extends AppCompatActivity {
                                             String socSit = (String) doc.getData().get("socSit");
                                             String id = (String) doc.getData().get("ID");
                                             String vibe = (String) doc.getData().get("vibe");
+                                            String image = (String) doc.getData().get("image");
                                         if (allFlag) {
-                                            vibeEventList.add(new VibeEvent(vibe, ldt, reason, socSit, id));
+                                            vibeEventList.add(new VibeEvent(vibe, ldt, reason, socSit, id, image));
                                         } else {
                                             if (filterVibe.equals(vibe)){
-                                                vibeEventList.add(new VibeEvent(vibe, ldt, reason, socSit, id));
+                                                vibeEventList.add(new VibeEvent(vibe, ldt, reason, socSit, id, image));
                                             }
                                         }
                                     }
@@ -119,7 +152,7 @@ public class MyVibesActivity extends AppCompatActivity {
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 // TODO: Stub out with other query above
                 vibeEventList.clear();
-                for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
 //                    LocalDateTime ldt = LocalDateTime.ofInstant(Instant.ofEpochMilli(doc.getDate("datetime").getTime()),
 //                            TimeZone.getDefault().toZoneId());
                     LocalDateTime ldt = doc.getDate("datetime").toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
@@ -128,7 +161,8 @@ public class MyVibesActivity extends AppCompatActivity {
                     String socSit = (String) doc.getData().get("socSit");
                     String id = (String) doc.getData().get("ID");
                     String vibe = (String) doc.getData().get("vibe");
-                    vibeEventList.add(new VibeEvent(vibe, ldt, reason, socSit, id));
+                    String image = (String) doc.getData().get("image");
+                    vibeEventList.add(new VibeEvent(vibe, ldt, reason, socSit, id, image));
                 }
                 myVibesAdapter.notifyDataSetChanged();
             }
@@ -148,7 +182,7 @@ public class MyVibesActivity extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MyVibesActivity.this);
-                builder.setMessage("yay");
+                
                 builder.setCancelable(true);
 
                 // Delete ride if user clicks on "Yes" button
@@ -183,5 +217,126 @@ public class MyVibesActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        myMapBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mLocationPermissionGranted) {
+                    Intent intent = new Intent(MyVibesActivity.this, MapViewActivity.class);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(MyVibesActivity.this, "Please enable GPS services", Toast.LENGTH_SHORT);
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //this is just the easiest way to consistently make sure the user has gps enabled
+        if (checkMapServices()) {
+            if (mLocationPermissionGranted){
+                //do stuff
+            }
+            else {
+                getLocationPermission();
+            }
+        }
+    }
+
+    private boolean checkMapServices() {
+        if (GoogleServicesWorks()){
+            if(isMapsEnabled()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean GoogleServicesWorks(){
+        //Makes sure that google api services are installed and enabled
+        int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(MyVibesActivity.this);
+
+        if (available == ConnectionResult.SUCCESS) {
+            return true;
+        }
+        else if (GoogleApiAvailability.getInstance().isUserResolvableError(available)) {
+            Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(MyVibesActivity.this, available, ERROR_DIALOG_REQUEST);
+            dialog.show();
+        }
+        return false;
+    }
+
+    public boolean isMapsEnabled() {
+        //Makes sure user has gps services enabled
+        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            NoGpsMessage();
+            return false;
+        }
+        return true;
+    }
+
+    private void NoGpsMessage() {
+        //alert for if user does not have gps enabled
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("We need you to vybe with us using your GPS services, please enable it for us")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent enableGpsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivityForResult(enableGpsIntent, PERMISSIONS_REQUEST_ENABLE_GPS);
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+
+    protected void OnActivityResult (int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST_ENABLE_GPS: {
+                if (mLocationPermissionGranted){
+                    //idk bro do some stuff
+                }
+                else {
+                    getLocationPermission();
+                }
+            }
+        }
+    }
+
+    private void getLocationPermission() {
+        //asks user for permission
+        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            mLocationPermissionGranted = true;
+            //do stuff
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    new String[] {Manifest.permission.ACCESS_FINE_LOCATION},
+                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String permissions[],
+                                           @NonNull int[] grantResults) {
+        //method ran after user closes the get permission window
+        mLocationPermissionGranted = false;
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
+                if (grantResults.length > 0
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    mLocationPermissionGranted = true;
+                }
+            }
+        }
     }
 }

@@ -6,6 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
+/**
+ * This Activity displays the screen for a user to log in. This file will be updated
+ * to reflect the above in the future
+ */
 public class MainActivity extends AppCompatActivity {
 
     Button loginButton;

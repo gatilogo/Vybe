@@ -13,6 +13,9 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.Locale;
 
+/**
+ * This Activity displays the screen for a vibe event and all its available details
+ */
 public class ViewVibeActivity extends AppCompatActivity {
 
     private static final String TAG = "ViewVibeActivity";

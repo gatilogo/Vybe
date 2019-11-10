@@ -2,6 +2,9 @@ package com.example.vybe.vibefactory;
 
 import com.example.vybe.R;
 
+/**
+ * The implementation of the vibe interface that represents a happy vibe
+ */
 public class HappyVibe implements Vibe {
     private int color;
     private int emoticon;
@@ -23,11 +26,19 @@ public class HappyVibe implements Vibe {
         return "happy";
     }
 
+    /**
+     * @return
+     * The emoticon view ID that describes the Vibe selected
+     */
     @Override
     public int getEmoticon() {
         return this.emoticon;
     }
 
+    /**
+     * @return
+     * The color view ID that describes the Vibe selected
+     */
     @Override
     public int getColor() {
         return this.color;
