@@ -3,6 +3,7 @@ package com.example.vybe;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -32,21 +33,18 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 
 /**
  * This Activity displays the screen for a user to add a vibe event, or
  * edit an existing vibe event by adding or modifying the different vibe attributes
  */
-public class AddEditVibeActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+public class AddEditVibeActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, LocationSelectionDialog.OnFragmentInteractionListener {
 
     private static final String TAG = "AddEditVibeActivity";
     private static final int GET_FROM_GALLERY = 1000;
@@ -58,6 +56,7 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
     private Spinner socialSituationDropdown;
     private Button addBtn;
     private Button pickImageBtn;
+    private Button pickLocationButton;
     //private TextView outputBox;
     private TextView pageTitle;
     private ImageView imageView;
@@ -86,6 +85,7 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
         addBtn = findViewById(R.id.add_btn);
         // outputBox = findViewById(R.id.textView);
         pickImageBtn = findViewById(R.id.pickImageBtn);
+        pickLocationButton = findViewById(R.id.btn_add_location);
         imageView = findViewById(R.id.imageView);
         pageTitle = findViewById(R.id.add_edit_vybe_title);
         pageTitle = findViewById(R.id.add_edit_vybe_title);
@@ -153,6 +153,15 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
         pickImageBtn.setOnClickListener((View view) -> {
             Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
             startActivityForResult(galleryIntent, GET_FROM_GALLERY);
+        });
+
+        // ---Location Picker---
+        pickLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment locationFragment = new LocationSelectionDialog();
+                locationFragment.show(getSupportFragmentManager(), "maybe title");
+            }
         });
 
         // --- Show Output on button click ---
@@ -295,6 +304,11 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
 
     public String formatDateTime(LocalDateTime dateTime) {
         return dateTime.format(DateTimeFormatter.ofPattern("MMM dd yyyy, hh:mm a"));
+    }
+
+    @Override
+    public void onOkPressed(){
+        //pass
     }
 
 }
