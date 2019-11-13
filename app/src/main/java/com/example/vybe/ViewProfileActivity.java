@@ -1,8 +1,8 @@
 package com.example.vybe;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * This activity still does nothing but will be fixed later

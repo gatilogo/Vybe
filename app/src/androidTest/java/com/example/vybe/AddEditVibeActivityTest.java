@@ -2,31 +2,23 @@ package com.example.vybe;
 
 
 import android.app.Activity;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.TimePicker;
+
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
-import android.view.View;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.TimePicker;
-
 import com.robotium.solo.Solo;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-
-import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 
 /**
  * Test class for MainActivity. All the UI tests are written here. Robotium test framework is

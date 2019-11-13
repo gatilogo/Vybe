@@ -1,12 +1,12 @@
 package com.example.vybe;
 
-import com.example.vybe.vibefactory.Vibe;
 import com.example.vybe.vibefactory.AngryVibe;
 import com.example.vybe.vibefactory.DisgustedVibe;
-import com.example.vybe.vibefactory.ScaredVibe;
 import com.example.vybe.vibefactory.HappyVibe;
 import com.example.vybe.vibefactory.SadVibe;
+import com.example.vybe.vibefactory.ScaredVibe;
 import com.example.vybe.vibefactory.SurprisedVibe;
+import com.example.vybe.vibefactory.Vibe;
 
 import java.io.Serializable;
 
