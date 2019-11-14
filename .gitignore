@@ -18,3 +18,7 @@
 
 # Project files
 .project
+
+# Eclipse files
+.classpath
+.settings/
