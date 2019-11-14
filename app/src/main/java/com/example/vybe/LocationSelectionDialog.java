@@ -5,9 +5,11 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
@@ -56,6 +58,12 @@ public class LocationSelectionDialog extends DialogFragment {
         exitButton = view.findViewById(R.id.btn_back);
         confirmButton = view.findViewById(R.id.btn_confirm);
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        final AlertDialog dialog = builder
+                .setCustomTitle(customTitle())
+                .setView(view)
+                .create();
+
         openLocationAutofill.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,14 +82,41 @@ public class LocationSelectionDialog extends DialogFragment {
             }
         });
 
+        useCurrentLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //pass
+            }
+        });
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        return builder
-                .setView(view)
-                .create();
+        exitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        confirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //pass
+            }
+        });
+        
+        return dialog;
     }
 
     public interface OnFragmentInteractionListener {
         void onOkPressed();
+    }
+
+    private TextView customTitle() {
+        TextView title = new TextView(getContext());
+        title.setText("Add a Location");
+        title.setGravity(Gravity.CENTER);
+        title.setTextColor(getResources().getColor(R.color.colorPrimary));
+        title.setTextSize(22);
+
+        return title;
     }
 }
