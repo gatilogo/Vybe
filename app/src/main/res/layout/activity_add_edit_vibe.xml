@@ -36,6 +36,12 @@
             android:orientation="vertical"
             android:padding="16dp" >
 
+            <ImageView
+                android:id="@+id/vibe_selector"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_vibeless" />  <!-- Placeholder till we get emoticons to work-->
+
             <in.goodiebag.carouselpicker.CarouselPicker
                 android:id="@+id/carousel"
                 android:layout_marginTop="20dp"

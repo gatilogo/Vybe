@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.vybe.vibefactory.Vibe;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -51,13 +52,14 @@ import in.goodiebag.carouselpicker.CarouselPicker;
  * This Activity displays the screen for a user to add a vibe event, or
  * edit an existing vibe event by adding or modifying the different vibe attributes
  */
-public class AddEditVibeActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+public class AddEditVibeActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, VibeCarouselFragment.OnFragmentInteractionListener {
 
     private static final String TAG = "AddEditVibeActivity";
     private static final int GET_FROM_GALLERY = 1000;
 
     // --- XML Elements ---
     private Spinner vibeDropdown;
+    private ImageView vibeSelector;
     private EditText datetimeField;
     private EditText reasonField;
     private Spinner socialSituationDropdown;
@@ -71,6 +73,7 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
     private VibeEvent vibeEvent;
     private LocalDate selectedDate;
     private LocalTime selectedTime;
+    private Vibe selectedVibe;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private boolean editFlag = false;
@@ -85,6 +88,7 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
         Log.d(TAG, "onCreate: In Add/Edit vibes");
 
         vibeDropdown = findViewById(R.id.vibe_dropdown);
+        vibeSelector = findViewById(R.id.vibe_selector);
         datetimeField = findViewById(R.id.date_time_edit_text);
         reasonField = findViewById(R.id.reason_edit_text);
         socialSituationDropdown = findViewById(R.id.social_situation_dropdown);
@@ -104,6 +108,7 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
             //TODO: set vibe and socsit dropdrowns
             vibeEvent = (VibeEvent) extras.getSerializable("vibeEvent");
             reasonField.setText(vibeEvent.getReason());
+            vibeSelector.setImageResource(vibeEvent.getVibe().getEmoticon());
             editFlag = true;
 
             pageTitle.setText(getString(R.string.edit_vybe_name));
@@ -118,40 +123,45 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
         datetimeField.setText(formatDateTime(currDateTime));
 
         // --- Vibe Carousel Picker ---
-        CarouselPicker carouselPicker = findViewById(R.id.carousel);
-        List<CarouselPicker.PickerItem> imageItems = new ArrayList<>();
-        imageItems.add(new CarouselPicker.DrawableItem(R.drawable.ic_angry));
-        imageItems.add(new CarouselPicker.DrawableItem(R.drawable.ic_disgusted));
-        imageItems.add(new CarouselPicker.DrawableItem(R.drawable.ic_happy));
-        imageItems.add(new CarouselPicker.DrawableItem(R.drawable.ic_sad));
-        imageItems.add(new CarouselPicker.DrawableItem(R.drawable.ic_scared));
-        imageItems.add(new CarouselPicker.DrawableItem(R.drawable.ic_surprised));
-
-        //Create an adapter
-        CarouselPicker.CarouselViewAdapter imageAdapter = new CarouselPicker.CarouselViewAdapter(this, imageItems, 0);
-        //Set the adapter
-        carouselPicker.setAdapter(imageAdapter);
-
-        carouselPicker.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            /**
-             * On selection of an emoticon, the vibe Event
-             * @param position
-             */
-            @Override
-            public void onPageSelected(int position) {
-                vibeEvent.setVibe(imageItems.get(position).getDrawable());
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
+        vibeSelector.setOnClickListener((View view) -> {
+            new VibeCarouselFragment().show(getSupportFragmentManager(), "Select a Vibe");
         });
+
+        // --- Vibe Carousel Picker ---
+//        CarouselPicker carouselPicker = findViewById(R.id.carousel);
+//        List<CarouselPicker.PickerItem> imageItems = new ArrayList<>();
+//        imageItems.add(new CarouselPicker.DrawableItem(R.drawable.ic_angry));
+//        imageItems.add(new CarouselPicker.DrawableItem(R.drawable.ic_disgusted));
+//        imageItems.add(new CarouselPicker.DrawableItem(R.drawable.ic_happy));
+//        imageItems.add(new CarouselPicker.DrawableItem(R.drawable.ic_sad));
+//        imageItems.add(new CarouselPicker.DrawableItem(R.drawable.ic_scared));
+//        imageItems.add(new CarouselPicker.DrawableItem(R.drawable.ic_surprised));
+//
+//        //Create an adapter
+//        CarouselPicker.CarouselViewAdapter imageAdapter = new CarouselPicker.CarouselViewAdapter(this, imageItems, 0);
+//        //Set the adapter
+//        carouselPicker.setAdapter(imageAdapter);
+//
+//        carouselPicker.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+//            @Override
+//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//
+//            }
+//
+//            /**
+//             * On selection of an emoticon, set the Vibe for a Vibe Event
+//             * @param position position of selected emoticon
+//             */
+//            @Override
+//            public void onPageSelected(int position) {
+//                vibeEvent.setVibe(imageItems.get(position).getDrawable());
+//            }
+//
+//            @Override
+//            public void onPageScrollStateChanged(int state) {
+//
+//            }
+//        });
 
         // --- Social Situation Dropdown ---
         String[] socialSituations = new String[]{"Select a Social Situation", "Alone", "In a group", "Alone in a group"};
@@ -320,6 +330,12 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
 
     public String formatDateTime(LocalDateTime dateTime) {
         return dateTime.format(DateTimeFormatter.ofPattern("MMM dd yyyy, hh:mm a"));
+    }
+
+    @Override
+    public void onOkPressed(int selectedEmoticon) {
+        vibeEvent.setVibe(selectedEmoticon);
+        vibeSelector.setImageResource(selectedEmoticon);
     }
 
 }
