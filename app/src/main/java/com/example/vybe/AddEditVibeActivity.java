@@ -3,6 +3,7 @@ package com.example.vybe;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -38,9 +39,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+
+import in.goodiebag.carouselpicker.CarouselPicker;
 
 /**
  * This Activity displays the screen for a user to add a vibe event, or
@@ -112,19 +117,39 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
         selectedTime = currDateTime.toLocalTime();
         datetimeField.setText(formatDateTime(currDateTime));
 
+        // --- Vibe Carousel Picker ---
+        CarouselPicker carouselPicker = findViewById(R.id.carousel);
+        List<CarouselPicker.PickerItem> imageItems = new ArrayList<>();
+        imageItems.add(new CarouselPicker.DrawableItem(R.drawable.ic_angry));
+        imageItems.add(new CarouselPicker.DrawableItem(R.drawable.ic_disgusted));
+        imageItems.add(new CarouselPicker.DrawableItem(R.drawable.ic_happy));
+        imageItems.add(new CarouselPicker.DrawableItem(R.drawable.ic_sad));
+        imageItems.add(new CarouselPicker.DrawableItem(R.drawable.ic_scared));
+        imageItems.add(new CarouselPicker.DrawableItem(R.drawable.ic_surprised));
 
-        // --- Vibes Dropdown ---
-        String[] vibes = new String[]{"Select a vibe", "Angry", "Disgusted", "Happy", "Sad", "Scared", "Surprised"};
-        ArrayAdapter<String> vibesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, vibes);
-        vibeDropdown.setAdapter(vibesAdapter);
-        vibeDropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        //Create an adapter
+        CarouselPicker.CarouselViewAdapter imageAdapter = new CarouselPicker.CarouselViewAdapter(this, imageItems, 0);
+        //Set the adapter
+        carouselPicker.setAdapter(imageAdapter);
+
+        carouselPicker.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                vibeEvent.setVibe(vibes[position]);
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            /**
+             * On selection of an emoticon, the vibe Event
+             * @param position
+             */
+            @Override
+            public void onPageSelected(int position) {
+                vibeEvent.setVibe(imageItems.get(position).getDrawable());
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
+            public void onPageScrollStateChanged(int state) {
+
             }
         });
 

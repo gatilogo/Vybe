@@ -36,6 +36,14 @@
             android:orientation="vertical"
             android:padding="16dp" >
 
+            <in.goodiebag.carouselpicker.CarouselPicker
+                android:id="@+id/carousel"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:items_visible="three" />
+
             <Spinner
                 android:id="@+id/vibe_dropdown"
                 android:layout_width="match_parent"
