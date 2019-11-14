@@ -50,12 +50,6 @@
                 android:layout_height="wrap_content"
                 app:items_visible="three" />
 
-            <Spinner
-                android:id="@+id/vibe_dropdown"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp" />
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/date_time_text_input"
                 android:layout_width="match_parent"

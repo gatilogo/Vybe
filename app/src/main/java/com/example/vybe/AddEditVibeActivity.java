@@ -87,7 +87,6 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
         setContentView(R.layout.activity_add_edit_vibe);
         Log.d(TAG, "onCreate: In Add/Edit vibes");
 
-        vibeDropdown = findViewById(R.id.vibe_dropdown);
         vibeSelector = findViewById(R.id.vibe_selector);
         datetimeField = findViewById(R.id.date_time_edit_text);
         reasonField = findViewById(R.id.reason_edit_text);
