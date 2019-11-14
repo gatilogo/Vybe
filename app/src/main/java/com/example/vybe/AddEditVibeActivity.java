@@ -71,6 +71,7 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
     private boolean editFlag = false;
     private boolean imageIsSelected = false;
     private Bitmap imageBitmap;
+    private int reasonMaxWords;
 
 
     @Override
@@ -92,6 +93,7 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
 
         imageView.setDrawingCacheEnabled(true);
         imageView.buildDrawingCache();
+        reasonMaxWords = 3;
 
         Bundle extras = getIntent().getExtras();
 
@@ -161,9 +163,15 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
             //TODO: integrate firestore stuff here i guess
 
             vibeEvent.setDateTime(LocalDateTime.of(selectedDate, selectedTime));
-            vibeEvent.setReason(reasonField.getText().toString());
 
-
+            if (reasonField.getText().toString().trim().split("\\s").length <= reasonMaxWords) {
+                reasonField.setError(null);
+                vibeEvent.setReason(reasonField.getText().toString());
+            } else {
+                // your code here
+                reasonField.setError(String.format("max %d words allowed", reasonMaxWords));
+                return;
+            }
 
 //            String output = "";
 //            output += "Vibe: " + vibeEvent.getVibe().getName() + "\n";
