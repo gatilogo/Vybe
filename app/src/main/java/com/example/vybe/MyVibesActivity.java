@@ -26,7 +26,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.example.vybe.AddEdit.AddEditVibeActivity;
+import com.example.vybe.AddEdit.AddEditVibeEventActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -186,7 +186,7 @@ public class MyVibesActivity extends AppCompatActivity {
                 // Delete ride if user clicks on "Yes" button
                 builder.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Intent intent = new Intent(MyVibesActivity.this, AddEditVibeActivity.class);
+                        Intent intent = new Intent(MyVibesActivity.this, AddEditVibeEventActivity.class);
                         VibeEvent vibeEvent = vibeEventList.get(position);
                         intent.putExtra("vibeEvent", vibeEvent);
                         startActivity(intent);
@@ -210,7 +210,7 @@ public class MyVibesActivity extends AppCompatActivity {
         addVibeEventBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MyVibesActivity.this, AddEditVibeActivity.class);
+                Intent intent = new Intent(MyVibesActivity.this, AddEditVibeEventActivity.class);
                 startActivity(intent);
             }
         });

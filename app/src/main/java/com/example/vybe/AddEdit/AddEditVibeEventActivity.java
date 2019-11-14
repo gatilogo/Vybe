@@ -45,9 +45,9 @@ import java.util.HashMap;
  * This Activity displays the screen for a user to add a vibe event, or
  * edit an existing vibe event by adding or modifying the different vibe attributes
  */
-public class AddEditVibeActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+public class AddEditVibeEventActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
-    private static final String TAG = "AddEditVibeActivity";
+    private static final String TAG = "AddEditVibeEventActivity";
     private static final int GET_FROM_GALLERY = 1000;
 
     // --- XML Elements ---
@@ -266,7 +266,7 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
         int currMonth = currDate.getMonthValue() - 1; // Since indexing starts at 0
         int currDay = currDate.getDayOfMonth();
 
-        DatePickerDialog datePickerDialog = new DatePickerDialog(AddEditVibeActivity.this, AddEditVibeActivity.this, currYear, currMonth, currDay);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(AddEditVibeEventActivity.this, AddEditVibeEventActivity.this, currYear, currMonth, currDay);
         datePickerDialog.show();
     }
 
@@ -282,7 +282,7 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
         int currHour = currTime.getHour();
         int currMin = currTime.getMinute();
 
-        TimePickerDialog tpd = new TimePickerDialog(AddEditVibeActivity.this, AddEditVibeActivity.this, currHour, currMin, true);
+        TimePickerDialog tpd = new TimePickerDialog(AddEditVibeEventActivity.this, AddEditVibeEventActivity.this, currHour, currMin, true);
         tpd.show();
     }
 

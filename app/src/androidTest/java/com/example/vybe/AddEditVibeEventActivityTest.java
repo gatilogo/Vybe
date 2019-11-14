@@ -10,7 +10,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
-import com.example.vybe.AddEdit.AddEditVibeActivity;
+import com.example.vybe.AddEdit.AddEditVibeEventActivity;
 import com.robotium.solo.Solo;
 
 import org.junit.After;
@@ -26,11 +26,11 @@ import static org.junit.Assert.assertEquals;
  used
  */
 @RunWith(AndroidJUnit4.class)
-public class AddEditVibeActivityTest {
+public class AddEditVibeEventActivityTest {
     private Solo solo;
     @Rule
-    public ActivityTestRule<AddEditVibeActivity> rule =
-            new ActivityTestRule<>(AddEditVibeActivity.class, true, true);
+    public ActivityTestRule<AddEditVibeEventActivity> rule =
+            new ActivityTestRule<>(AddEditVibeEventActivity.class, true, true);
     /**
      * Runs before all tests and creates solo instance.
      * @throws Exception
