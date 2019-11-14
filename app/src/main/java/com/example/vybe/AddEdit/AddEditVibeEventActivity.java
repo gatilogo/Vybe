@@ -53,7 +53,6 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
 
     // --- XML Elements ---
     private Spinner vibeDropdown;
-    private EditText datetimeField;
     private EditText reasonField;
     private Button addBtn;
     private Button pickImageBtn;
@@ -64,8 +63,6 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
     // -------------------
 
     private VibeEvent vibeEvent;
-    private LocalDate selectedDate;
-    private LocalTime selectedTime;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private boolean editFlag = false;
@@ -80,7 +77,6 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
         Log.d(TAG, "onCreate: In Add/Edit vibes");
 
         vibeDropdown = findViewById(R.id.vibe_dropdown);
-        datetimeField = findViewById(R.id.date_time_edit_text);
         reasonField = findViewById(R.id.reason_edit_text);
         addBtn = findViewById(R.id.add_btn);
         // outputBox = findViewById(R.id.textView);
@@ -92,8 +88,6 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
 
         imageView.setDrawingCacheEnabled(true);
         imageView.buildDrawingCache();
-
-
 
         Bundle extras = getIntent().getExtras();
 

@@ -48,10 +48,7 @@ public class DateTimeFieldFragment extends Fragment implements DatePickerDialog.
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.date_time_field_fragment, container, false);
 
-        selectedDate = LocalDate.now();
-        selectedTime = LocalTime.now();
         dateTimeField = view.findViewById(R.id.date_time_edit_text);
-
         dateTimeField.setOnClickListener(v -> {
             openDatePickerDialog(selectedDate);
         });
