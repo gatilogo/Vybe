@@ -57,11 +57,10 @@ public class MainActivity extends AppCompatActivity {
         };
 
         loginButton.setOnClickListener(view -> {
-            if (!isEmpty(usernameField) && !isEmpty(emailField) && !isEmpty(passwordField)){
-                // TODO: Put this "getter" into a function call maybe
-                String username = usernameField.getText().toString().trim();
-                String email = emailField.getText().toString().trim();
-                String password = passwordField.getText().toString().trim();
+            if (!isEmpty(emailField) && !isEmpty(passwordField)){
+
+                String email = getTrimmedString(emailField);
+                String password = getTrimmedString(passwordField);
 
                 mAuth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -81,9 +80,27 @@ public class MainActivity extends AppCompatActivity {
         });
 
         signupButton.setOnClickListener(view -> {
+            if (!isEmpty(usernameField) && !isEmpty(emailField) && !isEmpty(passwordField)){
+                String username = getTrimmedString(usernameField);
+                String email = getTrimmedString(emailField);
+                String password = getTrimmedString(passwordField);
 
-            Intent intent = new Intent(MainActivity.this, MyVibesActivity.class);
-            startActivity(intent);
+                mAuth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()){
+                                Intent intent = new Intent(MainActivity.this, MyVibesActivity.class);
+                                startActivity(intent);
+                            }
+                            else {
+                                Toast.makeText(getApplicationContext(), "Login Failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+
+            }
+
         });
     }
 
@@ -103,5 +120,9 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean isEmpty(EditText et){
         return et.getText().toString().trim().length() == 0;
+    }
+
+    private String getTrimmedString(EditText et){
+        return et.getText().toString().trim();
     }
 }
