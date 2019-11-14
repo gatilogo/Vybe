@@ -106,7 +106,7 @@ public class AddEditVibeActivityTest {
         solo.enterText((android.widget.EditText) solo.getView("reason_edit_text"), "as df ga sd");
         solo.clickOnButton("Save");
 
-        assertEquals("Expecting an error", "max 3 words allowed",
+        assertEquals("Expecting an error", "Max 3 words allowed",
                 ((EditText) solo.getView("reason_edit_text")).getError().toString());
     }
 

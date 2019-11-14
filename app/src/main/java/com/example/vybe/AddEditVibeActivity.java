@@ -42,6 +42,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
+import static com.example.vybe.util.Constants.REASON_FIELD_MAX_WORD_COUNT;
+
 /**
  * This Activity displays the screen for a user to add a vibe event, or
  * edit an existing vibe event by adding or modifying the different vibe attributes
@@ -71,7 +73,6 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
     private boolean editFlag = false;
     private boolean imageIsSelected = false;
     private Bitmap imageBitmap;
-    private int reasonMaxWords;
 
 
     @Override
@@ -93,7 +94,6 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
 
         imageView.setDrawingCacheEnabled(true);
         imageView.buildDrawingCache();
-        reasonMaxWords = 3;
 
         Bundle extras = getIntent().getExtras();
 
@@ -164,12 +164,11 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
 
             vibeEvent.setDateTime(LocalDateTime.of(selectedDate, selectedTime));
 
-            if (reasonField.getText().toString().trim().split("\\s").length <= reasonMaxWords) {
+            if (reasonField.getText().toString().trim().split("\\s").length <= REASON_FIELD_MAX_WORD_COUNT) {
                 reasonField.setError(null);
                 vibeEvent.setReason(reasonField.getText().toString());
             } else {
-                // your code here
-                reasonField.setError(String.format("max %d words allowed", reasonMaxWords));
+                reasonField.setError(String.format("Max %d words allowed", REASON_FIELD_MAX_WORD_COUNT));
                 return;
             }
 
