@@ -14,6 +14,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.HashMap;
 
 /**
  * This Activity displays the screen for a user to log in. This file will be updated
@@ -29,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         passwordField = findViewById(R.id.password_edit_text);
 
         mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -82,23 +88,41 @@ public class MainActivity extends AppCompatActivity {
         signupButton.setOnClickListener(view -> {
             if (!isEmpty(usernameField) && !isEmpty(emailField) && !isEmpty(passwordField)){
                 String username = getTrimmedString(usernameField);
-                String email = getTrimmedString(emailField);
-                String password = getTrimmedString(passwordField);
 
-                mAuth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                db.collection("Users").whereEqualTo("username", username).get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             if (task.isSuccessful()){
-                                Intent intent = new Intent(MainActivity.this, MyVibesActivity.class);
-                                startActivity(intent);
-                            }
-                            else {
-                                Toast.makeText(getApplicationContext(), "Login Failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                QuerySnapshot document = task.getResult();
+                                if (document.isEmpty()){
+                                    String email = getTrimmedString(emailField);
+                                    String password = getTrimmedString(passwordField);
+
+                                    mAuth.createUserWithEmailAndPassword(email, password)
+                                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                                    if (task.isSuccessful()){
+                                                        HashMap<String, Object> data = new HashMap<>();
+                                                        data.put("username", username);
+                                                        data.put("email", email);
+                                                        db.collection("Users").add(data);
+                                                        Intent intent = new Intent(MainActivity.this, MyVibesActivity.class);
+                                                        startActivity(intent);
+                                                    }
+                                                    else {
+                                                        Toast.makeText(getApplicationContext(), "Login Failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                                    }
+                                                }
+                                            });
+                                } else{
+                                    Toast.makeText(getApplicationContext(), "Username is already taken", Toast.LENGTH_LONG).show();
+                                }
+
                             }
                         }
                     });
-
             }
 
         });
