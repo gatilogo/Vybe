@@ -127,42 +127,6 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
             new VibeCarouselFragment().show(getSupportFragmentManager(), "Select a Vibe");
         });
 
-        // --- Vibe Carousel Picker ---
-//        CarouselPicker carouselPicker = findViewById(R.id.carousel);
-//        List<CarouselPicker.PickerItem> imageItems = new ArrayList<>();
-//        imageItems.add(new CarouselPicker.DrawableItem(R.drawable.ic_angry));
-//        imageItems.add(new CarouselPicker.DrawableItem(R.drawable.ic_disgusted));
-//        imageItems.add(new CarouselPicker.DrawableItem(R.drawable.ic_happy));
-//        imageItems.add(new CarouselPicker.DrawableItem(R.drawable.ic_sad));
-//        imageItems.add(new CarouselPicker.DrawableItem(R.drawable.ic_scared));
-//        imageItems.add(new CarouselPicker.DrawableItem(R.drawable.ic_surprised));
-//
-//        //Create an adapter
-//        CarouselPicker.CarouselViewAdapter imageAdapter = new CarouselPicker.CarouselViewAdapter(this, imageItems, 0);
-//        //Set the adapter
-//        carouselPicker.setAdapter(imageAdapter);
-//
-//        carouselPicker.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-//            @Override
-//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-//
-//            }
-//
-//            /**
-//             * On selection of an emoticon, set the Vibe for a Vibe Event
-//             * @param position position of selected emoticon
-//             */
-//            @Override
-//            public void onPageSelected(int position) {
-//                vibeEvent.setVibe(imageItems.get(position).getDrawable());
-//            }
-//
-//            @Override
-//            public void onPageScrollStateChanged(int state) {
-//
-//            }
-//        });
-
         // --- Social Situation Dropdown ---
         String[] socialSituations = new String[]{"Select a Social Situation", "Alone", "In a group", "Alone in a group"};
         ArrayAdapter<String> socialSituationAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, socialSituations);
@@ -206,6 +170,11 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
 //            output += "Reason: " + vibeEvent.getReason() + "\n";
 //            output += "Social Situation: " + vibeEvent.getSocialSituation() + "\n";
 //            outputBox.setText(output);
+
+            if (vibeEvent.getVibe() == null) {
+                Toast.makeText(getApplicationContext(), "Select a Vibe!", Toast.LENGTH_LONG).show();
+                return;
+            }
 
             if (editFlag) {
                 editVibeEvent(vibeEvent);

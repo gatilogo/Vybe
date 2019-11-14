@@ -19,15 +19,22 @@ import java.util.List;
 
 import in.goodiebag.carouselpicker.CarouselPicker;
 
+/**
+ * VibeCarouselFragment extends a DialogFragment and serves as a custom
+ * picker for a user to decide which Vibe they want to have added to a Vibe Event
+ * Functionality is similar to that of a {@link android.app.DatePickerDialog}
+ */
 public class VibeCarouselFragment extends DialogFragment {
 
     private OnFragmentInteractionListener listener;
-    private int selectedEmoticon = R.drawable.ic_vibeless;
+    private int selectedEmoticon = R.drawable.ic_no_vibe;
 
+    // interface to listen for any user interaction on fragment
     public interface OnFragmentInteractionListener {
         void onOkPressed(int selectedVibeEmoticon);
     }
 
+    // attach fragment to activity
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -39,6 +46,8 @@ public class VibeCarouselFragment extends DialogFragment {
         }
     }
 
+    // create the custom carousel picker within the dialog fragment
+    // populates a list of carousel picker items and then displays them for user's choosing
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -47,7 +56,7 @@ public class VibeCarouselFragment extends DialogFragment {
 
         CarouselPicker carouselPicker = view.findViewById(R.id.carousel_picker);
         List<CarouselPicker.PickerItem> imageItems = new ArrayList<>();
-        imageItems.add(new CarouselPicker.DrawableItem(R.drawable.ic_vibeless));
+        imageItems.add(new CarouselPicker.DrawableItem(R.drawable.ic_no_vibe));
         imageItems.add(new CarouselPicker.DrawableItem(R.drawable.ic_angry));
         imageItems.add(new CarouselPicker.DrawableItem(R.drawable.ic_disgusted));
         imageItems.add(new CarouselPicker.DrawableItem(R.drawable.ic_happy));
@@ -55,9 +64,9 @@ public class VibeCarouselFragment extends DialogFragment {
         imageItems.add(new CarouselPicker.DrawableItem(R.drawable.ic_scared));
         imageItems.add(new CarouselPicker.DrawableItem(R.drawable.ic_surprised));
 
-        //Create an adapter
+        // Create an adapter
         CarouselPicker.CarouselViewAdapter imageAdapter = new CarouselPicker.CarouselViewAdapter(getActivity(), imageItems, 0);
-        //Set the adapter
+        // Set the adapter
         carouselPicker.setAdapter(imageAdapter);
 
         carouselPicker.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -66,11 +75,7 @@ public class VibeCarouselFragment extends DialogFragment {
 
             }
 
-            /**
-             * On selection of an emoticon, set the Vibe for a Vibe Event
-             *
-             * @param position position of selected emoticon
-             */
+            // on selection of an emoticon, set the vibe for a vibe event
             @Override
             public void onPageSelected(int position) {
                 selectedEmoticon = imageItems.get(position).getDrawable();
@@ -90,12 +95,12 @@ public class VibeCarouselFragment extends DialogFragment {
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (selectedEmoticon != R.drawable.ic_vibeless) {
+                        // if no vibe selected just exit
+                        if (selectedEmoticon != R.drawable.ic_no_vibe) {
                             listener.onOkPressed(selectedEmoticon);
                         }
                         else {
-                            // How do I force this to make me pick a vibe
-                            Toast.makeText(getContext(), "Select a Vibe!", Toast.LENGTH_LONG).show();
+                            return;
                         }
                     }
                 }).create();
