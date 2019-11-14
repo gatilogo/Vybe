@@ -22,6 +22,25 @@ public class VibeEvent implements Serializable {
     private String socialSituation;
     private String id;
     private String image;
+    private String placeID;
+
+    public String getPlaceID() {
+        return placeID;
+    }
+
+    public void setPlaceID(String placeID) {
+        this.placeID = placeID;
+    }
+
+    public String getPlaceName() {
+        return placeName;
+    }
+
+    public void setPlaceName(String placeName) {
+        this.placeName = placeName;
+    }
+
+    private String placeName;
 
     /**
      * Default constructor called for serialization
@@ -44,14 +63,20 @@ public class VibeEvent implements Serializable {
      *      This is the unique identifier for a particular instance of a vibe event
      * @param image
      *      This is a photograph expressing the reason a vibe event occurred
+     * @param placeID
+     *      This is the ID google API uses to identify places
+     * @param placeName
+     *      This is the name of the place in google's API
      */
-    public VibeEvent(String vibe, LocalDateTime dateTime, String reason, String socialSituation, String id, String image) {
+    public VibeEvent(String vibe, LocalDateTime dateTime, String reason, String socialSituation, String id, String image, String placeID, String placeName) {
         this.vibe = VibeFactory.getVibe(vibe);
         this.dateTime = dateTime;
         this.reason = reason;
         this.socialSituation = socialSituation;
         this.id = id;
         this.image = image;
+        this.placeID = placeID;
+        this.placeName = placeName;
     }
 
     /**

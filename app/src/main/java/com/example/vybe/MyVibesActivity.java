@@ -121,11 +121,13 @@ public class MyVibesActivity extends AppCompatActivity {
                                             String id = (String) doc.getData().get("ID");
                                             String vibe = (String) doc.getData().get("vibe");
                                             String image = (String) doc.getData().get("image");
+                                            String placeID = (String) doc.getData().get("PlaceID");
+                                            String placeName = (String) doc.getData().get("PlaceName");
                                         if (allFlag) {
-                                            vibeEventList.add(new VibeEvent(vibe, ldt, reason, socSit, id, image));
+                                            vibeEventList.add(new VibeEvent(vibe, ldt, reason, socSit, id, image, placeID, placeName));
                                         } else {
                                             if (filterVibe.equals(vibe)){
-                                                vibeEventList.add(new VibeEvent(vibe, ldt, reason, socSit, id, image));
+                                                vibeEventList.add(new VibeEvent(vibe, ldt, reason, socSit, id, image, placeID, placeName));
                                             }
                                         }
                                     }
@@ -162,7 +164,9 @@ public class MyVibesActivity extends AppCompatActivity {
                     String id = (String) doc.getData().get("ID");
                     String vibe = (String) doc.getData().get("vibe");
                     String image = (String) doc.getData().get("image");
-                    vibeEventList.add(new VibeEvent(vibe, ldt, reason, socSit, id, image));
+                    String placeID = (String) doc.getData().get("placeID");
+                    String placeName = (String) doc.getData().get("placeName");
+                    vibeEventList.add(new VibeEvent(vibe, ldt, reason, socSit, id, image, placeID, placeName));
                 }
                 myVibesAdapter.notifyDataSetChanged();
             }

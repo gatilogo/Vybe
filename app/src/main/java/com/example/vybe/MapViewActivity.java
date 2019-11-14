@@ -45,6 +45,7 @@ public class MapViewActivity extends AppCompatActivity {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.map_container, fragment);
         transaction.commit();
+        
     }
 
 }

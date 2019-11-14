@@ -90,6 +90,15 @@
                 android:layout_height="wrap_content"
                 android:text="Pick Location" />
 
+            <TextView
+                android:id="@+id/selected_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:text="No Location Selected" />
+
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="wrap_content"

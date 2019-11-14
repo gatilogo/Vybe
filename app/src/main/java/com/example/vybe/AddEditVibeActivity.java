@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.libraries.places.api.model.Place;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -60,6 +61,7 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
     //private TextView outputBox;
     private TextView pageTitle;
     private ImageView imageView;
+    private TextView selectedLocation;
     // -------------------
 
     private VibeEvent vibeEvent;
@@ -268,6 +270,8 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
         data.put("reason", vibeEvent.getReason());
         data.put("socSit", vibeEvent.getSocialSituation());
         data.put("image", vibeEvent.getImage());
+        data.put("placeID", vibeEvent.getPlaceID());
+        data.put("placeName", vibeEvent.getPlaceName());
         return data;
     };
 
@@ -307,8 +311,13 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
     }
 
     @Override
-    public void onOkPressed(){
-        //pass
+    public void onOkPressed(String placeID, String placeName){
+        selectedLocation = findViewById(R.id.selected_location);
+        selectedLocation.setText(placeName);
+        vibeEvent.setPlaceID(placeID);
+        vibeEvent.setPlaceName(placeName);
     }
+
+
 
 }
