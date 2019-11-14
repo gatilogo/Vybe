@@ -51,14 +51,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
-                // User is not logged in
-                if (user == null){
-                    // TODO: Change this to redirect to MainActivity but may cause issues so need to test
-                    Toast.makeText(getApplicationContext(), "Aight imma head out", Toast.LENGTH_LONG).show();
-                } else {
-                    // TODO: Redirect to My Vibes Activity but need to test
-                    Log.i(TAG, "onAuthStateChanged: " + user.getUid());
-                    Toast.makeText(getApplicationContext(), "Aight imma stay in", Toast.LENGTH_LONG).show();
+                // User is logged in
+                if (user != null){
+                    Intent intent = new Intent(MainActivity.this, MyVibesActivity.class);
+                    startActivity(intent);
                 }
             }
         };
