@@ -73,8 +73,9 @@
                     android:maxLength="20" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <Spinner
-                android:id="@+id/social_situation_dropdown"
+            <fragment
+                android:id="@+id/fragment"
+                android:name="com.example.vybe.AddEdit.SocialSituationFieldFragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 

@@ -45,7 +45,7 @@ import java.util.HashMap;
  * This Activity displays the screen for a user to add a vibe event, or
  * edit an existing vibe event by adding or modifying the different vibe attributes
  */
-public class AddEditVibeEventActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+public class AddEditVibeEventActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, SocialSituationFieldFragment.SocStnSelectedListener {
 
     private static final String TAG = "AddEditVibeEventActivity";
     private static final int GET_FROM_GALLERY = 1000;
@@ -54,7 +54,6 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements DateP
     private Spinner vibeDropdown;
     private EditText datetimeField;
     private EditText reasonField;
-    private Spinner socialSituationDropdown;
     private Button addBtn;
     private Button pickImageBtn;
     //private TextView outputBox;
@@ -81,7 +80,6 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements DateP
         vibeDropdown = findViewById(R.id.vibe_dropdown);
         datetimeField = findViewById(R.id.date_time_edit_text);
         reasonField = findViewById(R.id.reason_edit_text);
-        socialSituationDropdown = findViewById(R.id.social_situation_dropdown);
         addBtn = findViewById(R.id.add_btn);
         // outputBox = findViewById(R.id.textView);
         pickImageBtn = findViewById(R.id.pickImageBtn);
@@ -127,21 +125,6 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements DateP
             }
         });
 
-        // --- Social Situation Dropdown ---
-        String[] socialSituations = new String[]{"Select a Social Situation", "Alone", "In a group", "Alone in a group"};
-        ArrayAdapter<String> socialSituationAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, socialSituations);
-        socialSituationDropdown.setAdapter(socialSituationAdapter);
-        socialSituationDropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                vibeEvent.setSocialSituation(socialSituations[position]);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-            }
-        });
-
         // --- Date Picker ---
         datetimeField.setOnClickListener((View view) -> {
             openDatePickerDialog(selectedDate);
@@ -162,8 +145,6 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements DateP
             vibeEvent.setDateTime(LocalDateTime.of(selectedDate, selectedTime));
             vibeEvent.setReason(reasonField.getText().toString());
 
-
-
 //            String output = "";
 //            output += "Vibe: " + vibeEvent.getVibe().getName() + "\n";
 //            output += "DateTime: " + vibeEvent.getDateTime() + "\n";
@@ -179,6 +160,12 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements DateP
             finish();
         });
 
+    }
+
+    @Override
+    public void onSocStnSelected(String socStn) {
+        vibeEvent.setSocialSituation(socStn);
+        Toast.makeText(getApplicationContext(), socStn, Toast.LENGTH_LONG).show();
     }
 
     @Override
