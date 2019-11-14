@@ -1,4 +1,4 @@
-package com.example.vybe;
+package com.example.vybe.AddEdit;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -24,6 +24,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.vybe.R;
+import com.example.vybe.VibeEvent;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;

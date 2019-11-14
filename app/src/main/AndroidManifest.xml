@@ -23,7 +23,7 @@
             android:label="@string/view_vybe_name"
             android:parentActivityName=".MyVibesActivity" />
         <activity
-            android:name=".AddEditVibeActivity"
+            android:name=".AddEdit.AddEditVibeActivity"
             android:label="@string/add_vybe_name"
             android:parentActivityName=".MyVibesActivity" />
         <activity android:name=".MyVibesActivity" />

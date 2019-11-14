@@ -10,6 +10,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
+import com.example.vybe.AddEdit.AddEditVibeActivity;
 import com.robotium.solo.Solo;
 
 import org.junit.After;
