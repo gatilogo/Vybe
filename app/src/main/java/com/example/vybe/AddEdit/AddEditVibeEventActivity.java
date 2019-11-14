@@ -23,6 +23,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import com.example.vybe.R;
 import com.example.vybe.VibeEvent;
@@ -45,7 +46,7 @@ import java.util.HashMap;
  * This Activity displays the screen for a user to add a vibe event, or
  * edit an existing vibe event by adding or modifying the different vibe attributes
  */
-public class AddEditVibeEventActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, SocialSituationFieldFragment.SocStnSelectedListener {
+public class AddEditVibeEventActivity extends AppCompatActivity implements SocialSituationFieldFragment.SocStnSelectedListener, DateTimeFieldFragment.DateTimeSelectedListener {
 
     private static final String TAG = "AddEditVibeEventActivity";
     private static final int GET_FROM_GALLERY = 1000;
@@ -59,6 +60,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements DateP
     //private TextView outputBox;
     private TextView pageTitle;
     private ImageView imageView;
+    private DateTimeFieldFragment dateTimeFieldFragment;
     // -------------------
 
     private VibeEvent vibeEvent;
@@ -86,9 +88,12 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements DateP
         imageView = findViewById(R.id.imageView);
         pageTitle = findViewById(R.id.add_edit_vybe_title);
         pageTitle = findViewById(R.id.add_edit_vybe_title);
+        dateTimeFieldFragment = (DateTimeFieldFragment) getSupportFragmentManager().findFragmentById(R.id.date_time_field_fragment);
 
         imageView.setDrawingCacheEnabled(true);
         imageView.buildDrawingCache();
+
+
 
         Bundle extras = getIntent().getExtras();
 
@@ -104,11 +109,9 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements DateP
             vibeEvent.setDateTime(LocalDateTime.now());
         }
 
-        LocalDateTime currDateTime = vibeEvent.getDateTime();
-        selectedDate = currDateTime.toLocalDate();
-        selectedTime = currDateTime.toLocalTime();
-        datetimeField.setText(formatDateTime(currDateTime));
-
+        Bundle args = new Bundle();
+        args.putSerializable("dateTime", vibeEvent.getDateTime());
+        dateTimeFieldFragment.setDefaultDateTime(args);
 
         // --- Vibes Dropdown ---
         String[] vibes = new String[]{"Select a vibe", "Angry", "Disgusted", "Happy", "Sad", "Scared", "Surprised"};
@@ -125,12 +128,6 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements DateP
             }
         });
 
-        // --- Date Picker ---
-        datetimeField.setOnClickListener((View view) -> {
-            openDatePickerDialog(selectedDate);
-        });
-
-
         // --- Image Picker ---
         pickImageBtn.setOnClickListener((View view) -> {
             Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
@@ -141,16 +138,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements DateP
         addBtn.setOnClickListener(view -> {
 
             //TODO: integrate firestore stuff here i guess
-
-            vibeEvent.setDateTime(LocalDateTime.of(selectedDate, selectedTime));
             vibeEvent.setReason(reasonField.getText().toString());
-
-//            String output = "";
-//            output += "Vibe: " + vibeEvent.getVibe().getName() + "\n";
-//            output += "DateTime: " + vibeEvent.getDateTime() + "\n";
-//            output += "Reason: " + vibeEvent.getReason() + "\n";
-//            output += "Social Situation: " + vibeEvent.getSocialSituation() + "\n";
-//            outputBox.setText(output);
 
             if (editFlag) {
                 editVibeEvent(vibeEvent);
@@ -165,7 +153,13 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements DateP
     @Override
     public void onSocStnSelected(String socStn) {
         vibeEvent.setSocialSituation(socStn);
-        Toast.makeText(getApplicationContext(), socStn, Toast.LENGTH_LONG).show();
+
+    }
+
+    @Override
+    public void onDateTimeSelected(LocalDateTime selectedDateTime) {
+        vibeEvent.setDateTime(selectedDateTime);
+        Toast.makeText(getApplicationContext(), "Yeee Boiii", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -247,40 +241,5 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements DateP
         data.put("image", vibeEvent.getImage());
         return data;
     };
-
-    private void openDatePickerDialog(LocalDate currDate) {
-        int currYear = currDate.getYear();
-        int currMonth = currDate.getMonthValue() - 1; // Since indexing starts at 0
-        int currDay = currDate.getDayOfMonth();
-
-        DatePickerDialog datePickerDialog = new DatePickerDialog(AddEditVibeEventActivity.this, AddEditVibeEventActivity.this, currYear, currMonth, currDay);
-        datePickerDialog.show();
-    }
-
-    @Override
-    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-        month += 1; // since indexing starts at 0
-        selectedDate = LocalDate.of(year, month, day);
-
-        openTimePickerDialog(selectedTime);
-    }
-
-    private void openTimePickerDialog(LocalTime currTime) {
-        int currHour = currTime.getHour();
-        int currMin = currTime.getMinute();
-
-        TimePickerDialog tpd = new TimePickerDialog(AddEditVibeEventActivity.this, AddEditVibeEventActivity.this, currHour, currMin, true);
-        tpd.show();
-    }
-
-    @Override
-    public void onTimeSet(TimePicker timePicker, int hour, int min) {
-        selectedTime = LocalTime.of(hour, min);
-        datetimeField.setText(formatDateTime(LocalDateTime.of(selectedDate, selectedTime)));
-    }
-
-    public String formatDateTime(LocalDateTime dateTime) {
-        return dateTime.format(DateTimeFormatter.ofPattern("MMM dd yyyy, hh:mm a"));
-    }
 
 }

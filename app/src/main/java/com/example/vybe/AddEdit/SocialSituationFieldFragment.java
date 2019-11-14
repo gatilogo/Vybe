@@ -19,7 +19,8 @@ import com.example.vybe.R;
 public class SocialSituationFieldFragment extends Fragment {
 
     private Spinner socStnDropdown;
-    private SocStnSelectedListener onSocStnSelectedListener;
+    private SocStnSelectedListener socStnSelectedListener;
+    private Context context;
 
     interface SocStnSelectedListener {
         void onSocStnSelected(String socStn);
@@ -28,9 +29,9 @@ public class SocialSituationFieldFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
+        this.context = context;
         Activity activity = (Activity) context;
-        onSocStnSelectedListener = (SocStnSelectedListener) activity;
-
+        socStnSelectedListener = (SocStnSelectedListener) activity;
     }
 
     @Nullable
@@ -41,17 +42,16 @@ public class SocialSituationFieldFragment extends Fragment {
         socStnDropdown = view.findViewById(R.id.soc_stn_dropdown);
 
         String[] socStn = new String[]{"Select a Social Situation", "Alone", "In a group", "Alone in a group"};
-        ArrayAdapter<String> socialSituationAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, socStn);
+        ArrayAdapter<String> socialSituationAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, socStn);
         socStnDropdown.setAdapter(socialSituationAdapter);
         socStnDropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                onSocStnSelectedListener.onSocStnSelected(socStn[position]);
+                socStnSelectedListener.onSocStnSelected(socStn[position]);
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-            }
+            public void onNothingSelected(AdapterView<?> adapterView) { }
         });
 
         return view;

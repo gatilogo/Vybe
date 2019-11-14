@@ -42,21 +42,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/date_time_text_input"
+            <fragment
+                android:id="@+id/date_time_field_fragment"
+                android:name="com.example.vybe.AddEdit.DateTimeFieldFragment"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:id="@+id/date_time_edit_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:autofillHints="false"
-                    android:focusableInTouchMode="false"
-                    android:hint="@string/date_time"
-                    android:inputType="datetime"
-                    android:textSize="18sp" />
-            </com.google.android.material.textfield.TextInputLayout>
+                android:layout_height="wrap_content" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/reason_text_input"
@@ -74,7 +64,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <fragment
-                android:id="@+id/fragment"
+                android:id="@+id/social_situation_field_fragment"
                 android:name="com.example.vybe.AddEdit.SocialSituationFieldFragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
