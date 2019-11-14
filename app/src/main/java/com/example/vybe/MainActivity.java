@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -24,16 +25,15 @@ import java.util.HashMap;
  * to reflect the above in the future
  */
 public class MainActivity extends AppCompatActivity {
+    private static final String TAG = "MainActivity";
 
     Button loginButton;
     Button signupButton;
-    EditText usernameField;
     EditText emailField;
     EditText passwordField;
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,12 +42,10 @@ public class MainActivity extends AppCompatActivity {
 
         loginButton = findViewById(R.id.login_button);
         signupButton = findViewById(R.id.signup_button);
-        usernameField = findViewById(R.id.username_edit_text);
         emailField = findViewById(R.id.email_edit_text);
         passwordField = findViewById(R.id.password_edit_text);
 
         mAuth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -59,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Aight imma head out", Toast.LENGTH_LONG).show();
                 } else {
                     // TODO: Redirect to My Vibes Activity but need to test
+                    Log.i(TAG, "onAuthStateChanged: " + user.getUid());
                     Toast.makeText(getApplicationContext(), "Aight imma stay in", Toast.LENGTH_LONG).show();
                 }
             }
@@ -90,56 +89,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         signupButton.setOnClickListener(view -> {
-            // Check all the fields are filled in for sign in
-            if (!isEmpty(usernameField) && !isEmpty(emailField) && !isEmpty(passwordField)){
-                String username = getTrimmedString(usernameField);
-                // Check Firestore if username is already taken
-                db.collection("Users").whereEqualTo("username", username).get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            // Query was successful
-                            if (task.isSuccessful()){
-                                // Get the user's profile record
-                                QuerySnapshot document = task.getResult();
-
-                                // If empty, then the unique username is not taken
-                                if (document.isEmpty()){
-                                    // Get the email and password entered
-                                    String email = getTrimmedString(emailField);
-                                    String password = getTrimmedString(passwordField);
-                                    // Create the account using Firebase authentication
-                                    mAuth.createUserWithEmailAndPassword(email, password)
-                                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                                    // If the account was created successfully then add the
-                                                    // profile information to Firestore
-                                                    if (task.isSuccessful()){
-                                                        HashMap<String, Object> data = new HashMap<>();
-                                                        data.put("username", username);
-                                                        data.put("email", email);
-                                                        db.collection("Users").add(data);
-                                                        // Switch to My Vibes Acitivity
-                                                        Intent intent = new Intent(MainActivity.this, MyVibesActivity.class);
-                                                        startActivity(intent);
-                                                    }
-                                                    else {
-                                                        // Notify user what caused the error
-                                                        Toast.makeText(getApplicationContext(), "Login Failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
-                                                    }
-                                                }
-                                            });
-                                } else{
-                                    // If the document exists, then the unique username already exists
-                                    Toast.makeText(getApplicationContext(), "Username is already taken", Toast.LENGTH_LONG).show();
-                                }
-
-                            }
-                        }
-                    });
-            }
-
+            Intent intent = new Intent(MainActivity.this, CreateAccountActivity.class);
+            startActivity(intent);
         });
     }
 
@@ -166,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
      *      EditText that we want to check
      * @return Returns true if the field is empty, false it is filled
      */
-    private boolean isEmpty(EditText et){
+    public static boolean isEmpty(EditText et){
         return et.getText().toString().trim().length() == 0;
     }
 
@@ -176,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
      *      EditText that we want to get the string from
      * @return Returns the string from the EditText trimmed
      */
-    private String getTrimmedString(EditText et){
+    public static String getTrimmedString(EditText et){
         return et.getText().toString().trim();
     }
 }

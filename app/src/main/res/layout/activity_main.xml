@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_weight="0"
-        android:padding="10dp"
+        android:padding="5dp"
         android:src="@drawable/ic_title_vibe" />
 
     <TextView
@@ -26,7 +26,7 @@
         android:textColor="@color/White"
         android:textStyle="bold"
         android:layout_gravity="center_horizontal"
-        android:padding="35dp"
+        android:padding="25dp"
         android:textSize="48sp" />
 
 <!--    <EditText-->
@@ -36,14 +36,6 @@
 <!--        android:autofillHints="false"-->
 <!--        android:hint="Latitude (-90 to 90)"-->
 <!--        android:inputType="numberDecimal|numberSigned" />-->
-
-    <EditText
-        android:id="@+id/username_edit_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:autofillHints="false"
-        android:hint="Username"
-        android:inputType="textPersonName" />
 
     <EditText
         android:id="@+id/email_edit_text"
