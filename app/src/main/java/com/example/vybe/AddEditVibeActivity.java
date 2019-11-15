@@ -25,7 +25,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
-
+import com.bumptech.glide.Glide;
 import com.example.vybe.vibefactory.Vibe;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -108,6 +108,9 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
             //TODO: set vibe and socsit dropdrowns
             vibeEvent = (VibeEvent) extras.getSerializable("vibeEvent");
             reasonField.setText(vibeEvent.getReason());
+            if (vibeEvent.getImage() != null){
+                loadImageFirebase(imageView, vibeEvent.getImage());
+            }
             vibeSelector.setImageResource(vibeEvent.getVibe().getEmoticon());
             toolbar.setBackgroundResource(vibeEvent.getVibe().getColor());
             addBtn.setBackgroundResource(vibeEvent.getVibe().getColor());
@@ -307,6 +310,30 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
         return dateTime.format(DateTimeFormatter.ofPattern("MMM dd yyyy, hh:mm a"));
     }
 
+    /**
+     * This will load an image from Firebase Storage into an ImageView
+     * @param imageView
+     *      The destination ImageView
+     * @param imagePath
+     *      Path to the image in Firebase Storage
+     */
+    public void loadImageFirebase(ImageView imageView, String imagePath){
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+
+        // Get the path to the image
+        StorageReference imageRef = storageRef.child(imagePath);
+
+        // Get the download URL for Glide
+        imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Glide.with(getApplicationContext())
+                        .load(uri) // Load the image
+                        .into(imageView); // Destination to load image into
+            }
+        });
+    }
+  
     @Override
     public void onOkPressed(int selectedEmoticon) {
         vibeEvent.setVibe(selectedEmoticon);
@@ -314,5 +341,4 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
         toolbar.setBackgroundResource(vibeEvent.getVibe().getColor());
         addBtn.setBackgroundResource(vibeEvent.getVibe().getColor());
     }
-
 }
