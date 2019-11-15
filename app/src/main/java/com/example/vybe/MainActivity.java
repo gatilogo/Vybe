@@ -109,21 +109,21 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Helper function to check if an edit text field is empty
-     * @param et
+     * @param editText
      *      EditText that we want to check
      * @return Returns true if the field is empty, false it is filled
      */
-    public static boolean isEmpty(EditText et){
-        return et.getText().toString().trim().length() == 0;
+    public static boolean isEmpty(EditText editText){
+        return editText.getText().toString().trim().length() == 0;
     }
 
     /**
      * Helper function to get trimmed string from edit text field
-     * @param et
+     * @param editText
      *      EditText that we want to get the string from
      * @return Returns the string from the EditText trimmed
      */
-    public static String getTrimmedString(EditText et){
-        return et.getText().toString().trim();
+    public static String getTrimmedString(EditText editText){
+        return editText.getText().toString().trim();
     }
 }

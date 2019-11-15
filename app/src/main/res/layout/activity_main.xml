@@ -28,7 +28,7 @@
         android:layout_gravity="center_horizontal"
         android:padding="25dp"
         android:textSize="48sp" />
-    
+
     <EditText
         android:id="@+id/email_edit_text"
         android:layout_width="match_parent"
