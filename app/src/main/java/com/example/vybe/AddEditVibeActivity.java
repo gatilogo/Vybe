@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -101,6 +102,11 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
             //TODO: set vibe and socsit dropdrowns
             vibeEvent = (VibeEvent) extras.getSerializable("vibeEvent");
             reasonField.setText(vibeEvent.getReason());
+
+            if (vibeEvent.getImage() != null){
+                loadImageFirebase(imageView, vibeEvent.getImage());
+            }
+
             editFlag = true;
 
             pageTitle.setText(getString(R.string.edit_vybe_name));
@@ -304,4 +310,17 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
         return dateTime.format(DateTimeFormatter.ofPattern("MMM dd yyyy, hh:mm a"));
     }
 
+    public void loadImageFirebase(ImageView imageView, String imagePath){
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+        StorageReference imageRef = storageRef.child(imagePath);
+
+        imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Glide.with(getApplicationContext() /* context */)
+                        .load(uri)
+                        .into(imageView);
+            }
+        });
+    }
 }
