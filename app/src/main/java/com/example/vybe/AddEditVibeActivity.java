@@ -310,16 +310,26 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
         return dateTime.format(DateTimeFormatter.ofPattern("MMM dd yyyy, hh:mm a"));
     }
 
+    /**
+     * This will load an image from Firebase Storage into an ImageView
+     * @param imageView
+     *      The destination ImageView
+     * @param imagePath
+     *      Path to the image in Firebase Storage
+     */
     public void loadImageFirebase(ImageView imageView, String imagePath){
         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+
+        // Get the path to the image
         StorageReference imageRef = storageRef.child(imagePath);
 
+        // Get the download URL for Glide
         imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
                 Glide.with(getApplicationContext() /* context */)
-                        .load(uri)
-                        .into(imageView);
+                        .load(uri) // Load the image
+                        .into(imageView); // Destination to load image into
             }
         });
     }
