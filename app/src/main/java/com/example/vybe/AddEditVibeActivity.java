@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -70,7 +71,6 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
     //private TextView outputBox;
     private TextView pageTitle;
     private ImageView imageView;
-    private TextView selectedLocation;
     private Toolbar toolbar;
     // -------------------
 
@@ -78,6 +78,7 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
     private LocalDate selectedDate;
     private LocalTime selectedTime;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private MapFragment addEditMapFragment;
 
     private boolean editFlag = false;
     private boolean imageIsSelected = false;
@@ -100,11 +101,12 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
         pickLocationButton = findViewById(R.id.btn_add_location);
         imageView = findViewById(R.id.imageView);
         pageTitle = findViewById(R.id.add_edit_vybe_title);
-        pageTitle = findViewById(R.id.add_edit_vybe_title);
         toolbar = findViewById(R.id.add_edit_vibes_toolbar);
+        addEditMapFragment = (MapFragment)  getSupportFragmentManager().findFragmentById(R.id.add_edit_map_fragment);
 
         imageView.setDrawingCacheEnabled(true);
         imageView.buildDrawingCache();
+
 
         Bundle extras = getIntent().getExtras();
 
@@ -118,12 +120,20 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
             vibeSelector.setImageResource(vibeEvent.getVibe().getEmoticon());
             toolbar.setBackgroundResource(vibeEvent.getVibe().getColor());
             addBtn.setBackgroundResource(vibeEvent.getVibe().getColor());
+
             editFlag = true;
 
             pageTitle.setText(getString(R.string.edit_vybe_name));
+
+            if (vibeEvent.getLatitude() != 0 && vibeEvent.getLongitude() != 0) {
+                addEditMapFragment.addVibeEventToMap(vibeEvent);
+            }
+
         } else {
             vibeEvent = new VibeEvent();
             vibeEvent.setDateTime(LocalDateTime.now());
+            vibeEvent.setLatitude(0);
+            vibeEvent.setLongitude(0);
         }
 
         LocalDateTime currDateTime = vibeEvent.getDateTime();
@@ -208,6 +218,7 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
         });
 
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -353,10 +364,9 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
   
     @Override
     public void onOkPressed(double latitude, double longitude){
-        selectedLocation = findViewById(R.id.selected_location);
-        selectedLocation.setText("A location has been set");
         vibeEvent.setLatitude(latitude);
         vibeEvent.setLongitude(longitude);
+        addEditMapFragment.addSingleMarker(latitude, longitude);
     }
   
     @Override
@@ -365,6 +375,16 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
         vibeSelector.setImageResource(selectedEmoticon);
         toolbar.setBackgroundResource(vibeEvent.getVibe().getColor());
         addBtn.setBackgroundResource(vibeEvent.getVibe().getColor());
+    }
+
+    public void inflateMapFragment(int containerID){
+        MapFragment fragment = new MapFragment();
+        Bundle bundle = new Bundle();
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(containerID, fragment);
+        transaction.commit();
+
     }
 
 }

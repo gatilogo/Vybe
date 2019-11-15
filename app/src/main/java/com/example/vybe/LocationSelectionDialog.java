@@ -118,7 +118,7 @@ public class LocationSelectionDialog extends DialogFragment {
                     Toast.makeText(getContext(), "Please Enable GPS", Toast.LENGTH_SHORT);
                     return;
                 }
-                Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                Location location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                 double longitude = location.getLongitude();
                 double latitude = location.getLatitude();
                 onFragmentInteractionListener.onOkPressed(latitude, longitude);

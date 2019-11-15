@@ -1,15 +1,20 @@
 package com.example.vybe;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 
 import androidx.annotation.ColorInt;
@@ -17,12 +22,15 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 
 
 import com.example.vybe.vibefactory.Vibe;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -49,6 +57,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     //widgets
     private MapView mMapView;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private GoogleMap mMap;
+    private VibeEvent vibe;
 
 
     @Override
@@ -115,6 +125,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(GoogleMap map) {
+        this.mMap = map;
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -122,7 +133,22 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             return;
         }
         map.setMyLocationEnabled(true);
-        addVibeLocations(map);
+        //this is here because the activity loads before the map
+        if (vibe != null) {
+            addSingleMarker(vibe.getLatitude(), vibe.getLongitude());
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(vibe.getLatitude(), vibe.getLongitude()), 15);
+            mMap.moveCamera(cameraUpdate);
+        } else {
+            LocationManager lm = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+            if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(getContext(), "Please Enable GPS", Toast.LENGTH_SHORT);
+                return;
+            }
+            Location location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 15);
+            mMap.moveCamera(cameraUpdate);
+        }
 
     }
 
@@ -159,7 +185,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
-    public void addVibeLocations(GoogleMap map) {
+
+
+    public void addVibeLocations() {
         // TODO:
         // add condition for user ID
         db.collection("VibeEvent").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -173,7 +201,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         Vibe vibe = VibeFactory.getVibe(vibeName);
                         BitmapDescriptor vibeMarker = vectorToBitmap(vibe.getEmoticon(), Color.parseColor("#B399C8"));
                         // change arguments --> to --> vibe.getEmoticon() and vibe.getColor()
-                        map.addMarker(new MarkerOptions()
+                        mMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(latitude, longitude))
                                 .icon(vibeMarker));
                     }
@@ -181,5 +209,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             }
         });
 
+    }
+
+    public void addSingleMarker(double latitude, double longitude) {
+        mMap.clear();
+        mMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)));
+    }
+
+    public void addVibeEventToMap(VibeEvent vibe) {
+        this.vibe = vibe;
     }
 }
