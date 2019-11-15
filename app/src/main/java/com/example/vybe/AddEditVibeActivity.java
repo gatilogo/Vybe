@@ -63,7 +63,6 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
     //private TextView outputBox;
     private TextView pageTitle;
     private ImageView imageView;
-    private TextView selectedLocation;
     // -------------------
 
     private VibeEvent vibeEvent;
@@ -273,8 +272,8 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
         data.put("reason", vibeEvent.getReason());
         data.put("socSit", vibeEvent.getSocialSituation());
         data.put("image", vibeEvent.getImage());
-        data.put("placeID", vibeEvent.getPlaceID());
-        data.put("placeName", vibeEvent.getPlaceName());
+        data.put("latitude", vibeEvent.getLatitude());
+        data.put("longitude", vibeEvent.getLongitude());
         return data;
     };
 
@@ -314,11 +313,9 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
     }
 
     @Override
-    public void onOkPressed(String placeID, String placeName){
-        selectedLocation = findViewById(R.id.selected_location);
-        selectedLocation.setText(placeName);
-        vibeEvent.setPlaceID(placeID);
-        vibeEvent.setPlaceName(placeName);
+    public void onOkPressed(double latitude, double longitude){
+        vibeEvent.setLatitude(latitude);
+        vibeEvent.setLongitude(longitude);
     }
 
 

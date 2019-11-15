@@ -121,6 +121,7 @@ public class LocationSelectionDialog extends DialogFragment {
                 Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                 double longitude = location.getLongitude();
                 double latitude = location.getLatitude();
+                onFragmentInteractionListener.onOkPressed(latitude, longitude);
 
                 /* THIS IS OLD GOOGLE MAPS PLACE FINDER
 
@@ -172,7 +173,7 @@ public class LocationSelectionDialog extends DialogFragment {
     }
 
     public interface OnFragmentInteractionListener {
-        void onOkPressed(String placeID, String placeName);
+        void onOkPressed(double latitude, double longitude);
     }
 
     private TextView customTitle() {
@@ -191,7 +192,8 @@ public class LocationSelectionDialog extends DialogFragment {
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 Place place = Autocomplete.getPlaceFromIntent(data);
-                onFragmentInteractionListener.onOkPressed(place.getId(), place.getName());
+                LatLng coordinates = place.getLatLng();
+                onFragmentInteractionListener.onOkPressed(coordinates.latitude, coordinates.longitude);
                 Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
                 return;
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {

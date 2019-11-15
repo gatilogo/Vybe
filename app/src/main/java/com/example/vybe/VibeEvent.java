@@ -22,25 +22,8 @@ public class VibeEvent implements Serializable {
     private String socialSituation;
     private String id;
     private String image;
-    private String placeID;
-
-    public String getPlaceID() {
-        return placeID;
-    }
-
-    public void setPlaceID(String placeID) {
-        this.placeID = placeID;
-    }
-
-    public String getPlaceName() {
-        return placeName;
-    }
-
-    public void setPlaceName(String placeName) {
-        this.placeName = placeName;
-    }
-
-    private String placeName;
+    private double latitude;
+    private double longitude;
 
     /**
      * Default constructor called for serialization
@@ -68,15 +51,15 @@ public class VibeEvent implements Serializable {
      * @param placeName
      *      This is the name of the place in google's API
      */
-    public VibeEvent(String vibe, LocalDateTime dateTime, String reason, String socialSituation, String id, String image, String placeID, String placeName) {
+    public VibeEvent(String vibe, LocalDateTime dateTime, String reason, String socialSituation, String id, String image, double latitude, double longitude) {
         this.vibe = VibeFactory.getVibe(vibe);
         this.dateTime = dateTime;
         this.reason = reason;
         this.socialSituation = socialSituation;
         this.id = id;
         this.image = image;
-        this.placeID = placeID;
-        this.placeName = placeName;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     /**
@@ -175,5 +158,21 @@ public class VibeEvent implements Serializable {
         long seconds = this.dateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
         Date date = new Date(seconds);
         return date;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 }

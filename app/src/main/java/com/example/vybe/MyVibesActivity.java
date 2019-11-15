@@ -121,13 +121,13 @@ public class MyVibesActivity extends AppCompatActivity {
                                             String id = (String) doc.getData().get("ID");
                                             String vibe = (String) doc.getData().get("vibe");
                                             String image = (String) doc.getData().get("image");
-                                            String placeID = (String) doc.getData().get("PlaceID");
-                                            String placeName = (String) doc.getData().get("PlaceName");
+                                            double latitude = (double) doc.getData().get("latitude");
+                                            double longitude = (double) doc.getData().get("longitude");
                                         if (allFlag) {
-                                            vibeEventList.add(new VibeEvent(vibe, ldt, reason, socSit, id, image, placeID, placeName));
+                                            vibeEventList.add(new VibeEvent(vibe, ldt, reason, socSit, id, image, latitude, longitude));
                                         } else {
                                             if (filterVibe.equals(vibe)){
-                                                vibeEventList.add(new VibeEvent(vibe, ldt, reason, socSit, id, image, placeID, placeName));
+                                                vibeEventList.add(new VibeEvent(vibe, ldt, reason, socSit, id, image, latitude, longitude));
                                             }
                                         }
                                     }
@@ -164,9 +164,13 @@ public class MyVibesActivity extends AppCompatActivity {
                     String id = (String) doc.getData().get("ID");
                     String vibe = (String) doc.getData().get("vibe");
                     String image = (String) doc.getData().get("image");
-                    String placeID = (String) doc.getData().get("placeID");
-                    String placeName = (String) doc.getData().get("placeName");
-                    vibeEventList.add(new VibeEvent(vibe, ldt, reason, socSit, id, image, placeID, placeName));
+                    double latitude = 0;
+                    double longitude = 0;
+                    if ((doc.getData().get("latitude") != null) && (doc.getData().get("longitude") != null)) {
+                        latitude = (double) doc.getData().get("latitude");
+                        longitude = (double) doc.getData().get("longitude");
+                    }
+                    vibeEventList.add(new VibeEvent(vibe, ldt, reason, socSit, id, image, latitude, longitude));
                 }
                 myVibesAdapter.notifyDataSetChanged();
             }
