@@ -14,9 +14,11 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 
+import com.example.vybe.vibefactory.Vibe;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -142,8 +144,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 for (QueryDocumentSnapshot doc: queryDocumentSnapshots) {
                     double latitude = doc.getDouble("latitude");
                     double longitude = doc.getDouble("longitude");
+                    String vibeName = (String) doc.getData().get("vibe");
+                    Vibe vibe = VibeFactory.getVibe(vibeName);
                     if (latitude != 0 && longitude != 0) {
-                        map.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)));
+//                        map.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)));
+
+                        map.addMarker(new MarkerOptions()
+                                .position(new LatLng(latitude, longitude))
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_vibeless)));
+                        // replace 'R.drawable.ic_vibeless' with vibe.getColor();
                     }
                 }
             }
