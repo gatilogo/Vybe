@@ -167,12 +167,14 @@ class SearchProfilesActivity <<View>> {
 }
 
 interface Vibe <<Model>> {
-    <<get>> - emoticon: ImageView
+    <<get>> - emoticon: int
+    <<get>> - color: int
     <<get>> - name: String
 }
 
 class VibeFactory <<Controller>> {
     + getVibe(selectedVibe: String)
+    + getVibe(selectedVibe: int)
 }
 
 class AddVibeEventController <<Controller>> {
@@ -193,38 +195,39 @@ class ProfileAdapter <<Controller>> {
     - showSearchProfileResults()
 }
 
-class ClowneryVibe <<Model>> {
-    <<get>> - emoticon: ImageView
-    <<get>> - name: String    
-}
-
 class HappyVibe <<Model>> {
-    <<get>> - emoticon: ImageView
+    <<get>> - emoticon: int
+    <<get>> - color: int
     <<get>> - name: String   
 }
 
 class SadVibe <<Model>> {
-    <<get>> - emoticon: ImageView
+    <<get>> - emoticon: int
+    <<get>> - color: int
     <<get>> - name: String   
 }
 
 class ScaredVibe <<Model>> {
-    <<get>> - emoticon: ImageView
+    <<get>> - emoticon: int
+    <<get>> - color: int
     <<get>> - name: String   
 }
 
 class DisgustedVibe <<Model>> {
-    <<get>> - emoticon: ImageView
+    <<get>> - emoticon: int
+    <<get>> - color: int
     <<get>> - name: String   
 }
 
 class SupriseVibe <<Model>> {
-    <<get>> - emoticon: ImageView
+    <<get>> - emoticon: int
+    <<get>> - color: int
     <<get>> - name: String   
 }
 
 class AngerVibe <<Model>> {
-    <<get>> - emoticon: ImageView
+    <<get>> - emoticon: int
+    <<get>> - color: int
     <<get>> - name: String   
 }
 
@@ -290,7 +293,6 @@ SearchProfilesActivity "1" -- "1" ProfileAdapter
 
 VibeFactory "1" o-- "0..*" Vibe
 
-Vibe <|.. ClowneryVibe
 Vibe <|.. HappyVibe
 Vibe <|.. SadVibe
 Vibe <|.. ScaredVibe
