@@ -47,29 +47,24 @@ public class MainActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+        mAuthListener = (@NonNull FirebaseAuth firebaseAuth) -> {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 // User is logged in
                 if (user != null){
                     Intent intent = new Intent(MainActivity.this, MyVibesActivity.class);
                     startActivity(intent);
                 }
-            }
         };
 
         loginButton.setOnClickListener(view -> {
             // Check that the email and password fields are entered
             if (!isEmpty(emailField) && !isEmpty(passwordField)){
                 // Get the credentials that were entered
-                User user = new User(getTrimmedString(emailField));
+                String email = getTrimmedString(emailField);
                 String password = getTrimmedString(passwordField);
                 // Sign in using Firebase
-                mAuth.signInWithEmailAndPassword(user.getEmail(), password)
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
+                mAuth.signInWithEmailAndPassword(email, password)
+                        .addOnCompleteListener((@NonNull Task<AuthResult> task) -> {
                         // If the task succeed, login passed and go to My Vibes Activity
                         if (task.isSuccessful()){
                             Intent intent = new Intent(MainActivity.this, MyVibesActivity.class);
@@ -79,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "Login Failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                         }
                     }
-                });
+                );
             }
 
         });
