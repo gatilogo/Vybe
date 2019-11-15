@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
+import androidx.appcompat.widget.Toolbar;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -28,6 +29,7 @@ public class ViewVibeActivity extends AppCompatActivity {
     private TextView reasonLabel;
     private TextView socialSituationField;
     private TextView socialSituationLabel;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,7 @@ public class ViewVibeActivity extends AppCompatActivity {
         reasonLabel = findViewById(R.id.view_reason_label);
         socialSituationField = findViewById(R.id.view_social_situation_text_view);
         socialSituationLabel = findViewById(R.id.view_social_situation_label);
+        toolbar = findViewById(R.id.view_vibes_toolbar);
 
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
@@ -59,9 +62,7 @@ public class ViewVibeActivity extends AppCompatActivity {
 
             if (vibeEvent.getVibe() != null) {
                 vibeImage.setImageResource(vibeEvent.getVibe().getEmoticon());
-            }
-            else {
-                vibeImage.setImageResource(R.drawable.ic_disgusted);
+                toolbar.setBackgroundResource(vibeEvent.getVibe().getColor());
             }
 
             if (reason == null || reason.equals("")) {  // Reason is optional

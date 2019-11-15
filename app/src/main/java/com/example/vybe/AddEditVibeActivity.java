@@ -3,6 +3,7 @@ package com.example.vybe;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -23,7 +24,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+import androidx.appcompat.widget.Toolbar;
 
+import com.example.vybe.vibefactory.Vibe;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -38,9 +41,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import static com.example.vybe.util.Constants.REASON_FIELD_MAX_WORD_COUNT;
 
@@ -48,13 +53,13 @@ import static com.example.vybe.util.Constants.REASON_FIELD_MAX_WORD_COUNT;
  * This Activity displays the screen for a user to add a vibe event, or
  * edit an existing vibe event by adding or modifying the different vibe attributes
  */
-public class AddEditVibeActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+public class AddEditVibeActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, VibeCarouselFragment.OnFragmentInteractionListener {
 
     private static final String TAG = "AddEditVibeActivity";
     private static final int GET_FROM_GALLERY = 1000;
 
     // --- XML Elements ---
-    private Spinner vibeDropdown;
+    private ImageView vibeSelector;
     private EditText datetimeField;
     private EditText reasonField;
     private Spinner socialSituationDropdown;
@@ -63,6 +68,7 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
     //private TextView outputBox;
     private TextView pageTitle;
     private ImageView imageView;
+    private Toolbar toolbar;
     // -------------------
 
     private VibeEvent vibeEvent;
@@ -81,7 +87,7 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
         setContentView(R.layout.activity_add_edit_vibe);
         Log.d(TAG, "onCreate: In Add/Edit vibes");
 
-        vibeDropdown = findViewById(R.id.vibe_dropdown);
+        vibeSelector = findViewById(R.id.vibe_selector);
         datetimeField = findViewById(R.id.date_time_edit_text);
         reasonField = findViewById(R.id.reason_edit_text);
         socialSituationDropdown = findViewById(R.id.social_situation_dropdown);
@@ -91,6 +97,7 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
         imageView = findViewById(R.id.imageView);
         pageTitle = findViewById(R.id.add_edit_vybe_title);
         pageTitle = findViewById(R.id.add_edit_vybe_title);
+        toolbar = findViewById(R.id.add_edit_vibes_toolbar);
 
         imageView.setDrawingCacheEnabled(true);
         imageView.buildDrawingCache();
@@ -101,6 +108,9 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
             //TODO: set vibe and socsit dropdrowns
             vibeEvent = (VibeEvent) extras.getSerializable("vibeEvent");
             reasonField.setText(vibeEvent.getReason());
+            vibeSelector.setImageResource(vibeEvent.getVibe().getEmoticon());
+            toolbar.setBackgroundResource(vibeEvent.getVibe().getColor());
+            addBtn.setBackgroundResource(vibeEvent.getVibe().getColor());
             editFlag = true;
 
             pageTitle.setText(getString(R.string.edit_vybe_name));
@@ -114,20 +124,9 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
         selectedTime = currDateTime.toLocalTime();
         datetimeField.setText(formatDateTime(currDateTime));
 
-
-        // --- Vibes Dropdown ---
-        String[] vibes = new String[]{"Select a vibe", "Angry", "Disgusted", "Happy", "Sad", "Scared", "Surprised"};
-        ArrayAdapter<String> vibesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, vibes);
-        vibeDropdown.setAdapter(vibesAdapter);
-        vibeDropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                vibeEvent.setVibe(vibes[position]);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-            }
+        // --- Vibe Carousel Picker ---
+        vibeSelector.setOnClickListener((View view) -> {
+            new VibeCarouselFragment().show(getSupportFragmentManager(), "Select a Vibe");
         });
 
         // --- Social Situation Dropdown ---
@@ -171,13 +170,17 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
                 reasonField.setError(String.format("Max %d words allowed", REASON_FIELD_MAX_WORD_COUNT));
                 return;
             }
-
 //            String output = "";
 //            output += "Vibe: " + vibeEvent.getVibe().getName() + "\n";
 //            output += "DateTime: " + vibeEvent.getDateTime() + "\n";
 //            output += "Reason: " + vibeEvent.getReason() + "\n";
 //            output += "Social Situation: " + vibeEvent.getSocialSituation() + "\n";
 //            outputBox.setText(output);
+
+            if (vibeEvent.getVibe() == null) {
+                Toast.makeText(getApplicationContext(), "Select a Vibe!", Toast.LENGTH_LONG).show();
+                return;
+            }
 
             if (editFlag) {
                 editVibeEvent(vibeEvent);
@@ -302,6 +305,14 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
 
     public String formatDateTime(LocalDateTime dateTime) {
         return dateTime.format(DateTimeFormatter.ofPattern("MMM dd yyyy, hh:mm a"));
+    }
+
+    @Override
+    public void onOkPressed(int selectedEmoticon) {
+        vibeEvent.setVibe(selectedEmoticon);
+        vibeSelector.setImageResource(selectedEmoticon);
+        toolbar.setBackgroundResource(vibeEvent.getVibe().getColor());
+        addBtn.setBackgroundResource(vibeEvent.getVibe().getColor());
     }
 
 }
