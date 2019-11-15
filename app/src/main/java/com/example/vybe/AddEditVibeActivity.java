@@ -108,6 +108,7 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
             reasonField.setText(vibeEvent.getReason());
             vibeSelector.setImageResource(vibeEvent.getVibe().getEmoticon());
             toolbar.setBackgroundColor(getColor(vibeEvent.getVibe().getColor()));
+            addBtn.setBackgroundColor(vibeEvent.getVibe().getColor());
             editFlag = true;
 
             pageTitle.setText(getString(R.string.edit_vybe_name));
@@ -303,6 +304,7 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
         vibeEvent.setVibe(selectedEmoticon);
         vibeSelector.setImageResource(selectedEmoticon);
         toolbar.setBackgroundColor(getColor(vibeEvent.getVibe().getColor()));
+        addBtn.setBackgroundColor(getColor(vibeEvent.getVibe().getColor()));
     }
 
 }
