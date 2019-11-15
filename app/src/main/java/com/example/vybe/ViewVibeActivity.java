@@ -62,7 +62,7 @@ public class ViewVibeActivity extends AppCompatActivity {
 
             if (vibeEvent.getVibe() != null) {
                 vibeImage.setImageResource(vibeEvent.getVibe().getEmoticon());
-                toolbar.setBackgroundColor(getColor(vibeEvent.getVibe().getColor()));
+                toolbar.setBackgroundResource(vibeEvent.getVibe().getColor());
             }
 
             if (reason == null || reason.equals("")) {  // Reason is optional
