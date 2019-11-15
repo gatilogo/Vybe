@@ -42,14 +42,6 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_no_vibe" />
 
-            <in.goodiebag.carouselpicker.CarouselPicker
-                android:id="@+id/carousel"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:items_visible="three" />
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/date_time_text_input"
                 android:layout_width="match_parent"
@@ -91,6 +83,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Pick Image" />
+
+            <Button
+                android:id="@+id/btn_add_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Pick Location" />
+
+            <TextView
+                android:id="@+id/selected_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:text="No Location Selected" />
 
             <ImageView
                 android:id="@+id/imageView"

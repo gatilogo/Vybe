@@ -2,21 +2,32 @@ package com.example.vybe;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 
+import androidx.annotation.ColorInt;
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 
 
+import com.example.vybe.vibefactory.Vibe;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -133,6 +144,21 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mMapView.onLowMemory();
     }
 
+    /**
+     * Demonstrates converting a {@link Drawable} to a {@link BitmapDescriptor},
+     * for use as a marker icon.
+     */
+    private BitmapDescriptor vectorToBitmap(@DrawableRes int id, @ColorInt int color) {
+        Drawable vectorDrawable = ResourcesCompat.getDrawable(getResources(), id, null);
+        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(),
+                vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        vectorDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        //DrawableCompat.setTint(vectorDrawable, color);
+        vectorDrawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
+    }
+
     public void addVibeLocations(GoogleMap map) {
         // TODO:
         // add condition for user ID
@@ -140,11 +166,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for (QueryDocumentSnapshot doc: queryDocumentSnapshots) {
-                    GeoPoint gp = (GeoPoint) doc.getGeoPoint("location");
-                    if (gp != null) {
-                        double lat = gp.getLatitude();
-                        double lng = gp.getLongitude();
-                        map.addMarker(new MarkerOptions().position(new LatLng(lat, lng)));
+                    if ((doc.getData().get("latitude") != null) && (doc.getData().get("latitude")!= null)) {
+                        double latitude = doc.getDouble("latitude");
+                        double longitude = doc.getDouble("longitude");
+                        String vibeName = (String) doc.getData().get("vibe");
+                        Vibe vibe = VibeFactory.getVibe(vibeName);
+                        BitmapDescriptor vibeMarker = vectorToBitmap(vibe.getEmoticon(), Color.parseColor("#B399C8"));
+                        // change arguments --> to --> vibe.getEmoticon() and vibe.getColor()
+                        map.addMarker(new MarkerOptions()
+                                .position(new LatLng(latitude, longitude))
+                                .icon(vibeMarker));
                     }
                 }
             }

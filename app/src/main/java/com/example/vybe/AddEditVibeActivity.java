@@ -3,12 +3,14 @@ package com.example.vybe;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.viewpager.widget.ViewPager;
-
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -29,13 +31,13 @@ import com.bumptech.glide.Glide;
 import com.example.vybe.vibefactory.Vibe;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.libraries.places.api.model.Place;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -53,8 +55,7 @@ import static com.example.vybe.util.Constants.REASON_FIELD_MAX_WORD_COUNT;
  * This Activity displays the screen for a user to add a vibe event, or
  * edit an existing vibe event by adding or modifying the different vibe attributes
  */
-public class AddEditVibeActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, VibeCarouselFragment.OnFragmentInteractionListener {
-
+public class AddEditVibeActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, LocationSelectionDialog.OnFragmentInteractionListener, VibeCarouselFragment.OnFragmentInteractionListener {
     private static final String TAG = "AddEditVibeActivity";
     private static final int GET_FROM_GALLERY = 1000;
 
@@ -65,9 +66,11 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
     private Spinner socialSituationDropdown;
     private Button addBtn;
     private Button pickImageBtn;
+    private Button pickLocationButton;
     //private TextView outputBox;
     private TextView pageTitle;
     private ImageView imageView;
+    private TextView selectedLocation;
     private Toolbar toolbar;
     // -------------------
 
@@ -94,6 +97,7 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
         addBtn = findViewById(R.id.add_btn);
         // outputBox = findViewById(R.id.textView);
         pickImageBtn = findViewById(R.id.pickImageBtn);
+        pickLocationButton = findViewById(R.id.btn_add_location);
         imageView = findViewById(R.id.imageView);
         pageTitle = findViewById(R.id.add_edit_vybe_title);
         pageTitle = findViewById(R.id.add_edit_vybe_title);
@@ -157,6 +161,16 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
         pickImageBtn.setOnClickListener((View view) -> {
             Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
             startActivityForResult(galleryIntent, GET_FROM_GALLERY);
+        });
+
+        // ---Location Picker---
+        pickLocationButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                DialogFragment locationFragment = new LocationSelectionDialog();
+                locationFragment.show(getSupportFragmentManager(), "tag");
+            }
         });
 
         // --- Show Output on button click ---
@@ -272,6 +286,8 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
         data.put("reason", vibeEvent.getReason());
         data.put("socSit", vibeEvent.getSocialSituation());
         data.put("image", vibeEvent.getImage());
+        data.put("latitude", vibeEvent.getLatitude());
+        data.put("longitude", vibeEvent.getLongitude());
         return data;
     };
 
@@ -310,6 +326,7 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
         return dateTime.format(DateTimeFormatter.ofPattern("MMM dd yyyy, hh:mm a"));
     }
 
+
     /**
      * This will load an image from Firebase Storage into an ImageView
      * @param imageView
@@ -335,10 +352,19 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
     }
   
     @Override
+    public void onOkPressed(double latitude, double longitude){
+        selectedLocation = findViewById(R.id.selected_location);
+        selectedLocation.setText("A location has been set");
+        vibeEvent.setLatitude(latitude);
+        vibeEvent.setLongitude(longitude);
+    }
+  
+    @Override
     public void onOkPressed(int selectedEmoticon) {
         vibeEvent.setVibe(selectedEmoticon);
         vibeSelector.setImageResource(selectedEmoticon);
         toolbar.setBackgroundResource(vibeEvent.getVibe().getColor());
         addBtn.setBackgroundResource(vibeEvent.getVibe().getColor());
     }
+
 }
