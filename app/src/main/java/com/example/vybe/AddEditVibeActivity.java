@@ -24,6 +24,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.vybe.vibefactory.Vibe;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -68,6 +69,7 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
     //private TextView outputBox;
     private TextView pageTitle;
     private ImageView imageView;
+    private Toolbar toolbar;
     // -------------------
 
     private VibeEvent vibeEvent;
@@ -97,6 +99,7 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
         imageView = findViewById(R.id.imageView);
         pageTitle = findViewById(R.id.add_edit_vybe_title);
         pageTitle = findViewById(R.id.add_edit_vybe_title);
+        toolbar = findViewById(R.id.add_edit_vibes_toolbar);
 
         imageView.setDrawingCacheEnabled(true);
         imageView.buildDrawingCache();
@@ -108,6 +111,7 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
             vibeEvent = (VibeEvent) extras.getSerializable("vibeEvent");
             reasonField.setText(vibeEvent.getReason());
             vibeSelector.setImageResource(vibeEvent.getVibe().getEmoticon());
+            toolbar.setBackgroundColor(getColor(vibeEvent.getVibe().getColor()));
             editFlag = true;
 
             pageTitle.setText(getString(R.string.edit_vybe_name));
@@ -304,6 +308,7 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
     public void onOkPressed(int selectedEmoticon) {
         vibeEvent.setVibe(selectedEmoticon);
         vibeSelector.setImageResource(selectedEmoticon);
+        toolbar.setBackgroundColor(getColor(vibeEvent.getVibe().getColor()));
     }
 
 }
