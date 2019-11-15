@@ -36,6 +36,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     private EditText usernameField, emailField, passwordField;
     private Button confirmBtn;
+    private User user;
 
 
     // Add the authentication listener on start
@@ -64,15 +65,17 @@ public class CreateAccountActivity extends AppCompatActivity {
         passwordField = findViewById(R.id.password_create);
         confirmBtn = findViewById(R.id.confirm_button);
 
+        user = new User();
+
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
+                FirebaseUser userFB = firebaseAuth.getCurrentUser();
                 // User is logged in
-                if (user != null) {
+                if (userFB != null) {
                     Intent intent = new Intent(CreateAccountActivity.this, MyVibesActivity.class);
                     startActivity(intent);
                 }
@@ -84,13 +87,13 @@ public class CreateAccountActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // Check all the fields are filled in for sign in
                 if (!isEmpty(usernameField) && !isEmpty(emailField) && !isEmpty(passwordField)) {
-                    String username = getTrimmedString(usernameField);
+                    user.setUsername(getTrimmedString(usernameField));
                     // Check Firestore if username is already taken
-                    db.collection("Users").whereEqualTo("username", username).get()
+                    db.collection("Users").whereEqualTo("username", user.getUsername()).get()
                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                verifyCreateAccount(task, username);
+                                verifyCreateAccount(task);
                             }
                         });
                 }
@@ -119,7 +122,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         return et.getText().toString().trim();
     }
 
-    public void verifyCreateAccount(Task<QuerySnapshot> task, String username){
+    public void verifyCreateAccount(Task<QuerySnapshot> task){
         // Query was successful
         if (task.isSuccessful()) {
             // Get the user's profile record
@@ -128,10 +131,10 @@ public class CreateAccountActivity extends AppCompatActivity {
             // If empty, then the unique username is not taken
             if (document.isEmpty()) {
                 // Get the email and password entered
-                String email = getTrimmedString(emailField);
+                user.setEmail(getTrimmedString(emailField));
                 String password = getTrimmedString(passwordField);
                 // Create the account using Firebase authentication
-                mAuth.createUserWithEmailAndPassword(email, password)
+                mAuth.createUserWithEmailAndPassword(user.getEmail(), password)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -139,8 +142,8 @@ public class CreateAccountActivity extends AppCompatActivity {
                                 // profile information to Firestore
                                 if (task.isSuccessful()) {
                                     HashMap<String, Object> data = new HashMap<>();
-                                    data.put("username", username);
-                                    data.put("email", email);
+                                    data.put("username", user.getUsername());
+                                    data.put("email", user.getEmail());
                                     db.collection("Users").add(data);
                                     // Switch to My Vibes Acitivity
                                     Intent intent = new Intent(CreateAccountActivity.this, MainActivity.class);

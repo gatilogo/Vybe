@@ -63,10 +63,10 @@ public class MainActivity extends AppCompatActivity {
             // Check that the email and password fields are entered
             if (!isEmpty(emailField) && !isEmpty(passwordField)){
                 // Get the credentials that were entered
-                String email = getTrimmedString(emailField);
+                User user = new User(getTrimmedString(emailField));
                 String password = getTrimmedString(passwordField);
                 // Sign in using Firebase
-                mAuth.signInWithEmailAndPassword(email, password)
+                mAuth.signInWithEmailAndPassword(user.getEmail(), password)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
