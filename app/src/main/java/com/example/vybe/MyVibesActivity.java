@@ -121,8 +121,12 @@ public class MyVibesActivity extends AppCompatActivity {
                                             String id = (String) doc.getData().get("ID");
                                             String vibe = (String) doc.getData().get("vibe");
                                             String image = (String) doc.getData().get("image");
-                                            double latitude = (double) doc.getData().get("latitude");
-                                            double longitude = (double) doc.getData().get("longitude");
+                                            double latitude = 0;
+                                            double longitude = 0;
+                                            if ((doc.getData().get("latitude") != null) && (doc.getData().get("latitude")!= null )) {
+                                                latitude = (double) doc.getData().get("latitude");
+                                                longitude = (double) doc.getData().get("longitude");
+                                            }
                                         if (allFlag) {
                                             vibeEventList.add(new VibeEvent(vibe, ldt, reason, socSit, id, image, latitude, longitude));
                                         } else {

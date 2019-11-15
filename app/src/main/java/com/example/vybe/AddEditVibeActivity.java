@@ -63,6 +63,7 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
     //private TextView outputBox;
     private TextView pageTitle;
     private ImageView imageView;
+    private TextView selectedLocation;
     // -------------------
 
     private VibeEvent vibeEvent;
@@ -314,6 +315,8 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
 
     @Override
     public void onOkPressed(double latitude, double longitude){
+        selectedLocation = findViewById(R.id.selected_location);
+        selectedLocation.setText("A location has been set");
         vibeEvent.setLatitude(latitude);
         vibeEvent.setLongitude(longitude);
     }
