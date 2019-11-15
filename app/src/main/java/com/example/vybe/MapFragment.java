@@ -150,8 +150,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 //                        map.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)));
 
                         map.addMarker(new MarkerOptions()
-                                .position(new LatLng(latitude, longitude))
-                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_vibeless)));
+                                .position(new LatLng(latitude, longitude)));
                         // replace 'R.drawable.ic_vibeless' with vibe.getColor();
                     }
                 }
