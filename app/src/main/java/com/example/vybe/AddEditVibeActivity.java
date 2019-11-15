@@ -47,8 +47,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import in.goodiebag.carouselpicker.CarouselPicker;
-
 /**
  * This Activity displays the screen for a user to add a vibe event, or
  * edit an existing vibe event by adding or modifying the different vibe attributes
@@ -59,7 +57,6 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
     private static final int GET_FROM_GALLERY = 1000;
 
     // --- XML Elements ---
-    private Spinner vibeDropdown;
     private ImageView vibeSelector;
     private EditText datetimeField;
     private EditText reasonField;
@@ -75,7 +72,6 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
     private VibeEvent vibeEvent;
     private LocalDate selectedDate;
     private LocalTime selectedTime;
-    private Vibe selectedVibe;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private boolean editFlag = false;
@@ -164,8 +160,6 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
 
             vibeEvent.setDateTime(LocalDateTime.of(selectedDate, selectedTime));
             vibeEvent.setReason(reasonField.getText().toString());
-
-
 
 //            String output = "";
 //            output += "Vibe: " + vibeEvent.getVibe().getName() + "\n";
