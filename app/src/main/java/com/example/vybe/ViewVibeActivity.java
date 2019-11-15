@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
+import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -35,6 +36,7 @@ public class ViewVibeActivity extends AppCompatActivity {
     private TextView socialSituationField;
     private TextView socialSituationLabel;
     private ImageView reasonImage;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,7 @@ public class ViewVibeActivity extends AppCompatActivity {
 
         reasonImage.setDrawingCacheEnabled(true);
         reasonImage.buildDrawingCache();
+        toolbar = findViewById(R.id.view_vibes_toolbar);
 
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
@@ -74,9 +77,7 @@ public class ViewVibeActivity extends AppCompatActivity {
 
             if (vibeEvent.getVibe() != null) {
                 vibeImage.setImageResource(vibeEvent.getVibe().getEmoticon());
-            }
-            else {
-                vibeImage.setImageResource(R.drawable.ic_disgusted);
+                toolbar.setBackgroundResource(vibeEvent.getVibe().getColor());
             }
 
             if (reason == null || reason.equals("")) {  // Reason is optional

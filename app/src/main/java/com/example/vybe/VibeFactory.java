@@ -49,4 +49,28 @@ public class VibeFactory implements Serializable {
 
         return null;
     }
+
+    public static Vibe getVibe(int selectedVibe) {
+
+        if (selectedVibe == R.drawable.ic_angry) {
+            return new AngryVibe();
+        }
+        else if (selectedVibe == R.drawable.ic_disgusted) {
+            return new DisgustedVibe();
+        }
+        else if (selectedVibe == R.drawable.ic_scared) {
+            return new ScaredVibe();
+        }
+        else if (selectedVibe == R.drawable.ic_happy) {
+            return new HappyVibe();
+        }
+        else if (selectedVibe == R.drawable.ic_sad) {
+            return new SadVibe();
+        }
+        else if (selectedVibe == R.drawable.ic_surprised) {
+            return new SurprisedVibe();
+        }
+
+        return null;
+    }
 }
