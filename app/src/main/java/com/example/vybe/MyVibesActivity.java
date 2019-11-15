@@ -305,7 +305,7 @@ public class MyVibesActivity extends AppCompatActivity {
         switch (requestCode) {
             case PERMISSIONS_REQUEST_ENABLE_GPS: {
                 if (mLocationPermissionGranted){
-                    //idk bro do some stuff
+                    //everything is fine
                 }
                 else {
                     getLocationPermission();

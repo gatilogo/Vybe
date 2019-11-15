@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -111,6 +112,18 @@ public class LocationSelectionDialog extends DialogFragment {
             @Override
             public void onClick(View v) {
 
+                LocationManager lm = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+                if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(getContext(), "Please Enable GPS", Toast.LENGTH_SHORT);
+                    return;
+                }
+                Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                double longitude = location.getLongitude();
+                double latitude = location.getLatitude();
+
+                /* THIS IS OLD GOOGLE MAPS PLACE FINDER
+
                 PlacesClient placesClient = Places.createClient(getContext());
 
                 // Use fields to define the data types to return.
@@ -126,14 +139,14 @@ public class LocationSelectionDialog extends DialogFragment {
                     placeResponse.addOnCompleteListener(task -> {
                         if (task.isSuccessful()){
                             FindCurrentPlaceResponse response = task.getResult();
+                            Place closestPlace = response.getPlaceLikelihoods().get(0).getPlace();
+                            onFragmentInteractionListener.onOkPressed(closestPlace.getId(), closestPlace.getName());
                             for (PlaceLikelihood placeLikelihood : response.getPlaceLikelihoods()) {
                                 Log.i(TAG, String.format("Place '%s' has likelihood: %f With ID: %s",
                                         placeLikelihood.getPlace().getName(),
                                         placeLikelihood.getLikelihood(),
                                         placeLikelihood.getPlace().getId()));
                             }
-                            Place closestPlace = response.getPlaceLikelihoods().get(0).getPlace();
-                            onFragmentInteractionListener.onOkPressed(closestPlace.getId(), closestPlace.getName());
 
                         } else {
                             Exception exception = task.getException();
@@ -147,6 +160,8 @@ public class LocationSelectionDialog extends DialogFragment {
                     Toast.makeText(getContext(), "GPS is Not Enabled", Toast.LENGTH_SHORT);
                 }
 
+
+                 */
                 dialog.dismiss();
 
             }

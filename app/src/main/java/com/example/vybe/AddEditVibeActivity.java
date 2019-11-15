@@ -7,8 +7,10 @@ import androidx.fragment.app.DialogFragment;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -159,10 +161,11 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
 
         // ---Location Picker---
         pickLocationButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 DialogFragment locationFragment = new LocationSelectionDialog();
-                locationFragment.show(getSupportFragmentManager(), "maybe title");
+                locationFragment.show(getSupportFragmentManager(), "tag");
             }
         });
 
