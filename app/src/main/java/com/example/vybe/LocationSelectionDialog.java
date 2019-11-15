@@ -95,7 +95,7 @@ public class LocationSelectionDialog extends DialogFragment {
 
                 // Set the fields to specify which types of place data to
                 // return after the user has made a selection.
-                List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME);
+                List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG);
 
                 // Start the autocomplete intent.
                 Intent intent = new Autocomplete.IntentBuilder(
@@ -122,47 +122,6 @@ public class LocationSelectionDialog extends DialogFragment {
                 double longitude = location.getLongitude();
                 double latitude = location.getLatitude();
                 onFragmentInteractionListener.onOkPressed(latitude, longitude);
-
-                /* THIS IS OLD GOOGLE MAPS PLACE FINDER
-
-                PlacesClient placesClient = Places.createClient(getContext());
-
-                // Use fields to define the data types to return.
-                List<Place.Field> placeFields = Collections.singletonList(Place.Field.NAME);
-
-                // Use the builder to create a FindCurrentPlaceRequest.
-                FindCurrentPlaceRequest request =
-                        FindCurrentPlaceRequest.newInstance(placeFields);
-
-                // Call findCurrentPlace and handle the response (first check that the user has granted permission).
-                if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    Task<FindCurrentPlaceResponse> placeResponse = placesClient.findCurrentPlace(request);
-                    placeResponse.addOnCompleteListener(task -> {
-                        if (task.isSuccessful()){
-                            FindCurrentPlaceResponse response = task.getResult();
-                            Place closestPlace = response.getPlaceLikelihoods().get(0).getPlace();
-                            onFragmentInteractionListener.onOkPressed(closestPlace.getId(), closestPlace.getName());
-                            for (PlaceLikelihood placeLikelihood : response.getPlaceLikelihoods()) {
-                                Log.i(TAG, String.format("Place '%s' has likelihood: %f With ID: %s",
-                                        placeLikelihood.getPlace().getName(),
-                                        placeLikelihood.getLikelihood(),
-                                        placeLikelihood.getPlace().getId()));
-                            }
-
-                        } else {
-                            Exception exception = task.getException();
-                            if (exception instanceof ApiException) {
-                                ApiException apiException = (ApiException) exception;
-                                Log.e(TAG, "Place not found: " + apiException.getStatusCode());
-                            }
-                        }
-                    });
-                } else {
-                    Toast.makeText(getContext(), "GPS is Not Enabled", Toast.LENGTH_SHORT);
-                }
-
-
-                 */
                 dialog.dismiss();
 
             }
@@ -195,13 +154,10 @@ public class LocationSelectionDialog extends DialogFragment {
                 LatLng coordinates = place.getLatLng();
                 onFragmentInteractionListener.onOkPressed(coordinates.latitude, coordinates.longitude);
                 Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
-                return;
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 // TODO: Handle the error.
                 Status status = Autocomplete.getStatusFromIntent(data);
                 Log.i(TAG, status.getStatusMessage());
-            } else if (resultCode == RESULT_CANCELED) {
-                // The user canceled the operation.
             }
         }
     }
