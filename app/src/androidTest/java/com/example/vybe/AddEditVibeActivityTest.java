@@ -84,7 +84,7 @@ public class AddEditVibeActivityTest {
     }
 
     @Test
-    public void stringReasonTest(){
+    public void stringReasonValidTest(){
         //Click on Empty Text View
         solo.clickOnView(solo.getView("reason_edit_text"));
         //Enter the text: 'asdfg'
@@ -94,6 +94,20 @@ public class AddEditVibeActivityTest {
         // Validate the text on the TextView
         assertEquals("Text should be the field value", "asdfg",
                 ((EditText) solo.getView("reason_edit_text")).getText().toString());
+
+    }
+
+    @Test
+    public void stringReasonErrorTest(){
+        // test if more than 3 words is provided
+        solo.clickOnView(solo.getView("reason_edit_text"));
+        //Enter the text: 'as df ga sd'
+        solo.clearEditText((android.widget.EditText) solo.getView("reason_edit_text"));
+        solo.enterText((android.widget.EditText) solo.getView("reason_edit_text"), "as df ga sd");
+        solo.clickOnButton("Save");
+
+        assertEquals("Expecting an error", "Max 3 words allowed",
+                ((EditText) solo.getView("reason_edit_text")).getError().toString());
     }
 
     @Test

@@ -42,6 +42,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
+import static com.example.vybe.util.Constants.REASON_FIELD_MAX_WORD_COUNT;
+
 /**
  * This Activity displays the screen for a user to add a vibe event, or
  * edit an existing vibe event by adding or modifying the different vibe attributes
@@ -161,9 +163,14 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
             //TODO: integrate firestore stuff here i guess
 
             vibeEvent.setDateTime(LocalDateTime.of(selectedDate, selectedTime));
-            vibeEvent.setReason(reasonField.getText().toString());
 
-
+            if (reasonField.getText().toString().trim().split("\\s").length <= REASON_FIELD_MAX_WORD_COUNT) {
+                reasonField.setError(null);
+                vibeEvent.setReason(reasonField.getText().toString());
+            } else {
+                reasonField.setError(String.format("Max %d words allowed", REASON_FIELD_MAX_WORD_COUNT));
+                return;
+            }
 
 //            String output = "";
 //            output += "Vibe: " + vibeEvent.getVibe().getName() + "\n";
