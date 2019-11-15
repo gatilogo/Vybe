@@ -142,16 +142,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for (QueryDocumentSnapshot doc: queryDocumentSnapshots) {
-                    double latitude = doc.getDouble("latitude");
-                    double longitude = doc.getDouble("longitude");
-                    String vibeName = (String) doc.getData().get("vibe");
-                    Vibe vibe = VibeFactory.getVibe(vibeName);
-                    if (latitude != 0 && longitude != 0) {
-//                        map.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)));
-
+                    if ((doc.getData().get("latitude") != null) && (doc.getData().get("latitude")!= null)) {
+                        double latitude = doc.getDouble("latitude");
+                        double longitude = doc.getDouble("longitude");
                         map.addMarker(new MarkerOptions()
                                 .position(new LatLng(latitude, longitude)));
-                        // replace 'R.drawable.ic_vibeless' with vibe.getColor();
                     }
                 }
             }

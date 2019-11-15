@@ -123,7 +123,7 @@ public class MyVibesActivity extends AppCompatActivity {
                                             String image = (String) doc.getData().get("image");
                                             double latitude = 0;
                                             double longitude = 0;
-                                            if ((doc.getData().get("latitude") != null) && (doc.getData().get("latitude")!= null )) {
+                                            if ((doc.getData().get("latitude") != null) && (doc.getData().get("latitude")!= null)) {
                                                 latitude = (double) doc.getData().get("latitude");
                                                 longitude = (double) doc.getData().get("longitude");
                                             }
