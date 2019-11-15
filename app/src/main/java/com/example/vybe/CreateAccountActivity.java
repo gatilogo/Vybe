@@ -93,7 +93,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                verifyCreateAccount(task);
+                                checkUsernameExists(task);
                             }
                         });
                 }
@@ -122,7 +122,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         return et.getText().toString().trim();
     }
 
-    public void verifyCreateAccount(Task<QuerySnapshot> task){
+    public void checkUsernameExists(Task<QuerySnapshot> task){
         // Query was successful
         if (task.isSuccessful()) {
             // Get the user's profile record
@@ -130,35 +130,44 @@ public class CreateAccountActivity extends AppCompatActivity {
 
             // If empty, then the unique username is not taken
             if (document.isEmpty()) {
-                // Get the email and password entered
-                user.setEmail(getTrimmedString(emailField));
-                String password = getTrimmedString(passwordField);
-                // Create the account using Firebase authentication
-                mAuth.createUserWithEmailAndPassword(user.getEmail(), password)
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                // If the account was created successfully then add the
-                                // profile information to Firestore
-                                if (task.isSuccessful()) {
-                                    HashMap<String, Object> data = new HashMap<>();
-                                    data.put("username", user.getUsername());
-                                    data.put("email", user.getEmail());
-                                    db.collection("Users").add(data);
-                                    // Switch to My Vibes Acitivity
-                                    Intent intent = new Intent(CreateAccountActivity.this, MainActivity.class);
-                                    startActivity(intent);
-                                } else {
-                                    // Notify user what caused the error
-                                    Toast.makeText(getApplicationContext(), "Login Failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
-                                }
-                            }
-                        });
+                createAccount();
             } else {
                 // If the document exists, then the unique username already exists
                 Toast.makeText(getApplicationContext(), "Username is already taken", Toast.LENGTH_LONG).show();
             }
 
         }
+    }
+
+    /**
+     * This method will update the User object with the username, email and password. Then
+     * it will create the account in Firebase Authentication as well as add it to Firestore if
+     * Authentication passes
+      */
+    public void createAccount(){
+        // Get the email and password entered
+        user.setEmail(getTrimmedString(emailField));
+        String password = getTrimmedString(passwordField);
+        // Create the account using Firebase authentication
+        mAuth.createUserWithEmailAndPassword(user.getEmail(), password)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        // If the account was created successfully then add the
+                        // profile information to Firestore
+                        if (task.isSuccessful()) {
+                            HashMap<String, Object> data = new HashMap<>();
+                            data.put("username", user.getUsername());
+                            data.put("email", user.getEmail());
+                            db.collection("Users").add(data);
+                            // Switch to My Vibes Acitivity
+                            Intent intent = new Intent(CreateAccountActivity.this, MainActivity.class);
+                            startActivity(intent);
+                        } else {
+                            // Notify user what caused the error
+                            Toast.makeText(getApplicationContext(), "Login Failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
     }
 }
