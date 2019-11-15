@@ -3,10 +3,16 @@ package com.example.vybe;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -28,6 +34,7 @@ public class ViewVibeActivity extends AppCompatActivity {
     private TextView reasonLabel;
     private TextView socialSituationField;
     private TextView socialSituationLabel;
+    private ImageView reasonImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +48,10 @@ public class ViewVibeActivity extends AppCompatActivity {
         reasonLabel = findViewById(R.id.view_reason_label);
         socialSituationField = findViewById(R.id.view_social_situation_text_view);
         socialSituationLabel = findViewById(R.id.view_social_situation_label);
+        reasonImage = findViewById(R.id.reason_image);
+
+        reasonImage.setDrawingCacheEnabled(true);
+        reasonImage.buildDrawingCache();
 
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
@@ -55,7 +66,11 @@ public class ViewVibeActivity extends AppCompatActivity {
             String reason = vibeEvent.getReason();
             String socialSituation = vibeEvent.getSocialSituation();
             // TODO: missing location - do that later once done
-            // TODO: missing reason photo
+            String reasonImagePath = vibeEvent.getImage();
+
+            if (reasonImagePath != null){
+                loadImageFirebase(reasonImage, reasonImagePath);
+            }
 
             if (vibeEvent.getVibe() != null) {
                 vibeImage.setImageResource(vibeEvent.getVibe().getEmoticon());
@@ -79,5 +94,19 @@ public class ViewVibeActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    public void loadImageFirebase(ImageView imageView, String imagePath){
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+        StorageReference imageRef = storageRef.child(imagePath);
+
+        imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Glide.with(getApplicationContext() /* context */)
+                        .load(uri)
+                        .into(imageView);
+            }
+        });
     }
 }
