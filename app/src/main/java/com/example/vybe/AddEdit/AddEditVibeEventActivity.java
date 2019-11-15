@@ -35,7 +35,7 @@ import java.util.HashMap;
  * This Activity displays the screen for a user to add a vibe event, or
  * edit an existing vibe event by adding or modifying the different vibe attributes
  */
-public class AddEditVibeEventActivity extends AppCompatActivity implements SocialSituationFieldFragment.SocStnSelectedListener, DateTimeFieldFragment.DateTimeSelectedListener, VibeFieldFragment.VibeSelectedListener {
+public class AddEditVibeEventActivity extends AppCompatActivity implements SocialSituationFieldFragment.SocStnSelectedListener, VibeFieldFragment.VibeSelectedListener {
 
     private static final String TAG = "AddEditVibeEventActivity";
     private static final int GET_FROM_GALLERY = 1000;
@@ -47,7 +47,6 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
     //private TextView outputBox;
     private TextView pageTitle;
     private ImageView imageView;
-    private DateTimeFieldFragment dateTimeFieldFragment;
     private VibeFieldFragment vibeFieldFragment;
     // -------------------
 
@@ -72,7 +71,6 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
         imageView = findViewById(R.id.imageView);
         pageTitle = findViewById(R.id.add_edit_vybe_title);
         pageTitle = findViewById(R.id.add_edit_vybe_title);
-        dateTimeFieldFragment = (DateTimeFieldFragment) getSupportFragmentManager().findFragmentById(R.id.date_time_field_fragment);
         vibeFieldFragment = (VibeFieldFragment) getSupportFragmentManager().findFragmentById(R.id.vibe_field_fragment);
 
         imageView.setDrawingCacheEnabled(true);
@@ -95,10 +93,6 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
             vibeEvent = new VibeEvent();
             vibeEvent.setDateTime(LocalDateTime.now());
         }
-
-        Bundle dateTimeFieldArgs = new Bundle();
-        dateTimeFieldArgs.putSerializable("dateTime", vibeEvent.getDateTime());
-        dateTimeFieldFragment.setDefaultDateTime(dateTimeFieldArgs);
 
         // --- Image Picker ---
         pickImageBtn.setOnClickListener((View view) -> {
@@ -130,11 +124,6 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
     @Override
     public void onSocStnSelected(String socStn) {
         vibeEvent.setSocialSituation(socStn);
-    }
-
-    @Override
-    public void onDateTimeSelected(LocalDateTime selectedDateTime) {
-        vibeEvent.setDateTime(selectedDateTime);
     }
 
     @Override
