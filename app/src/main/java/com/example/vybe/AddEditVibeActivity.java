@@ -327,7 +327,7 @@ public class AddEditVibeActivity extends AppCompatActivity implements DatePicker
         imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                Glide.with(getApplicationContext() /* context */)
+                Glide.with(getApplicationContext())
                         .load(uri) // Load the image
                         .into(imageView); // Destination to load image into
             }
