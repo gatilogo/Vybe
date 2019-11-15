@@ -63,18 +63,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <Button
-                android:id="@+id/pickImageBtn"
+            <fragment
+                android:id="@+id/image_field_fragment"
+                android:name="com.example.vybe.AddEdit.ImageFieldFragment"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Pick Image" />
-
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-<!--            <TextView-->
+            <!--            <TextView-->
 <!--                android:id="@+id/textView"-->
 <!--                android:layout_width="wrap_content"-->
 <!--                android:layout_height="wrap_content"-->

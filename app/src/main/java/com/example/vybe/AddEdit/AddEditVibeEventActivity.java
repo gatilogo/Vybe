@@ -35,18 +35,14 @@ import java.util.HashMap;
  * This Activity displays the screen for a user to add a vibe event, or
  * edit an existing vibe event by adding or modifying the different vibe attributes
  */
-public class AddEditVibeEventActivity extends AppCompatActivity implements SocialSituationFieldFragment.SocStnSelectedListener, VibeFieldFragment.VibeSelectedListener {
+public class AddEditVibeEventActivity extends AppCompatActivity implements SocialSituationFieldFragment.SocStnSelectedListener, VibeFieldFragment.VibeSelectedListener, ImageFieldFragment.ImageSelectedListener {
 
     private static final String TAG = "AddEditVibeEventActivity";
-    private static final int GET_FROM_GALLERY = 1000;
 
     // --- XML Elements ---
     private EditText reasonField;
     private Button addBtn;
-    private Button pickImageBtn;
-    //private TextView outputBox;
     private TextView pageTitle;
-    private ImageView imageView;
     private VibeFieldFragment vibeFieldFragment;
     // -------------------
 
@@ -57,27 +53,17 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
     private boolean imageIsSelected = false;
     private Bitmap imageBitmap;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_edit_vibe);
-        Log.d(TAG, "onCreate: In Add/Edit vibes");
 
         reasonField = findViewById(R.id.reason_edit_text);
         addBtn = findViewById(R.id.add_btn);
-        // outputBox = findViewById(R.id.textView);
-        pickImageBtn = findViewById(R.id.pickImageBtn);
-        imageView = findViewById(R.id.imageView);
-        pageTitle = findViewById(R.id.add_edit_vybe_title);
         pageTitle = findViewById(R.id.add_edit_vybe_title);
         vibeFieldFragment = (VibeFieldFragment) getSupportFragmentManager().findFragmentById(R.id.vibe_field_fragment);
 
-        imageView.setDrawingCacheEnabled(true);
-        imageView.buildDrawingCache();
-
         Bundle extras = getIntent().getExtras();
-
         if (extras != null) {
             pageTitle.setText(getString(R.string.edit_vybe_name));
 
@@ -93,12 +79,6 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
             vibeEvent = new VibeEvent();
             vibeEvent.setDateTime(LocalDateTime.now());
         }
-
-        // --- Image Picker ---
-        pickImageBtn.setOnClickListener((View view) -> {
-            Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-            startActivityForResult(galleryIntent, GET_FROM_GALLERY);
-        });
 
         // --- Show Output on button click ---
         addBtn.setOnClickListener(view -> {
@@ -127,25 +107,12 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == GET_FROM_GALLERY && resultCode == RESULT_OK && data != null) {
-            Uri selectedImageUri = data.getData();
-            try {
-                imageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
-                imageIsSelected = true;
-            } catch (IOException e) {
-                e.printStackTrace();
-                return;
-            }
-
-            imageView.setImageBitmap(imageBitmap);
-
-        }
+    public void onImageSelected(Bitmap selectedImageBitmap) {
+        imageBitmap = selectedImageBitmap;
+        imageIsSelected = true;
     }
 
-    public void uploadImage(Bitmap bitmap, String id) {
+    private void uploadImage(Bitmap bitmap, String id) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] byteArray = baos.toByteArray();
@@ -205,5 +172,4 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
         data.put("image", vibeEvent.getImage());
         return data;
     };
-
 }

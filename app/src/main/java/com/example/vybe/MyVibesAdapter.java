@@ -47,7 +47,7 @@ public class MyVibesAdapter extends ArrayAdapter<VibeEvent> {
 
         TextView dateField = view.findViewById(R.id.view_date_text_view);
         TextView reasonField = view.findViewById(R.id.my_reason_text_view);
-        ImageView vibeImage = view.findViewById(R.id.imageView);
+        ImageView vibeImage = view.findViewById(R.id.image_view);
 
         VibeEvent vibeEvent = vibeEventList.get(position);
 
