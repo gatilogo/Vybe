@@ -7,6 +7,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -17,6 +18,9 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import com.example.vybe.MapFragment;
+
+import static com.example.vybe.R.id.map_view_fragment;
 import static com.example.vybe.util.Constants.MAPVIEW_BUNDLE_KEY;
 
 /**
@@ -28,22 +32,29 @@ public class MapViewActivity extends AppCompatActivity {
 
     private static final String TAG = "MapViewActivity";
 
+    private MapFragment mapViewFragment;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_view);
+        mapViewFragment = (MapFragment) getSupportFragmentManager().findFragmentById(map_view_fragment);
 
-        inflateMapFragment();
+        //inflateMapFragment(R.id.map_container);
+        mapViewFragment.addVibeLocations();
+
 
         Log.d(TAG, "onCreate: showing map");
     }
 
-    private void inflateMapFragment(){
+    public void inflateMapFragment(int containerID){
         MapFragment fragment = new MapFragment();
         Bundle bundle = new Bundle();
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.map_container, fragment);
+        transaction.replace(containerID, fragment);
         transaction.commit();
         
     }

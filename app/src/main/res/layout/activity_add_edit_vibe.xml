@@ -90,14 +90,11 @@
                 android:layout_height="wrap_content"
                 android:text="Pick Location" />
 
-            <TextView
-                android:id="@+id/selected_location"
+            <fragment
+                android:id="@+id/add_edit_map_fragment"
+                android:name="com.example.vybe.MapFragment"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
-                android:text="No Location Selected" />
+                android:layout_height="300dp" />
 
             <ImageView
                 android:id="@+id/imageView"
