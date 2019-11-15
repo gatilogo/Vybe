@@ -120,7 +120,11 @@ public class AddEditVibeActivityTest {
                 (editText.getError().toString()));
     }
 
-    @Test
+    /*
+    Due to a change in requirements, this test will be temporarily disabled until
+    it becomes obsolete
+     */
+    @Ignore
     public void DatePicker_SelectDate_Pass(){
         solo.clickOnEditText(0);
         DatePicker datePicker = solo.getView(DatePicker.class, 0); // the second param is an index
