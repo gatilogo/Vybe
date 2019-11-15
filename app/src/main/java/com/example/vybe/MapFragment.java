@@ -140,9 +140,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for (QueryDocumentSnapshot doc: queryDocumentSnapshots) {
-                    double latitude = doc.getDouble("latitude");
-                    double longitude = doc.getDouble("longitude");
-                    if (latitude != 0 && longitude != 0) {
+                    if ((doc.getData().get("latitude") != null) && (doc.getData().get("latitude")!= null)) {
+                        double latitude = doc.getDouble("latitude");
+                        double longitude = doc.getDouble("longitude");
                         map.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)));
                     }
                 }
