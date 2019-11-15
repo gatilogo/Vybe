@@ -12,14 +12,6 @@ Story Points:
 
 Related Issues:
 
-Task List
-
-- [ ] Java Files to  be Added/Modified (Architecture):
-- [ ] UI Tasks (XML):
-- [ ] Database:
-- [ ] Testing (Unit and/or Intent):
-- [ ] Documentation (UML, Storyboard, Mockups, Wiki)
-
 [//]: # (Notes:)
 [//]: # (- Testing and Documentation tasks should always be assumed, but only need to be explicitly stated if there is something that ~~does not~~ need modification. For example,)
 [//]: # (some Issues/Stories may not require one of Unit or Intent tests, and this should be indicated in the task list.)

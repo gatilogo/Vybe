@@ -36,11 +36,19 @@
             android:orientation="vertical"
             android:padding="16dp" >
 
-            <Spinner
-                android:id="@+id/vibe_dropdown"
+            <ImageView
+                android:id="@+id/vibe_selector"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp" />
+                android:src="@drawable/ic_no_vibe" />
+
+            <in.goodiebag.carouselpicker.CarouselPicker
+                android:id="@+id/carousel"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:items_visible="three" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/date_time_text_input"
