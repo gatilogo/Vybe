@@ -121,11 +121,17 @@ public class MyVibesActivity extends AppCompatActivity {
                                             String id = (String) doc.getData().get("ID");
                                             String vibe = (String) doc.getData().get("vibe");
                                             String image = (String) doc.getData().get("image");
+                                            double latitude = 0;
+                                            double longitude = 0;
+                                            if ((doc.getData().get("latitude") != null) && (doc.getData().get("latitude")!= null)) {
+                                                latitude = (double) doc.getData().get("latitude");
+                                                longitude = (double) doc.getData().get("longitude");
+                                            }
                                         if (allFlag) {
-                                            vibeEventList.add(new VibeEvent(vibe, ldt, reason, socSit, id, image));
+                                            vibeEventList.add(new VibeEvent(vibe, ldt, reason, socSit, id, image, latitude, longitude));
                                         } else {
                                             if (filterVibe.equals(vibe)){
-                                                vibeEventList.add(new VibeEvent(vibe, ldt, reason, socSit, id, image));
+                                                vibeEventList.add(new VibeEvent(vibe, ldt, reason, socSit, id, image, latitude, longitude));
                                             }
                                         }
                                     }
@@ -162,7 +168,13 @@ public class MyVibesActivity extends AppCompatActivity {
                     String id = (String) doc.getData().get("ID");
                     String vibe = (String) doc.getData().get("vibe");
                     String image = (String) doc.getData().get("image");
-                    vibeEventList.add(new VibeEvent(vibe, ldt, reason, socSit, id, image));
+                    double latitude = 0;
+                    double longitude = 0;
+                    if ((doc.getData().get("latitude") != null) && (doc.getData().get("longitude") != null)) {
+                        latitude = (double) doc.getData().get("latitude");
+                        longitude = (double) doc.getData().get("longitude");
+                    }
+                    vibeEventList.add(new VibeEvent(vibe, ldt, reason, socSit, id, image, latitude, longitude));
                 }
                 myVibesAdapter.notifyDataSetChanged();
             }
@@ -301,7 +313,7 @@ public class MyVibesActivity extends AppCompatActivity {
         switch (requestCode) {
             case PERMISSIONS_REQUEST_ENABLE_GPS: {
                 if (mLocationPermissionGranted){
-                    //idk bro do some stuff
+                    //everything is fine
                 }
                 else {
                     getLocationPermission();

@@ -18,3 +18,4 @@
 
 # Project files
 .project
+app/src/main/java/com/example/vybe/util/APIKey.java
