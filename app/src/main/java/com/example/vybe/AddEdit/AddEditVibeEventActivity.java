@@ -1,7 +1,5 @@
 package com.example.vybe.AddEdit;
 
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -9,21 +7,15 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
 import com.example.vybe.R;
 import com.example.vybe.VibeEvent;
@@ -36,23 +28,19 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
 /**
  * This Activity displays the screen for a user to add a vibe event, or
  * edit an existing vibe event by adding or modifying the different vibe attributes
  */
-public class AddEditVibeEventActivity extends AppCompatActivity implements SocialSituationFieldFragment.SocStnSelectedListener, DateTimeFieldFragment.DateTimeSelectedListener {
+public class AddEditVibeEventActivity extends AppCompatActivity implements SocialSituationFieldFragment.SocStnSelectedListener, DateTimeFieldFragment.DateTimeSelectedListener, VibeFieldFragment.VibeSelectedListener {
 
     private static final String TAG = "AddEditVibeEventActivity";
     private static final int GET_FROM_GALLERY = 1000;
 
     // --- XML Elements ---
-    private Spinner vibeDropdown;
     private EditText reasonField;
     private Button addBtn;
     private Button pickImageBtn;
@@ -60,6 +48,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
     private TextView pageTitle;
     private ImageView imageView;
     private DateTimeFieldFragment dateTimeFieldFragment;
+    private VibeFieldFragment vibeFieldFragment;
     // -------------------
 
     private VibeEvent vibeEvent;
@@ -76,7 +65,6 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
         setContentView(R.layout.activity_add_edit_vibe);
         Log.d(TAG, "onCreate: In Add/Edit vibes");
 
-        vibeDropdown = findViewById(R.id.vibe_dropdown);
         reasonField = findViewById(R.id.reason_edit_text);
         addBtn = findViewById(R.id.add_btn);
         // outputBox = findViewById(R.id.textView);
@@ -85,6 +73,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
         pageTitle = findViewById(R.id.add_edit_vybe_title);
         pageTitle = findViewById(R.id.add_edit_vybe_title);
         dateTimeFieldFragment = (DateTimeFieldFragment) getSupportFragmentManager().findFragmentById(R.id.date_time_field_fragment);
+        vibeFieldFragment = (VibeFieldFragment) getSupportFragmentManager().findFragmentById(R.id.vibe_field_fragment);
 
         imageView.setDrawingCacheEnabled(true);
         imageView.buildDrawingCache();
@@ -92,35 +81,24 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
         Bundle extras = getIntent().getExtras();
 
         if (extras != null) {
-            //TODO: set vibe and socsit dropdrowns
+            pageTitle.setText(getString(R.string.edit_vybe_name));
+
             vibeEvent = (VibeEvent) extras.getSerializable("vibeEvent");
             reasonField.setText(vibeEvent.getReason());
             editFlag = true;
 
-            pageTitle.setText(getString(R.string.edit_vybe_name));
+            Bundle vibeFieldArgs = new Bundle();
+            vibeFieldArgs.putSerializable("vibe", vibeEvent.getVibe().getName());
+            vibeFieldFragment.setDefaultVibe(vibeFieldArgs);
+
         } else {
             vibeEvent = new VibeEvent();
             vibeEvent.setDateTime(LocalDateTime.now());
         }
 
-        Bundle args = new Bundle();
-        args.putSerializable("dateTime", vibeEvent.getDateTime());
-        dateTimeFieldFragment.setDefaultDateTime(args);
-
-        // --- Vibes Dropdown ---
-        String[] vibes = new String[]{"Select a vibe", "Angry", "Disgusted", "Happy", "Sad", "Scared", "Surprised"};
-        ArrayAdapter<String> vibesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, vibes);
-        vibeDropdown.setAdapter(vibesAdapter);
-        vibeDropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                vibeEvent.setVibe(vibes[position]);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-            }
-        });
+        Bundle dateTimeFieldArgs = new Bundle();
+        dateTimeFieldArgs.putSerializable("dateTime", vibeEvent.getDateTime());
+        dateTimeFieldFragment.setDefaultDateTime(dateTimeFieldArgs);
 
         // --- Image Picker ---
         pickImageBtn.setOnClickListener((View view) -> {
@@ -145,15 +123,18 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
     }
 
     @Override
+    public void onVibeSelected(String selectedVibe) {
+        vibeEvent.setVibe(selectedVibe);
+    }
+
+    @Override
     public void onSocStnSelected(String socStn) {
         vibeEvent.setSocialSituation(socStn);
-
     }
 
     @Override
     public void onDateTimeSelected(LocalDateTime selectedDateTime) {
         vibeEvent.setDateTime(selectedDateTime);
-        Toast.makeText(getApplicationContext(), "Yeee Boiii", Toast.LENGTH_LONG).show();
     }
 
     @Override

@@ -36,11 +36,11 @@
             android:orientation="vertical"
             android:padding="16dp" >
 
-            <Spinner
-                android:id="@+id/vibe_dropdown"
+            <fragment
+                android:id="@+id/vibe_field_fragment"
+                android:name="com.example.vybe.AddEdit.VibeFieldFragment"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp" />
+                android:layout_height="wrap_content" />
 
             <fragment
                 android:id="@+id/date_time_field_fragment"
