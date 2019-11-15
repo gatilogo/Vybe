@@ -171,7 +171,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         double longitude = doc.getDouble("longitude");
                         String vibeName = (String) doc.getData().get("vibe");
                         Vibe vibe = VibeFactory.getVibe(vibeName);
-                        BitmapDescriptor vibeMarker = vectorToBitmap(R.drawable.ic_vibeless, Color.parseColor("#B399C8"));
+                        BitmapDescriptor vibeMarker = vectorToBitmap(vibe.getEmoticon(), Color.parseColor("#B399C8"));
                         // change arguments --> to --> vibe.getEmoticon() and vibe.getColor()
                         map.addMarker(new MarkerOptions()
                                 .position(new LatLng(latitude, longitude))
