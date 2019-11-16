@@ -36,12 +36,12 @@ import java.util.HashMap;
  * This Activity displays the screen for a user to add a vibe event, or
  * edit an existing vibe event by adding or modifying the different vibe attributes
  */
-public class AddEditVibeEventActivity extends AppCompatActivity implements SocialSituationFieldFragment.OnSocStnSelectedListener, ImageFieldFragment.OnImageSelectedListener, VibeCarouselFragment.OnVibeSelectedListener, LocationSelectionDialog.OnFragmentInteractionListener {
+public class AddEditVibeEventActivity extends AppCompatActivity implements SocialSituationFieldFragment.OnSocStnSelectedListener, ImageFieldFragment.OnImageSelectedListener, VibeCarouselDialogFragment.OnVibeSelectedListener, LocationSelectionDialog.OnFragmentInteractionListener {
 
     private static final String TAG = "AddEditVibeEventActivity";
 
     // --- XML Elements ---
-    private ImageView vibeSelector;
+    private ImageView vibeImage;
     private EditText reasonField;
     private Button addBtn;
     private TextView pageTitle;
@@ -68,7 +68,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
         addBtn = findViewById(R.id.add_btn);
         pageTitle = findViewById(R.id.add_edit_vybe_title);
         pickLocationButton = findViewById(R.id.btn_add_location);
-        vibeSelector = findViewById(R.id.vibe_selector);
+        vibeImage = findViewById(R.id.vibe_image);
         imageView = findViewById(R.id.imageView);
         mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.add_edit_map_fragment);
 
@@ -98,8 +98,8 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
         }
 
         // --- Vibe Carousel Picker ---
-        vibeSelector.setOnClickListener((View view) -> {
-            new VibeCarouselFragment().show(getSupportFragmentManager(), "Select a Vibe");
+        vibeImage.setOnClickListener((View view) -> {
+            new VibeCarouselDialogFragment().show(getSupportFragmentManager(), "Select a Vibe");
         });
 
         // ---Location Picker---
@@ -110,8 +110,6 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
 
         // --- Show Output on button click ---
         addBtn.setOnClickListener(view -> {
-
-            //TODO: integrate firestore stuff here i guess
             vibeEvent.setReason(reasonField.getText().toString());
 
             if (editFlag) {
@@ -142,7 +140,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
     }
 
     private void setTheme(Vibe vibe) {
-        vibeSelector.setImageResource(vibe.getEmoticon());
+        vibeImage.setImageResource(vibe.getEmoticon());
         toolbar.setBackgroundResource(vibe.getColor());
         addBtn.setBackgroundResource(vibe.getColor());
     }

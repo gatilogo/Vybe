@@ -24,11 +24,11 @@ import java.util.List;
 import in.goodiebag.carouselpicker.CarouselPicker;
 
 /**
- * VibeCarouselFragment extends a DialogFragment and serves as a custom
+ * VibeCarouselDialogFragment extends a DialogFragment and serves as a custom
  * picker for a user to decide which Vibe they want to have added to a Vibe Event
  * Functionality is similar to that of a {@link android.app.DatePickerDialog}
  */
-public class VibeCarouselFragment extends DialogFragment {
+public class VibeCarouselDialogFragment extends DialogFragment {
 
     private Context context;
     private int selectedEmoticon = R.drawable.ic_no_vibe;
