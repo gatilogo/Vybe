@@ -19,10 +19,10 @@ import com.example.vybe.R;
 public class SocialSituationFieldFragment extends Fragment {
 
     private Spinner socStnDropdown;
-    private SocStnSelectedListener socStnSelectedListener;
+    private OnSocStnSelectedListener onSocStnSelectedListener;
     private Context context;
 
-    interface SocStnSelectedListener {
+    interface OnSocStnSelectedListener {
         void onSocStnSelected(String socStn);
     }
 
@@ -31,7 +31,7 @@ public class SocialSituationFieldFragment extends Fragment {
         super.onAttach(context);
         this.context = context;
         Activity activity = (Activity) context;
-        socStnSelectedListener = (SocStnSelectedListener) activity;
+        onSocStnSelectedListener = (OnSocStnSelectedListener) activity;
     }
 
     @Nullable
@@ -47,7 +47,7 @@ public class SocialSituationFieldFragment extends Fragment {
         socStnDropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                socStnSelectedListener.onSocStnSelected(socStn[position]);
+                onSocStnSelectedListener.onSocStnSelected(socStn[position]);
             }
 
             @Override

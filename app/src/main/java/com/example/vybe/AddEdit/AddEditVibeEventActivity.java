@@ -1,11 +1,8 @@
 package com.example.vybe.AddEdit;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,7 +11,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
@@ -33,7 +29,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 
@@ -41,7 +36,7 @@ import java.util.HashMap;
  * This Activity displays the screen for a user to add a vibe event, or
  * edit an existing vibe event by adding or modifying the different vibe attributes
  */
-public class AddEditVibeEventActivity extends AppCompatActivity implements SocialSituationFieldFragment.SocStnSelectedListener, VibeFieldFragment.VibeSelectedListener, ImageFieldFragment.ImageSelectedListener, VibeCarouselFragment.OnFragmentInteractionListener, LocationSelectionDialog.OnFragmentInteractionListener {
+public class AddEditVibeEventActivity extends AppCompatActivity implements SocialSituationFieldFragment.OnSocStnSelectedListener, VibeFieldFragment.VibeSelectedListener, ImageFieldFragment.ImageSelectedListener, VibeCarouselFragment.OnFragmentInteractionListener, LocationSelectionDialog.OnFragmentInteractionListener {
 
     private static final String TAG = "AddEditVibeEventActivity";
 
