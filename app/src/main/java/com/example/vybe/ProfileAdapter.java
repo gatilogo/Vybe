@@ -12,6 +12,10 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
+/**
+ * ProfileAdapter is an ArrayAdapter used in the SearchProfilesActivity class to create a
+ * view for a list of Vybe users
+ */
 public class ProfileAdapter extends ArrayAdapter<User> {
 
     private static final String TAG = "ProfileAdapter";

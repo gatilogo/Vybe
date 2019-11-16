@@ -12,7 +12,6 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
@@ -21,6 +20,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
+/**
+ * SearchProfilesActivity enables the user to search for other participants/users of the Vybe app
+ */
 public class SearchProfilesActivity extends AppCompatActivity {
 
     private static final String TAG = "SearchProfilesActivity";
@@ -42,29 +44,37 @@ public class SearchProfilesActivity extends AppCompatActivity {
         searchView = findViewById(R.id.search_view);
         searchListView = findViewById(R.id.search_list_view);
 
+        // Initialize list of users
         usersList = new ArrayList<>();
 
+        // Get users from the database
         final CollectionReference collectionReference = db.collection("Users");
         Query query = collectionReference.orderBy("username", Query.Direction.DESCENDING);
-
         query.addSnapshotListener((@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) -> {
             usersList.clear();
             for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                 String username = (String) doc.getData().get("username");
                 String email = (String) doc.getData().get("email");
-                usersList.add(new User(username, email));
+                usersList.add(new User(username, email));   // Populate users list
             }
         });
 
+        // Initialize search list
         searchList = new ArrayList<>();
+        // Create adapter
         profileAdapter = new ProfileAdapter(this, R.layout.user_item, searchList);
+        // Set adapter
         searchListView.setAdapter(profileAdapter);
 
+        // Listener for the search view
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
+            // This function is called when a user presses enter in the search view
             public boolean onQueryTextSubmit(String query) {
+                // Refresh adapter
                 profileAdapter.clear();
 
+                // Check if entered 'query' (username to search for) is in the users list
                 for (User user: usersList) {
                     String username = user.getUsername().toLowerCase();
                     if (username.contains(query.toLowerCase())) {
@@ -72,6 +82,7 @@ public class SearchProfilesActivity extends AppCompatActivity {
                     }
                 }
 
+                // If adapter is empty, display a Toast
                 if (profileAdapter.isEmpty()) {
                     Toast.makeText(SearchProfilesActivity.this, "No match found", Toast.LENGTH_LONG).show();
                 }
@@ -80,6 +91,7 @@ public class SearchProfilesActivity extends AppCompatActivity {
             }
 
             @Override
+            // This function is called when the text field in the search view changes. Currently unused
             public boolean onQueryTextChange(String newText) {
                 return false;
             }

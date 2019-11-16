@@ -8,6 +8,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+/**
+ * SocialActivity displays the screen for a user to view a list of their followers' vibe events
+ */
 public class SocialActivity extends AppCompatActivity {
 
     private static final String TAG = "SocialActivity";
