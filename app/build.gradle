@@ -40,7 +40,13 @@ dependencies {
     androidTestImplementation 'androidx.test:rules:1.2.0'
     androidTestImplementation 'com.jayway.android.robotium:robotium-solo:5.3.1'
     implementation 'com.google.firebase:firebase-auth:19.1.0'
+    implementation 'com.google.android.gms:play-services-auth:17.0.0'
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'com.google.android.libraries.places:places:2.0.0'
+    implementation 'com.github.bumptech.glide:glide:4.10.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'
+    implementation 'com.firebaseui:firebase-ui-storage:4.3.2'
+    implementation 'com.github.GoodieBag:CarouselPicker:v1.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

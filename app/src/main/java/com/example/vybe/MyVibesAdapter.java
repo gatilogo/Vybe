@@ -60,7 +60,7 @@ public class MyVibesAdapter extends ArrayAdapter<VibeEvent> {
         if (vibeEvent.getVibe() != null) {
             vibeImage.setImageResource(vibeEvent.getVibe().getEmoticon());
         } else {
-            vibeImage.setImageResource(R.drawable.ic_vibeless);
+            vibeImage.setImageResource(R.drawable.ic_no_vibe);
         }
 
         if (vibeEvent.getReason() == null) {

@@ -42,6 +42,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
+            <ImageView
+                android:id="@+id/vibe_selector"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_no_vibe" />
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/reason_text_input"
                 android:layout_width="match_parent"
@@ -67,6 +73,24 @@
                 android:id="@+id/image_field_fragment"
                 android:name="com.example.vybe.AddEdit.ImageFieldFragment"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Pick Image" />
+
+            <Button
+                android:id="@+id/btn_add_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Pick Location" />
+
+            <fragment
+                android:id="@+id/add_edit_map_fragment"
+                android:name="com.example.vybe.MapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="300dp" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <!--            <TextView-->

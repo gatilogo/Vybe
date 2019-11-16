@@ -22,6 +22,8 @@ public class VibeEvent implements Serializable {
     private String socialSituation;
     private String id;
     private String image;
+    private double latitude;
+    private double longitude;
 
     /**
      * Default constructor called for serialization
@@ -44,14 +46,20 @@ public class VibeEvent implements Serializable {
      *      This is the unique identifier for a particular instance of a vibe event
      * @param image
      *      This is a photograph expressing the reason a vibe event occurred
+     * @param placeID
+     *      This is the ID google API uses to identify places
+     * @param placeName
+     *      This is the name of the place in google's API
      */
-    public VibeEvent(String vibe, LocalDateTime dateTime, String reason, String socialSituation, String id, String image) {
+    public VibeEvent(String vibe, LocalDateTime dateTime, String reason, String socialSituation, String id, String image, double latitude, double longitude) {
         this.vibe = VibeFactory.getVibe(vibe);
         this.dateTime = dateTime;
         this.reason = reason;
         this.socialSituation = socialSituation;
         this.id = id;
         this.image = image;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     /**
@@ -64,10 +72,18 @@ public class VibeEvent implements Serializable {
 
     /**
      * This sets the vibe of a VibeEvent
-     * @param vibe The string representation of a vibe
+     * @param vibeString The string representation of a vibe
      */
-    public void setVibe(String vibe) {
-        this.vibe = VibeFactory.getVibe(vibe);
+    public void setVibe(String vibeString) {
+        this.vibe = VibeFactory.getVibe(vibeString);
+    }
+
+    /**
+     * This sets the vibe of a VibeEvent
+     * @param vibeEmoticon The integer representing the emoticon of a vibe
+     */
+    public void setVibe(int vibeEmoticon) {
+        this.vibe = VibeFactory.getVibe(vibeEmoticon);
     }
 
     /**
@@ -150,5 +166,21 @@ public class VibeEvent implements Serializable {
         long seconds = this.dateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
         Date date = new Date(seconds);
         return date;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 }

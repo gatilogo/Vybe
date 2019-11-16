@@ -1,10 +1,17 @@
 package com.example.vybe;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
+import androidx.appcompat.widget.Toolbar;
+
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -28,6 +35,8 @@ public class ViewVibeActivity extends AppCompatActivity {
     private TextView reasonLabel;
     private TextView socialSituationField;
     private TextView socialSituationLabel;
+    private ImageView reasonImage;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +50,11 @@ public class ViewVibeActivity extends AppCompatActivity {
         reasonLabel = findViewById(R.id.view_reason_label);
         socialSituationField = findViewById(R.id.view_social_situation_text_view);
         socialSituationLabel = findViewById(R.id.view_social_situation_label);
+        reasonImage = findViewById(R.id.reason_image);
+
+        reasonImage.setDrawingCacheEnabled(true);
+        reasonImage.buildDrawingCache();
+        toolbar = findViewById(R.id.view_vibes_toolbar);
 
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
@@ -55,13 +69,15 @@ public class ViewVibeActivity extends AppCompatActivity {
             String reason = vibeEvent.getReason();
             String socialSituation = vibeEvent.getSocialSituation();
             // TODO: missing location - do that later once done
-            // TODO: missing reason photo
+            String reasonImagePath = vibeEvent.getImage();
+
+            if (reasonImagePath != null){
+                loadImageFirebase(reasonImage, reasonImagePath);
+            }
 
             if (vibeEvent.getVibe() != null) {
                 vibeImage.setImageResource(vibeEvent.getVibe().getEmoticon());
-            }
-            else {
-                vibeImage.setImageResource(R.drawable.ic_disgusted);
+                toolbar.setBackgroundResource(vibeEvent.getVibe().getColor());
             }
 
             if (reason == null || reason.equals("")) {  // Reason is optional
@@ -79,5 +95,29 @@ public class ViewVibeActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    /**
+     * This will load an image from Firebase Storage into an ImageView
+     * @param imageView
+     *      The destination ImageView
+     * @param imagePath
+     *      Path to the image in Firebase Storage
+     */
+    public void loadImageFirebase(ImageView imageView, String imagePath){
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+
+        // Get the path to the image
+        StorageReference imageRef = storageRef.child(imagePath);
+
+        // Get the download URL for Glide
+        imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Glide.with(getApplicationContext() /* context */)
+                        .load(uri) // Load the image
+                        .into(imageView); // Destination to load image into
+            }
+        });
     }
 }
