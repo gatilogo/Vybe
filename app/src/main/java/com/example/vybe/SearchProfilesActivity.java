@@ -1,5 +1,6 @@
 package com.example.vybe;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -10,11 +11,20 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import java.util.ArrayList;
 
 public class SearchProfilesActivity extends AppCompatActivity {
 
     private static final String TAG = "SearchProfilesActivity";
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private ArrayList<User> usersList;
     private ArrayList<User> searchList;
@@ -33,9 +43,21 @@ public class SearchProfilesActivity extends AppCompatActivity {
         searchListView = findViewById(R.id.search_list_view);
 
         usersList = new ArrayList<>();
-        usersList.add(new User("trishia", ""));
-        usersList.add(new User("haha", ""));
-        usersList.add(new User("hehe", ""));
+
+        final CollectionReference collectionReference = db.collection("Users");
+        Query query = collectionReference.orderBy("username", Query.Direction.DESCENDING);
+
+        query.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                usersList.clear();
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                    String username = (String) doc.getData().get("username");
+                    String email = (String) doc.getData().get("email");
+                    usersList.add(new User(username, email));
+                }
+            }
+        });
 
         searchList = new ArrayList<>();
         profileAdapter = new ProfileAdapter(this, R.layout.user_item, searchList);
