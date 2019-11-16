@@ -55,6 +55,7 @@ public class LocationSelectionDialog extends DialogFragment {
     private Button openLocationAutofill;
     private Button useCurrentLocation;
     private View view;
+    private LocationController locationController;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -111,14 +112,9 @@ public class LocationSelectionDialog extends DialogFragment {
         useCurrentLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                LocationManager lm = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
-                if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(getContext(), "Please Enable GPS", Toast.LENGTH_SHORT);
-                    return;
-                }
-                Location location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                locationController = new LocationController();
+                Location location = locationController.getUserLocation(getContext());
+                if (location == null) {return;}
                 double longitude = location.getLongitude();
                 double latitude = location.getLatitude();
                 onFragmentInteractionListener.onOkPressed(latitude, longitude);

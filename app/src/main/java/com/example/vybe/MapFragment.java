@@ -55,6 +55,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap mMap;
     private VibeEvent vibe;
 
+    private LocationController locationController;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -134,13 +136,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(vibe.getLatitude(), vibe.getLongitude()), 15);
             mMap.moveCamera(cameraUpdate);
         } else {
-            LocationManager lm = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
-            if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-                    != PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(getContext(), "Please Enable GPS", Toast.LENGTH_SHORT);
-                return;
-            }
-            Location location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            Location location = locationController.getUserLocation(getContext());
+            if (location == null) {return;}
             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 15);
             mMap.moveCamera(cameraUpdate);
         }

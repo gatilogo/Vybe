@@ -45,14 +45,4 @@ public class MapViewActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate: showing map");
     }
 
-    public void inflateMapFragment(int containerID){
-        MapFragment fragment = new MapFragment();
-        Bundle bundle = new Bundle();
-
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(containerID, fragment);
-        transaction.commit();
-        
-    }
-
 }
