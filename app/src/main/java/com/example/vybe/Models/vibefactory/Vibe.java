@@ -1,4 +1,4 @@
-package com.example.vybe.vibefactory;
+package com.example.vybe.Models.vibefactory;
 
 import java.io.Serializable;
 

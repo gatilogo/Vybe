@@ -11,6 +11,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.vybe.Models.VibeEvent;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
@@ -27,6 +29,9 @@ public class MyVibesAdapter extends ArrayAdapter<VibeEvent> {
     private Context context;
     private ArrayList<VibeEvent> vibeEventList;
     private int resource;
+    TextView dateField;
+    TextView reasonField;
+    ImageView vibeImage;
 
     public MyVibesAdapter(@NonNull Context context, int resource, ArrayList<VibeEvent> vibeEventList) {
         super(context, resource, vibeEventList);
@@ -45,30 +50,40 @@ public class MyVibesAdapter extends ArrayAdapter<VibeEvent> {
                     .inflate(this.resource, parent, false);
         }
 
-        TextView dateField = view.findViewById(R.id.view_date_text_view);
-        TextView reasonField = view.findViewById(R.id.my_reason_text_view);
-        ImageView vibeImage = view.findViewById(R.id.image_view);
+        dateField = view.findViewById(R.id.view_date_text_view);
+        reasonField = view.findViewById(R.id.my_reason_text_view);
+        vibeImage = view.findViewById(R.id.image_view);
 
         VibeEvent vibeEvent = vibeEventList.get(position);
+        populateVibeAdapterFields(vibeEvent);
 
+        return view;
+    }
+
+    /**
+     * This will populate the appropriate fields for displaying Vibe
+     * Event details on the VibesAdapter view
+     * @param vibeEvent
+     *      The Vibe Event object containing details to be displayed
+     */
+    // TODO:
+    // this can be moved to a controller class and could potentially be used in common with
+    // the ViewVibeActivity method: populateVibeEventDetails
+    public void populateVibeAdapterFields(VibeEvent vibeEvent) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(" d, YYYY h:mm a", Locale.ENGLISH);
         LocalDateTime dateTime = vibeEvent.getDateTime();
         String month = dateTime.getMonth().getDisplayName(TextStyle.FULL_STANDALONE, Locale.ENGLISH);
+        String dateFieldText = month + dateTime.format(formatter);
+        dateField.setText(dateFieldText);
+        vibeImage.setImageResource(vibeEvent.getVibe().getEmoticon());
 
-        dateField.setText(month + dateTime.format(formatter));
-
-        if (vibeEvent.getVibe() != null) {
-            vibeImage.setImageResource(vibeEvent.getVibe().getEmoticon());
-        } else {
-            vibeImage.setImageResource(R.drawable.ic_no_vibe);
-        }
-
+        // TODO: DO WE WANT TO DISPLAY REASON?
+        // KEN SAID ON FORUM DATETIME AND EMOTICON IS ENOUGH.
         if (vibeEvent.getReason() == null) {
             reasonField.setVisibility(View.GONE);
         } else {
             reasonField.setText(vibeEvent.getReason());
         }
 
-        return view;
     }
 }

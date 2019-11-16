@@ -1,11 +1,8 @@
 package com.example.vybe.AddEdit;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,7 +11,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
@@ -24,7 +20,7 @@ import com.example.vybe.LocationSelectionDialog;
 import com.example.vybe.MapFragment;
 import com.example.vybe.R;
 import com.example.vybe.VibeCarouselFragment;
-import com.example.vybe.VibeEvent;
+import com.example.vybe.Models.VibeEvent;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -33,7 +29,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 
@@ -175,7 +170,6 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] byteArray = baos.toByteArray();
 
-//        Log.d(TAG, id + ".jpg");
         String imgPath = "reasons/" + id + ".jpg";
         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
         StorageReference mountainsRef = storageRef.child(imgPath);

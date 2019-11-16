@@ -1,6 +1,7 @@
 package com.example.vybe;
 
-import com.example.vybe.vibefactory.Vibe;
+import com.example.vybe.Models.vibefactory.Vibe;
+import com.example.vybe.Models.vibefactory.VibeFactory;
 
 import org.junit.Test;
 
