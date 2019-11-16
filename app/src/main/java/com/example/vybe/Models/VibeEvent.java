@@ -31,15 +31,10 @@ public class VibeEvent implements Serializable {
      * to have the current date and time initialized.
      */
     public VibeEvent() {
-        this.dateTime = LocalDateTime.now();
-    }
 
-    /**
-     * Constructor for VibeEvent with provided location coordinates
-     */
-    public VibeEvent(double latitude, double longitude) {
-        this.latitude = latitude;
-        this.longitude = longitude;
+        this.dateTime = LocalDateTime.now();
+        this.latitude = 0;
+        this.longitude = 0;
     }
 
     /**
