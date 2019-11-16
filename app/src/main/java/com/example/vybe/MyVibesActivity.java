@@ -122,12 +122,8 @@ public class MyVibesActivity extends AppCompatActivity {
                                             String id = (String) doc.getData().get("ID");
                                             String vibe = (String) doc.getData().get("vibe");
                                             String image = (String) doc.getData().get("image");
-                                            double latitude = 0;
-                                            double longitude = 0;
-                                            if ((doc.getData().get("latitude") != null) && (doc.getData().get("latitude")!= null)) {
-                                                latitude = (double) doc.getData().get("latitude");
-                                                longitude = (double) doc.getData().get("longitude");
-                                            }
+                                            double latitude = (double) doc.getData().get("latitude");
+                                            double longitude = (double) doc.getData().get("longitude");
                                         if (allFlag) {
                                             vibeEventList.add(new VibeEvent(vibe, ldt, reason, socSit, id, image, latitude, longitude));
                                         } else {
@@ -164,18 +160,29 @@ public class MyVibesActivity extends AppCompatActivity {
 //                            TimeZone.getDefault().toZoneId());
                     LocalDateTime ldt = doc.getDate("datetime").toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
                     Log.d(TAG, ldt.toString());
+                    /*
                     String reason = (String) doc.getData().get("reason");
                     String socSit = (String) doc.getData().get("socSit");
                     String id = (String) doc.getData().get("ID");
                     String vibe = (String) doc.getData().get("vibe");
                     String image = (String) doc.getData().get("image");
-                    double latitude = 0;
-                    double longitude = 0;
-                    if ((doc.getData().get("latitude") != null) && (doc.getData().get("longitude") != null)) {
-                        latitude = (double) doc.getData().get("latitude");
-                        longitude = (double) doc.getData().get("longitude");
-                    }
+                    double latitude = (double) doc.getData().get("latitude");
+                    double longitude = (double) doc.getData().get("longitude");
                     vibeEventList.add(new VibeEvent(vibe, ldt, reason, socSit, id, image, latitude, longitude));
+                     */
+                    VibeEvent vibeEvent = new VibeEvent();
+                    vibeEvent.setReason(doc.getString("reason"));
+                    vibeEvent.setSocialSituation(doc.getString("socSit"));
+                    vibeEvent.setId(doc.getId());
+                    vibeEvent.setVibe(doc.getString("vibe"));
+                    if (doc.getData().get("image") != null) {
+                        vibeEvent.setImage(doc.getString("image"));
+                    }
+                    if (doc.getData().get("latitude") != null && doc.getData().get("longitude") != null) {
+                        vibeEvent.setLatitude(doc.getDouble("latitude"));
+                        vibeEvent.setLongitude(doc.getDouble("longitude"));
+                    }
+                    vibeEventList.add(vibeEvent);
                 }
                 myVibesAdapter.notifyDataSetChanged();
             }
@@ -246,10 +253,7 @@ public class MyVibesActivity extends AppCompatActivity {
         super.onResume();
         //this is just the easiest way to consistently make sure the user has gps enabled
         if (checkMapServices()) {
-            if (mLocationPermissionGranted){
-                //do stuff
-            }
-            else {
+            if (!mLocationPermissionGranted){
                 getLocationPermission();
             }
         }

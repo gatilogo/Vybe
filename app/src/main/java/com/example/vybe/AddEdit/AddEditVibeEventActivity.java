@@ -92,8 +92,6 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
 
         } else {
             vibeEvent = new VibeEvent();
-            vibeEvent.setLatitude(0);
-            vibeEvent.setLongitude(0);
         }
 
         // --- Vibe Carousel Picker ---
