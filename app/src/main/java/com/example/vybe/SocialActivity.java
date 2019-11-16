@@ -24,18 +24,12 @@ public class SocialActivity extends AppCompatActivity {
         myVibesBtn = findViewById(R.id.my_vibes_btn);
         searchBtn = findViewById(R.id.search_btn);
 
-        myVibesBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
+        myVibesBtn.setOnClickListener((View v) -> {
+            finish();
         });
 
-        searchBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(SocialActivity.this, SearchProfilesActivity.class));
-            }
+        searchBtn.setOnClickListener((View v) -> {
+            startActivity(new Intent(SocialActivity.this, SearchProfilesActivity.class));
         });
     }
 }

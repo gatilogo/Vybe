@@ -47,15 +47,12 @@ public class SearchProfilesActivity extends AppCompatActivity {
         final CollectionReference collectionReference = db.collection("Users");
         Query query = collectionReference.orderBy("username", Query.Direction.DESCENDING);
 
-        query.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                usersList.clear();
-                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                    String username = (String) doc.getData().get("username");
-                    String email = (String) doc.getData().get("email");
-                    usersList.add(new User(username, email));
-                }
+        query.addSnapshotListener((@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) -> {
+            usersList.clear();
+            for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                String username = (String) doc.getData().get("username");
+                String email = (String) doc.getData().get("email");
+                usersList.add(new User(username, email));
             }
         });
 
@@ -88,12 +85,9 @@ public class SearchProfilesActivity extends AppCompatActivity {
             }
         });
 
-        searchListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                User user = profileAdapter.getItem(position);
-//                System.out.println(user.getUsername());
-            }
+        searchListView.setOnItemClickListener((AdapterView<?> parent, View view, int position, long id) -> {
+//            User user = profileAdapter.getItem(position);   // set-up for issue #45
+//            System.out.println(user.getUsername());
         });
     }
 }
