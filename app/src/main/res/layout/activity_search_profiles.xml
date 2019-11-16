@@ -31,4 +31,9 @@
         android:iconifiedByDefault="false"
         android:queryHint="@string/search" />
 
+    <ListView
+        android:id="@+id/search_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent" />
+
 </LinearLayout>
