@@ -1,6 +1,5 @@
 package com.example.vybe;
 
-
 import android.app.Activity;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -76,17 +75,15 @@ public class AddEditVibeEventActivityTest {
         assertEquals(image, verify);
     }
 
-
     @Test
     public void SocialSpinner_SelectOptions_Pass(){
-        // Check That selector starts not selected on a vibe
+        // Check That selector starts not selected on a social situation
         boolean result = solo.isSpinnerTextSelected(1, "Select a Social Situation");
         assertEquals("Select a SC not selected", true, result);
 
+        // Check That selector starts can select correct social situation based on index
         solo.pressSpinnerItem(1, 2);
-
         boolean actual = solo.isSpinnerTextSelected(1, "In a group");
-
         assertEquals("spinner item 'in a group' is not selected",true, actual);
 
     }
@@ -94,12 +91,14 @@ public class AddEditVibeEventActivityTest {
     @Test
     public void StringReason_EnterText_Valid(){
         EditText editText = (EditText) solo.getView("reason_edit_text");
-        //Click on Empty Text View
+
+        // Add valid text to EditText
         solo.clickOnView(editText);
-        //Enter the text: 'asdfg'
         solo.clearEditText(editText);
         solo.enterText(editText, "asdfg");
+
         solo.searchEditText("asdfg");
+
         // Validate the text on the TextView
         assertEquals("Text should be the field value", "asdfg",
                 (editText.getText().toString()));
@@ -108,14 +107,15 @@ public class AddEditVibeEventActivityTest {
 
     @Test
     public void StringReason_EnterText_Invalid(){
-        // test if more than 3 words is provided
         EditText editText = (EditText) solo.getView("reason_edit_text");
+
+        // Add invalid text to EditText
         solo.clickOnView(editText);
-        //Enter the text: 'as df ga sd'
         solo.clearEditText(editText);
         solo.enterText(editText, "as df ga sd");
-        solo.clickOnButton("Save");
 
+        // Check to see if valid error is received
+        solo.clickOnButton("Save");
         assertEquals("Expecting an error", "Max 3 words allowed",
                 (editText.getError().toString()));
     }
@@ -127,6 +127,7 @@ public class AddEditVibeEventActivityTest {
     @Ignore
     public void DatePicker_SelectDate_Pass(){
         solo.clickOnEditText(0);
+
         DatePicker datePicker = solo.getView(DatePicker.class, 0); // the second param is an index
         solo.setDatePicker(datePicker, 2019, 10, 8);
         solo.clickOnButton("OK");
