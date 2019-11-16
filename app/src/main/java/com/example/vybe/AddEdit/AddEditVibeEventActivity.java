@@ -19,8 +19,8 @@ import com.bumptech.glide.Glide;
 import com.example.vybe.LocationSelectionDialog;
 import com.example.vybe.MapFragment;
 import com.example.vybe.R;
-import com.example.vybe.VibeCarouselFragment;
 import com.example.vybe.VibeEvent;
+import com.example.vybe.vibefactory.Vibe;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -36,7 +36,7 @@ import java.util.HashMap;
  * This Activity displays the screen for a user to add a vibe event, or
  * edit an existing vibe event by adding or modifying the different vibe attributes
  */
-public class AddEditVibeEventActivity extends AppCompatActivity implements SocialSituationFieldFragment.OnSocStnSelectedListener, VibeFieldFragment.VibeSelectedListener, ImageFieldFragment.OnImageSelectedListener, VibeCarouselFragment.OnFragmentInteractionListener, LocationSelectionDialog.OnFragmentInteractionListener {
+public class AddEditVibeEventActivity extends AppCompatActivity implements SocialSituationFieldFragment.OnSocStnSelectedListener, ImageFieldFragment.OnImageSelectedListener, VibeCarouselFragment.OnVibeSelectedListener, LocationSelectionDialog.OnFragmentInteractionListener {
 
     private static final String TAG = "AddEditVibeEventActivity";
 
@@ -47,7 +47,6 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
     private TextView pageTitle;
     private Button pickLocationButton;
     private Toolbar toolbar;
-    private VibeFieldFragment vibeFieldFragment;
     private MapFragment addEditMapFragment;
     private ImageView imageView;
     // -------------------
@@ -71,7 +70,6 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
         pickLocationButton = findViewById(R.id.btn_add_location);
         vibeSelector = findViewById(R.id.vibe_selector);
         imageView = findViewById(R.id.imageView);
-        vibeFieldFragment = (VibeFieldFragment) getSupportFragmentManager().findFragmentById(R.id.vibe_field_fragment);
         addEditMapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.add_edit_map_fragment);
 
         Bundle extras = getIntent().getExtras();
@@ -85,11 +83,6 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
             if (vibeEvent.getImage() != null) {
                 loadImageFirebase(imageView, vibeEvent.getImage());
             }
-
-
-            Bundle vibeFieldArgs = new Bundle();
-            vibeFieldArgs.putSerializable("vibe", vibeEvent.getVibe().getName());
-            vibeFieldFragment.setDefaultVibe(vibeFieldArgs);
 
             vibeSelector.setImageResource(vibeEvent.getVibe().getEmoticon());
 
@@ -135,11 +128,6 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
     }
 
     @Override
-    public void onVibeSelected(String selectedVibe) {
-        vibeEvent.setVibe(selectedVibe);
-    }
-
-    @Override
     public void onSocStnSelected(String socStn) {
         vibeEvent.setSocialSituation(socStn);
     }
@@ -151,7 +139,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
     }
 
     @Override
-    public void onOkPressed(int selectedEmoticon) {
+    public void onVibeSelected(Vibe vibe) {
         vibeEvent.setVibe(selectedEmoticon);
         vibeSelector.setImageResource(selectedEmoticon);
         toolbar.setBackgroundResource(vibeEvent.getVibe().getColor());
