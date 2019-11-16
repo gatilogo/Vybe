@@ -11,7 +11,7 @@ import static org.junit.Assert.assertNull;
 public class VibeFactoryTest {
 
     @Test
-    public void testGetAngryVibe() {
+    public void GetAngryVibe() {
         Vibe angry = VibeFactory.getVibe("angry");
 
         assertEquals("angry", angry.getName());
@@ -21,7 +21,7 @@ public class VibeFactoryTest {
     }
 
     @Test
-    public void testGetDisgustedVibe() {
+    public void GetDisgustedVibe() {
         Vibe disgusted = VibeFactory.getVibe("disgusted");
 
         assertEquals("disgusted", disgusted.getName());
@@ -31,7 +31,7 @@ public class VibeFactoryTest {
     }
 
     @Test
-    public void testGetScaredVibe() {
+    public void GetScaredVibe() {
         Vibe scared = VibeFactory.getVibe("scared");
 
         assertEquals("scared", scared.getName());
@@ -41,7 +41,7 @@ public class VibeFactoryTest {
     }
 
     @Test
-    public void testGetHappyVibe() {
+    public void GetHappyVibe() {
         Vibe happy = VibeFactory.getVibe("happy");
 
         assertEquals("happy", happy.getName());
@@ -51,7 +51,7 @@ public class VibeFactoryTest {
     }
 
     @Test
-    public void testGetSadVibe() {
+    public void GetSadVibe() {
         Vibe sad = VibeFactory.getVibe("sad");
 
         assertEquals("sad", sad.getName());
@@ -61,7 +61,7 @@ public class VibeFactoryTest {
     }
 
     @Test
-    public void testGetSurprisedVibe() {
+    public void GetSurprisedVibe() {
         Vibe surprised = VibeFactory.getVibe("surprised");
 
         assertEquals("surprised", surprised.getName());
@@ -71,14 +71,14 @@ public class VibeFactoryTest {
     }
 
     @Test
-    public void testGetNullVibe_Empty() {
+    public void GetNullVibe_Empty() {
         Vibe vibeless = VibeFactory.getVibe("");
 
         assertNull(vibeless);
     }
 
     @Test
-    public void testGetNullVibe_NonEmpty() {
+    public void GetNullVibe_NonEmpty() {
         Vibe antivibe = VibeFactory.getVibe("Antivibe");
 
         assertNull(antivibe);

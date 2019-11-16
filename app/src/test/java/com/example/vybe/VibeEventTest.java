@@ -32,6 +32,7 @@ public class VibeEventTest {
 
     @Test
     public void testEmptyConstructor() {
+        // TODO: talk about how to test
         assertNull(mockEmptyVibeEvent().getVibe());
         assertNull(mockEmptyVibeEvent().getReason());
         assertNull(mockEmptyVibeEvent().getSocialSituation());
