@@ -23,7 +23,7 @@ public class VibeEventTest {
 
     private VibeEvent mockVibeEvent() {
         return new VibeEvent(mockVibe().getName(), ldt,
-                "just really happy", "Alone", "", "image");
+                "just really happy", "Alone", "", "image", 2.0, 2.0);
     }
 
     private Vibe mockVibe() {
@@ -33,7 +33,6 @@ public class VibeEventTest {
     @Test
     public void testEmptyConstructor() {
         assertNull(mockEmptyVibeEvent().getVibe());
-        assertNull(mockEmptyVibeEvent().getDateTime());
         assertNull(mockEmptyVibeEvent().getReason());
         assertNull(mockEmptyVibeEvent().getSocialSituation());
         assertNull(mockEmptyVibeEvent().getId());

@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class UserTest {
 
@@ -27,9 +28,9 @@ public class UserTest {
         User emailUser = new User("mock@test.ca");
 
         assertEquals("mock@test.ca", emailUser.getEmail());
-        assertNull(emailUser.getUsername());
-        assertNull(emailUser.getFollowers());
-        assertNull(emailUser.getFollowing());
+        assertEquals("", emailUser.getUsername());
+        assertTrue(emailUser.getFollowers().isEmpty());
+        assertTrue(emailUser.getFollowing().isEmpty());
     }
 
     @Test
@@ -38,8 +39,8 @@ public class UserTest {
 
         assertEquals("mock@test.ca", ueUser.getEmail());
         assertEquals("test", ueUser.getUsername());
-        assertNull(ueUser.getFollowers());
-        assertNull(ueUser.getFollowing());
+        assertTrue(ueUser.getFollowers().isEmpty());
+        assertTrue(ueUser.getFollowing().isEmpty());
     }
 
     /**
