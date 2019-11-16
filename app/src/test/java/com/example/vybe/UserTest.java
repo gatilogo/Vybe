@@ -1,8 +1,7 @@
 package com.example.vybe;
 
-import org.junit.Test;
+import com.example.vybe.Models.User;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

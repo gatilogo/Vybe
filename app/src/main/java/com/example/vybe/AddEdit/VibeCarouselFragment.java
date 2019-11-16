@@ -14,9 +14,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.vybe.Models.vibefactory.Vibe;
+import com.example.vybe.Models.vibefactory.VibeFactory;
 import com.example.vybe.R;
-import com.example.vybe.VibeFactory;
-import com.example.vybe.vibefactory.Vibe;
 
 import java.util.ArrayList;
 import java.util.List;

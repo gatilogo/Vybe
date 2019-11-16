@@ -5,28 +5,26 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 
-import com.example.vybe.vibefactory.Vibe;
+import com.example.vybe.Models.VibeEvent;
+import com.example.vybe.Models.vibefactory.Vibe;
+import com.example.vybe.Models.vibefactory.VibeFactory;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -38,7 +36,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -172,13 +169,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
      * Demonstrates converting a {@link Drawable} to a {@link BitmapDescriptor},
      * for use as a marker icon.
      */
-    private BitmapDescriptor vectorToBitmap(@DrawableRes int id, @ColorInt int color) {
+    private BitmapDescriptor vectorToBitmap(@DrawableRes int id) {
         Drawable vectorDrawable = ResourcesCompat.getDrawable(getResources(), id, null);
         Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(),
                 vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         vectorDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-        //DrawableCompat.setTint(vectorDrawable, color);
         vectorDrawable.draw(canvas);
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
@@ -197,8 +193,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         double longitude = doc.getDouble("longitude");
                         String vibeName = (String) doc.getData().get("vibe");
                         Vibe vibe = VibeFactory.getVibe(vibeName);
-                        BitmapDescriptor vibeMarker = vectorToBitmap(vibe.getEmoticon(), Color.parseColor("#B399C8"));
-                        // change arguments --> to --> vibe.getEmoticon() and vibe.getColor()
+                        BitmapDescriptor vibeMarker = vectorToBitmap(vibe.getEmoticon());
                         mMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(latitude, longitude))
                                 .icon(vibeMarker));

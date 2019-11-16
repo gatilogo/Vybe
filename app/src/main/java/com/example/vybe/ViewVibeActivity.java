@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
+import com.example.vybe.Models.VibeEvent;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -61,38 +62,48 @@ public class ViewVibeActivity extends AppCompatActivity {
 
         if (extras.containsKey("vibeEvent")) {
             vibeEvent = (VibeEvent) extras.getSerializable("vibeEvent");
+            populateVibeEventDetails(vibeEvent);
+        }
 
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(" d, YYYY h:mm a", Locale.ENGLISH);
-            LocalDateTime dateTime = vibeEvent.getDateTime();
-            String month = dateTime.getMonth().getDisplayName(TextStyle.FULL_STANDALONE, Locale.ENGLISH);
-            dateField.setText(month + dateTime.format(formatter));
-            String reason = vibeEvent.getReason();
-            String socialSituation = vibeEvent.getSocialSituation();
-            // TODO: missing location - do that later once done
-            String reasonImagePath = vibeEvent.getImage();
+    }
 
-            if (reasonImagePath != null){
-                loadImageFirebase(reasonImage, reasonImagePath);
-            }
 
-            if (vibeEvent.getVibe() != null) {
-                vibeImage.setImageResource(vibeEvent.getVibe().getEmoticon());
-                toolbar.setBackgroundResource(vibeEvent.getVibe().getColor());
-            }
+    /**
+     * This will populate the appropriate fields for viewing Vibe Event details
+     * @param vibeEvent
+     *      The Vibe Event object containing details to be displayed
+     */
+    public void populateVibeEventDetails(VibeEvent vibeEvent) {
+        //
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(" d, YYYY h:mm a", Locale.ENGLISH);
+        LocalDateTime dateTime = vibeEvent.getDateTime();
+        String month = dateTime.getMonth().getDisplayName(TextStyle.FULL_STANDALONE, Locale.ENGLISH);
+        String dateFieldText = month + dateTime.format(formatter);
+        dateField.setText(dateFieldText);
+        String reason = vibeEvent.getReason();
+        String socialSituation = vibeEvent.getSocialSituation();
+        // TODO: missing location - do that later once done
+        String reasonImagePath = vibeEvent.getImage();
 
-            if (reason == null || reason.equals("")) {  // Reason is optional
-                reasonLabel.setVisibility(TextView.GONE);
-                reasonField.setVisibility(TextView.GONE);
-            } else {
-                reasonField.setText(reason);
-            }
+        if (reasonImagePath != null){
+            loadImageFirebase(reasonImage, reasonImagePath);
+        }
 
-            if (socialSituation == null || socialSituation.equals("")) { // Social Situation is optional
-                socialSituationLabel.setVisibility(TextView.GONE);
-                socialSituationField.setVisibility(TextView.GONE);
-            } else {
-                socialSituationField.setText(socialSituation);
-            }
+        vibeImage.setImageResource(vibeEvent.getVibe().getEmoticon());
+        toolbar.setBackgroundResource(vibeEvent.getVibe().getColor());
+
+        if (reason == null || reason.equals("")) {  // Reason is optional
+            reasonLabel.setVisibility(TextView.GONE);
+            reasonField.setVisibility(TextView.GONE);
+        } else {
+            reasonField.setText(reason);
+        }
+
+        if (socialSituation == null || socialSituation.equals("")) { // Social Situation is optional
+            socialSituationLabel.setVisibility(TextView.GONE);
+            socialSituationField.setVisibility(TextView.GONE);
+        } else {
+            socialSituationField.setText(socialSituation);
         }
 
     }

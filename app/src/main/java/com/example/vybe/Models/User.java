@@ -1,4 +1,4 @@
-package com.example.vybe;
+package com.example.vybe.Models;
 
 import java.util.ArrayList;
 

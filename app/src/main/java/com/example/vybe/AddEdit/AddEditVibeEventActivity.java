@@ -18,9 +18,9 @@ import androidx.fragment.app.DialogFragment;
 import com.bumptech.glide.Glide;
 import com.example.vybe.LocationSelectionDialog;
 import com.example.vybe.MapFragment;
+import com.example.vybe.Models.vibefactory.Vibe;
 import com.example.vybe.R;
-import com.example.vybe.VibeEvent;
-import com.example.vybe.vibefactory.Vibe;
+import com.example.vybe.Models.VibeEvent;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -140,8 +140,8 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
 
     @Override
     public void onVibeSelected(Vibe vibe) {
-        vibeEvent.setVibe(selectedEmoticon);
-        vibeSelector.setImageResource(selectedEmoticon);
+        vibeEvent.setVibe(vibe);
+        vibeSelector.setImageResource(vibeEvent.getVibe().getEmoticon());
         toolbar.setBackgroundResource(vibeEvent.getVibe().getColor());
         addBtn.setBackgroundResource(vibeEvent.getVibe().getColor());
     }
@@ -158,7 +158,6 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] byteArray = baos.toByteArray();
 
-//        Log.d(TAG, id + ".jpg");
         String imgPath = "reasons/" + id + ".jpg";
         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
         StorageReference mountainsRef = storageRef.child(imgPath);
