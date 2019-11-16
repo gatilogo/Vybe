@@ -5,6 +5,7 @@
     <string name="view_vybe_name">View Vybe</string>
     <string name="edit_vybe_name">Edit Vybe</string>
     <string name="social_name">Social</string>
+    <string name="explore_vibes_name">Explore Vibes</string>
 
     <string name="date_time">Date/Time</string>
     <string name="reason">Reason</string>
@@ -14,4 +15,5 @@
     <string name="save">Save</string>
 
     <string name="google_map_api_key">AIzaSyAQ0WGTWMUV_WBRCfc7B-_HifGn9sXIUV4</string>
+
 </resources>

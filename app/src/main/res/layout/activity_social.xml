@@ -43,7 +43,7 @@
             android:textColor="@android:color/white" />
 
         <Button
-            android:id="@+id/social_map_button"
+            android:id="@+id/social_map_btn"
             style="?android:buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -52,7 +52,7 @@
             android:textColor="@android:color/white" />
 
         <Button
-            android:id="@+id/search_button"
+            android:id="@+id/search_btn"
             style="?android:buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
