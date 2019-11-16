@@ -47,7 +47,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
     private TextView pageTitle;
     private Button pickLocationButton;
     private Toolbar toolbar;
-    private MapFragment addEditMapFragment;
+    private MapFragment mapFragment;
     private ImageView imageView;
     // -------------------
 
@@ -70,7 +70,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
         pickLocationButton = findViewById(R.id.btn_add_location);
         vibeSelector = findViewById(R.id.vibe_selector);
         imageView = findViewById(R.id.imageView);
-        addEditMapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.add_edit_map_fragment);
+        mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.add_edit_map_fragment);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -84,13 +84,10 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
                 loadImageFirebase(imageView, vibeEvent.getImage());
             }
 
-            vibeSelector.setImageResource(vibeEvent.getVibe().getEmoticon());
-
-            toolbar.setBackgroundResource(vibeEvent.getVibe().getColor());
-            addBtn.setBackgroundResource(vibeEvent.getVibe().getColor());
+            setTheme(vibeEvent.getVibe());
 
             if (vibeEvent.getLatitude() != 0 && vibeEvent.getLongitude() != 0) {
-                addEditMapFragment.addVibeEventToMap(vibeEvent);
+                mapFragment.addVibeEventToMap(vibeEvent);
             }
 
         } else {
@@ -141,16 +138,20 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
     @Override
     public void onVibeSelected(Vibe vibe) {
         vibeEvent.setVibe(vibe);
-        vibeSelector.setImageResource(vibeEvent.getVibe().getEmoticon());
-        toolbar.setBackgroundResource(vibeEvent.getVibe().getColor());
-        addBtn.setBackgroundResource(vibeEvent.getVibe().getColor());
+        setTheme(vibe);
+    }
+
+    private void setTheme(Vibe vibe) {
+        vibeSelector.setImageResource(vibe.getEmoticon());
+        toolbar.setBackgroundResource(vibe.getColor());
+        addBtn.setBackgroundResource(vibe.getColor());
     }
 
     @Override
     public void onOkPressed(double latitude, double longitude) {
         vibeEvent.setLatitude(latitude);
         vibeEvent.setLongitude(longitude);
-        addEditMapFragment.addSingleMarker(latitude, longitude);
+        mapFragment.addSingleMarker(latitude, longitude);
     }
 
     private void uploadImage(Bitmap bitmap, String id) {
