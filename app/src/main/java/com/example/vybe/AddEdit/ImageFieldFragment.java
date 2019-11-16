@@ -30,10 +30,10 @@ public class ImageFieldFragment extends Fragment {
     Button pickImageBtn;
     ImageView imageView;
     Context context;
-    ImageSelectedListener imageSelectedListener;
+    OnImageSelectedListener onImageSelectedListener;
     private Bitmap imageBitmap;
 
-    interface ImageSelectedListener {
+    interface OnImageSelectedListener {
         void onImageSelected(Bitmap selectedImageBitmap);
     }
 
@@ -42,7 +42,7 @@ public class ImageFieldFragment extends Fragment {
         super.onAttach(context);
         this.context = context;
         Activity activity = (Activity) context;
-        imageSelectedListener = (ImageSelectedListener) activity;
+        onImageSelectedListener = (OnImageSelectedListener) activity;
     }
 
     @Nullable
@@ -70,7 +70,7 @@ public class ImageFieldFragment extends Fragment {
             Uri selectedImageUri = data.getData();
             try {
                 imageBitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), selectedImageUri);
-                imageSelectedListener.onImageSelected(imageBitmap);
+                onImageSelectedListener.onImageSelected(imageBitmap);
                 imageView.setImageBitmap(imageBitmap);
 
             } catch (IOException e) {

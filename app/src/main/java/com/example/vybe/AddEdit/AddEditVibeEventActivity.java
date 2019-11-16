@@ -36,7 +36,7 @@ import java.util.HashMap;
  * This Activity displays the screen for a user to add a vibe event, or
  * edit an existing vibe event by adding or modifying the different vibe attributes
  */
-public class AddEditVibeEventActivity extends AppCompatActivity implements SocialSituationFieldFragment.OnSocStnSelectedListener, VibeFieldFragment.VibeSelectedListener, ImageFieldFragment.ImageSelectedListener, VibeCarouselFragment.OnFragmentInteractionListener, LocationSelectionDialog.OnFragmentInteractionListener {
+public class AddEditVibeEventActivity extends AppCompatActivity implements SocialSituationFieldFragment.OnSocStnSelectedListener, VibeFieldFragment.VibeSelectedListener, ImageFieldFragment.OnImageSelectedListener, VibeCarouselFragment.OnFragmentInteractionListener, LocationSelectionDialog.OnFragmentInteractionListener {
 
     private static final String TAG = "AddEditVibeEventActivity";
 
