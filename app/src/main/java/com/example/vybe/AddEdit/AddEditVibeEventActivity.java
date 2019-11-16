@@ -92,7 +92,6 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
 
         } else {
             vibeEvent = new VibeEvent();
-            vibeEvent.setDateTime(LocalDateTime.now());
             vibeEvent.setLatitude(0);
             vibeEvent.setLongitude(0);
         }
