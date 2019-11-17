@@ -181,31 +181,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         Canvas canvas = new Canvas(bitmap);
         vectorDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         vectorDrawable.draw(canvas);
+
         return BitmapDescriptorFactory.fromBitmap(bitmap);
-    }
-
-
-    public void addVibeLocations() {
-        // TODO:
-        // add condition for user ID
-        db.collection("VibeEvent").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                    if ((doc.getData().get("latitude") != null) && (doc.getData().get("latitude") != null)) {
-                        double latitude = doc.getDouble("latitude");
-                        double longitude = doc.getDouble("longitude");
-                        String vibeName = (String) doc.getData().get("vibe");
-                        Vibe vibe = VibeFactory.getVibe(vibeName);
-                        BitmapDescriptor vibeMarker = vectorToBitmap(vibe.getEmoticon());
-                        mMap.addMarker(new MarkerOptions()
-                                .position(new LatLng(latitude, longitude))
-                                .icon(vibeMarker));
-                    }
-                }
-            }
-        });
-
     }
 
     public void setToNewLatLng(LatLng latLng) {
@@ -222,7 +199,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         setCamera(new LatLng(location.getLatitude(), location.getLongitude()));
     }
 
-    private void addMarker(LatLng latLng, BitmapDescriptor icon) {
+    public void addMarker(LatLng latLng, BitmapDescriptor icon) {
         mMap.addMarker(new MarkerOptions().position(latLng).icon(icon));
     }
 
