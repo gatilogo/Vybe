@@ -41,7 +41,7 @@
                 android:id="@+id/vibe_image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_no_vibe" />
+                app:srcCompat="@drawable/ic_no_vibe" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/reason_text_input"
