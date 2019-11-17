@@ -171,6 +171,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     /**
      * Demonstrates converting a {@link Drawable} to a {@link BitmapDescriptor},
      * for use as a marker icon.
+     * @param id the drawable vector asset to convert
+     * @return BitmapDescriptor generated from provided vector asset
      */
     private BitmapDescriptor vectorToBitmap(@DrawableRes int id) {
         Drawable vectorDrawable = ResourcesCompat.getDrawable(getResources(), id, null);
@@ -208,7 +210,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     public void setToNewLatLng(LatLng latLng) {
         mMap.clear();
-        addMarker(latLng);
+        addMarker(latLng, vectorToBitmap(R.drawable.ic_map_marker));
         setCamera(latLng);
     }
 
@@ -218,10 +220,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             return;
         }
         setCamera(new LatLng(location.getLatitude(), location.getLongitude()));
-    }
-
-    private void addMarker(LatLng latLng) {
-        mMap.addMarker(new MarkerOptions().position(latLng));
     }
 
     private void addMarker(LatLng latLng, BitmapDescriptor icon) {
