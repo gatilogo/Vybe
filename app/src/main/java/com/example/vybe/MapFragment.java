@@ -53,7 +53,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private MapView mMapView;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private GoogleMap mMap;
-    private VibeEvent vibe;
     private OnMapFragmentReadyListener onMapFragmentReadyListener;
 
 //    private LocationController locationController;
@@ -185,7 +184,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
-    public void setToNewLatLng(LatLng latLng) {
+    public void setToLocation(LatLng latLng) {
         mMap.clear();
         addMarker(latLng, vectorToBitmap(R.drawable.ic_map_marker));
         setCamera(latLng);
@@ -208,7 +207,4 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mMap.moveCamera(cameraUpdate);
     }
 
-    public void addVibeEventToMap(VibeEvent vibe) {
-        this.vibe = vibe;
-    }
 }

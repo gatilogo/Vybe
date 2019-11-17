@@ -38,5 +38,15 @@ public enum SocialSituation {
         return stringValues;
     }
 
+    public static SocialSituation of(String desc) {
+        for (SocialSituation ss: SocialSituation.values()) {
+            if (ss.toString().equals(desc)) {
+                return ss;
+            }
+        }
+
+        return null;
+    }
+
 
 }

@@ -91,4 +91,18 @@ public class SocialSituationFieldFragment extends Fragment {
             }
         };
     }
+
+    /**
+     * Set the default Social Situation. If the string doesn't match any of the social situations,
+     * the social situation is not set (it is null aka "Select a Social Situation")
+     * @param socStnDesc
+     */
+    public void setDefaultSocStn(String socStnDesc) {
+        SocialSituation ss = SocialSituation.of(socStnDesc);
+
+        if (ss != null) {
+            socStnDropdown.setSelection(ss.ordinal());
+        }
+
+    }
 }

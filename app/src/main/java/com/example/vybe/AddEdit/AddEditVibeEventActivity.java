@@ -3,7 +3,6 @@ package com.example.vybe.AddEdit;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,7 +21,6 @@ import com.example.vybe.Models.vibefactory.Vibe;
 import com.example.vybe.R;
 import com.example.vybe.Models.VibeEvent;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -31,6 +29,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
+import java.util.Locale;
 
 import static com.example.vybe.util.Constants.REASON_FIELD_MAX_WORD_COUNT;
 
@@ -41,6 +40,7 @@ import static com.example.vybe.util.Constants.REASON_FIELD_MAX_WORD_COUNT;
 public class AddEditVibeEventActivity extends AppCompatActivity implements SocialSituationFieldFragment.OnSocStnSelectedListener, ImageFieldFragment.OnImageSelectedListener, VibeCarouselDialogFragment.OnVibeSelectedListener, LocationSelectionDialog.OnLocationSelectedListener, MapFragment.OnMapFragmentReadyListener {
 
     private static final String TAG = "AddEditVibeEventActivity";
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     // --- XML Elements ---
     private ImageView vibeImage;
@@ -51,12 +51,11 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
     private Toolbar toolbar;
     private MapFragment mapFragment;
     private ImageView imageView;
+    private SocialSituationFieldFragment socStnFragment;
     // -------------------
 
     private VibeEvent vibeEvent;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-    private boolean editFlag = false;
+    private boolean editMode = false;
     private boolean imageIsSelected = false;
     private Bitmap imageBitmap;
 
@@ -73,24 +72,26 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
         vibeImage = findViewById(R.id.vibe_image);
         imageView = findViewById(R.id.imageView);
         mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.add_edit_map_fragment);
+        socStnFragment = (SocialSituationFieldFragment) getSupportFragmentManager().findFragmentById(R.id.social_situation_field_fragment);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
+            editMode = true;
             pageTitle.setText(getString(R.string.edit_vybe_name));
-            editFlag = true;
-
             vibeEvent = (VibeEvent) extras.getSerializable("vibeEvent");
+
             reasonField.setText(vibeEvent.getReason());
 
             if (vibeEvent.getImage() != null) {
                 loadImageFirebase(imageView, vibeEvent.getImage());
             }
 
-            setTheme(vibeEvent.getVibe());
-
-            if (vibeEvent.getLatitude() != 0 && vibeEvent.getLongitude() != 0) {
-                mapFragment.addVibeEventToMap(vibeEvent);
+            if (vibeEvent.getSocialSituation() != null) {
+                socStnFragment.setDefaultSocStn(vibeEvent.getSocialSituation());
             }
+
+
+            setTheme(vibeEvent.getVibe());
 
         } else {
             vibeEvent = new VibeEvent();
@@ -114,7 +115,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
                 reasonField.setError(null);
                 vibeEvent.setReason(reasonField.getText().toString());
             } else {
-                reasonField.setError(String.format("Max %d words allowed", REASON_FIELD_MAX_WORD_COUNT));
+                reasonField.setError(String.format(Locale.CANADA, "Max %d words allowed", REASON_FIELD_MAX_WORD_COUNT));
                 return;
             }
 
@@ -123,11 +124,8 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
                 return;
             }
 
-            if (editFlag) {
-                editVibeEvent(vibeEvent);
-            } else {
-                addVibeEvent(vibeEvent);
-            }
+
+            uploadVibeEvent();
 
             finish();
         });
@@ -159,8 +157,8 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
 
     @Override
     public void onMapFragmentReady() {
-        if (editFlag) {
-            mapFragment.setToNewLatLng(new LatLng(vibeEvent.getLatitude(), vibeEvent.getLongitude()));
+        if (editMode) {
+            mapFragment.setToLocation(new LatLng(vibeEvent.getLatitude(), vibeEvent.getLongitude()));
 
         } else {
             mapFragment.setToCurrentLocation();
@@ -171,7 +169,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
     public void onLocationSelected(double latitude, double longitude) {
         vibeEvent.setLatitude(latitude);
         vibeEvent.setLongitude(longitude);
-        mapFragment.setToNewLatLng(new LatLng(latitude, longitude));
+        mapFragment.setToLocation(new LatLng(latitude, longitude));
     }
 
     private void uploadImage(Bitmap bitmap, String id) {
@@ -184,44 +182,50 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
         StorageReference mountainsRef = storageRef.child(imgPath);
 
         UploadTask uploadTask = mountainsRef.putBytes(byteArray);
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Toast.makeText(getApplicationContext(), "Failed", Toast.LENGTH_LONG).show();
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Toast.makeText(getApplicationContext(), "Succ", Toast.LENGTH_LONG).show();
-                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                // ...
-            }
+        uploadTask.addOnFailureListener((@NonNull Exception exception) -> {
+            Toast.makeText(getApplicationContext(), "Image Upload Failed", Toast.LENGTH_LONG).show();
+
+        }).addOnSuccessListener((UploadTask.TaskSnapshot taskSnapshot) -> {
+            Toast.makeText(getApplicationContext(), "Image Upload Successful", Toast.LENGTH_LONG).show();
         });
 
     }
 
-    // TODO: Move to Controller Class
-    public void addVibeEvent(VibeEvent vibeEvent) {
-        // TODO: Put as private attribute in Controller class if we use one
-
-        String id = db.collection("VibeEvent").document().getId();
-        vibeEvent.setId(id);
-        if (imageIsSelected) {
-            uploadImage(imageBitmap, id);
-            vibeEvent.setImage("reasons/" + id + ".jpg");
+    public void uploadVibeEvent() {
+        if (!editMode) {
+            String id = db.collection("VibeEvent").document().getId();
+            vibeEvent.setId(id);
         }
-        HashMap<String, Object> data = createVibeEventData(vibeEvent);
-        db.collection("VibeEvent").document(id).set(data);
-    }
 
-    public void editVibeEvent(VibeEvent vibeEvent) {
         if (imageIsSelected) {
             uploadImage(imageBitmap, vibeEvent.getId());
             vibeEvent.setImage("reasons/" + vibeEvent.getId() + ".jpg");
         }
+
         HashMap<String, Object> data = createVibeEventData(vibeEvent);
         db.collection("VibeEvent").document(vibeEvent.getId()).set(data);
     }
+
+//    // TODO: Move to Controller Class (as a private attribute)
+//    public void addVibeEvent(VibeEvent vibeEvent) {
+//        String id = db.collection("VibeEvent").document().getId();
+//        vibeEvent.setId(id);
+//        if (imageIsSelected) {
+//            uploadImage(imageBitmap, id);
+//            vibeEvent.setImage("reasons/" + id + ".jpg");
+//        }
+//        HashMap<String, Object> data = createVibeEventData(vibeEvent);
+//        db.collection("VibeEvent").document(id).set(data);
+//    }
+//
+//    public void editVibeEvent(VibeEvent vibeEvent) {
+//        if (imageIsSelected) {
+//            uploadImage(imageBitmap, vibeEvent.getId());
+//            vibeEvent.setImage("reasons/" + vibeEvent.getId() + ".jpg");
+//        }
+//        HashMap<String, Object> data = createVibeEventData(vibeEvent);
+//        db.collection("VibeEvent").document(vibeEvent.getId()).set(data);
+//    }
 
     public HashMap<String, Object> createVibeEventData(VibeEvent vibeEvent) {
         HashMap<String, Object> data = new HashMap<>();
