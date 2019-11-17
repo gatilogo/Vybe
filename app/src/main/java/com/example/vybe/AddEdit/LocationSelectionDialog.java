@@ -1,4 +1,4 @@
-package com.example.vybe;
+package com.example.vybe.AddEdit;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -18,6 +18,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.example.vybe.LocationController;
+import com.example.vybe.R;
 import com.example.vybe.util.APIKey;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
