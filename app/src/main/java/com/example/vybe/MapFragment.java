@@ -168,44 +168,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mMapView.onLowMemory();
     }
 
-    /**
-     * Demonstrates converting a {@link Drawable} to a {@link BitmapDescriptor},
-     * for use as a marker icon.
-     */
-    private BitmapDescriptor vectorToBitmap(@DrawableRes int id) {
-        Drawable vectorDrawable = ResourcesCompat.getDrawable(getResources(), id, null);
-        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(),
-                vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        vectorDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-        vectorDrawable.draw(canvas);
-        return BitmapDescriptorFactory.fromBitmap(bitmap);
-    }
-
-
-    public void addVibeLocations() {
-        // TODO:
-        // add condition for user ID
-        db.collection("VibeEvent").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                    if ((doc.getData().get("latitude") != null) && (doc.getData().get("latitude") != null)) {
-                        double latitude = doc.getDouble("latitude");
-                        double longitude = doc.getDouble("longitude");
-                        String vibeName = (String) doc.getData().get("vibe");
-                        Vibe vibe = VibeFactory.getVibe(vibeName);
-                        BitmapDescriptor vibeMarker = vectorToBitmap(vibe.getEmoticon());
-                        mMap.addMarker(new MarkerOptions()
-                                .position(new LatLng(latitude, longitude))
-                                .icon(vibeMarker));
-                    }
-                }
-            }
-        });
-
-    }
-
     public void setToNewLatLng(LatLng latLng) {
         mMap.clear();
         addMarker(latLng);
@@ -220,11 +182,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         setCamera(new LatLng(location.getLatitude(), location.getLongitude()));
     }
 
-    private void addMarker(LatLng latLng) {
+    public void addMarker(LatLng latLng) {
         mMap.addMarker(new MarkerOptions().position(latLng));
     }
 
-    private void addMarker(LatLng latLng, BitmapDescriptor icon) {
+    public void addMarker(LatLng latLng, BitmapDescriptor icon) {
         mMap.addMarker(new MarkerOptions().position(latLng).icon(icon));
     }
 
