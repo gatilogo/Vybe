@@ -241,6 +241,13 @@ public class MyVibesActivity extends AppCompatActivity {
                 }
             }
         });
+
+        socialBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MyVibesActivity.this, SocialActivity.class));
+            }
+        });
     }
 
     @Override
