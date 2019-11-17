@@ -60,30 +60,12 @@ public class MapViewActivity extends AppCompatActivity implements MapFragment.On
                     String vibeName = (String) doc.getData().get("vibe");
                     Vibe vibe = VibeFactory.getVibe(vibeName);
 
-                    BitmapDescriptor vibeBitmapDesc = vectorToBitmap(vibe.getEmoticon());
-                    mapFragment.addMarker(new LatLng(latitude, longitude), vibeBitmapDesc);
+                    mapFragment.addMarker(new LatLng(latitude, longitude), vibe.getEmoticon());
 
                 }
             }
 
         });
 
-    }
-
-    /**
-     * Demonstrates converting a {@link Drawable} to a {@link BitmapDescriptor},
-     * for use as a marker icon.
-     * @param id the drawable vector asset to convert
-     * @return BitmapDescriptor generated from provided vector asset
-     */
-    private BitmapDescriptor vectorToBitmap(@DrawableRes int id) {
-        Drawable vectorDrawable = ResourcesCompat.getDrawable(getResources(), id, null);
-        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(),
-                vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        vectorDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-        vectorDrawable.draw(canvas);
-
-        return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 }

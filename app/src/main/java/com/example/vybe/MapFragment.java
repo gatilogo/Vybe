@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -167,6 +168,32 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mMapView.onLowMemory();
     }
 
+    public void setToLocation(LatLng latLng) {
+        Log.d(TAG, "setToLocation: Here");
+        mMap.clear();
+        addMarker(latLng, R.drawable.ic_map_marker);
+        setCamera(latLng);
+    }
+
+    public void setToCurrentLocation() {
+        Location location = LocationController.getUserLocation(getContext());
+        if (location == null) {
+            return;
+        }
+        setCamera(new LatLng(location.getLatitude(), location.getLongitude()));
+    }
+
+    public void addMarker(LatLng latLng, @DrawableRes int drawableRes) {
+        BitmapDescriptor marker = vectorToBitmap(drawableRes);
+        mMap.addMarker(new MarkerOptions().position(latLng).icon(marker));
+    }
+
+    private void setCamera(LatLng latLng) {
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 15);
+        mMap.moveCamera(cameraUpdate);
+    }
+
+
     /**
      * Demonstrates converting a {@link Drawable} to a {@link BitmapDescriptor},
      * for use as a marker icon.
@@ -182,29 +209,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         vectorDrawable.draw(canvas);
 
         return BitmapDescriptorFactory.fromBitmap(bitmap);
-    }
-
-    public void setToLocation(LatLng latLng) {
-        mMap.clear();
-        addMarker(latLng, vectorToBitmap(R.drawable.ic_map_marker));
-        setCamera(latLng);
-    }
-
-    public void setToCurrentLocation() {
-        Location location = LocationController.getUserLocation(getContext());
-        if (location == null) {
-            return;
-        }
-        setCamera(new LatLng(location.getLatitude(), location.getLongitude()));
-    }
-
-    public void addMarker(LatLng latLng, BitmapDescriptor icon) {
-        mMap.addMarker(new MarkerOptions().position(latLng).icon(icon));
-    }
-
-    private void setCamera(LatLng latLng) {
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 15);
-        mMap.moveCamera(cameraUpdate);
     }
 
 }
