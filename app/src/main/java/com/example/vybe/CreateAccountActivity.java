@@ -28,7 +28,7 @@ import java.util.HashMap;
  */
 public class CreateAccountActivity extends AppCompatActivity {
 
-    private static final String TAG = "LoginActivity";
+    private static final String TAG = "CreateAccountActivity";
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
