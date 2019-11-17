@@ -62,7 +62,7 @@ public class AddEditVibeEventActivityTest {
     public void VibeCarousel_DialogOpen_True(){
         // WIP: Blocking other issues, will continue working on this test later
         // Check That selector starts not selected on a vibe
-        ImageView image = (ImageView) solo.getView("vibe_selector");
+        ImageView image = (ImageView) solo.getView("vibe_image");
 
         solo.clickOnView(image);
 
@@ -78,12 +78,12 @@ public class AddEditVibeEventActivityTest {
     @Test
     public void SocialSpinner_SelectOptions_Pass(){
         // Check That selector starts not selected on a social situation
-        boolean result = solo.isSpinnerTextSelected(1, "Select a Social Situation");
+        boolean result = solo.isSpinnerTextSelected(0, "Select a Social Situation");
         assertEquals("Select a SC not selected", true, result);
 
         // Check That selector starts can select correct social situation based on index
-        solo.pressSpinnerItem(1, 2);
-        boolean actual = solo.isSpinnerTextSelected(1, "In a group");
+        solo.pressSpinnerItem(0, 2);
+        boolean actual = solo.isSpinnerTextSelected(0, "In a group");
         assertEquals("spinner item 'in a group' is not selected",true, actual);
 
     }
@@ -116,7 +116,12 @@ public class AddEditVibeEventActivityTest {
 
         // Check to see if valid error is received
         solo.clickOnButton("Save");
-        assertEquals("Expecting an error", "Max 3 words allowed",
+
+        // Validate the text on the TextView
+        assertEquals("Text should be the field value", "as df ga sd",
+                (editText.getText().toString()));
+
+        assertEquals("Expecting an error", new String("Max 3 words allowed"),
                 (editText.getError().toString()));
     }
 

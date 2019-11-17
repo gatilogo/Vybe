@@ -52,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
+//        mAuth.signOut();
+
         mAuthListener = (@NonNull FirebaseAuth firebaseAuth) -> {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 // User is logged in

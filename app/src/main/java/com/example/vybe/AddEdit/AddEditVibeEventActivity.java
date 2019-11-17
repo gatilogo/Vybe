@@ -3,6 +3,7 @@ package com.example.vybe.AddEdit;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,6 +31,8 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
+
+import static com.example.vybe.util.Constants.REASON_FIELD_MAX_WORD_COUNT;
 
 /**
  * This Activity displays the screen for a user to add a vibe event, or
@@ -106,13 +109,26 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
 
         // --- Show Output on button click ---
         addBtn.setOnClickListener(view -> {
-            vibeEvent.setReason(reasonField.getText().toString());
+
+            if (reasonField.getText().toString().trim().split("\\s").length <= REASON_FIELD_MAX_WORD_COUNT) {
+                reasonField.setError(null);
+                vibeEvent.setReason(reasonField.getText().toString());
+            } else {
+                reasonField.setError(String.format("Max %d words allowed", REASON_FIELD_MAX_WORD_COUNT));
+                return;
+            }
+
+            if (vibeEvent.getVibe() == null) {
+                Toast.makeText(getApplicationContext(), "Select a Vibe!", Toast.LENGTH_LONG).show();
+                return;
+            }
 
             if (editFlag) {
                 editVibeEvent(vibeEvent);
             } else {
                 addVibeEvent(vibeEvent);
             }
+
             finish();
         });
 
@@ -216,7 +232,9 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
         data.put("socSit", vibeEvent.getSocialSituation());
         data.put("image", vibeEvent.getImage());
         return data;
-    };
+    }
+
+    ;
 
     /**
      * This will load an image from Firebase Storage into an ImageView
