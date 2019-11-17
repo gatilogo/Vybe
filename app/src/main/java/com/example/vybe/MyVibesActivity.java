@@ -87,15 +87,13 @@ public class MyVibesActivity extends AppCompatActivity {
 
         allFlag = true; // Ask jakey
 
-        profileBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MyVibesActivity.this, ViewProfileActivity.class);
-                startActivity(intent);
-            }
+        profileBtn.setOnClickListener((View v) -> {
+            Intent viewProfileIntent = new Intent(MyVibesActivity.this, ViewProfileActivity.class);
+            startActivity(viewProfileIntent);
         });
 
         // --- Vibes Dropdown ---
+        // TODO: Refactor with custom spinner and/or different filtering methodology
         String[] vibes = new String[]{"Filter Vibe", "Angry", "Disgusted", "Happy", "Sad", "Scared", "Surprised"};
         ArrayAdapter<String> vibesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, vibes);
         filterSpinner.setAdapter(vibesAdapter);
@@ -202,14 +200,11 @@ public class MyVibesActivity extends AppCompatActivity {
             }
         });
 
-        vibesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(MyVibesActivity.this, ViewVibeActivity.class);
-                VibeEvent vibeEvent = vibeEventList.get(i);
-                intent.putExtra("vibeEvent", vibeEvent);
-                startActivity(intent);
-            }
+        vibesListView.setOnItemClickListener((AdapterView<?> parent, View view, int position, long id) ->  {
+            Intent viewVibe = new Intent(MyVibesActivity.this, ViewVibeActivity.class);
+            VibeEvent vibeEvent = vibeEventList.get(position);
+            viewVibe.putExtra("vibeEvent", vibeEvent);
+            startActivity(viewVibe);
         });
 
         vibesListView.setOnItemLongClickListener((AdapterView<?> parent, View view, int position, long id) -> {
@@ -217,23 +212,19 @@ public class MyVibesActivity extends AppCompatActivity {
                 
                 builder.setCancelable(true);
 
-                // Delete ride if user clicks on "Yes" button
-                builder.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        Intent intent = new Intent(MyVibesActivity.this, AddEditVibeEventActivity.class);
-                        VibeEvent vibeEvent = vibeEventList.get(position);
-                        intent.putExtra("vibeEvent", vibeEvent);
-                        startActivity(intent);
-                    }
+                // Edit Vibe Event if user clicks on "Edit" button
+                builder.setPositiveButton("Edit", (DialogInterface dialog, int editId) -> {
+                    Intent editIntent = new Intent(MyVibesActivity.this, AddEditVibeEventActivity.class);
+                    VibeEvent vibeEvent = vibeEventList.get(position);
+                    editIntent.putExtra("vibeEvent", vibeEvent);
+                    startActivity(editIntent);
                 });
 
-                // Close dialog if user clicks on "No" button
-                builder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        VibeEvent vibeEvent = vibeEventList.get(position);
-                        db.collection("VibeEvent").document(vibeEvent.getId()).delete();
-                        myVibesAdapter.notifyDataSetChanged();
-                    }
+                // Delete a Vibe Event if user clicks on "Delete" button
+                builder.setNegativeButton("Delete", (DialogInterface dialog, int deleteId) -> {
+                    VibeEvent vibeEvent = vibeEventList.get(position);
+                    db.collection("VibeEvent").document(vibeEvent.getId()).delete();
+                    myVibesAdapter.notifyDataSetChanged();
                 });
 
                 AlertDialog alertDialog = builder.create();
@@ -241,23 +232,17 @@ public class MyVibesActivity extends AppCompatActivity {
                 return true;
         });
 
-        addVibeEventBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MyVibesActivity.this, AddEditVibeEventActivity.class);
-                startActivity(intent);
-            }
+        addVibeEventBtn.setOnClickListener((View view) -> {
+            Intent addIntent = new Intent(MyVibesActivity.this, AddEditVibeEventActivity.class);
+            startActivity(addIntent);
         });
 
-        myMapBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mLocationPermissionGranted) {
-                    Intent intent = new Intent(MyVibesActivity.this, MapViewActivity.class);
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(MyVibesActivity.this, "Please enable GPS services", Toast.LENGTH_SHORT);
-                }
+        myMapBtn.setOnClickListener((View view) -> {
+            if (mLocationPermissionGranted) {
+                Intent MapViewIntent = new Intent(MyVibesActivity.this, MapViewActivity.class);
+                startActivity(MapViewIntent);
+            } else {
+                Toast.makeText(MyVibesActivity.this, "Please enable GPS services", Toast.LENGTH_SHORT);
             }
         });
     }
