@@ -1,14 +1,11 @@
 package com.example.vybe;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -16,53 +13,46 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 
 import com.example.vybe.util.APIKey;
-import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.model.PlaceLikelihood;
-import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
-import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
-import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
-import static com.android.volley.VolleyLog.TAG;
 import static com.example.vybe.util.Constants.*;
 
 public class LocationSelectionDialog extends DialogFragment {
 
     private static final String TAG = "LocationSelector";
 
-    private OnFragmentInteractionListener onFragmentInteractionListener;
+    private OnLocationSelectedListener onLocationSelectedListener;
     private Button openLocationAutofill;
     private Button useCurrentLocation;
     private View view;
     private LocationController locationController;
+
+    public interface OnLocationSelectedListener {
+        void onLocationSelected(double latitude, double longitude);
+    }
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
         Activity activity = (Activity) context;
-        onFragmentInteractionListener = (OnFragmentInteractionListener) activity;
+        onLocationSelectedListener = (OnLocationSelectedListener) activity;
 
     }
 
@@ -117,7 +107,7 @@ public class LocationSelectionDialog extends DialogFragment {
                 if (location == null) {return;}
                 double longitude = location.getLongitude();
                 double latitude = location.getLatitude();
-                onFragmentInteractionListener.onOkPressed(latitude, longitude);
+                onLocationSelectedListener.onLocationSelected(latitude, longitude);
                 dialog.dismiss();
 
             }
@@ -125,10 +115,6 @@ public class LocationSelectionDialog extends DialogFragment {
 
 
         return dialog;
-    }
-
-    public interface OnFragmentInteractionListener {
-        void onOkPressed(double latitude, double longitude);
     }
 
     private TextView customTitle() {
@@ -148,7 +134,7 @@ public class LocationSelectionDialog extends DialogFragment {
             if (resultCode == RESULT_OK) {
                 Place place = Autocomplete.getPlaceFromIntent(data);
                 LatLng coordinates = place.getLatLng();
-                onFragmentInteractionListener.onOkPressed(coordinates.latitude, coordinates.longitude);
+                onLocationSelectedListener.onLocationSelected(coordinates.latitude, coordinates.longitude);
                 Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 // TODO: Handle the error.

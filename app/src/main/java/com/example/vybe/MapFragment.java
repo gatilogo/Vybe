@@ -54,9 +54,25 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private GoogleMap mMap;
     private VibeEvent vibe;
+    private OnMapFragmentReadyListener onMapFragmentReadyListener;
 
 //    private LocationController locationController;
 
+    public interface OnMapFragmentReadyListener {
+        void onMapFragmentReady();
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof OnMapFragmentReadyListener) {
+            onMapFragmentReadyListener = (OnMapFragmentReadyListener) context;
+
+        } else {
+            throw new RuntimeException(context.toString() + " must implement OnMapFragmentReadyListener");
+
+        }
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -74,7 +90,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         return view;
     }
 
-    private void initGoogleMap(Bundle savedInstanceState){
+    private void initGoogleMap(Bundle savedInstanceState) {
         // *** IMPORTANT ***
         // MapView requires that the Bundle you pass contain _ONLY_ MapView SDK
         // objects or sub-Bundles.
@@ -122,26 +138,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(GoogleMap map) {
-        this.mMap = map;
+        mMap = map;
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        map.setMyLocationEnabled(true);
-        //this is here because the activity loads before the map
-        if (vibe != null) {
-            addSingleMarker(vibe.getLatitude(), vibe.getLongitude());
-            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(vibe.getLatitude(), vibe.getLongitude()), 15);
-            mMap.moveCamera(cameraUpdate);
-        } else {
-            Location location = LocationController.getUserLocation(getContext());
-            if (location == null) {return;}
-            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 15);
-            mMap.moveCamera(cameraUpdate);
-        }
+        mMap.setMyLocationEnabled(true);
 
+        onMapFragmentReadyListener.onMapFragmentReady();
     }
 
     @Override
@@ -177,15 +183,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
 
-
     public void addVibeLocations() {
         // TODO:
         // add condition for user ID
         db.collection("VibeEvent").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for (QueryDocumentSnapshot doc: queryDocumentSnapshots) {
-                    if ((doc.getData().get("latitude") != null) && (doc.getData().get("latitude")!= null)) {
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                    if ((doc.getData().get("latitude") != null) && (doc.getData().get("latitude") != null)) {
                         double latitude = doc.getDouble("latitude");
                         double longitude = doc.getDouble("longitude");
                         String vibeName = (String) doc.getData().get("vibe");
@@ -201,9 +206,31 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     }
 
-    public void addSingleMarker(double latitude, double longitude) {
+    public void setToNewLatLng(LatLng latLng) {
         mMap.clear();
-        mMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)));
+        addMarker(latLng);
+        setCamera(latLng);
+    }
+
+    public void setToCurrentLocation() {
+        Location location = LocationController.getUserLocation(getContext());
+        if (location == null) {
+            return;
+        }
+        setCamera(new LatLng(location.getLatitude(), location.getLongitude()));
+    }
+
+    private void addMarker(LatLng latLng) {
+        mMap.addMarker(new MarkerOptions().position(latLng));
+    }
+
+    private void addMarker(LatLng latLng, BitmapDescriptor icon) {
+        mMap.addMarker(new MarkerOptions().position(latLng).icon(icon));
+    }
+
+    private void setCamera(LatLng latLng) {
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 15);
+        mMap.moveCamera(cameraUpdate);
     }
 
     public void addVibeEventToMap(VibeEvent vibe) {

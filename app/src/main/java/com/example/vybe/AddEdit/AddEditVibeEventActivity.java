@@ -21,6 +21,7 @@ import com.example.vybe.MapFragment;
 import com.example.vybe.Models.vibefactory.Vibe;
 import com.example.vybe.R;
 import com.example.vybe.Models.VibeEvent;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -29,14 +30,13 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 
 /**
  * This Activity displays the screen for a user to add a vibe event, or
  * edit an existing vibe event by adding or modifying the different vibe attributes
  */
-public class AddEditVibeEventActivity extends AppCompatActivity implements SocialSituationFieldFragment.OnSocStnSelectedListener, ImageFieldFragment.OnImageSelectedListener, VibeCarouselDialogFragment.OnVibeSelectedListener, LocationSelectionDialog.OnFragmentInteractionListener {
+public class AddEditVibeEventActivity extends AppCompatActivity implements SocialSituationFieldFragment.OnSocStnSelectedListener, ImageFieldFragment.OnImageSelectedListener, VibeCarouselDialogFragment.OnVibeSelectedListener, LocationSelectionDialog.OnLocationSelectedListener, MapFragment.OnMapFragmentReadyListener {
 
     private static final String TAG = "AddEditVibeEventActivity";
 
@@ -143,10 +143,20 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
     }
 
     @Override
-    public void onOkPressed(double latitude, double longitude) {
+    public void onMapFragmentReady() {
+        if (editFlag) {
+            mapFragment.setToNewLatLng(new LatLng(vibeEvent.getLatitude(), vibeEvent.getLongitude()));
+
+        } else {
+            mapFragment.setToCurrentLocation();
+        }
+    }
+
+    @Override
+    public void onLocationSelected(double latitude, double longitude) {
         vibeEvent.setLatitude(latitude);
         vibeEvent.setLongitude(longitude);
-        mapFragment.addSingleMarker(latitude, longitude);
+        mapFragment.setToNewLatLng(new LatLng(latitude, longitude));
     }
 
     private void uploadImage(Bitmap bitmap, String id) {
