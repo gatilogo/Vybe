@@ -202,8 +202,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     public void addSingleMarker(double latitude, double longitude) {
+        BitmapDescriptor mapMarker = vectorToBitmap(R.drawable.ic_map_marker);
         mMap.clear();
-        mMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)));
+        mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(latitude, longitude))
+                .icon(mapMarker));
     }
 
     public void addVibeEventToMap(VibeEvent vibe) {
