@@ -55,7 +55,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap mMap;
     private VibeEvent vibe;
 
-    private LocationController locationController;
+//    private LocationController locationController;
 
 
     @Override
@@ -136,7 +136,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(vibe.getLatitude(), vibe.getLongitude()), 15);
             mMap.moveCamera(cameraUpdate);
         } else {
-            Location location = locationController.getUserLocation(getContext());
+            Location location = LocationController.getUserLocation(getContext());
             if (location == null) {return;}
             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 15);
             mMap.moveCamera(cameraUpdate);

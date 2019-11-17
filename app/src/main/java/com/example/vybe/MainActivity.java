@@ -47,6 +47,9 @@ public class MainActivity extends AppCompatActivity {
         emailField = findViewById(R.id.email_edit_text);
         passwordField = findViewById(R.id.password_edit_text);
 
+        emailField.setText("test2@vybe.ca");
+        passwordField.setText("testuser2");
+
         mAuth = FirebaseAuth.getInstance();
 
         mAuthListener = (@NonNull FirebaseAuth firebaseAuth) -> {
@@ -59,28 +62,26 @@ public class MainActivity extends AppCompatActivity {
         };
 
         loginButton.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this, MyVibesActivity.class);
-            startActivity(intent);
 
-//            // Check that the email and password fields are entered
-//            if (!isEmpty(emailField) && !isEmpty(passwordField)){
-//                // Get the credentials that were entered
-//                String email = getTrimmedString(emailField);
-//                String password = getTrimmedString(passwordField);
-//                // Sign in using Firebase
-//                mAuth.signInWithEmailAndPassword(email, password)
-//                        .addOnCompleteListener((@NonNull Task<AuthResult> task) -> {
-//                        // If the task succeed, login passed and go to My Vibes Activity
-//                        if (task.isSuccessful()){
-//                            Intent intent = new Intent(MainActivity.this, MyVibesActivity.class);
-//                            startActivity(intent);
-//                        }
-//                        else {
-//                            Toast.makeText(getApplicationContext(), "Login Failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
-//                        }
-//                    }
-//                );
-//            }
+            // Check that the email and password fields are entered
+            if (!isEmpty(emailField) && !isEmpty(passwordField)){
+                // Get the credentials that were entered
+                String email = getTrimmedString(emailField);
+                String password = getTrimmedString(passwordField);
+                // Sign in using Firebase
+                mAuth.signInWithEmailAndPassword(email, password)
+                        .addOnCompleteListener((@NonNull Task<AuthResult> task) -> {
+                        // If the task succeed, login passed and go to My Vibes Activity
+                        if (task.isSuccessful()){
+                            Intent intent = new Intent(MainActivity.this, MyVibesActivity.class);
+                            startActivity(intent);
+                        }
+                        else {
+                            Toast.makeText(getApplicationContext(), "Login Failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                );
+            }
 
         });
 

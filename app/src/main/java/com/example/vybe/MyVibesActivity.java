@@ -115,20 +115,34 @@ public class MyVibesActivity extends AppCompatActivity {
                                     vibeEventList.clear();
                                     for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
 
-                                            LocalDateTime ldt = doc.getDate("datetime").toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-                                            Log.d(TAG, ldt.toString());
-                                            String reason = (String) doc.getData().get("reason");
-                                            String socSit = (String) doc.getData().get("socSit");
-                                            String id = (String) doc.getData().get("ID");
-                                            String vibe = (String) doc.getData().get("vibe");
-                                            String image = (String) doc.getData().get("image");
-                                            double latitude = (double) doc.getData().get("latitude");
-                                            double longitude = (double) doc.getData().get("longitude");
+                                        VibeEvent vibeEvent = new VibeEvent();
+                                        vibeEvent.setDateTime(doc.getDate("datetime").toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+                                        vibeEvent.setReason(doc.getString("reason"));
+                                        vibeEvent.setSocialSituation(doc.getString("socSit"));
+                                        vibeEvent.setId(doc.getId());
+                                        vibeEvent.setVibe(doc.getString("vibe"));
+                                        if (doc.getData().get("image") != null) {
+                                            vibeEvent.setImage(doc.getString("image"));
+                                        }
+                                        if (doc.getData().get("latitude") != null && doc.getData().get("longitude") != null) {
+                                            vibeEvent.setLatitude(doc.getDouble("latitude"));
+                                            vibeEvent.setLongitude(doc.getDouble("longitude"));
+                                        }
+
+//                                            LocalDateTime ldt = doc.getDate("datetime").toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+//                                            Log.d(TAG, ldt.toString());
+//                                            String reason = (String) doc.getData().get("reason");
+//                                            String socSit = (String) doc.getData().get("socSit");
+//                                            String id = (String) doc.getData().get("ID");
+//                                            String vibe = (String) doc.getData().get("vibe");
+//                                            String image = (String) doc.getData().get("image");
+//                                            double latitude = (double) doc.getData().get("latitude");
+//                                            double longitude = (double) doc.getData().get("longitude");
                                         if (allFlag) {
-                                            vibeEventList.add(new VibeEvent(vibe, ldt, reason, socSit, id, image, latitude, longitude));
+                                            vibeEventList.add(vibeEvent);
                                         } else {
-                                            if (filterVibe.equals(vibe)){
-                                                vibeEventList.add(new VibeEvent(vibe, ldt, reason, socSit, id, image, latitude, longitude));
+                                            if (filterVibe.equals(vibeEvent.getVibe().getName())){
+                                                vibeEventList.add(vibeEvent);
                                             }
                                         }
                                     }
