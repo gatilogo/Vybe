@@ -52,9 +52,9 @@ public class VibeEvent implements Serializable {
      * @param image
      *      This is a photograph expressing the reason a vibe event occurred
      * @param latitude
-     *      Emmett fill this in
+     *      this is the latitude coordinate of the vibe
      * @param longitude
-     *      Emmett fill this in
+     *      this is the longitude coordinate of the vibe
      */
     public VibeEvent(String vibe, LocalDateTime dateTime, String reason, String socialSituation, String id, String image, double latitude, double longitude) {
         this.vibe = VibeFactory.getVibe(vibe);

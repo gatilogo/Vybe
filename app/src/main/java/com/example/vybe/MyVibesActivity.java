@@ -138,23 +138,16 @@ public class MyVibesActivity extends AppCompatActivity {
                                         vibeEvent.setSocialSituation(doc.getString("socSit"));
                                         vibeEvent.setId(doc.getId());
                                         vibeEvent.setVibe(doc.getString("vibe"));
+
                                         if (doc.getData().get("image") != null) {
                                             vibeEvent.setImage(doc.getString("image"));
                                         }
+
                                         if (doc.getData().get("latitude") != null && doc.getData().get("longitude") != null) {
                                             vibeEvent.setLatitude(doc.getDouble("latitude"));
                                             vibeEvent.setLongitude(doc.getDouble("longitude"));
                                         }
 
-//                                            LocalDateTime ldt = doc.getDate("datetime").toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-//                                            Log.d(TAG, ldt.toString());
-//                                            String reason = (String) doc.getData().get("reason");
-//                                            String socSit = (String) doc.getData().get("socSit");
-//                                            String id = (String) doc.getData().get("ID");
-//                                            String vibe = (String) doc.getData().get("vibe");
-//                                            String image = (String) doc.getData().get("image");
-//                                            double latitude = (double) doc.getData().get("latitude");
-//                                            double longitude = (double) doc.getData().get("longitude");
                                         if (allFlag) {
                                             vibeEventList.add(vibeEvent);
                                         } else {
@@ -191,16 +184,6 @@ public class MyVibesActivity extends AppCompatActivity {
 //                            TimeZone.getDefault().toZoneId());
                     LocalDateTime ldt = doc.getDate("datetime").toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
                     Log.d(TAG, ldt.toString());
-                    /*
-                    String reason = (String) doc.getData().get("reason");
-                    String socSit = (String) doc.getData().get("socSit");
-                    String id = (String) doc.getData().get("ID");
-                    String vibe = (String) doc.getData().get("vibe");
-                    String image = (String) doc.getData().get("image");
-                    double latitude = (double) doc.getData().get("latitude");
-                    double longitude = (double) doc.getData().get("longitude");
-                    vibeEventList.add(new VibeEvent(vibe, ldt, reason, socSit, id, image, latitude, longitude));
-                     */
                     VibeEvent vibeEvent = new VibeEvent();
                     vibeEvent.setReason(doc.getString("reason"));
                     vibeEvent.setSocialSituation(doc.getString("socSit"));
