@@ -145,7 +145,7 @@ public class MyVibesActivity extends AppCompatActivity {
                                             vibeEvent.setLatitude(doc.getDouble("latitude"));
                                             vibeEvent.setLongitude(doc.getDouble("longitude"));
                                         }
-                                        
+
                                         if (allFlag) {
                                             vibeEventList.add(vibeEvent);
                                         } else {
@@ -234,20 +234,8 @@ public class MyVibesActivity extends AppCompatActivity {
         query.get().addOnSuccessListener((QuerySnapshot queryDocumentSnapshots) -> {
                 vibeEventList.clear();
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-//                    LocalDateTime ldt = LocalDateTime.ofInstant(Instant.ofEpochMilli(doc.getDate("datetime").getTime()),
-//                            TimeZone.getDefault().toZoneId());
                     LocalDateTime ldt = doc.getDate("datetime").toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
                     Log.d(TAG, ldt.toString());
-                    /*
-                    String reason = (String) doc.getData().get("reason");
-                    String socSit = (String) doc.getData().get("socSit");
-                    String id = (String) doc.getData().get("ID");
-                    String vibe = (String) doc.getData().get("vibe");
-                    String image = (String) doc.getData().get("image");
-                    double latitude = (double) doc.getData().get("latitude");
-                    double longitude = (double) doc.getData().get("longitude");
-                    vibeEventList.add(new VibeEvent(vibe, ldt, reason, socSit, id, image, latitude, longitude));
-                     */
                     VibeEvent vibeEvent = new VibeEvent();
                     vibeEvent.setReason(doc.getString("reason"));
                     vibeEvent.setSocialSituation(doc.getString("socSit"));
