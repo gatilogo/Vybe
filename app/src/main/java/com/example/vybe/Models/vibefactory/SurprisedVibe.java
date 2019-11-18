@@ -1,20 +1,20 @@
-package com.example.vybe.vibefactory;
+package com.example.vybe.Models.vibefactory;
 
 import com.example.vybe.R;
 
 /**
- * The implementation of the vibe interface that represents a disgusted vibe
+ * The implementation of the vibe interface that represents a scared vibe
  */
-public class DisgustedVibe implements Vibe {
+public class SurprisedVibe implements Vibe {
     private int color;
     private int emoticon;
 
     /**
      * This Constructor sets the new vibe's color and emoticon
      */
-    public DisgustedVibe() {
-        this.color = R.color.Green;
-        this.emoticon = R.drawable.ic_disgusted;
+    public SurprisedVibe() {
+        this.color = R.color.Orange;
+        this.emoticon = R.drawable.ic_surprised;
     }
 
     /**
@@ -23,7 +23,7 @@ public class DisgustedVibe implements Vibe {
      * The string that describes the Vibe selected
      */
     public String getName() {
-        return "disgusted";
+        return "surprised";
     }
 
     /**

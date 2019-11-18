@@ -1,16 +1,17 @@
 package com.example.vybe;
 
-import com.example.vybe.vibefactory.*;
+import com.example.vybe.Models.VibeEvent;
+import com.example.vybe.Models.vibefactory.Vibe;
+import com.example.vybe.Models.vibefactory.VibeFactory;
 
-import org.junit.Before;
 import org.junit.Test;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class VibeEventTest {
 
@@ -22,7 +23,7 @@ public class VibeEventTest {
 
     private VibeEvent mockVibeEvent() {
         return new VibeEvent(mockVibe().getName(), ldt,
-                "just really happy", "Alone", "", "image");
+                "just really happy", "Alone", "", "image", 2.0, 2.0);
     }
 
     private Vibe mockVibe() {
@@ -31,8 +32,8 @@ public class VibeEventTest {
 
     @Test
     public void testEmptyConstructor() {
+        // TODO: talk about how to test
         assertNull(mockEmptyVibeEvent().getVibe());
-        assertNull(mockEmptyVibeEvent().getDateTime());
         assertNull(mockEmptyVibeEvent().getReason());
         assertNull(mockEmptyVibeEvent().getSocialSituation());
         assertNull(mockEmptyVibeEvent().getId());

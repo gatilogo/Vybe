@@ -28,7 +28,7 @@ import java.util.HashMap;
  */
 public class CreateAccountActivity extends AppCompatActivity {
 
-    private static final String TAG = "LoginActivity";
+    private static final String TAG = "CreateAccountActivity";
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -143,7 +143,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                             HashMap<String, Object> data = new HashMap<>();
                             data.put("username", username);
                             data.put("email", email);
-                            db.collection("Users").add(data);
+                            db.collection("Users").document(mAuth.getCurrentUser().getUid()).set(data);
                             // Switch to My Vibes Acitivity
                             Intent intent = new Intent(CreateAccountActivity.this, MainActivity.class);
                             startActivity(intent);

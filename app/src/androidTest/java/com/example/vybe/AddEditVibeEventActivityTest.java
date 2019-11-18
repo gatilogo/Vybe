@@ -1,12 +1,6 @@
 package com.example.vybe;
 
-
 import android.app.Activity;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.platform.app.InstrumentationRegistry;
-import androidx.test.rule.ActivityTestRule;
-
-import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -15,7 +9,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
+import androidx.test.rule.ActivityTestRule;
+
+import com.example.vybe.AddEdit.AddEditVibeEventActivity;
 import com.robotium.solo.Solo;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -30,18 +30,17 @@ import in.goodiebag.carouselpicker.CarouselPicker;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 
 /**
  * Test class for MainActivity. All the UI tests are written here. Robotium test framework is
  used
  */
 @RunWith(AndroidJUnit4.class)
-public class AddEditVibeActivityTest {
+public class AddEditVibeEventActivityTest {
     private Solo solo;
     @Rule
-    public ActivityTestRule<AddEditVibeActivity> rule =
-            new ActivityTestRule<>(AddEditVibeActivity.class, true, true);
+    public ActivityTestRule<AddEditVibeEventActivity> rule =
+            new ActivityTestRule<>(AddEditVibeEventActivity.class, true, true);
     /**
      * Runs before all tests and creates solo instance.
      * @throws Exception
@@ -63,7 +62,7 @@ public class AddEditVibeActivityTest {
     public void VibeCarousel_DialogOpen_True(){
         // WIP: Blocking other issues, will continue working on this test later
         // Check That selector starts not selected on a vibe
-        ImageView image = (ImageView) solo.getView("vibe_selector");
+        ImageView image = (ImageView) solo.getView("vibe_image");
 
         solo.clickOnView(image);
 
@@ -76,17 +75,15 @@ public class AddEditVibeActivityTest {
         assertEquals(image, verify);
     }
 
-
     @Test
     public void SocialSpinner_SelectOptions_Pass(){
-        // Check That selector starts not selected on a vibe
-        boolean result = solo.isSpinnerTextSelected(1, "Select a Social Situation");
+        // Check That selector starts not selected on a social situation
+        boolean result = solo.isSpinnerTextSelected(0, "Select a Social Situation");
         assertEquals("Select a SC not selected", true, result);
 
-        solo.pressSpinnerItem(1, 2);
-
-        boolean actual = solo.isSpinnerTextSelected(1, "In a group");
-
+        // Check That selector starts can select correct social situation based on index
+        solo.pressSpinnerItem(0, 2);
+        boolean actual = solo.isSpinnerTextSelected(0, "In a group");
         assertEquals("spinner item 'in a group' is not selected",true, actual);
 
     }
@@ -94,12 +91,14 @@ public class AddEditVibeActivityTest {
     @Test
     public void StringReason_EnterText_Valid(){
         EditText editText = (EditText) solo.getView("reason_edit_text");
-        //Click on Empty Text View
+
+        // Add valid text to EditText
         solo.clickOnView(editText);
-        //Enter the text: 'asdfg'
         solo.clearEditText(editText);
         solo.enterText(editText, "asdfg");
+
         solo.searchEditText("asdfg");
+
         // Validate the text on the TextView
         assertEquals("Text should be the field value", "asdfg",
                 (editText.getText().toString()));
@@ -108,15 +107,21 @@ public class AddEditVibeActivityTest {
 
     @Test
     public void StringReason_EnterText_Invalid(){
-        // test if more than 3 words is provided
         EditText editText = (EditText) solo.getView("reason_edit_text");
+
+        // Add invalid text to EditText
         solo.clickOnView(editText);
-        //Enter the text: 'as df ga sd'
         solo.clearEditText(editText);
         solo.enterText(editText, "as df ga sd");
+
+        // Check to see if valid error is received
         solo.clickOnButton("Save");
 
-        assertEquals("Expecting an error", "Max 3 words allowed",
+        // Validate the text on the TextView
+        assertEquals("Text should be the field value", "as df ga sd",
+                (editText.getText().toString()));
+
+        assertEquals("Expecting an error", new String("Max 3 words allowed"),
                 (editText.getError().toString()));
     }
 
@@ -127,6 +132,7 @@ public class AddEditVibeActivityTest {
     @Ignore
     public void DatePicker_SelectDate_Pass(){
         solo.clickOnEditText(0);
+
         DatePicker datePicker = solo.getView(DatePicker.class, 0); // the second param is an index
         solo.setDatePicker(datePicker, 2019, 10, 8);
         solo.clickOnButton("OK");

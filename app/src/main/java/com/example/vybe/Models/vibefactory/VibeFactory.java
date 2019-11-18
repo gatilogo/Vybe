@@ -1,14 +1,6 @@
-package com.example.vybe;
+package com.example.vybe.Models.vibefactory;
 
-import com.example.vybe.vibefactory.Vibe;
-import com.example.vybe.vibefactory.AngryVibe;
-import com.example.vybe.vibefactory.DisgustedVibe;
-import com.example.vybe.vibefactory.ScaredVibe;
-import com.example.vybe.vibefactory.HappyVibe;
-import com.example.vybe.vibefactory.SadVibe;
-import com.example.vybe.vibefactory.SurprisedVibe;
-
-import java.io.Serializable;
+import com.example.vybe.R;
 
 /**
  * A factory class that generates instances of different implementations of
@@ -16,7 +8,7 @@ import java.io.Serializable;
  * generated implementation is chosen based on the vibe selected by the user
  * and returns the appropriate Vibe object
  */
-public class VibeFactory implements Serializable {
+public class VibeFactory {
 
     /**
      * Returns the vibe object the user has selected

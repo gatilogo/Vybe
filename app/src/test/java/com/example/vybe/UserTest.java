@@ -1,12 +1,12 @@
 package com.example.vybe;
 
-import org.junit.Test;
+import com.example.vybe.Models.User;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class UserTest {
 
@@ -15,8 +15,9 @@ public class UserTest {
     }
 
     @Test
-    public void testEmptyUserConstructor() {
+    public void UserConstructor_EmptyInit() {
         User emptyUser = mockUser();
+
         assertNull(emptyUser.getUsername());
         assertNull(emptyUser.getEmail());
         assertNull(emptyUser.getFollowers());
@@ -24,45 +25,47 @@ public class UserTest {
     }
 
     @Test
-    public void testEmailOnlyUserConstructor() {
+    public void UserConstructor_EmailInit() {
         User emailUser = new User("mock@test.ca");
 
         assertEquals("mock@test.ca", emailUser.getEmail());
-        assertNull(emailUser.getUsername());
-        assertNull(emailUser.getFollowers());
-        assertNull(emailUser.getFollowing());
+        assertEquals("", emailUser.getUsername());
+        assertTrue(emailUser.getFollowers().isEmpty());
+        assertTrue(emailUser.getFollowing().isEmpty());
     }
 
     @Test
-    public void testUsernameEmailUserConstructor() {
+    public void UserConstructor_UserEmailInit() {
         User ueUser = new User("test", "mock@test.ca");
 
         assertEquals("mock@test.ca", ueUser.getEmail());
         assertEquals("test", ueUser.getUsername());
-        assertNull(ueUser.getFollowers());
-        assertNull(ueUser.getFollowing());
+        assertTrue(ueUser.getFollowers().isEmpty());
+        assertTrue(ueUser.getFollowing().isEmpty());
     }
 
     /**
      * Placeholder test. May not be necessary
      */
     @Test
-    public void testNonEmptyUserConstructor() {
+    public void UserConstructor_FullInit() {
 
     }
 
     @Test
-    public void testGetUsername() {
+    public void GetUsername() {
+        // Test Method for empty constructor
         User testUser = mockUser();
         assertNull(testUser.getUsername());
 
+        // Test Method for non-empty constructor
         testUser.setUsername("test");
         assertEquals("test", testUser.getUsername());
 
     }
 
     @Test
-    public void testSetUserName() {
+    public void SetUsername() {
         User testUser = new User("test", "mock@test.ca");
         assertEquals("test", testUser.getUsername());
 
@@ -72,16 +75,18 @@ public class UserTest {
     }
 
     @Test
-    public void testGetEmail() {
+    public void GetEmail() {
+        // Test Method for empty constructor
         User testUser = mockUser();
         assertNull(testUser.getEmail());
 
+        // Test Method for non-empty constructor
         testUser.setUsername("mock@test.ca");
         assertEquals("mock@test.ca", testUser.getUsername());
     }
 
     @Test
-    public void testSetEmail() {
+    public void SetEmail() {
         User testUser = new User("test", "mock@test.ca");
         assertEquals("mock@test.ca", testUser.getEmail());
 
@@ -96,19 +101,19 @@ public class UserTest {
      * wanting to test
      */
     @Test
-    public void testGetFollowers() {
+    public void GetFollowerList() {
     }
 
     @Test
-    public void testSetFollowers() {
+    public void SetFollowerList() {
     }
 
     @Test
-    public void testGetFollowing() {
+    public void GetFollowingList() {
     }
 
     @Test
-    public void testSetFollowing() {
+    public void SetFollowingList() {
     }
 
 }

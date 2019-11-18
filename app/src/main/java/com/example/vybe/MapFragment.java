@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
@@ -16,19 +15,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-
-import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 
-
-import com.example.vybe.vibefactory.Vibe;
+import com.example.vybe.Models.VibeEvent;
+import com.example.vybe.Models.vibefactory.Vibe;
+import com.example.vybe.Models.vibefactory.VibeFactory;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -40,11 +37,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import static com.example.vybe.util.Constants.MAPVIEW_BUNDLE_KEY;
+import static com.example.vybe.util.Constants.MAP_ZOOM_LEVEL;
 
 /**
  * This fragment displays the map view for your personal vibes. Will
@@ -58,8 +55,23 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private MapView mMapView;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private GoogleMap mMap;
-    private VibeEvent vibe;
+    private OnMapFragmentReadyListener onMapFragmentReadyListener;
 
+    public interface OnMapFragmentReadyListener {
+        void onMapFragmentReady();
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof OnMapFragmentReadyListener) {
+            onMapFragmentReadyListener = (OnMapFragmentReadyListener) context;
+
+        } else {
+            throw new RuntimeException(context.toString() + " must implement OnMapFragmentReadyListener");
+
+        }
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,7 +89,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         return view;
     }
 
-    private void initGoogleMap(Bundle savedInstanceState){
+    private void initGoogleMap(Bundle savedInstanceState) {
         // *** IMPORTANT ***
         // MapView requires that the Bundle you pass contain _ONLY_ MapView SDK
         // objects or sub-Bundles.
@@ -125,31 +137,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(GoogleMap map) {
-        this.mMap = map;
+        mMap = map;
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        map.setMyLocationEnabled(true);
-        //this is here because the activity loads before the map
-        if (vibe != null) {
-            addSingleMarker(vibe.getLatitude(), vibe.getLongitude());
-            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(vibe.getLatitude(), vibe.getLongitude()), 15);
-            mMap.moveCamera(cameraUpdate);
-        } else {
-            LocationManager lm = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
-            if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-                    != PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(getContext(), "Please Enable GPS", Toast.LENGTH_SHORT);
-                return;
-            }
-            Location location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 15);
-            mMap.moveCamera(cameraUpdate);
-        }
+        mMap.setMyLocationEnabled(true);
 
+        onMapFragmentReadyListener.onMapFragmentReady();
     }
 
     @Override
@@ -170,53 +167,47 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mMapView.onLowMemory();
     }
 
+    public void setToLocation(LatLng latLng) {
+        Log.d(TAG, "setToLocation: Here");
+        mMap.clear();
+        addMarker(latLng, R.drawable.ic_map_marker);
+        setCamera(latLng);
+    }
+
+    public void setToCurrentLocation() {
+        Location location = LocationController.getUserLocation(getContext());
+        if (location == null) {
+            return;
+        }
+        setCamera(new LatLng(location.getLatitude(), location.getLongitude()));
+    }
+
+    public void addMarker(LatLng latLng, @DrawableRes int drawableRes) {
+        BitmapDescriptor marker = vectorToBitmap(drawableRes);
+        mMap.addMarker(new MarkerOptions().position(latLng).icon(marker));
+    }
+
+    private void setCamera(LatLng latLng) {
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, MAP_ZOOM_LEVEL);
+        mMap.moveCamera(cameraUpdate);
+    }
+
+
     /**
      * Demonstrates converting a {@link Drawable} to a {@link BitmapDescriptor},
      * for use as a marker icon.
+     * @param id the drawable vector asset to convert
+     * @return BitmapDescriptor generated from provided vector asset
      */
-    private BitmapDescriptor vectorToBitmap(@DrawableRes int id, @ColorInt int color) {
+    private BitmapDescriptor vectorToBitmap(@DrawableRes int id) {
         Drawable vectorDrawable = ResourcesCompat.getDrawable(getResources(), id, null);
         Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(),
                 vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         vectorDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-        //DrawableCompat.setTint(vectorDrawable, color);
         vectorDrawable.draw(canvas);
+
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
-
-
-    public void addVibeLocations() {
-        // TODO:
-        // add condition for user ID
-        db.collection("VibeEvent").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for (QueryDocumentSnapshot doc: queryDocumentSnapshots) {
-                    if ((doc.getData().get("latitude") != null) && (doc.getData().get("latitude")!= null)) {
-                        double latitude = doc.getDouble("latitude");
-                        double longitude = doc.getDouble("longitude");
-                        String vibeName = (String) doc.getData().get("vibe");
-                        Vibe vibe = VibeFactory.getVibe(vibeName);
-                        BitmapDescriptor vibeMarker = vectorToBitmap(vibe.getEmoticon(), Color.parseColor("#B399C8"));
-                        // change arguments --> to --> vibe.getEmoticon() and vibe.getColor()
-                        mMap.addMarker(new MarkerOptions()
-                                .position(new LatLng(latitude, longitude))
-                                .icon(vibeMarker));
-                    }
-                }
-            }
-        });
-
-    }
-
-    public void addSingleMarker(double latitude, double longitude) {
-        mMap.clear();
-        mMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)));
-    }
-
-    public void addVibeEventToMap(VibeEvent vibe) {
-        this.vibe = vibe;
-    }
 }

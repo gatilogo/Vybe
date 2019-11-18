@@ -2,7 +2,6 @@ package com.example.vybe;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,6 +19,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * This Activity displays the screen for a user to log in. This file will be updated
@@ -32,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     EditText emailField;
     EditText passwordField;
 
-    private FirebaseAuth mAuth;
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseAuth.AuthStateListener mAuthListener;
 
     @Override
@@ -40,12 +42,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         loginButton = findViewById(R.id.login_button);
         signupButton = findViewById(R.id.signup_button);
         emailField = findViewById(R.id.email_edit_text);
         passwordField = findViewById(R.id.password_edit_text);
-
-        mAuth = FirebaseAuth.getInstance();
 
         mAuthListener = (@NonNull FirebaseAuth firebaseAuth) -> {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
@@ -57,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         };
 
         loginButton.setOnClickListener(view -> {
+
             // Check that the email and password fields are entered
             if (!isEmpty(emailField) && !isEmpty(passwordField)){
                 // Get the credentials that were entered
