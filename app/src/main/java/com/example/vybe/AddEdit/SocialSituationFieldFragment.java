@@ -79,13 +79,17 @@ public class SocialSituationFieldFragment extends Fragment {
 
 
     private ArrayAdapter<String> createSocStnAdapter() {
+        // List of all the social situation options
         List<String> options = SocialSituation.stringValues();
+
+        // Add hint to the end of the options list
         options.add("Select a Social Situation");
 
+        // return an array adapter that doesn't show the last option (aka the hint)
         return new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, options) {
+            // Don't show the last item - don't show the hint
             @Override
             public int getCount() {
-                // don't display last item. It is used as hint.
                 int count = super.getCount();
                 return count > 0 ? count - 1 : count;
             }
