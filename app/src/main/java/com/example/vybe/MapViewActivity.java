@@ -42,7 +42,6 @@ public class MapViewActivity extends AppCompatActivity implements MapFragment.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_view);
         mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(map_view_fragment);
-        Log.d(TAG, "onCreate: showing map");
     }
 
     @Override
