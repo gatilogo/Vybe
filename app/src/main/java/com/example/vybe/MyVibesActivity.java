@@ -87,6 +87,8 @@ public class MyVibesActivity extends AppCompatActivity {
         socialBtn = findViewById(R.id.social_btn);
         profileBtn = findViewById(R.id.profile_btn);
 
+        vibeEventDBPath = "Users/" + mAuth.getCurrentUser().getUid() + "/VibeEvents";
+        
         allFlag = true; // Ask jakey
 
         profileBtn.setOnClickListener(new View.OnClickListener() {
@@ -164,7 +166,7 @@ public class MyVibesActivity extends AppCompatActivity {
         final CollectionReference collectionReference = db.collection("VibeEvent");
         Query query = collectionReference.orderBy("datetime", Query.Direction.DESCENDING);
 
-        query.addSnapshotListener(new EventListener<QuerySnapshot>() {
+        query.addSnapshotListener(this, new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 // TODO: Stub out with other query above
