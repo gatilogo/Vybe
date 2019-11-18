@@ -47,12 +47,7 @@ public class MainActivity extends AppCompatActivity {
         emailField = findViewById(R.id.email_edit_text);
         passwordField = findViewById(R.id.password_edit_text);
 
-        emailField.setText("test2@vybe.ca");
-        passwordField.setText("testuser2");
-
         mAuth = FirebaseAuth.getInstance();
-
-//        mAuth.signOut();
 
         mAuthListener = (@NonNull FirebaseAuth firebaseAuth) -> {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
