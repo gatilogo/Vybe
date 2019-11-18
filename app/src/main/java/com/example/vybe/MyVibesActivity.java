@@ -27,6 +27,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.vybe.AddEdit.AddEditVibeEventActivity;
+import com.example.vybe.Models.User;
 import com.example.vybe.Models.VibeEvent;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
