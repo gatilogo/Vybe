@@ -30,7 +30,9 @@ import android.widget.Spinner;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -69,6 +71,7 @@ public class MyVibesActivity extends AppCompatActivity {
     private Button socialBtn;
     private ImageButton profileBtn;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private boolean allFlag;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +93,15 @@ public class MyVibesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MyVibesActivity.this, ViewProfileActivity.class);
-                startActivity(intent);
+                // Get the current user's profile information
+                db.collection("Users").document(mAuth.getCurrentUser().getUid()).get()
+                        .addOnSuccessListener((DocumentSnapshot doc) -> {
+                            String username = (String) doc.get("username");
+                            String email = (String) doc.get("email");
+                            intent.putExtra("user", new User(username, email));
+                            startActivity(intent);
+                        });
+
             }
         });
 
