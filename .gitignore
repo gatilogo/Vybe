@@ -18,11 +18,10 @@
 
 # Project files
 .project
-<<<<<<< HEAD
 
 # Eclipse files
 .classpath
 .settings/
-=======
+
+# API Key
 app/src/main/java/com/example/vybe/util/APIKey.java
->>>>>>> 1d60f1383bbb9c5e49c7049ab920365a652300c0
