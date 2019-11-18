@@ -145,8 +145,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             return;
         }
         mMap.setMyLocationEnabled(true);
-        getView().
-
         onMapFragmentReadyListener.onMapFragmentReady();
     }
 
