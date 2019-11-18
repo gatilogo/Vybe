@@ -29,9 +29,9 @@ public class MyVibesAdapter extends ArrayAdapter<VibeEvent> {
     private Context context;
     private ArrayList<VibeEvent> vibeEventList;
     private int resource;
-    TextView dateField;
-    TextView reasonField;
-    ImageView vibeImage;
+    private TextView dateField;
+    private TextView reasonField;
+    private ImageView vibeImage;
 
     public MyVibesAdapter(@NonNull Context context, int resource, ArrayList<VibeEvent> vibeEventList) {
         super(context, resource, vibeEventList);
