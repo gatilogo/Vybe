@@ -181,7 +181,7 @@ public class MyVibesActivity extends AppCompatActivity {
         CollectionReference collectionReference = db.collection(vibeEventDBPath);
         Query query = collectionReference.orderBy("datetime", Query.Direction.DESCENDING);
 
-        query.addSnapshotListener(new EventListener<QuerySnapshot>() {
+        query.addSnapshotListener(this, new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 // TODO: Stub out with other query above

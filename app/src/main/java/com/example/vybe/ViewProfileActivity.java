@@ -49,7 +49,10 @@ public class ViewProfileActivity extends AppCompatActivity {
 
         logoutBtn.setOnClickListener(view -> {
             mAuth.signOut();
-            startActivity(new Intent(this, MainActivity.class));
+            Intent restart = new Intent(this, MainActivity.class);
+            // Finishes all background activities that may be running
+            restart.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(restart);
         });
 
     }
