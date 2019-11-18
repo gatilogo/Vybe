@@ -41,6 +41,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import static com.example.vybe.util.Constants.MAPVIEW_BUNDLE_KEY;
+import static com.example.vybe.util.Constants.MAP_ZOOM_LEVEL;
 
 /**
  * This fragment displays the map view for your personal vibes. Will
@@ -187,7 +188,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void setCamera(LatLng latLng) {
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 15);
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, MAP_ZOOM_LEVEL);
         mMap.moveCamera(cameraUpdate);
     }
 

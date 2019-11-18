@@ -15,5 +15,6 @@ public class Constants {
     public static final int REASON_FIELD_MAX_WORD_COUNT = 3;
     public static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
     public static final int GET_FROM_GALLERY = 1000;
+    public static final int MAP_ZOOM_LEVEL = 15;
 
 }
