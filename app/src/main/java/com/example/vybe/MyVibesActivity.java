@@ -138,9 +138,11 @@ public class MyVibesActivity extends AppCompatActivity {
                                         vibeEvent.setSocialSituation(doc.getString("socSit"));
                                         vibeEvent.setId(doc.getId());
                                         vibeEvent.setVibe(doc.getString("vibe"));
+
                                         if (doc.getData().get("image") != null) {
                                             vibeEvent.setImage(doc.getString("image"));
                                         }
+
                                         if (doc.getData().get("latitude") != null && doc.getData().get("longitude") != null) {
                                             vibeEvent.setLatitude(doc.getDouble("latitude"));
                                             vibeEvent.setLongitude(doc.getDouble("longitude"));

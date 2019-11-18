@@ -145,7 +145,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             return;
         }
         mMap.setMyLocationEnabled(true);
-
         onMapFragmentReadyListener.onMapFragmentReady();
     }
 
@@ -208,6 +207,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         vectorDrawable.draw(canvas);
 
         return BitmapDescriptorFactory.fromBitmap(bitmap);
+    }
+
+    public void hideMap() {
+        getView().setVisibility(View.GONE);
     }
 
 }

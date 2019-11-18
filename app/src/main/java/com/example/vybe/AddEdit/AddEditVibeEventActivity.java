@@ -162,7 +162,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
 
     @Override
     public void onMapFragmentReady() {
-        if (editMode) {
+        if (vibeEvent.getLatitude() != 0 && vibeEvent.getLongitude() != 0) {
             mapFragment.setToLocation(new LatLng(vibeEvent.getLatitude(), vibeEvent.getLongitude()));
 
         } else {
@@ -219,6 +219,8 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
         data.put("reason", vibeEvent.getReason());
         data.put("socSit", vibeEvent.getSocialSituation());
         data.put("image", vibeEvent.getImage());
+        data.put("latitude", vibeEvent.getLatitude());
+        data.put("longitude", vibeEvent.getLongitude());
         return data;
     }
 

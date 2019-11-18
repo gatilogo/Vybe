@@ -10,6 +10,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.example.vybe.Models.VibeEvent;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -24,7 +25,7 @@ import java.util.Locale;
 /**
  * This Activity displays the screen for a vibe event and all its available details
  */
-public class ViewVibeActivity extends AppCompatActivity {
+public class ViewVibeActivity extends AppCompatActivity implements MapFragment.OnMapFragmentReadyListener{
 
     private static final String TAG = "ViewVibeActivity";
 
@@ -38,6 +39,7 @@ public class ViewVibeActivity extends AppCompatActivity {
     private TextView socialSituationLabel;
     private ImageView reasonImage;
     private Toolbar toolbar;
+    private MapFragment mapFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +58,8 @@ public class ViewVibeActivity extends AppCompatActivity {
         reasonImage.setDrawingCacheEnabled(true);
         reasonImage.buildDrawingCache();
         toolbar = findViewById(R.id.view_vibes_toolbar);
+
+        mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.view_vibe_map);
 
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
@@ -82,7 +86,6 @@ public class ViewVibeActivity extends AppCompatActivity {
         dateField.setText(dateFieldText);
         String reason = vibeEvent.getReason();
         String socialSituation = vibeEvent.getSocialSituation();
-        // TODO: missing location - do that later once done
         String reasonImagePath = vibeEvent.getImage();
 
         if (reasonImagePath != null){
@@ -130,5 +133,15 @@ public class ViewVibeActivity extends AppCompatActivity {
                         .into(imageView); // Destination to load image into
             }
         });
+    }
+
+    @Override
+    public void onMapFragmentReady() {
+        //if the vibe has a location, show it on the map
+        if (vibeEvent.getLatitude() != 0 && vibeEvent.getLongitude() != 0) {
+            mapFragment.setToLocation(new LatLng(vibeEvent.getLatitude(), vibeEvent.getLongitude()));
+        } else {
+            mapFragment.hideMap();
+        }
     }
 }
