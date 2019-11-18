@@ -206,27 +206,6 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
         db.collection("VibeEvent").document(vibeEvent.getId()).set(data);
     }
 
-//    // TODO: Move to Controller Class (as a private attribute)
-//    public void addVibeEvent(VibeEvent vibeEvent) {
-//        String id = db.collection("VibeEvent").document().getId();
-//        vibeEvent.setId(id);
-//        if (imageIsSelected) {
-//            uploadImage(imageBitmap, id);
-//            vibeEvent.setImage("reasons/" + id + ".jpg");
-//        }
-//        HashMap<String, Object> data = createVibeEventData(vibeEvent);
-//        db.collection("VibeEvent").document(id).set(data);
-//    }
-//
-//    public void editVibeEvent(VibeEvent vibeEvent) {
-//        if (imageIsSelected) {
-//            uploadImage(imageBitmap, vibeEvent.getId());
-//            vibeEvent.setImage("reasons/" + vibeEvent.getId() + ".jpg");
-//        }
-//        HashMap<String, Object> data = createVibeEventData(vibeEvent);
-//        db.collection("VibeEvent").document(vibeEvent.getId()).set(data);
-//    }
-
     public HashMap<String, Object> createVibeEventData(VibeEvent vibeEvent) {
         HashMap<String, Object> data = new HashMap<>();
         data.put("ID", vibeEvent.getId());
