@@ -75,6 +75,7 @@ public class MyVibesActivity extends AppCompatActivity {
     private ImageButton profileBtn;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private String vibeEventDBPath;
     private boolean allFlag;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +91,8 @@ public class MyVibesActivity extends AppCompatActivity {
         socialBtn = findViewById(R.id.social_btn);
         profileBtn = findViewById(R.id.profile_btn);
 
+        vibeEventDBPath = "Users/" + mAuth.getCurrentUser().getUid() + "/VibeEvents";
+        
         allFlag = true; // Ask jakey
 
         profileBtn.setOnClickListener(new View.OnClickListener() {
@@ -119,7 +122,7 @@ public class MyVibesActivity extends AppCompatActivity {
                     String filterVibe = vibes[position].toLowerCase();
                     allFlag = true;
                     if (position != 0){ allFlag = false;}
-                    db.collection("VibeEvent")
+                    db.collection(vibeEventDBPath)
                             .orderBy("datetime", Query.Direction.DESCENDING)
                             .get()
                             .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -175,7 +178,7 @@ public class MyVibesActivity extends AppCompatActivity {
         myVibesAdapter = new MyVibesAdapter(this, R.layout.my_vibe_item, vibeEventList);
         vibesListView.setAdapter(myVibesAdapter);
 
-        final CollectionReference collectionReference = db.collection("VibeEvent");
+        CollectionReference collectionReference = db.collection(vibeEventDBPath);
         Query query = collectionReference.orderBy("datetime", Query.Direction.DESCENDING);
 
         query.addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -239,7 +242,7 @@ public class MyVibesActivity extends AppCompatActivity {
                 // Delete a Vibe Event if user clicks on "Delete" button
                 builder.setNegativeButton("Delete", (DialogInterface dialog, int deleteId) -> {
                     VibeEvent vibeEvent = vibeEventList.get(position);
-                    db.collection("VibeEvent").document(vibeEvent.getId()).delete();
+                    db.collection(vibeEventDBPath).document(vibeEvent.getId()).delete();
                     myVibesAdapter.notifyDataSetChanged();
                 });
 

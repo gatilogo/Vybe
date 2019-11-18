@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -33,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     EditText emailField;
     EditText passwordField;
 
-    private FirebaseAuth mAuth;
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseAuth.AuthStateListener mAuthListener;
 
     @Override
@@ -46,8 +47,6 @@ public class MainActivity extends AppCompatActivity {
         signupButton = findViewById(R.id.signup_button);
         emailField = findViewById(R.id.email_edit_text);
         passwordField = findViewById(R.id.password_edit_text);
-
-        mAuth = FirebaseAuth.getInstance();
 
         mAuthListener = (@NonNull FirebaseAuth firebaseAuth) -> {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
