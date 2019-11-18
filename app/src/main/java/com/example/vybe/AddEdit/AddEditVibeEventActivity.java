@@ -22,6 +22,7 @@ import com.example.vybe.R;
 import com.example.vybe.Models.VibeEvent;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -41,6 +42,8 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
 
     private static final String TAG = "AddEditVibeEventActivity";
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private String vibeEventDBPath;
 
     // --- XML Elements ---
     private ImageView vibeImage;
@@ -73,6 +76,8 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
         imageView = findViewById(R.id.imageView);
         mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.add_edit_map_fragment);
         socStnFragment = (SocialSituationFieldFragment) getSupportFragmentManager().findFragmentById(R.id.social_situation_field_fragment);
+
+        vibeEventDBPath = "Users/" + mAuth.getCurrentUser().getUid() + "/VibeEvents";
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -193,7 +198,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
 
     public void uploadVibeEvent() {
         if (!editMode) {
-            String id = db.collection("VibeEvent").document().getId();
+            String id = db.collection(vibeEventDBPath).document().getId();
             vibeEvent.setId(id);
         }
 
@@ -203,7 +208,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
         }
 
         HashMap<String, Object> data = createVibeEventData(vibeEvent);
-        db.collection("VibeEvent").document(vibeEvent.getId()).set(data);
+        db.collection(vibeEventDBPath).document(vibeEvent.getId()).set(data);
     }
 
     public HashMap<String, Object> createVibeEventData(VibeEvent vibeEvent) {
