@@ -102,10 +102,11 @@ public class SocialSituationFieldFragment extends Fragment {
      * @param socStnDesc
      */
     public void setDefaultSocStn(String socStnDesc) {
-        SocialSituation ss = SocialSituation.of(socStnDesc);
+        SocialSituation socStn = SocialSituation.of(socStnDesc);
 
-        if (ss != null) {
-            socStnDropdown.setSelection(ss.ordinal());
+        if (socStn != null) {
+            int position = socStn.ordinal();
+            socStnDropdown.setSelection(position);
         }
 
     }
