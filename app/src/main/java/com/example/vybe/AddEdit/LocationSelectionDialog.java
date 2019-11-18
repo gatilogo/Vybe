@@ -43,7 +43,6 @@ public class LocationSelectionDialog extends DialogFragment {
     private Button openLocationAutofill;
     private Button useCurrentLocation;
     private View view;
-    private LocationController locationController;
 
     public interface OnLocationSelectedListener {
         void onLocationSelected(double latitude, double longitude);
@@ -104,8 +103,7 @@ public class LocationSelectionDialog extends DialogFragment {
         useCurrentLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                locationController = new LocationController();
-                Location location = locationController.getUserLocation(getContext());
+                Location location = LocationController.getUserLocation(getContext());
                 if (location == null) {return;}
                 double longitude = location.getLongitude();
                 double latitude = location.getLatitude();

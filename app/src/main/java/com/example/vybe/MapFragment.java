@@ -56,8 +56,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap mMap;
     private OnMapFragmentReadyListener onMapFragmentReadyListener;
 
-//    private LocationController locationController;
-
     public interface OnMapFragmentReadyListener {
         void onMapFragmentReady();
     }
