@@ -43,12 +43,6 @@ public class ViewProfileActivity extends AppCompatActivity {
             usernameTextView.setText(user.getUsername());
             emailTextView.setText(user.getEmail());
         }
-//        db.collection("Users").document(mAuth.getCurrentUser().getUid())
-//                .get()
-//                .addOnSuccessListener((DocumentSnapshot doc) -> {
-//                    usernameTextView.setText((String) doc.getData().get("username"));
-//                    emailTextView.setText((String) doc.getData().get("email"));
-//                });
 
         logoutBtn.setOnClickListener(view -> {
             mAuth.signOut();
