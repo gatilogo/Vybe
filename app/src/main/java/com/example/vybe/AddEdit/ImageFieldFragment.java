@@ -26,10 +26,10 @@ import static com.example.vybe.util.Constants.GET_FROM_GALLERY;
 
 public class ImageFieldFragment extends Fragment {
 
-    Button pickImageBtn;
-    ImageView imageView;
-    Context context;
-    OnImageSelectedListener onImageSelectedListener;
+    private Button pickImageBtn;
+    private ImageView imageView;
+    private Context context;
+    private OnImageSelectedListener onImageSelectedListener;
     private Bitmap imageBitmap;
 
     interface OnImageSelectedListener {
