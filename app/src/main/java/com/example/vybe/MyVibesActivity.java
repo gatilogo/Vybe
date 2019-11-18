@@ -92,7 +92,7 @@ public class MyVibesActivity extends AppCompatActivity {
         profileBtn = findViewById(R.id.profile_btn);
 
         vibeEventDBPath = "Users/" + mAuth.getCurrentUser().getUid() + "/VibeEvents";
-        Log.d(TAG, "onCreate: " + vibeEventDBPath);
+        
         allFlag = true; // Ask jakey
 
         profileBtn.setOnClickListener(new View.OnClickListener() {
@@ -178,7 +178,7 @@ public class MyVibesActivity extends AppCompatActivity {
         myVibesAdapter = new MyVibesAdapter(this, R.layout.my_vibe_item, vibeEventList);
         vibesListView.setAdapter(myVibesAdapter);
 
-        final CollectionReference collectionReference = db.collection(vibeEventDBPath);
+        CollectionReference collectionReference = db.collection(vibeEventDBPath);
         Query query = collectionReference.orderBy("datetime", Query.Direction.DESCENDING);
 
         query.addSnapshotListener(new EventListener<QuerySnapshot>() {
