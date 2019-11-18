@@ -2,7 +2,6 @@ package com.example.vybe;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,6 +18,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * This Activity displays the screen for a user to log in. This file will be updated
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         loginButton = findViewById(R.id.login_button);
         signupButton = findViewById(R.id.signup_button);
         emailField = findViewById(R.id.email_edit_text);
@@ -57,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
         };
 
         loginButton.setOnClickListener(view -> {
+
             // Check that the email and password fields are entered
             if (!isEmpty(emailField) && !isEmpty(passwordField)){
                 // Get the credentials that were entered

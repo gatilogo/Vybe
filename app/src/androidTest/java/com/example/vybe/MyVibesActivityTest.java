@@ -1,6 +1,5 @@
 package com.example.vybe;
 
-
 import android.app.Activity;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -14,6 +13,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.example.vybe.AddEdit.AddEditVibeEventActivity;
 import com.robotium.solo.Solo;
 import org.junit.After;
 import org.junit.Before;
@@ -59,22 +59,12 @@ public class MyVibesActivityTest {
     @Test
     public void NewVibeButton_CreateVibe_Pass() {
         solo.assertCurrentActivity("Wrong Activity", MyVibesActivity.class);
+
+        // Go to AddEditVibeEventActivity and confirm the current activity changes
         solo.clickOnButton("ADD");
-        solo.assertCurrentActivity("Wrong Activity", AddEditVibeActivity.class);
 
-        //Click on Empty Text View
-        solo.clickOnView(solo.getView("reason_edit_text"));
-        //Enter the text: 'asdfg'
-        solo.clearEditText((android.widget.EditText) solo.getView("reason_edit_text"));
-        solo.enterText((android.widget.EditText) solo.getView("reason_edit_text"), "asdfg");
-        solo.searchEditText("asdfg");
-        // Validate the text on the TextView
-        assertEquals("Text should be the field value", "asdfg",
-                ((EditText) solo.getView("reason_edit_text")).getText().toString());
+        solo.assertCurrentActivity("Wrong Activity", AddEditVibeEventActivity.class);
 
-        solo.clickOnButton("SAVE");
-
-        assertTrue(solo.waitForText("asdfg", 1, 2000));
     }
 
     @After

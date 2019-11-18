@@ -1,5 +1,6 @@
-package com.example.vybe;
+package com.example.vybe.AddEdit;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -13,35 +14,40 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.vybe.Models.vibefactory.Vibe;
+import com.example.vybe.Models.vibefactory.VibeFactory;
+import com.example.vybe.R;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import in.goodiebag.carouselpicker.CarouselPicker;
 
 /**
- * VibeCarouselFragment extends a DialogFragment and serves as a custom
+ * VibeCarouselDialogFragment extends a DialogFragment and serves as a custom
  * picker for a user to decide which Vibe they want to have added to a Vibe Event
  * Functionality is similar to that of a {@link android.app.DatePickerDialog}
  */
-public class VibeCarouselFragment extends DialogFragment {
+public class VibeCarouselDialogFragment extends DialogFragment {
 
-    private OnFragmentInteractionListener listener;
+    private Context context;
     private int selectedEmoticon = R.drawable.ic_no_vibe;
+    private OnVibeSelectedListener onVibeSelectedListener;
 
-    // interface to listen for any user interaction on fragment
-    public interface OnFragmentInteractionListener {
-        void onOkPressed(int selectedVibeEmoticon);
+    public interface OnVibeSelectedListener {
+        void onVibeSelected(Vibe vibe);
     }
 
-    // attach fragment to activity
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            listener = (OnFragmentInteractionListener) context;
+
+        if (context instanceof OnVibeSelectedListener) {
+            onVibeSelectedListener = (OnVibeSelectedListener) context;
+
         } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+            throw new RuntimeException(context.toString() + " must implement OnVibeSelectedListener");
+
         }
     }
 
@@ -54,6 +60,7 @@ public class VibeCarouselFragment extends DialogFragment {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_vibe_carousel, null);
 
         CarouselPicker carouselPicker = view.findViewById(R.id.carousel_picker);
+
         List<CarouselPicker.PickerItem> imageItems = new ArrayList<>();
         imageItems.add(new CarouselPicker.DrawableItem(R.drawable.ic_no_vibe));
         imageItems.add(new CarouselPicker.DrawableItem(R.drawable.ic_angry));
@@ -63,15 +70,12 @@ public class VibeCarouselFragment extends DialogFragment {
         imageItems.add(new CarouselPicker.DrawableItem(R.drawable.ic_scared));
         imageItems.add(new CarouselPicker.DrawableItem(R.drawable.ic_surprised));
 
-        // Create an adapter
         CarouselPicker.CarouselViewAdapter imageAdapter = new CarouselPicker.CarouselViewAdapter(getActivity(), imageItems, 0);
-        // Set the adapter
         carouselPicker.setAdapter(imageAdapter);
 
         carouselPicker.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
             }
 
             // on selection of an emoticon, set the vibe for a vibe event
@@ -82,7 +86,6 @@ public class VibeCarouselFragment extends DialogFragment {
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
             }
         });
 
@@ -91,16 +94,10 @@ public class VibeCarouselFragment extends DialogFragment {
                 .setView(view)
                 .setTitle("Select a Vibe")
                 .setNegativeButton("Cancel", null)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // if no vibe selected just exit
-                        if (selectedEmoticon != R.drawable.ic_no_vibe) {
-                            listener.onOkPressed(selectedEmoticon);
-                        }
-                        else {
-                            return;
-                        }
+                .setPositiveButton("OK", (dialog, which) -> {
+                    // if no vibe selected just exit
+                    if (selectedEmoticon != R.drawable.ic_no_vibe) {
+                        onVibeSelectedListener.onVibeSelected(VibeFactory.getVibe(selectedEmoticon));
                     }
                 }).create();
     }

@@ -1,29 +1,28 @@
-package com.example.vybe.vibefactory;
+package com.example.vybe.Models.vibefactory;
 
 import com.example.vybe.R;
 
 /**
- * The implementation of the vibe interface that represents a happy vibe
+ * The implementation of the vibe interface that represents an angry vibe
  */
-public class HappyVibe implements Vibe {
+public class AngryVibe implements Vibe {
     private int color;
     private int emoticon;
 
     /**
      * This Constructor sets the new vibe's color and emoticon
      */
-    public HappyVibe() {
-        this.color = R.color.Yellow;
-        this.emoticon = R.drawable.ic_happy;
+    public AngryVibe() {
+        this.color = R.color.Red;
+        this.emoticon = R.drawable.ic_angry;
     }
 
     /**
-     * This gets the string value of the Vibe class selected by a user
      * @return
      * The string that describes the Vibe selected
      */
     public String getName() {
-        return "happy";
+        return "angry";
     }
 
     /**

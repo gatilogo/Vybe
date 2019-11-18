@@ -1,11 +1,5 @@
 package com.example.vybe;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -23,11 +17,20 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+import com.example.vybe.AddEdit.AddEditVibeEventActivity;
+import com.example.vybe.Models.User;
+import com.example.vybe.Models.VibeEvent;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import android.widget.Spinner;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -40,13 +43,13 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.TimeZone;
 
-import static com.example.vybe.util.Constants.*;
+import static com.example.vybe.util.Constants.ERROR_DIALOG_REQUEST;
+import static com.example.vybe.util.Constants.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
+import static com.example.vybe.util.Constants.PERMISSIONS_REQUEST_ENABLE_GPS;
 
 
 /**
@@ -106,6 +109,7 @@ public class MyVibesActivity extends AppCompatActivity {
         });
 
         // --- Vibes Dropdown ---
+        // TODO: Refactor with custom spinner and/or different filtering methodology
         String[] vibes = new String[]{"Filter Vibe", "Angry", "Disgusted", "Happy", "Sad", "Scared", "Surprised"};
         ArrayAdapter<String> vibesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, vibes);
         filterSpinner.setAdapter(vibesAdapter);
@@ -125,24 +129,34 @@ public class MyVibesActivity extends AppCompatActivity {
                                     vibeEventList.clear();
                                     for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
 
-                                            LocalDateTime ldt = doc.getDate("datetime").toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-                                            Log.d(TAG, ldt.toString());
-                                            String reason = (String) doc.getData().get("reason");
-                                            String socSit = (String) doc.getData().get("socSit");
-                                            String id = (String) doc.getData().get("ID");
-                                            String vibe = (String) doc.getData().get("vibe");
-                                            String image = (String) doc.getData().get("image");
-                                            double latitude = 0;
-                                            double longitude = 0;
-                                            if ((doc.getData().get("latitude") != null) && (doc.getData().get("latitude")!= null)) {
-                                                latitude = (double) doc.getData().get("latitude");
-                                                longitude = (double) doc.getData().get("longitude");
-                                            }
+                                        VibeEvent vibeEvent = new VibeEvent();
+                                        vibeEvent.setDateTime(doc.getDate("datetime").toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+                                        vibeEvent.setReason(doc.getString("reason"));
+                                        vibeEvent.setSocialSituation(doc.getString("socSit"));
+                                        vibeEvent.setId(doc.getId());
+                                        vibeEvent.setVibe(doc.getString("vibe"));
+                                        if (doc.getData().get("image") != null) {
+                                            vibeEvent.setImage(doc.getString("image"));
+                                        }
+                                        if (doc.getData().get("latitude") != null && doc.getData().get("longitude") != null) {
+                                            vibeEvent.setLatitude(doc.getDouble("latitude"));
+                                            vibeEvent.setLongitude(doc.getDouble("longitude"));
+                                        }
+
+//                                            LocalDateTime ldt = doc.getDate("datetime").toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+//                                            Log.d(TAG, ldt.toString());
+//                                            String reason = (String) doc.getData().get("reason");
+//                                            String socSit = (String) doc.getData().get("socSit");
+//                                            String id = (String) doc.getData().get("ID");
+//                                            String vibe = (String) doc.getData().get("vibe");
+//                                            String image = (String) doc.getData().get("image");
+//                                            double latitude = (double) doc.getData().get("latitude");
+//                                            double longitude = (double) doc.getData().get("longitude");
                                         if (allFlag) {
-                                            vibeEventList.add(new VibeEvent(vibe, ldt, reason, socSit, id, image, latitude, longitude));
+                                            vibeEventList.add(vibeEvent);
                                         } else {
-                                            if (filterVibe.equals(vibe)){
-                                                vibeEventList.add(new VibeEvent(vibe, ldt, reason, socSit, id, image, latitude, longitude));
+                                            if (filterVibe.equals(vibeEvent.getVibe().getName())){
+                                                vibeEventList.add(vibeEvent);
                                             }
                                         }
                                     }
@@ -174,82 +188,77 @@ public class MyVibesActivity extends AppCompatActivity {
 //                            TimeZone.getDefault().toZoneId());
                     LocalDateTime ldt = doc.getDate("datetime").toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
                     Log.d(TAG, ldt.toString());
+                    /*
                     String reason = (String) doc.getData().get("reason");
                     String socSit = (String) doc.getData().get("socSit");
                     String id = (String) doc.getData().get("ID");
                     String vibe = (String) doc.getData().get("vibe");
                     String image = (String) doc.getData().get("image");
-                    double latitude = 0;
-                    double longitude = 0;
-                    if ((doc.getData().get("latitude") != null) && (doc.getData().get("longitude") != null)) {
-                        latitude = (double) doc.getData().get("latitude");
-                        longitude = (double) doc.getData().get("longitude");
-                    }
+                    double latitude = (double) doc.getData().get("latitude");
+                    double longitude = (double) doc.getData().get("longitude");
                     vibeEventList.add(new VibeEvent(vibe, ldt, reason, socSit, id, image, latitude, longitude));
+                     */
+                    VibeEvent vibeEvent = new VibeEvent();
+                    vibeEvent.setReason(doc.getString("reason"));
+                    vibeEvent.setSocialSituation(doc.getString("socSit"));
+                    vibeEvent.setId(doc.getId());
+                    vibeEvent.setVibe(doc.getString("vibe"));
+                    if (doc.getData().get("image") != null) {
+                        vibeEvent.setImage(doc.getString("image"));
+                    }
+                    if (doc.getData().get("latitude") != null && doc.getData().get("longitude") != null) {
+                        vibeEvent.setLatitude(doc.getDouble("latitude"));
+                        vibeEvent.setLongitude(doc.getDouble("longitude"));
+                    }
+                    vibeEventList.add(vibeEvent);
                 }
                 myVibesAdapter.notifyDataSetChanged();
             }
         });
 
-        vibesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(MyVibesActivity.this, ViewVibeActivity.class);
-                VibeEvent vibeEvent = vibeEventList.get(i);
-                intent.putExtra("vibeEvent", vibeEvent);
-                startActivity(intent);
-            }
+        vibesListView.setOnItemClickListener((AdapterView<?> parent, View view, int position, long id) ->  {
+            Intent viewVibe = new Intent(MyVibesActivity.this, ViewVibeActivity.class);
+            VibeEvent vibeEvent = vibeEventList.get(position);
+            viewVibe.putExtra("vibeEvent", vibeEvent);
+            startActivity(viewVibe);
         });
 
-        vibesListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        vibesListView.setOnItemLongClickListener((AdapterView<?> parent, View view, int position, long id) -> {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MyVibesActivity.this);
                 
                 builder.setCancelable(true);
 
-                // Delete ride if user clicks on "Yes" button
-                builder.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        Intent intent = new Intent(MyVibesActivity.this, AddEditVibeActivity.class);
-                        VibeEvent vibeEvent = vibeEventList.get(position);
-                        intent.putExtra("vibeEvent", vibeEvent);
-                        startActivity(intent);
-                    }
+                // Edit Vibe Event if user clicks on "Edit" button
+                builder.setPositiveButton("Edit", (DialogInterface dialog, int editId) -> {
+                    Intent editIntent = new Intent(MyVibesActivity.this, AddEditVibeEventActivity.class);
+                    VibeEvent vibeEvent = vibeEventList.get(position);
+                    editIntent.putExtra("vibeEvent", vibeEvent);
+                    startActivity(editIntent);
                 });
 
-                // Close dialog if user clicks on "No" button
-                builder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        VibeEvent vibeEvent = vibeEventList.get(position);
-                        db.collection("VibeEvent").document(vibeEvent.getId()).delete();
-                        myVibesAdapter.notifyDataSetChanged();
-                    }
+                // Delete a Vibe Event if user clicks on "Delete" button
+                builder.setNegativeButton("Delete", (DialogInterface dialog, int deleteId) -> {
+                    VibeEvent vibeEvent = vibeEventList.get(position);
+                    db.collection("VibeEvent").document(vibeEvent.getId()).delete();
+                    myVibesAdapter.notifyDataSetChanged();
                 });
 
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
                 return true;
-            }
         });
 
-        addVibeEventBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MyVibesActivity.this, AddEditVibeActivity.class);
-                startActivity(intent);
-            }
+        addVibeEventBtn.setOnClickListener((View view) -> {
+            Intent addIntent = new Intent(MyVibesActivity.this, AddEditVibeEventActivity.class);
+            startActivity(addIntent);
         });
 
-        myMapBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mLocationPermissionGranted) {
-                    Intent intent = new Intent(MyVibesActivity.this, MapViewActivity.class);
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(MyVibesActivity.this, "Please enable GPS services", Toast.LENGTH_SHORT);
-                }
+        myMapBtn.setOnClickListener((View view) -> {
+            if (mLocationPermissionGranted) {
+                Intent MapViewIntent = new Intent(MyVibesActivity.this, MapViewActivity.class);
+                startActivity(MapViewIntent);
+            } else {
+                Toast.makeText(MyVibesActivity.this, "Please enable GPS services", Toast.LENGTH_SHORT);
             }
         });
 
@@ -266,10 +275,7 @@ public class MyVibesActivity extends AppCompatActivity {
         super.onResume();
         //this is just the easiest way to consistently make sure the user has gps enabled
         if (checkMapServices()) {
-            if (mLocationPermissionGranted){
-                //do stuff
-            }
-            else {
+            if (!mLocationPermissionGranted){
                 getLocationPermission();
             }
         }

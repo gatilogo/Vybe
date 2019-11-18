@@ -1,6 +1,7 @@
-package com.example.vybe;
+package com.example.vybe.Models;
 
-import com.example.vybe.vibefactory.Vibe;
+import com.example.vybe.Models.vibefactory.Vibe;
+import com.example.vybe.Models.vibefactory.VibeFactory;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -26,10 +27,14 @@ public class VibeEvent implements Serializable {
     private double longitude;
 
     /**
-     * Default constructor called for serialization
+     * Constructor called for serialization. Always requires
+     * to have the current date and time initialized.
      */
     public VibeEvent() {
 
+        this.dateTime = LocalDateTime.now();
+        this.latitude = 0;
+        this.longitude = 0;
     }
 
     /**
@@ -46,10 +51,10 @@ public class VibeEvent implements Serializable {
      *      This is the unique identifier for a particular instance of a vibe event
      * @param image
      *      This is a photograph expressing the reason a vibe event occurred
-     * @param placeID
-     *      This is the ID google API uses to identify places
-     * @param placeName
-     *      This is the name of the place in google's API
+     * @param latitude
+     *      Emmett fill this in
+     * @param longitude
+     *      Emmett fill this in
      */
     public VibeEvent(String vibe, LocalDateTime dateTime, String reason, String socialSituation, String id, String image, double latitude, double longitude) {
         this.vibe = VibeFactory.getVibe(vibe);
@@ -84,6 +89,14 @@ public class VibeEvent implements Serializable {
      */
     public void setVibe(int vibeEmoticon) {
         this.vibe = VibeFactory.getVibe(vibeEmoticon);
+    }
+
+    /**
+     * This sets the vibe of a VibeEvent
+     * @param vibe The vibe to set
+     */
+    public void setVibe(Vibe vibe) {
+        this.vibe = vibe;
     }
 
     /**

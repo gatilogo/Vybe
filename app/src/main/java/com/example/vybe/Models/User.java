@@ -1,4 +1,4 @@
-package com.example.vybe;
+package com.example.vybe.Models;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -120,4 +120,42 @@ public class User implements Serializable {
     public void setFollowing(ArrayList<User> following) {
         this.following = following;
     }
+
+    /**
+     * Wrapper Functions - i.e. 'Hide Delegate' refactoring pattern
+     * More may be added as we continue development
+     */
+
+    /**
+     * This gets the number of other users that this user follows
+     * @return The number of users this user follows
+     */
+    public int followingCount() {
+        return this.following.size();
+    }
+
+    /**
+     * This gets the number of users that follow this user
+     * @return The number of users that follow this user
+     */
+    public int followerCount() {
+        return this.followers.size();
+    }
+
+    /**
+     * This returns whether or not this user has followers
+     * @return Boolean indicating whether or not this user has followers
+     */
+    public boolean isFollowersEmpty() {
+        return this.followers.isEmpty();
+    }
+
+    /**
+     * This returns whether or not this user is following any other user
+     * @return Boolean indicating whether or not this user follows anyone
+     */
+    public boolean isFollowingEmpty() {
+        return this.following.isEmpty();
+    }
+
 }
