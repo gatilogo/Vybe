@@ -1,8 +1,9 @@
 package com.example.vybe;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class User {
+public class User implements Serializable {
     private String username;
     private String email;
     private ArrayList<User> followers;
