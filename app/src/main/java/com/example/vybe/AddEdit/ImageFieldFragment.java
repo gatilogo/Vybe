@@ -22,10 +22,9 @@ import com.example.vybe.R;
 import java.io.IOException;
 
 import static android.app.Activity.RESULT_OK;
+import static com.example.vybe.util.Constants.GET_FROM_GALLERY;
 
 public class ImageFieldFragment extends Fragment {
-
-    private static final int GET_FROM_GALLERY = 1000;
 
     Button pickImageBtn;
     ImageView imageView;
