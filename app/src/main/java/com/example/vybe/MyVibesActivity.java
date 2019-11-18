@@ -171,36 +171,6 @@ public class MyVibesActivity extends AppCompatActivity {
         myVibesAdapter = new MyVibesAdapter(this, R.layout.my_vibe_item, vibeEventList);
         vibesListView.setAdapter(myVibesAdapter);
 
-        CollectionReference collectionReference = db.collection(vibeEventDBPath);
-        Query query = collectionReference.orderBy("datetime", Query.Direction.DESCENDING);
-
-        query.addSnapshotListener(this, new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                // TODO: Stub out with other query above
-                vibeEventList.clear();
-                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-//                    LocalDateTime ldt = LocalDateTime.ofInstant(Instant.ofEpochMilli(doc.getDate("datetime").getTime()),
-//                            TimeZone.getDefault().toZoneId());
-                    LocalDateTime ldt = doc.getDate("datetime").toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-                    Log.d(TAG, ldt.toString());
-                    VibeEvent vibeEvent = new VibeEvent();
-                    vibeEvent.setReason(doc.getString("reason"));
-                    vibeEvent.setSocialSituation(doc.getString("socSit"));
-                    vibeEvent.setId(doc.getId());
-                    vibeEvent.setVibe(doc.getString("vibe"));
-                    if (doc.getData().get("image") != null) {
-                        vibeEvent.setImage(doc.getString("image"));
-                    }
-                    if (doc.getData().get("latitude") != null && doc.getData().get("longitude") != null) {
-                        vibeEvent.setLatitude(doc.getDouble("latitude"));
-                        vibeEvent.setLongitude(doc.getDouble("longitude"));
-                    }
-                    vibeEventList.add(vibeEvent);
-                }
-                myVibesAdapter.notifyDataSetChanged();
-            }
-        });
 
         vibesListView.setOnItemClickListener((AdapterView<?> parent, View view, int position, long id) ->  {
             Intent viewVibe = new Intent(MyVibesActivity.this, ViewVibeActivity.class);
@@ -253,6 +223,36 @@ public class MyVibesActivity extends AppCompatActivity {
             public void onClick(View v) {
                 startActivity(new Intent(MyVibesActivity.this, SocialActivity.class));
             }
+        });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Want to get the most recent list of mood history
+        CollectionReference collectionReference = db.collection(vibeEventDBPath);
+        Query query = collectionReference.orderBy("datetime", Query.Direction.DESCENDING);
+
+        query.get().addOnSuccessListener((QuerySnapshot queryDocumentSnapshots) -> {
+                vibeEventList.clear();
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                    LocalDateTime ldt = doc.getDate("datetime").toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+                    Log.d(TAG, ldt.toString());
+                    VibeEvent vibeEvent = new VibeEvent();
+                    vibeEvent.setReason(doc.getString("reason"));
+                    vibeEvent.setSocialSituation(doc.getString("socSit"));
+                    vibeEvent.setId(doc.getId());
+                    vibeEvent.setVibe(doc.getString("vibe"));
+                    if (doc.getData().get("image") != null) {
+                        vibeEvent.setImage(doc.getString("image"));
+                    }
+                    if (doc.getData().get("latitude") != null && doc.getData().get("longitude") != null) {
+                        vibeEvent.setLatitude(doc.getDouble("latitude"));
+                        vibeEvent.setLongitude(doc.getDouble("longitude"));
+                    }
+                    vibeEventList.add(vibeEvent);
+                }
+                myVibesAdapter.notifyDataSetChanged();
         });
     }
 
