@@ -46,6 +46,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 
 import static com.example.vybe.util.Constants.ERROR_DIALOG_REQUEST;
 import static com.example.vybe.util.Constants.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
@@ -133,7 +134,7 @@ public class MyVibesActivity extends AppCompatActivity {
                                     for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
 
                                         VibeEvent vibeEvent = new VibeEvent();
-                                        vibeEvent.setDateTime(doc.getDate("datetime").toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+                                        vibeEvent.setDateTime(doc.getDate("datetime"));
                                         vibeEvent.setReason(doc.getString("reason"));
                                         vibeEvent.setSocialSituation(doc.getString("socSit"));
                                         vibeEvent.setId(doc.getId());
@@ -236,9 +237,8 @@ public class MyVibesActivity extends AppCompatActivity {
         query.get().addOnSuccessListener((QuerySnapshot queryDocumentSnapshots) -> {
                 vibeEventList.clear();
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                    LocalDateTime ldt = doc.getDate("datetime").toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-                    Log.d(TAG, ldt.toString());
                     VibeEvent vibeEvent = new VibeEvent();
+                    vibeEvent.setDateTime(doc.getDate("datetime"));
                     vibeEvent.setReason(doc.getString("reason"));
                     vibeEvent.setSocialSituation(doc.getString("socSit"));
                     vibeEvent.setId(doc.getId());

@@ -1,6 +1,7 @@
 package com.example.vybe;
 
 import android.content.Context;
+import android.icu.text.SimpleDateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -70,11 +72,8 @@ public class MyVibesAdapter extends ArrayAdapter<VibeEvent> {
     // this can be moved to a controller class and could potentially be used in common with
     // the ViewVibeActivity method: populateVibeEventDetails
     public void populateVibeAdapterFields(VibeEvent vibeEvent) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(" d, YYYY h:mm a", Locale.ENGLISH);
-        LocalDateTime dateTime = vibeEvent.getDateTime();
-        String month = dateTime.getMonth().getDisplayName(TextStyle.FULL_STANDALONE, Locale.ENGLISH);
-        String dateFieldText = month + dateTime.format(formatter);
-        dateField.setText(dateFieldText);
+        String datetimeText = vibeEvent.getDateTimeString();
+        dateField.setText(datetimeText);
         vibeImage.setImageResource(vibeEvent.getVibe().getEmoticon());
 
         // TODO: DO WE WANT TO DISPLAY REASON?

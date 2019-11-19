@@ -215,7 +215,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
         HashMap<String, Object> data = new HashMap<>();
         data.put("ID", vibeEvent.getId());
         data.put("vibe", vibeEvent.getVibe().getName());
-        data.put("datetime", vibeEvent.getDateTimeFormat());
+        data.put("datetime", vibeEvent.getDateTime());
         data.put("reason", vibeEvent.getReason());
         data.put("socSit", vibeEvent.getSocialSituation());
         data.put("image", vibeEvent.getImage());
