@@ -32,7 +32,7 @@ public class MyVibesAdapter extends ArrayAdapter<VibeEvent> {
     private ArrayList<VibeEvent> vibeEventList;
     private int resource;
     private TextView dateField;
-    private TextView reasonField;
+    private TextView vibeNameField;
     private ImageView vibeImage;
 
     public MyVibesAdapter(@NonNull Context context, int resource, ArrayList<VibeEvent> vibeEventList) {
@@ -53,7 +53,7 @@ public class MyVibesAdapter extends ArrayAdapter<VibeEvent> {
         }
 
         dateField = view.findViewById(R.id.view_date_text_view);
-        reasonField = view.findViewById(R.id.my_reason_text_view);
+        vibeNameField = view.findViewById(R.id.vibe_name_text_view);
         vibeImage = view.findViewById(R.id.image_view);
 
         VibeEvent vibeEvent = vibeEventList.get(position);
@@ -75,14 +75,6 @@ public class MyVibesAdapter extends ArrayAdapter<VibeEvent> {
         String datetimeText = vibeEvent.getDateTimeString();
         dateField.setText(datetimeText);
         vibeImage.setImageResource(vibeEvent.getVibe().getEmoticon());
-
-        // TODO: DO WE WANT TO DISPLAY REASON?
-        // KEN SAID ON FORUM DATETIME AND EMOTICON IS ENOUGH.
-        if (vibeEvent.getReason() == null) {
-            reasonField.setVisibility(View.GONE);
-        } else {
-            reasonField.setText(vibeEvent.getReason());
-        }
-
+        vibeNameField.setText(vibeEvent.getVibe().getName());
     }
 }

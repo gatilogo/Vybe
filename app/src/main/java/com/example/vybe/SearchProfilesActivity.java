@@ -3,6 +3,7 @@ package com.example.vybe;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -99,8 +100,10 @@ public class SearchProfilesActivity extends AppCompatActivity {
         });
 
         searchListView.setOnItemClickListener((AdapterView<?> parent, View view, int position, long id) -> {
-//            User user = profileAdapter.getItem(position);   // set-up for issue #45
-//            System.out.println(user.getUsername());
+            User user = profileAdapter.getItem(position);
+            Intent intent = new Intent(this, ViewProfileActivity.class);
+            intent.putExtra("user", user);
+            startActivity(intent);
         });
     }
 }
