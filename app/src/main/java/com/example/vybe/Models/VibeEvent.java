@@ -1,5 +1,7 @@
 package com.example.vybe.Models;
 
+import android.icu.text.SimpleDateFormat;
+
 import com.example.vybe.Models.vibefactory.Vibe;
 import com.example.vybe.Models.vibefactory.VibeFactory;
 
@@ -18,7 +20,7 @@ import java.util.Date;
  */
 public class VibeEvent implements Serializable {
     private Vibe vibe;
-    private LocalDateTime dateTime;
+    private Date dateTime;
     private String reason;
     private String socialSituation;
     private String id;
@@ -32,7 +34,7 @@ public class VibeEvent implements Serializable {
      */
     public VibeEvent() {
 
-        this.dateTime = LocalDateTime.now();
+        this.dateTime = new Date();
         this.latitude = 0;
         this.longitude = 0;
     }
@@ -52,11 +54,11 @@ public class VibeEvent implements Serializable {
      * @param image
      *      This is a photograph expressing the reason a vibe event occurred
      * @param latitude
-     *      this is the latitude coordinate of the vibe
+     *      This is the latitude coordinate of where a vibe event occurred
      * @param longitude
-     *      this is the longitude coordinate of the vibe
+     *      This is the longitude coordinate of where a vibe event occurred
      */
-    public VibeEvent(String vibe, LocalDateTime dateTime, String reason, String socialSituation, String id, String image, double latitude, double longitude) {
+    public VibeEvent(String vibe, Date dateTime, String reason, String socialSituation, String id, String image, double latitude, double longitude) {
         this.vibe = VibeFactory.getVibe(vibe);
         this.dateTime = dateTime;
         this.reason = reason;
@@ -103,7 +105,7 @@ public class VibeEvent implements Serializable {
      * This gets the date and time of the VibeEvent
      * @return The date and time of the event as a LocalDateTime object
      */
-    public LocalDateTime getDateTime() {
+    public Date getDateTime() {
         return dateTime;
     }
 
@@ -111,8 +113,14 @@ public class VibeEvent implements Serializable {
      * This sets the date and time in which a VibeEvent occurred
      * @param dateTime The date and time of the event
      */
-    public void setDateTime(LocalDateTime dateTime) {
+    public void setDateTime(Date dateTime) {
         this.dateTime = dateTime;
+    }
+
+    public String getDateTimeString() {
+        SimpleDateFormat formatter = new SimpleDateFormat("MMMM dd, yyyy hh:mm a");
+        Date dateTime = this.getDateTime();
+        return formatter.format(dateTime);
     }
 
     /**
@@ -170,16 +178,6 @@ public class VibeEvent implements Serializable {
      * @param image The path to the image for the event
      */
     public void setImage(String image) { this.image = image; }
-
-     /**
-     * This gets a Date object from the VibeEvent's date and time attribute
-     * @return A Date object representing the date and time which a vibe event occurred
-     **/
-    public Date getDateTimeFormat() {
-        long seconds = this.dateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
-        Date date = new Date(seconds);
-        return date;
-    }
 
     public double getLatitude() {
         return latitude;

@@ -1,6 +1,7 @@
 package com.example.vybe;
 
 import android.content.Intent;
+import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
+import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -79,11 +81,8 @@ public class ViewVibeActivity extends AppCompatActivity implements MapFragment.O
      */
     public void populateVibeEventDetails(VibeEvent vibeEvent) {
         //
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(" d, YYYY h:mm a", Locale.ENGLISH);
-        LocalDateTime dateTime = vibeEvent.getDateTime();
-        String month = dateTime.getMonth().getDisplayName(TextStyle.FULL_STANDALONE, Locale.ENGLISH);
-        String dateFieldText = month + dateTime.format(formatter);
-        dateField.setText(dateFieldText);
+        String datetimeText = vibeEvent.getDateTimeString();
+        dateField.setText(datetimeText);
         String reason = vibeEvent.getReason();
         String socialSituation = vibeEvent.getSocialSituation();
         String reasonImagePath = vibeEvent.getImage();
