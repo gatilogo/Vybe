@@ -238,8 +238,7 @@ public class MyVibesActivity extends AppCompatActivity {
                 vibeEventList.clear();
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                     VibeEvent vibeEvent = new VibeEvent();
-//                    Date vibeTime = (Date) doc.get("datetime");
-//                    VibeEvent.setDateTime(vibeTime);
+                    vibeEvent.setDateTime(doc.getDate("datetime"));
                     vibeEvent.setReason(doc.getString("reason"));
                     vibeEvent.setSocialSituation(doc.getString("socSit"));
                     vibeEvent.setId(doc.getId());
