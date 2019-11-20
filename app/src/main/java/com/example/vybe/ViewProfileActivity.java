@@ -74,16 +74,12 @@ public class ViewProfileActivity extends AppCompatActivity {
         sendRequestBtn.setOnClickListener(view -> {
             String otherUserID = user.getUserID();
             String requestPath = "Users/" + otherUserID + "/Requests";
-//            usernameTextView.setText("sending request to path: " + requestPath);
 
             // TODO: set the correct username/display name from/for mAuth.getCurrentUser()
             User self = new User(mAuth.getCurrentUser().getEmail());
             self.setUserID(mAuth.getCurrentUser().getUid());
-//            emailTextView.setText("request from: " + self.getUserID());
 
             db.collection(requestPath).document(self.getUserID()).set(self);
-            Toast.makeText(this, "succ request", Toast.LENGTH_LONG).show();
-
         });
 
 
