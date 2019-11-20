@@ -2,6 +2,8 @@ package com.example.vybe;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -35,7 +37,7 @@ public class SearchProfilesActivity extends AppCompatActivity {
     private ProfileAdapter profileAdapter;
 
     private SearchView searchView;
-    private ListView searchListView;
+    private RecyclerView searchRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +46,7 @@ public class SearchProfilesActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate: In search profiles");
 
         searchView = findViewById(R.id.search_view);
-        searchListView = findViewById(R.id.search_list_view);
+        searchRecyclerView = findViewById(R.id.search_list_view);
 
         // Initialize list of users
         usersList = new ArrayList<>();
@@ -69,7 +71,8 @@ public class SearchProfilesActivity extends AppCompatActivity {
         // Create adapter
         profileAdapter = new ProfileAdapter(this, R.layout.user_item, searchList);
         // Set adapter
-        searchListView.setAdapter(profileAdapter);
+        searchRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        searchRecyclerView.setAdapter(profileAdapter);
 
         // Listener for the search view
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -102,11 +105,11 @@ public class SearchProfilesActivity extends AppCompatActivity {
             }
         });
 
-        searchListView.setOnItemClickListener((AdapterView<?> parent, View view, int position, long id) -> {
-            User user = profileAdapter.getItem(position);
-            Intent intent = new Intent(this, ViewProfileActivity.class);
-            intent.putExtra("user", user);
-            startActivity(intent);
-        });
+//        searchRecyclerView.setOnItemClickListener((AdapterView<?> parent, View view, int position, long id) -> {
+//            User user = profileAdapter.getItem(position);
+//            Intent intent = new Intent(this, ViewProfileActivity.class);
+//            intent.putExtra("user", user);
+//            startActivity(intent);
+//        });
     }
 }
