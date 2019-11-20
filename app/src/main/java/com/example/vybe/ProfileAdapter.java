@@ -25,24 +25,29 @@ import java.util.List;
 public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.UserHolder> {
 
     private static final String TAG = "ProfileAdapter";
-    private Context context;
     private ArrayList<User> usersList;
     private int resource;
 
-//    private OnClickListener itemClickListener;
+    private OnItemClickListener itemClickListener;
 
-    public class UserHolder extends RecyclerView.ViewHolder{
+    public class UserHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView usernameField;
 
         public UserHolder(@NonNull View view) {
             super(view);
             usernameField = view.findViewById(R.id.username_text_view);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            itemClickListener.onItemClick(getAdapterPosition());
         }
     }
 
-    public ProfileAdapter(@NonNull Context context, int resource, ArrayList<User> usersList) {
+    public ProfileAdapter(OnItemClickListener itemClickListener, int resource, ArrayList<User> usersList) {
+        this.itemClickListener = itemClickListener;
         this.resource = resource;
-        this.context = context;
         this.usersList = usersList;
     }
 
@@ -57,17 +62,6 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.UserHold
     public void onBindViewHolder(@NonNull UserHolder holder, int position) {
         User user = usersList.get(position);
         holder.usernameField.setText(user.getUsername());
-
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //itemClickListener.onItemClick(holder.getAdapterPosition());
-                User user = usersList.get(position);
-                Intent intent = new Intent(context, ViewProfileActivity.class);
-                intent.putExtra("user", user);
-                context.startActivity(intent);
-            }
-        });
     }
 
     @Override
@@ -75,14 +69,9 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.UserHold
         return usersList.size();
     }
 
-    // TODO: Pass in generic listener for further abstraction
-//    public void setOnClickListener(OnClickListener onClickListener){
-//        this.itemClickListener = onClickListener;
-//    }
-
-//    public interface OnClickListener {
-//        void onItemClick(int position);
-//    }
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
 
     public void clear(){
         usersList.clear();
@@ -98,7 +87,4 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.UserHold
         return usersList.isEmpty();
     }
 
-//    public User getItem(int position){
-//        return usersList.get(position);
-//    }
 }

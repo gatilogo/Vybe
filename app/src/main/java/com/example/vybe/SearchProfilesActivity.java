@@ -27,7 +27,7 @@ import java.util.ArrayList;
 /**
  * SearchProfilesActivity enables the user to search for other participants/users of the Vybe app
  */
-public class SearchProfilesActivity extends AppCompatActivity {
+public class SearchProfilesActivity extends AppCompatActivity implements ProfileAdapter.OnItemClickListener {
 
     private static final String TAG = "SearchProfilesActivity";
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -38,6 +38,14 @@ public class SearchProfilesActivity extends AppCompatActivity {
 
     private SearchView searchView;
     private RecyclerView searchRecyclerView;
+
+    @Override
+    public void onItemClick(int position) {
+        User user = searchList.get(position);
+        Intent intent = new Intent(SearchProfilesActivity.this, ViewProfileActivity.class);
+        intent.putExtra("user", user);
+        startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +112,6 @@ public class SearchProfilesActivity extends AppCompatActivity {
                 return false;
             }
         });
-
 
 //        searchRecyclerView.setOnClickListener(new ProfileAdapter.OnItemClickListener() {
 //            @Override
