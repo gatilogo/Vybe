@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -140,10 +141,22 @@ public class CreateAccountActivity extends AppCompatActivity {
                         // If the account was created successfully then add the
                         // profile information to Firestore
                         if (task.isSuccessful()) {
+                            // Get the new account created
+                            FirebaseUser newUser = mAuth.getCurrentUser();
+
+                            // Create profile updates to apply username created
+                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                    .setDisplayName(username)
+                                    //.setPhotoUri(Uri.parse("https://example.com/jane-q-user/profile.jpg"))
+                                    .build();
+
+                            // Add the username to the Display Name property
+                            newUser.updateProfile(profileUpdates);
+
                             HashMap<String, Object> data = new HashMap<>();
                             data.put("username", username);
                             data.put("email", email);
-                            db.collection("Users").document(mAuth.getCurrentUser().getUid()).set(data);
+                            db.collection("Users").document(newUser.getUid()).set(data);
                             // Switch to My Vibes Acitivity
                             Intent intent = new Intent(CreateAccountActivity.this, MainActivity.class);
                             startActivity(intent);
