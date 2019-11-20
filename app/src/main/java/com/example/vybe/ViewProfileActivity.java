@@ -74,10 +74,12 @@ public class ViewProfileActivity extends AppCompatActivity {
         sendRequestBtn.setOnClickListener(view -> {
             String otherUserID = user.getUserID();
             String requestPath = "Users/" + otherUserID + "/Requests";
+            FirebaseUser selfFB = mAuth.getCurrentUser();
 
             // TODO: set the correct username/display name from/for mAuth.getCurrentUser()
-            User self = new User(mAuth.getCurrentUser().getEmail());
-            self.setUserID(mAuth.getCurrentUser().getUid());
+            User self = new User(selfFB.getEmail());
+            self.setUserID(selfFB.getUid());
+            self.setUsername(selfFB.getDisplayName());
 
             db.collection(requestPath).document(self.getUserID()).set(self);
         });
