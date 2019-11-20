@@ -220,12 +220,15 @@ public class MyVibesActivity extends AppCompatActivity {
 
                 if (dX < 0) {   // Swipe left
                     button.set(itemView.getRight() + dX, itemView.getTop(), itemView.getRight(), itemView.getBottom());
-                    int deleteColor = getResources().getColor(R.color.Red);
+                    int deleteColor = ContextCompat.getColor(MyVibesActivity.this, R.color.Delete);
                     p.setColor(deleteColor);
                     msg = "DELETE";
                 } else if (dX > 0) {    // Swipe right
                     button.set(itemView.getLeft(), itemView.getTop(), itemView.getLeft() + dX, itemView.getBottom());
-                    int editColor = getResources().getColor(R.color.colorAccent);
+                    int position = viewHolder.getAdapterPosition();
+                    VibeEvent vibeEvent = vibeEventList.get(position);
+                    int vibeColor = vibeEvent.getVibe().getColor();
+                    int editColor = ContextCompat.getColor(MyVibesActivity.this, vibeColor);
                     p.setColor(editColor);
                     msg = "EDIT";
                 }
