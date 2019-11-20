@@ -1,6 +1,7 @@
 package com.example.vybe;
 
 import android.content.Context;
+import android.content.Intent;
 import android.icu.text.SimpleDateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +12,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.vybe.Models.VibeEvent;
+import com.example.vybe.Models.vibefactory.Vibe;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -25,18 +30,28 @@ import java.util.Locale;
  * MyVibesAdapter is a CustomList used for the ListAdapter in the main activity that serves as the
  * list for storing vibe events
  */
-public class MyVibesAdapter extends ArrayAdapter<VibeEvent> {
+public class MyVibesAdapter extends RecyclerView.Adapter<MyVibesAdapter.VibeEventHolder> {
 
     private static final String TAG = "MyVibesAdapter";
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private Context context;
     private ArrayList<VibeEvent> vibeEventList;
     private int resource;
-    private TextView dateField;
-    private TextView vibeNameField;
-    private ImageView vibeImage;
+
+    public class VibeEventHolder extends RecyclerView.ViewHolder {
+        private TextView dateField;
+        private TextView vibeNameField;
+        private ImageView vibeImage;
+
+        public VibeEventHolder(View view) {
+            super(view);
+            dateField = view.findViewById(R.id.view_date_text_view);
+            vibeNameField = view.findViewById(R.id.vibe_name_text_view);
+            vibeImage = view.findViewById(R.id.image_view);
+        }
+    }
 
     public MyVibesAdapter(@NonNull Context context, int resource, ArrayList<VibeEvent> vibeEventList) {
-        super(context, resource, vibeEventList);
         this.resource = resource;
         this.context = context;
         this.vibeEventList = vibeEventList;
@@ -44,37 +59,35 @@ public class MyVibesAdapter extends ArrayAdapter<VibeEvent> {
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        View view = convertView;
-        if (view == null) {
-            view = LayoutInflater
-                    .from(this.context)
-                    .inflate(this.resource, parent, false);
-        }
+    public VibeEventHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(this.resource, parent, false);
+        return new VibeEventHolder(view);
+    }
 
-        dateField = view.findViewById(R.id.view_date_text_view);
-        vibeNameField = view.findViewById(R.id.vibe_name_text_view);
-        vibeImage = view.findViewById(R.id.image_view);
-
+    @Override
+    public void onBindViewHolder(@NonNull VibeEventHolder holder, int position) {
         VibeEvent vibeEvent = vibeEventList.get(position);
-        populateVibeAdapterFields(vibeEvent);
-
-        return view;
-    }
-
-    /**
-     * This will populate the appropriate fields for displaying Vibe
-     * Event details on the VibesAdapter view
-     * @param vibeEvent
-     *      The Vibe Event object containing details to be displayed
-     */
-    // TODO:
-    // this can be moved to a controller class and could potentially be used in common with
-    // the ViewVibeActivity method: populateVibeEventDetails
-    public void populateVibeAdapterFields(VibeEvent vibeEvent) {
         String datetimeText = vibeEvent.getDateTimeString();
-        dateField.setText(datetimeText);
-        vibeImage.setImageResource(vibeEvent.getVibe().getEmoticon());
-        vibeNameField.setText(vibeEvent.getVibe().getName());
+        holder.dateField.setText(datetimeText);
+        holder.vibeImage.setImageResource(vibeEvent.getVibe().getEmoticon());
+        holder.vibeNameField.setText(vibeEvent.getVibe().getName());
+
+        holder.itemView.setOnClickListener((View v) -> {
+            Intent viewVibe = new Intent(context, ViewVibeActivity.class);
+            viewVibe.putExtra("vibeEvent", vibeEvent);
+            context.startActivity(viewVibe);
+        });
     }
+
+    @Override
+    public int getItemCount() {
+        return vibeEventList.size();
+    }
+
+    public void deleteItem(int position, String vibeEventDBPath) {
+        VibeEvent vibeEvent = vibeEventList.get(position);
+        db.collection(vibeEventDBPath).document(vibeEvent.getId()).delete();
+        notifyItemRemoved(position);
+    }
+
 }
