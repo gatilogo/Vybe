@@ -87,6 +87,7 @@ public class MyVibesAdapter extends RecyclerView.Adapter<MyVibesAdapter.VibeEven
     public void deleteItem(int position, String vibeEventDBPath) {
         VibeEvent vibeEvent = vibeEventList.get(position);
         db.collection(vibeEventDBPath).document(vibeEvent.getId()).delete();
+        vibeEventList.remove(position);
         notifyItemRemoved(position);
     }
 
