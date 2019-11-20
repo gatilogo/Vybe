@@ -105,11 +105,15 @@ public class SearchProfilesActivity extends AppCompatActivity {
             }
         });
 
-//        searchRecyclerView.setOnItemClickListener((AdapterView<?> parent, View view, int position, long id) -> {
-//            User user = profileAdapter.getItem(position);
-//            Intent intent = new Intent(this, ViewProfileActivity.class);
-//            intent.putExtra("user", user);
-//            startActivity(intent);
+
+//        searchRecyclerView.setOnClickListener(new ProfileAdapter.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(int position){
+////                User user = profileAdapter.getItem(position);
+////                Intent intent = new Intent(SearchProfilesActivity.this, ViewProfileActivity.class);
+////                intent.putExtra("user", user);
+////                startActivity(intent);
+//            }
 //        });
     }
 }

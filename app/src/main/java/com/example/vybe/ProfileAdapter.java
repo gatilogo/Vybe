@@ -1,9 +1,11 @@
 package com.example.vybe;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
@@ -26,6 +28,8 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.UserHold
     private Context context;
     private ArrayList<User> usersList;
     private int resource;
+
+//    private OnClickListener itemClickListener;
 
     public class UserHolder extends RecyclerView.ViewHolder{
         private TextView usernameField;
@@ -53,12 +57,32 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.UserHold
     public void onBindViewHolder(@NonNull UserHolder holder, int position) {
         User user = usersList.get(position);
         holder.usernameField.setText(user.getUsername());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //itemClickListener.onItemClick(holder.getAdapterPosition());
+                User user = usersList.get(position);
+                Intent intent = new Intent(context, ViewProfileActivity.class);
+                intent.putExtra("user", user);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return usersList.size();
     }
+
+    // TODO: Pass in generic listener for further abstraction
+//    public void setOnClickListener(OnClickListener onClickListener){
+//        this.itemClickListener = onClickListener;
+//    }
+
+//    public interface OnClickListener {
+//        void onItemClick(int position);
+//    }
 
     public void clear(){
         usersList.clear();
@@ -73,4 +97,8 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.UserHold
     public boolean isEmpty() {
         return usersList.isEmpty();
     }
+
+//    public User getItem(int position){
+//        return usersList.get(position);
+//    }
 }
