@@ -3,12 +3,15 @@ package com.example.vybe;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.RectF;
 import android.graphics.drawable.ColorDrawable;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -179,7 +182,8 @@ public class MyVibesActivity extends AppCompatActivity {
         vibesRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         vibesRecyclerView.setAdapter(myVibesAdapter);
 
-        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
                 return false;
@@ -187,47 +191,59 @@ public class MyVibesActivity extends AppCompatActivity {
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                myVibesAdapter.deleteItem(viewHolder.getAdapterPosition(), vibeEventDBPath);
+                int position = viewHolder.getAdapterPosition();
+
+                if (direction == ItemTouchHelper.LEFT) {
+                    myVibesAdapter.deleteItem(position, vibeEventDBPath);
+                } else if (direction == ItemTouchHelper.RIGHT) {
+                    Intent intent = new Intent(MyVibesActivity.this, AddEditVibeEventActivity.class);
+                    VibeEvent vibeEvent = vibeEventList.get(position);
+                    intent.putExtra("vibeEvent", vibeEvent);
+                    startActivity(intent);
+                }
             }
 
             @Override
             public void onChildDrawOver(@NonNull Canvas c, @NonNull RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
                 super.onChildDrawOver(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
 
+                drawButtons(c, viewHolder, dX);
+            }
+
+            private void drawButtons(Canvas c, RecyclerView.ViewHolder viewHolder, float dX) {
+                float corners = 16;
+
                 View itemView = viewHolder.itemView;
-                final ColorDrawable background = new ColorDrawable(Color.RED);
-                background.setBounds(itemView.getRight() + (int) dX, itemView.getTop(), itemView.getRight(), itemView.getBottom());
-                background.draw(c);
+                Paint p = new Paint();
+                RectF button = new RectF();
+                String msg = "";
+
+                if (dX < 0) {   // Swipe left
+                    button.set(itemView.getRight() + dX, itemView.getTop(), itemView.getRight(), itemView.getBottom());
+                    p.setColor(Color.RED);
+                    msg = "DELETE";
+                } else if (dX > 0) {    // Swipe right
+                    button.set(itemView.getLeft(), itemView.getTop(), itemView.getLeft() + dX, itemView.getBottom());
+                    p.setColor(Color.BLUE);
+                    msg = "EDIT";
+                }
+
+                c.drawRoundRect(button, corners, corners, p);
+                drawText(msg, c, button, p);
+            }
+
+            private void drawText(String text, Canvas c, RectF button, Paint p) {
+                float textSize = 60;
+                p.setColor(Color.WHITE);
+                p.setAntiAlias(true);
+                p.setTextSize(textSize);
+
+                float textWidth = p.measureText(text);
+                c.drawText(text, button.centerX()-(textWidth/2), button.centerY()+(textSize/2), p);
             }
         };
 
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(vibesRecyclerView);
-
-
-//        vibesRecyclerView.setOnItemLongClickListener((AdapterView<?> parent, View view, int position, long id) -> {
-//                AlertDialog.Builder builder = new AlertDialog.Builder(MyVibesActivity.this);
-//
-//                builder.setCancelable(true);
-//
-//                // Edit Vibe Event if user clicks on "Edit" button
-//                builder.setPositiveButton("Edit", (DialogInterface dialog, int editId) -> {
-//                    Intent editIntent = new Intent(MyVibesActivity.this, AddEditVibeEventActivity.class);
-//                    VibeEvent vibeEvent = vibeEventList.get(position);
-//                    editIntent.putExtra("vibeEvent", vibeEvent);
-//                    startActivity(editIntent);
-//                });
-//
-//                // Delete a Vibe Event if user clicks on "Delete" button
-//                builder.setNegativeButton("Delete", (DialogInterface dialog, int deleteId) -> {
-//                    VibeEvent vibeEvent = vibeEventList.get(position);
-//                    db.collection(vibeEventDBPath).document(vibeEvent.getId()).delete();
-//                    myVibesAdapter.notifyDataSetChanged();
-//                });
-//
-//                AlertDialog alertDialog = builder.create();
-//                alertDialog.show();
-//                return true;
-//        });
 
         addVibeEventBtn.setOnClickListener((View view) -> {
             Intent addIntent = new Intent(MyVibesActivity.this, AddEditVibeEventActivity.class);
