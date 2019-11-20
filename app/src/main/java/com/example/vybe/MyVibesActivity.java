@@ -220,11 +220,13 @@ public class MyVibesActivity extends AppCompatActivity {
 
                 if (dX < 0) {   // Swipe left
                     button.set(itemView.getRight() + dX, itemView.getTop(), itemView.getRight(), itemView.getBottom());
-                    p.setColor(Color.RED);
+                    int deleteColor = getResources().getColor(R.color.Red);
+                    p.setColor(deleteColor);
                     msg = "DELETE";
                 } else if (dX > 0) {    // Swipe right
                     button.set(itemView.getLeft(), itemView.getTop(), itemView.getLeft() + dX, itemView.getBottom());
-                    p.setColor(Color.BLUE);
+                    int editColor = getResources().getColor(R.color.colorAccent);
+                    p.setColor(editColor);
                     msg = "EDIT";
                 }
 
