@@ -74,6 +74,7 @@ public class MyVibesActivity extends AppCompatActivity {
     private Button myMapBtn;
     private Button socialBtn;
     private ImageButton profileBtn;
+    private Button requestBtn;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private String vibeEventDBPath;
@@ -91,6 +92,7 @@ public class MyVibesActivity extends AppCompatActivity {
         myMapBtn = findViewById(R.id.my_map_btn);
         socialBtn = findViewById(R.id.social_btn);
         profileBtn = findViewById(R.id.profile_btn);
+        requestBtn = findViewById(R.id.request_btn);
 
         vibeEventDBPath = "Users/" + mAuth.getCurrentUser().getUid() + "/VibeEvents";
         
@@ -224,6 +226,10 @@ public class MyVibesActivity extends AppCompatActivity {
             public void onClick(View v) {
                 startActivity(new Intent(MyVibesActivity.this, SocialActivity.class));
             }
+        });
+
+        requestBtn.setOnClickListener(view -> {
+            startActivity(new Intent(MyVibesActivity.this, MyRequestsActivity.class));
         });
     }
 
