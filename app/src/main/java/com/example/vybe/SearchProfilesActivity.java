@@ -57,7 +57,10 @@ public class SearchProfilesActivity extends AppCompatActivity {
             for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                 String username = (String) doc.getData().get("username");
                 String email = (String) doc.getData().get("email");
-                usersList.add(new User(username, email));   // Populate users list
+                String uid = doc.getId();
+                User searchedUser = new User(username, email);
+                searchedUser.setUserID(uid);
+                usersList.add(searchedUser);   // Populate users list
             }
         });
 
