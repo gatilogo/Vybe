@@ -2,6 +2,7 @@ package com.example.vybe;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -77,6 +78,9 @@ public class MyRequestsActivity extends AppCompatActivity implements ProfileAdap
         profileAdapter = new ProfileAdapter(this, R.layout.user_item, requestList);
         userRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         userRecyclerView.setAdapter(profileAdapter);
+
+        DividerItemDecoration itemDecor = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        userRecyclerView.addItemDecoration(itemDecor);
 
         myVibesBtn.setOnClickListener((View v) -> {
             finish();

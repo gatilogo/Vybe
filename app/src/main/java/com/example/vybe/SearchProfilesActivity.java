@@ -2,6 +2,7 @@ package com.example.vybe;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -81,6 +82,9 @@ public class SearchProfilesActivity extends AppCompatActivity implements Profile
         // Set adapter
         searchRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         searchRecyclerView.setAdapter(profileAdapter);
+
+        DividerItemDecoration itemDecor = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        searchRecyclerView.addItemDecoration(itemDecor);
 
         // Listener for the search view
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
