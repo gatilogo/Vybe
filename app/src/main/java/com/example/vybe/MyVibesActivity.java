@@ -74,8 +74,8 @@ public class MyVibesActivity extends AppCompatActivity {
 
     private static final String TAG = "MyVibesActivity";
 
-    ArrayList<VibeEvent> vibeEventList;
-    MyVibesAdapter myVibesAdapter;
+    private ArrayList<VibeEvent> vibeEventList;
+    private MyVibesAdapter myVibesAdapter;
 
     private boolean mLocationPermissionGranted = false;
 
@@ -93,7 +93,6 @@ public class MyVibesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_vibes);
-        Intent intent = getIntent();
         Log.d(TAG, "onCreate: In my vibes");
 
         filterSpinner = findViewById(R.id.filter_spinner);
@@ -104,8 +103,9 @@ public class MyVibesActivity extends AppCompatActivity {
         profileBtn = findViewById(R.id.profile_btn);
 
         vibeEventDBPath = "Users/" + mAuth.getCurrentUser().getUid() + "/VibeEvents";
-        
         allFlag = true; // Ask jakey
+
+        buildRecyclerView();
 
         profileBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -176,83 +176,6 @@ public class MyVibesActivity extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {}
         });
-
-//        Vibe vibe, Date date, String reason, String socialSituation
-        vibeEventList = new ArrayList<>();
-
-        myVibesAdapter = new MyVibesAdapter(this, R.layout.my_vibe_item, vibeEventList);
-        vibesRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        vibesRecyclerView.setAdapter(myVibesAdapter);
-
-        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-
-            @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                int position = viewHolder.getAdapterPosition();
-
-                if (direction == ItemTouchHelper.LEFT) {
-                    myVibesAdapter.deleteItem(position, vibeEventDBPath);
-                } else if (direction == ItemTouchHelper.RIGHT) {
-                    Intent intent = new Intent(MyVibesActivity.this, AddEditVibeEventActivity.class);
-                    VibeEvent vibeEvent = vibeEventList.get(position);
-                    intent.putExtra("vibeEvent", vibeEvent);
-                    startActivity(intent);
-                }
-            }
-
-            @Override
-            public void onChildDrawOver(@NonNull Canvas c, @NonNull RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-                super.onChildDrawOver(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-
-                drawButtons(c, viewHolder, dX);
-            }
-
-            private void drawButtons(Canvas c, RecyclerView.ViewHolder viewHolder, float dX) {
-                float corners = 16;
-
-                View itemView = viewHolder.itemView;
-                Paint p = new Paint();
-                RectF button = new RectF();
-                String msg = "";
-
-                if (dX < 0) {   // Swipe left
-                    button.set(itemView.getRight() + dX, itemView.getTop(), itemView.getRight(), itemView.getBottom());
-                    int deleteColor = ContextCompat.getColor(MyVibesActivity.this, R.color.Delete);
-                    p.setColor(deleteColor);
-                    msg = "DELETE";
-                } else if (dX > 0) {    // Swipe right
-                    button.set(itemView.getLeft(), itemView.getTop(), itemView.getLeft() + dX, itemView.getBottom());
-                    int position = viewHolder.getAdapterPosition();
-                    VibeEvent vibeEvent = vibeEventList.get(position);
-                    int vibeColor = vibeEvent.getVibe().getColor();
-                    int editColor = ContextCompat.getColor(MyVibesActivity.this, vibeColor);
-                    p.setColor(editColor);
-                    msg = "EDIT";
-                }
-
-                c.drawRoundRect(button, corners, corners, p);
-                drawText(msg, c, button, p);
-            }
-
-            private void drawText(String text, Canvas c, RectF button, Paint p) {
-                float textSize = 60;
-                p.setColor(Color.WHITE);
-                p.setAntiAlias(true);
-                p.setTextSize(textSize);
-
-                float textWidth = p.measureText(text);
-                c.drawText(text, button.centerX()-(textWidth/2), button.centerY()+(textSize/2), p);
-            }
-        };
-
-        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(vibesRecyclerView);
-        DividerItemDecoration itemDecor = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
-        vibesRecyclerView.addItemDecoration(itemDecor);
 
         addVibeEventBtn.setOnClickListener((View view) -> {
             Intent addIntent = new Intent(MyVibesActivity.this, AddEditVibeEventActivity.class);
@@ -409,5 +332,23 @@ public class MyVibesActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    private void buildRecyclerView() {
+        vibeEventList = new ArrayList<>();
+
+        myVibesAdapter = new MyVibesAdapter(this, R.layout.my_vibe_item, vibeEventList);
+        vibesRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        vibesRecyclerView.setAdapter(myVibesAdapter);
+
+        SwipeItemTouchHelper itemTouchHelperCallback = new SwipeItemTouchHelper(
+                this,
+                0,
+                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT,
+                myVibesAdapter,
+                vibeEventDBPath);
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(vibesRecyclerView);
+        DividerItemDecoration itemDecor = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        vibesRecyclerView.addItemDecoration(itemDecor);
     }
 }

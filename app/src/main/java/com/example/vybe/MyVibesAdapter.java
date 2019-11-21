@@ -91,4 +91,8 @@ public class MyVibesAdapter extends RecyclerView.Adapter<MyVibesAdapter.VibeEven
         notifyItemRemoved(position);
     }
 
+    public VibeEvent getItem(int position) {
+        return vibeEventList.get(position);
+    }
+
 }
