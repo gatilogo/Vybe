@@ -2,29 +2,19 @@ package com.example.vybe;
 
 import android.content.Context;
 import android.content.Intent;
-import android.icu.text.SimpleDateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.vybe.Models.VibeEvent;
-import com.example.vybe.Models.vibefactory.Vibe;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.TextStyle;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
 
 /**
  * MyVibesAdapter is a CustomList used for the ListAdapter in the main activity that serves as the

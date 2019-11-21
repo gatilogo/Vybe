@@ -3,16 +3,10 @@ package com.example.vybe;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.RectF;
-import android.graphics.drawable.ColorDrawable;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -58,7 +52,6 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 
-import static androidx.recyclerview.widget.RecyclerView.HORIZONTAL;
 import static com.example.vybe.util.Constants.ERROR_DIALOG_REQUEST;
 import static com.example.vybe.util.Constants.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
 import static com.example.vybe.util.Constants.PERMISSIONS_REQUEST_ENABLE_GPS;
@@ -73,11 +66,14 @@ import static com.example.vybe.util.Constants.PERMISSIONS_REQUEST_ENABLE_GPS;
 public class MyVibesActivity extends AppCompatActivity {
 
     private static final String TAG = "MyVibesActivity";
+    private boolean mLocationPermissionGranted = false;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     private ArrayList<VibeEvent> vibeEventList;
     private MyVibesAdapter myVibesAdapter;
-
-    private boolean mLocationPermissionGranted = false;
+    private String vibeEventDBPath;
+    private boolean allFlag;
 
     private Spinner filterSpinner;
     private RecyclerView vibesRecyclerView;
@@ -85,10 +81,7 @@ public class MyVibesActivity extends AppCompatActivity {
     private Button myMapBtn;
     private Button socialBtn;
     private ImageButton profileBtn;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    private String vibeEventDBPath;
-    private boolean allFlag;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
