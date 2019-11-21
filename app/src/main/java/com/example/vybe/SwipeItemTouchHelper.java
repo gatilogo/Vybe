@@ -16,6 +16,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.vybe.AddEdit.AddEditVibeEventActivity;
 import com.example.vybe.Models.VibeEvent;
 
+/**
+ * SwipeItemTouchHelper includes the Edit and Delete swipe functionality for a MyVibesAdapter item.
+ * This is attached to the recycler view defined in the MyVibesActivity class.
+ */
 public class SwipeItemTouchHelper extends ItemTouchHelper.SimpleCallback {
 
     private MyVibesAdapter myVibesAdapter;
@@ -63,9 +67,9 @@ public class SwipeItemTouchHelper extends ItemTouchHelper.SimpleCallback {
         RectF swipeAction = new RectF();
         String msg = "";
 
-        if (dX < 0) {   // Swipe left
+        if (dX < 0) {           // Swipe left
             swipeAction.set(itemView.getRight() + dX, itemView.getTop(), itemView.getRight(), itemView.getBottom());
-            int deleteColor = ContextCompat.getColor(context, R.color.Delete);
+            int deleteColor = ContextCompat.getColor(context, R.color.Salmon);
             p.setColor(deleteColor);
             msg = "DELETE";
         } else if (dX > 0) {    // Swipe right
