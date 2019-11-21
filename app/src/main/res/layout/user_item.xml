@@ -34,14 +34,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@id/username_text_view"
-            android:background="@drawable/ic_peppery" />
+            android:background="@drawable/ic_check" />
 
         <ImageButton
             android:id="@+id/reject_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@id/accept_btn"
-            android:background="@drawable/ic_peach" />
+            android:background="@drawable/ic_reject" />
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>
