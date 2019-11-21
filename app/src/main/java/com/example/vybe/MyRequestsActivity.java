@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.vybe.AddEdit.AddEditVibeEventActivity;
@@ -41,6 +42,12 @@ public class MyRequestsActivity extends AppCompatActivity implements ProfileAdap
     @Override
     public void onItemClick(int position) {
         Toast.makeText(this, "Can't view profile from here I guess", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onDeleteClick(int position) {
+        // TODO: actually delete request from database
+        profileAdapter.deleteItem(position);
     }
 
     @Override

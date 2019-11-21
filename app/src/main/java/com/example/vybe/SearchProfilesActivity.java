@@ -49,6 +49,11 @@ public class SearchProfilesActivity extends AppCompatActivity implements Profile
     }
 
     @Override
+    public void onDeleteClick(int position) {
+        Toast.makeText(this, "This shouldnt be here remove later i guess", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_profiles);

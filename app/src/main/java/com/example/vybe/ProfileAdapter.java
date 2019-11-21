@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -32,17 +33,24 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.UserHold
 
     public class UserHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView usernameField;
+        private ImageView deleteBtn;
 
         public UserHolder(@NonNull View view) {
             super(view);
             usernameField = view.findViewById(R.id.username_text_view);
+            deleteBtn = view.findViewById(R.id.delete_img);
             itemView.setOnClickListener(this);
+            // TODO: make this more generic and stub it out if possible?
+            deleteBtn.setOnClickListener((View) -> {
+                itemClickListener.onDeleteClick(getAdapterPosition());
+            });
         }
 
         @Override
         public void onClick(View v) {
             itemClickListener.onItemClick(getAdapterPosition());
         }
+
     }
 
     public ProfileAdapter(OnItemClickListener itemClickListener, int resource, ArrayList<User> usersList) {
@@ -71,6 +79,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.UserHold
 
     public interface OnItemClickListener {
         void onItemClick(int position);
+        void onDeleteClick(int position);
     }
 
     public void clear(){
@@ -85,6 +94,11 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.UserHold
 
     public boolean isEmpty() {
         return usersList.isEmpty();
+    }
+
+    public void deleteItem(int position) {
+        usersList.remove(position);
+        notifyItemRemoved(position);
     }
 
 }
