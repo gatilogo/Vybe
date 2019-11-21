@@ -28,8 +28,8 @@ public class MyRequestsActivity extends AppCompatActivity implements ProfileAdap
 
     private static final String TAG = "MyRequestsActivity";
 
-    ArrayList<User> requestList;
-    ProfileAdapter profileAdapter;
+    private ArrayList<User> requestList;
+    private ProfileAdapter profileAdapter;
 
     private RecyclerView userRecyclerView;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -49,7 +49,7 @@ public class MyRequestsActivity extends AppCompatActivity implements ProfileAdap
     }
 
     @Override
-    public void onDeleteClick(int position) {
+    public void onRejectClick(int position) {
         // TODO: actually delete request from database
         declineFollowRequest(position);
 

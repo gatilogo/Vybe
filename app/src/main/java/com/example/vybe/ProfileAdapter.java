@@ -50,7 +50,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.UserHold
             });
 
             rejectBtn.setOnClickListener((View) -> {
-                itemClickListener.onDeleteClick(getAdapterPosition());
+                itemClickListener.onRejectClick(getAdapterPosition());
             });
         }
 
@@ -88,7 +88,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.UserHold
     public interface OnItemClickListener {
         void onItemClick(int position);
         void onAcceptClick(int position);
-        void onDeleteClick(int position); // TODO: rename to rejectClick?
+        void onRejectClick(int position);
     }
 
     public void clear(){
