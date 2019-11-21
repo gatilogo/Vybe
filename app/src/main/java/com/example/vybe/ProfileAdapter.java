@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -33,15 +35,15 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.UserHold
 
     public class UserHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView usernameField;
-        private ImageView deleteBtn;
+        private ImageButton rejectBtn;
 
         public UserHolder(@NonNull View view) {
             super(view);
             usernameField = view.findViewById(R.id.username_text_view);
-            deleteBtn = view.findViewById(R.id.delete_img);
+            rejectBtn = view.findViewById(R.id.reject_btn);
             itemView.setOnClickListener(this);
             // TODO: make this more generic and stub it out if possible?
-            deleteBtn.setOnClickListener((View) -> {
+            rejectBtn.setOnClickListener((View) -> {
                 itemClickListener.onDeleteClick(getAdapterPosition());
             });
         }

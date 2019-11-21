@@ -29,14 +29,13 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <ImageView
-            android:id="@+id/delete_img"
+
+        <ImageButton
+            android:id="@+id/reject_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_toEndOf="@+id/username_text_view"
-            android:padding="5dp"
-            android:src="@drawable/ic_peach" />
+            android:layout_toEndOf="@id/username_text_view"
+            android:background="@drawable/ic_peach" />
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>
