@@ -31,6 +31,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -57,6 +58,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 
+import static androidx.recyclerview.widget.RecyclerView.HORIZONTAL;
 import static com.example.vybe.util.Constants.ERROR_DIALOG_REQUEST;
 import static com.example.vybe.util.Constants.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
 import static com.example.vybe.util.Constants.PERMISSIONS_REQUEST_ENABLE_GPS;
@@ -249,6 +251,8 @@ public class MyVibesActivity extends AppCompatActivity {
         };
 
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(vibesRecyclerView);
+        DividerItemDecoration itemDecor = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        vibesRecyclerView.addItemDecoration(itemDecor);
 
         addVibeEventBtn.setOnClickListener((View view) -> {
             Intent addIntent = new Intent(MyVibesActivity.this, AddEditVibeEventActivity.class);
