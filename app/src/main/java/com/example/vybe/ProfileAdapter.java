@@ -36,13 +36,19 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.UserHold
     public class UserHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView usernameField;
         private ImageButton rejectBtn;
+        private ImageButton acceptBtn;
 
         public UserHolder(@NonNull View view) {
             super(view);
             usernameField = view.findViewById(R.id.username_text_view);
+            acceptBtn = view.findViewById(R.id.accept_btn);
             rejectBtn = view.findViewById(R.id.reject_btn);
             itemView.setOnClickListener(this);
             // TODO: make this more generic and stub it out if possible?
+            acceptBtn.setOnClickListener((View) -> {
+                itemClickListener.onAcceptClick(getAdapterPosition());
+            });
+
             rejectBtn.setOnClickListener((View) -> {
                 itemClickListener.onDeleteClick(getAdapterPosition());
             });
@@ -81,7 +87,8 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.UserHold
 
     public interface OnItemClickListener {
         void onItemClick(int position);
-        void onDeleteClick(int position);
+        void onAcceptClick(int position);
+        void onDeleteClick(int position); // TODO: rename to rejectClick?
     }
 
     public void clear(){

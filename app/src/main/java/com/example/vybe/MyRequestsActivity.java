@@ -44,6 +44,12 @@ public class MyRequestsActivity extends AppCompatActivity implements ProfileAdap
         Toast.makeText(this, "Can't view profile from here I guess", Toast.LENGTH_LONG).show();
     }
 
+    // TODO: Implement correct request functionality in these buttons
+    @Override
+    public void onAcceptClick(int position) {
+        Toast.makeText(this, "ACCEPT REQUEST HERE", Toast.LENGTH_LONG).show();
+    }
+
     @Override
     public void onDeleteClick(int position) {
         // TODO: actually delete request from database

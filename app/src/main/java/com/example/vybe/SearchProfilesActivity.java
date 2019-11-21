@@ -49,6 +49,11 @@ public class SearchProfilesActivity extends AppCompatActivity implements Profile
     }
 
     @Override
+    public void onAcceptClick(int position) {
+        Toast.makeText(this, "This shouldnt be here remove later i guess", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
     public void onDeleteClick(int position) {
         Toast.makeText(this, "This shouldnt be here remove later i guess", Toast.LENGTH_LONG).show();
     }
