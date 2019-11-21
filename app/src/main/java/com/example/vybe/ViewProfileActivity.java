@@ -7,14 +7,19 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.vybe.Models.User;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.HashMap;
 
 /**
  * This activity still does nothing but will be fixed later
@@ -51,6 +56,7 @@ public class ViewProfileActivity extends AppCompatActivity {
                 sendRequestBtn.setVisibility(View.GONE);
             } else {
                 logoutBtn.setVisibility(View.GONE);
+
             }
 
             usernameTextView.setText(user.getUsername());
@@ -64,6 +70,19 @@ public class ViewProfileActivity extends AppCompatActivity {
             restart.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(restart);
         });
+
+        sendRequestBtn.setOnClickListener(view -> {
+            String otherUserID = user.getUserID();
+            String requestPath = "Users/" + otherUserID + "/Requests";
+
+            // TODO: set the correct username/display name from/for mAuth.getCurrentUser()
+            User self = new User(mAuth.getCurrentUser().getEmail());
+            self.setUserID(mAuth.getCurrentUser().getUid());
+
+            db.collection(requestPath).document(self.getUserID()).set(self);
+        });
+
+
 
     }
 }
