@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.vybe.AddEdit.AddEditVibeEventActivity;
@@ -44,15 +43,24 @@ public class MyRequestsActivity extends AppCompatActivity implements ProfileAdap
         Toast.makeText(this, "Can't view profile from here I guess", Toast.LENGTH_LONG).show();
     }
 
-    // TODO: Implement correct request functionality in these buttons
     @Override
     public void onAcceptClick(int position) {
-        Toast.makeText(this, "ACCEPT REQUEST HERE", Toast.LENGTH_LONG).show();
+        acceptFollowRequest(position);
     }
 
     @Override
     public void onDeleteClick(int position) {
         // TODO: actually delete request from database
+        declineFollowRequest(position);
+
+    }
+
+    //TODO: stub out request functionality into its own, singleton class maybe?
+    public void acceptFollowRequest(int position) {
+        Toast.makeText(this, "ACCEPT REQUEST HERE", Toast.LENGTH_LONG).show();
+    }
+
+    public void declineFollowRequest(int position) {
         profileAdapter.deleteItem(position);
     }
 
@@ -60,7 +68,6 @@ public class MyRequestsActivity extends AppCompatActivity implements ProfileAdap
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_requests);
-        Intent intent = getIntent();
 
         userRecyclerView = findViewById(R.id.my_request_list);
         addVibeEventBtn = findViewById(R.id.add_vibe_event_btn);
@@ -116,13 +123,7 @@ public class MyRequestsActivity extends AppCompatActivity implements ProfileAdap
         query.get().addOnSuccessListener((QuerySnapshot queryDocumentSnapshots) -> {
             requestList.clear();
             for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                User user = new User();
-                String email = (String) doc.get("email");
-                String userID = (String) doc.get("userID");
-                String username = (String) doc.get("username");
-                user.setEmail(email);
-                user.setUserID(userID);
-                user.setUsername(username);
+                User user = doc.toObject(User.class);
                 requestList.add(user);
             }
             profileAdapter.notifyDataSetChanged();
