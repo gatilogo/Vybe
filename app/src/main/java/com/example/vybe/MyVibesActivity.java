@@ -25,6 +25,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.vybe.AddEdit.AddEditVibeEventActivity;
 import com.example.vybe.Models.User;
@@ -62,32 +66,31 @@ import static com.example.vybe.util.Constants.PERMISSIONS_REQUEST_ENABLE_GPS;
 public class MyVibesActivity extends AppCompatActivity {
 
     private static final String TAG = "MyVibesActivity";
-
-    ArrayList<VibeEvent> vibeEventList;
-    MyVibesAdapter myVibesAdapter;
-
     private boolean mLocationPermissionGranted = false;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
+    private ArrayList<VibeEvent> vibeEventList;
+    private MyVibesAdapter myVibesAdapter;
+    private String vibeEventDBPath;
+    private boolean allFlag;
 
     private Spinner filterSpinner;
-    private ListView vibesListView;
+    private RecyclerView vibesRecyclerView;
     private Button addVibeEventBtn;
     private Button myMapBtn;
     private Button socialBtn;
-    private ImageButton profileBtn;
     private Button requestBtn;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    private String vibeEventDBPath;
-    private boolean allFlag;
+    private ImageButton profileBtn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_vibes);
-        Intent intent = getIntent();
         Log.d(TAG, "onCreate: In my vibes");
 
         filterSpinner = findViewById(R.id.filter_spinner);
-        vibesListView = findViewById(R.id.my_vibe_list);
+        vibesRecyclerView = findViewById(R.id.my_vibe_list);
         addVibeEventBtn = findViewById(R.id.add_vibe_event_btn);
         myMapBtn = findViewById(R.id.my_map_btn);
         socialBtn = findViewById(R.id.social_btn);
@@ -95,8 +98,9 @@ public class MyVibesActivity extends AppCompatActivity {
         requestBtn = findViewById(R.id.request_btn);
 
         vibeEventDBPath = "Users/" + mAuth.getCurrentUser().getUid() + "/VibeEvents";
-        
         allFlag = true; // Ask jakey
+
+        buildRecyclerView();
 
         profileBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -166,45 +170,6 @@ public class MyVibesActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {}
-        });
-
-//        Vibe vibe, Date date, String reason, String socialSituation
-        vibeEventList = new ArrayList<>();
-
-        myVibesAdapter = new MyVibesAdapter(this, R.layout.my_vibe_item, vibeEventList);
-        vibesListView.setAdapter(myVibesAdapter);
-
-
-        vibesListView.setOnItemClickListener((AdapterView<?> parent, View view, int position, long id) ->  {
-            Intent viewVibe = new Intent(MyVibesActivity.this, ViewVibeActivity.class);
-            VibeEvent vibeEvent = vibeEventList.get(position);
-            viewVibe.putExtra("vibeEvent", vibeEvent);
-            startActivity(viewVibe);
-        });
-
-        vibesListView.setOnItemLongClickListener((AdapterView<?> parent, View view, int position, long id) -> {
-                AlertDialog.Builder builder = new AlertDialog.Builder(MyVibesActivity.this);
-                
-                builder.setCancelable(true);
-
-                // Edit Vibe Event if user clicks on "Edit" button
-                builder.setPositiveButton("Edit", (DialogInterface dialog, int editId) -> {
-                    Intent editIntent = new Intent(MyVibesActivity.this, AddEditVibeEventActivity.class);
-                    VibeEvent vibeEvent = vibeEventList.get(position);
-                    editIntent.putExtra("vibeEvent", vibeEvent);
-                    startActivity(editIntent);
-                });
-
-                // Delete a Vibe Event if user clicks on "Delete" button
-                builder.setNegativeButton("Delete", (DialogInterface dialog, int deleteId) -> {
-                    VibeEvent vibeEvent = vibeEventList.get(position);
-                    db.collection(vibeEventDBPath).document(vibeEvent.getId()).delete();
-                    myVibesAdapter.notifyDataSetChanged();
-                });
-
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
-                return true;
         });
 
         addVibeEventBtn.setOnClickListener((View view) -> {
@@ -366,5 +331,23 @@ public class MyVibesActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    private void buildRecyclerView() {
+        vibeEventList = new ArrayList<>();
+
+        myVibesAdapter = new MyVibesAdapter(this, R.layout.my_vibe_item, vibeEventList);
+        vibesRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        vibesRecyclerView.setAdapter(myVibesAdapter);
+
+        SwipeItemTouchHelper itemTouchHelperCallback = new SwipeItemTouchHelper(
+                this,
+                0,
+                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT,
+                myVibesAdapter,
+                vibeEventDBPath);
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(vibesRecyclerView);
+        DividerItemDecoration itemDecor = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        vibesRecyclerView.addItemDecoration(itemDecor);
     }
 }

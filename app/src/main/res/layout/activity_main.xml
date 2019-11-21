@@ -15,7 +15,7 @@
         android:layout_gravity="center"
         android:layout_weight="0"
         android:padding="5dp"
-        android:src="@drawable/ic_title_vibe" />
+        android:src="@drawable/ic_title_vibe_alt" />
 
     <TextView
         android:id="@+id/app_title"
