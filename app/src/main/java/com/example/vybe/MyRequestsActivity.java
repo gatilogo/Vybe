@@ -16,6 +16,7 @@ import com.example.vybe.AddEdit.AddEditVibeEventActivity;
 import com.example.vybe.Models.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
@@ -50,17 +51,27 @@ public class MyRequestsActivity extends AppCompatActivity implements ProfileAdap
 
     @Override
     public void onRejectClick(int position) {
-        // TODO: actually delete request from database
-        declineFollowRequest(position);
-
+        removeFollowRequest(position);
     }
 
     //TODO: stub out request functionality into its own, singleton class maybe?
     public void acceptFollowRequest(int position) {
-        Toast.makeText(this, "ACCEPT REQUEST HERE", Toast.LENGTH_LONG).show();
+        User user = requestList.get(position);
+        removeFollowRequest(position);
+        String myID = mAuth.getCurrentUser().getUid();
+        String theirID = user.getUserID();
+        db.collection("Users").document(myID)
+                .update("Followers", FieldValue.arrayUnion(theirID));
+
+        db.collection("Users").document(theirID)
+                .update("Following", FieldValue.arrayUnion(myID));
+
     }
 
-    public void declineFollowRequest(int position) {
+    public void removeFollowRequest(int position) {
+        User user = requestList.get(position);
+        String requestDBPath = "Users/" + mAuth.getCurrentUser().getUid() + "/Requests";
+        db.collection(requestDBPath).document(user.getUserID()).delete();
         profileAdapter.deleteItem(position);
     }
 
