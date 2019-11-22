@@ -83,6 +83,7 @@ public class SocialActivity extends AppCompatActivity {
                                 for (QueryDocumentSnapshot document: queryDoc){
                                     vibeEventList.add(document.toObject(VibeEvent.class));
                                 }
+                                // TODO: Sort by datetime
                                 socialVibesAdapter.notifyDataSetChanged();
                             }
                         });
