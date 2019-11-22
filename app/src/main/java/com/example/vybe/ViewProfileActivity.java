@@ -54,9 +54,16 @@ public class ViewProfileActivity extends AppCompatActivity {
 
             if (user.getEmail().equals(mAuth.getCurrentUser().getEmail())) {
                 sendRequestBtn.setVisibility(View.GONE);
+
             } else {
                 logoutBtn.setVisibility(View.GONE);
-
+                // TODO: hide both buttons if other user is already followed pls and tnx
+                // Refactor user class arraylist pls and thx ask jakey
+                if (user.getFollowers() != null){
+                    if (user.getFollowers().contains(mAuth.getCurrentUser().getUid())) {
+                        sendRequestBtn.setVisibility(View.GONE);
+                    }
+                }
             }
 
             usernameTextView.setText(user.getUsername());
@@ -74,15 +81,16 @@ public class ViewProfileActivity extends AppCompatActivity {
         sendRequestBtn.setOnClickListener(view -> {
             String otherUserID = user.getUserID();
             String requestPath = "Users/" + otherUserID + "/Requests";
+            FirebaseUser selfFB = mAuth.getCurrentUser();
 
             // TODO: set the correct username/display name from/for mAuth.getCurrentUser()
-            User self = new User(mAuth.getCurrentUser().getEmail());
-            self.setUserID(mAuth.getCurrentUser().getUid());
+            User self = new User(selfFB.getEmail());
+            self.setUserID(selfFB.getUid());
+            self.setUsername(selfFB.getDisplayName());
 
             db.collection(requestPath).document(self.getUserID()).set(self);
+            Toast.makeText(this,"Request sent!", Toast.LENGTH_LONG).show();
         });
-
-
 
     }
 }

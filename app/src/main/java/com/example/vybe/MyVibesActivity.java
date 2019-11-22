@@ -80,6 +80,7 @@ public class MyVibesActivity extends AppCompatActivity {
     private Button addVibeEventBtn;
     private Button myMapBtn;
     private Button socialBtn;
+    private Button requestBtn;
     private ImageButton profileBtn;
 
     @Override
@@ -94,6 +95,7 @@ public class MyVibesActivity extends AppCompatActivity {
         myMapBtn = findViewById(R.id.my_map_btn);
         socialBtn = findViewById(R.id.social_btn);
         profileBtn = findViewById(R.id.profile_btn);
+        requestBtn = findViewById(R.id.request_btn);
 
         vibeEventDBPath = "Users/" + mAuth.getCurrentUser().getUid() + "/VibeEvents";
         allFlag = true; // Ask jakey
@@ -189,6 +191,10 @@ public class MyVibesActivity extends AppCompatActivity {
             public void onClick(View v) {
                 startActivity(new Intent(MyVibesActivity.this, SocialActivity.class));
             }
+        });
+
+        requestBtn.setOnClickListener(view -> {
+            startActivity(new Intent(MyVibesActivity.this, MyRequestsActivity.class));
         });
     }
 
