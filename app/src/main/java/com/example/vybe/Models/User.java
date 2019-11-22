@@ -7,8 +7,8 @@ public class User implements Serializable {
     private String userID;
     private String username;
     private String email;
-    private ArrayList<User> followers;
-    private ArrayList<User> following;
+    private ArrayList<String> followers;
+    private ArrayList<String> following;
     private ArrayList<User> requests;
 
     /**
@@ -21,11 +21,11 @@ public class User implements Serializable {
      * @param followers
      *      This is a list of all the users following this user
      * @param following
-     *      This is a list of all the users that this user follows
+     *      This is a list of all the user IDs that this user follows
      * @param requests
-     *      This is a list of all users requesting to follow this user
+     *      This is a list of all user IDs requesting to follow this user
      */
-    public User(String username, String email, ArrayList<User> followers, ArrayList<User> following, ArrayList<User> requests) {
+    public User(String username, String email, ArrayList<String> followers, ArrayList<String> following, ArrayList<User> requests) {
         this.username = username;
         this.email = email;
         this.followers = followers;
@@ -114,7 +114,7 @@ public class User implements Serializable {
      * This gets the list of users following this user
      * @return List of users following this user
      */
-    public ArrayList<User> getFollowers() {
+    public ArrayList<String> getFollowers() {
         return followers;
     }
 
@@ -123,7 +123,7 @@ public class User implements Serializable {
      * @param followers
      *      List of users following this user
      */
-    public void setFollowers(ArrayList<User> followers) {
+    public void setFollowers(ArrayList<String> followers) {
         this.followers = followers;
     }
 
@@ -131,7 +131,7 @@ public class User implements Serializable {
      * This gets the list of users this user follows
      * @return The list of users this user follows
      */
-    public ArrayList<User> getFollowing() {
+    public ArrayList<String> getFollowing() {
         return following;
     }
 
@@ -140,7 +140,7 @@ public class User implements Serializable {
      * @param following
      *      List of users this user will follow
      */
-    public void setFollowing(ArrayList<User> following) {
+    public void setFollowing(ArrayList<String> following) {
         this.following = following;
     }
 
@@ -158,7 +158,7 @@ public class User implements Serializable {
      *      List of users that want to follow this user
      */
     public void setRequests(ArrayList<User> requests) {
-        this.following = requests;
+        this.requests = requests;
     }
 
     /**
