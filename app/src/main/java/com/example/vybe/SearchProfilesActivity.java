@@ -9,9 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -28,7 +25,7 @@ import java.util.ArrayList;
 /**
  * SearchProfilesActivity enables the user to search for other participants/users of the Vybe app
  */
-public class SearchProfilesActivity extends AppCompatActivity implements ProfileAdapter.OnItemClickListener {
+public class SearchProfilesActivity extends AppCompatActivity {
 
     private static final String TAG = "SearchProfilesActivity";
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -39,24 +36,6 @@ public class SearchProfilesActivity extends AppCompatActivity implements Profile
 
     private SearchView searchView;
     private RecyclerView searchRecyclerView;
-
-    @Override
-    public void onItemClick(int position) {
-        User user = searchList.get(position);
-        Intent intent = new Intent(SearchProfilesActivity.this, ViewProfileActivity.class);
-        intent.putExtra("user", user);
-        startActivity(intent);
-    }
-
-    @Override
-    public void onAcceptClick(int position) {
-        Toast.makeText(this, "This shouldnt be here remove later i guess", Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onRejectClick(int position) {
-        Toast.makeText(this, "This shouldnt be here remove later i guess", Toast.LENGTH_LONG).show();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,9 +68,18 @@ public class SearchProfilesActivity extends AppCompatActivity implements Profile
 
         // Initialize search list
         searchList = new ArrayList<>();
-        // Create adapter
-        profileAdapter = new ProfileAdapter(this, R.layout.user_item, searchList);
-        // Set adapter
+
+        profileAdapter = new ProfileAdapter(R.layout.user_item, searchList);
+        profileAdapter.setOnItemClickLister(new ProfileAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                User user = searchList.get(position);
+                Intent intent = new Intent(SearchProfilesActivity.this, ViewProfileActivity.class);
+                intent.putExtra("user", user);
+                startActivity(intent);
+            }
+        });
+
         searchRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         searchRecyclerView.setAdapter(profileAdapter);
 
@@ -128,15 +116,5 @@ public class SearchProfilesActivity extends AppCompatActivity implements Profile
                 return false;
             }
         });
-
-//        searchRecyclerView.setOnClickListener(new ProfileAdapter.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(int position){
-////                User user = profileAdapter.getItem(position);
-////                Intent intent = new Intent(SearchProfilesActivity.this, ViewProfileActivity.class);
-////                intent.putExtra("user", user);
-////                startActivity(intent);
-//            }
-//        });
     }
 }

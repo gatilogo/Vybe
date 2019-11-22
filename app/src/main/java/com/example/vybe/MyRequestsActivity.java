@@ -21,7 +21,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-public class MyRequestsActivity extends AppCompatActivity implements ProfileAdapter.OnItemClickListener {
+public class MyRequestsActivity extends AppCompatActivity {
 
     private static final String TAG = "MyRequestsActivity";
 
@@ -32,42 +32,6 @@ public class MyRequestsActivity extends AppCompatActivity implements ProfileAdap
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private String userRequestDBPath;
-
-    @Override
-    public void onItemClick(int position) {
-        Toast.makeText(this, "Can't view profile from here I guess", Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onAcceptClick(int position) {
-        acceptFollowRequest(position);
-    }
-
-    @Override
-    public void onRejectClick(int position) {
-        removeFollowRequest(position);
-    }
-
-    //TODO: stub out request functionality into its own, singleton class maybe?
-    public void acceptFollowRequest(int position) {
-        User user = requestList.get(position);
-        removeFollowRequest(position);
-        String myID = mAuth.getCurrentUser().getUid();
-        String theirID = user.getUserID();
-        db.collection("Users").document(myID)
-                .update("followers", FieldValue.arrayUnion(theirID));
-
-        db.collection("Users").document(theirID)
-                .update("following", FieldValue.arrayUnion(myID));
-
-    }
-
-    public void removeFollowRequest(int position) {
-        User user = requestList.get(position);
-        String requestDBPath = "Users/" + mAuth.getCurrentUser().getUid() + "/Requests";
-        db.collection(requestDBPath).document(user.getUserID()).delete();
-        profileAdapter.deleteItem(position);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +61,19 @@ public class MyRequestsActivity extends AppCompatActivity implements ProfileAdap
             }
         });
 
-        profileAdapter = new ProfileAdapter(this, R.layout.user_item, requestList);
+        profileAdapter = new ProfileAdapter(R.layout.user_item, requestList);
+        profileAdapter.setRequestClickListener(new ProfileAdapter.OnRequestClickListener() {
+            @Override
+            public void onAcceptClick(int position) {
+                acceptFollowRequest(position);
+            }
+
+            @Override
+            public void onRejectClick(int position) {
+                removeFollowRequest(position);
+            }
+        });
+
         userRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         userRecyclerView.setAdapter(profileAdapter);
 
@@ -120,5 +96,25 @@ public class MyRequestsActivity extends AppCompatActivity implements ProfileAdap
             }
             profileAdapter.notifyDataSetChanged();
         });
+    }
+
+    //TODO: stub out request functionality into its own, singleton class maybe?
+    public void acceptFollowRequest(int position) {
+        User user = requestList.get(position);
+        removeFollowRequest(position);
+        String myID = mAuth.getCurrentUser().getUid();
+        String theirID = user.getUserID();
+        db.collection("Users").document(myID)
+                .update("followers", FieldValue.arrayUnion(theirID));
+
+        db.collection("Users").document(theirID)
+                .update("following", FieldValue.arrayUnion(myID));
+    }
+
+    public void removeFollowRequest(int position) {
+        User user = requestList.get(position);
+        String requestDBPath = "Users/" + mAuth.getCurrentUser().getUid() + "/Requests";
+        db.collection(requestDBPath).document(user.getUserID()).delete();
+        profileAdapter.deleteItem(position);
     }
 }

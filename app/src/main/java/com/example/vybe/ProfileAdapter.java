@@ -1,25 +1,17 @@
 package com.example.vybe;
 
-import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.vybe.Models.User;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * ProfileAdapter is an ArrayAdapter used in the SearchProfilesActivity class to create a
@@ -32,8 +24,18 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.UserHold
     private int resource;
 
     private OnItemClickListener itemClickListener;
+    private OnRequestClickListener requestClickListener;
 
-    public class UserHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    public interface OnRequestClickListener {
+        void onAcceptClick(int position);
+        void onRejectClick(int position);
+    }
+
+    public class UserHolder extends RecyclerView.ViewHolder {
         private TextView usernameField;
         private ImageButton rejectBtn;
         private ImageButton acceptBtn;
@@ -43,26 +45,29 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.UserHold
             usernameField = view.findViewById(R.id.username_text_view);
             acceptBtn = view.findViewById(R.id.accept_btn);
             rejectBtn = view.findViewById(R.id.reject_btn);
-            itemView.setOnClickListener(this);
+
+            if (view.getContext() instanceof SearchProfilesActivity) {
+                acceptBtn.setVisibility(View.GONE);
+                rejectBtn.setVisibility(View.GONE);
+
+                itemView.setOnClickListener((View) -> {
+                    itemClickListener.onItemClick(getAdapterPosition());
+                });
+            }
+
             // TODO: make this more generic and stub it out if possible?
             acceptBtn.setOnClickListener((View) -> {
-                itemClickListener.onAcceptClick(getAdapterPosition());
+                requestClickListener.onAcceptClick(getAdapterPosition());
             });
 
             rejectBtn.setOnClickListener((View) -> {
-                itemClickListener.onRejectClick(getAdapterPosition());
+                requestClickListener.onRejectClick(getAdapterPosition());
             });
-        }
-
-        @Override
-        public void onClick(View v) {
-            itemClickListener.onItemClick(getAdapterPosition());
         }
 
     }
 
-    public ProfileAdapter(OnItemClickListener itemClickListener, int resource, ArrayList<User> usersList) {
-        this.itemClickListener = itemClickListener;
+    public ProfileAdapter(int resource, ArrayList<User> usersList) {
         this.resource = resource;
         this.usersList = usersList;
     }
@@ -85,12 +90,6 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.UserHold
         return usersList.size();
     }
 
-    public interface OnItemClickListener {
-        void onItemClick(int position);
-        void onAcceptClick(int position);
-        void onRejectClick(int position);
-    }
-
     public void clear(){
         usersList.clear();
         this.notifyDataSetChanged();
@@ -108,6 +107,14 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.UserHold
     public void deleteItem(int position) {
         usersList.remove(position);
         notifyItemRemoved(position);
+    }
+
+    public void setOnItemClickLister(OnItemClickListener itemClickLister) {
+        this.itemClickListener = itemClickLister;
+    }
+
+    public void setRequestClickListener(OnRequestClickListener requestClickListener) {
+        this.requestClickListener = requestClickListener;
     }
 
 }
