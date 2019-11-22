@@ -27,6 +27,7 @@ public class VibeEvent implements Serializable {
     private String image;
     private double latitude;
     private double longitude;
+    private String owner = "";
 
     /**
      * Constructor called for serialization. Always requires
@@ -84,7 +85,7 @@ public class VibeEvent implements Serializable {
     public void setVibe(String vibeString) {
         this.vibe = VibeFactory.getVibe(vibeString);
     }
-    
+
 //    /**
 //     * This sets the vibe of a VibeEvent
 //     * @param vibeEmoticon The integer representing the emoticon of a vibe
@@ -194,4 +195,10 @@ public class VibeEvent implements Serializable {
     public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
+
+    public String getOwner() { return owner;}
+
+    public void setOwner(String owner) { this.owner = owner;}
+
+
 }

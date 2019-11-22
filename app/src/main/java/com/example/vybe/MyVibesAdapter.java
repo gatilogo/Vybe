@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.vybe.Models.VibeEvent;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ public class MyVibesAdapter extends RecyclerView.Adapter<MyVibesAdapter.VibeEven
 
     private static final String TAG = "MyVibesAdapter";
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private Context context;
     private ArrayList<VibeEvent> vibeEventList;
     private int resource;
@@ -60,7 +62,15 @@ public class MyVibesAdapter extends RecyclerView.Adapter<MyVibesAdapter.VibeEven
         String datetimeText = vibeEvent.getDateTimeString();
         holder.dateField.setText(datetimeText);
         holder.vibeImage.setImageResource(vibeEvent.getVibe().getEmoticon());
-        holder.vibeNameField.setText(vibeEvent.getVibe().getName());
+
+        // TODO: FIX THIS ITS UGLY
+        String displaytext = vibeEvent.getVibe().getName();
+        // IF userID != mAuth My own id then set displayText = notmyUsername + displayText;
+        if (!vibeEvent.getOwner().equals(mAuth.getCurrentUser().getDisplayName())) {
+            displaytext = "@" + vibeEvent.getOwner() + " is " + displaytext;
+        }
+
+        holder.vibeNameField.setText(displaytext);
 
         holder.itemView.setOnClickListener((View v) -> {
             Intent viewVibe = new Intent(context, ViewVibeActivity.class);
