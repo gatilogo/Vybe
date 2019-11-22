@@ -20,7 +20,7 @@ import java.util.Date;
  */
 public class VibeEvent implements Serializable {
     private Vibe vibe;
-    private Date dateTime;
+    private Date datetime;
     private String reason;
     private String socialSituation;
     private String id;
@@ -34,7 +34,7 @@ public class VibeEvent implements Serializable {
      */
     public VibeEvent() {
 
-        this.dateTime = new Date();
+        this.datetime = new Date();
         this.latitude = 0;
         this.longitude = 0;
     }
@@ -43,7 +43,7 @@ public class VibeEvent implements Serializable {
      * Default constructor for VibeEvent with provided vibe event parameters
      * @param vibe
      *      This is the name of the user selected vibe
-     * @param dateTime
+     * @param datetime
      *      This is the timestamp in which a vibe event occurs/occurred
      * @param reason
      *      This is the reason a vibe event occurred
@@ -58,9 +58,9 @@ public class VibeEvent implements Serializable {
      * @param longitude
      *      This is the longitude coordinate of where a vibe event occurred
      */
-    public VibeEvent(String vibe, Date dateTime, String reason, String socialSituation, String id, String image, double latitude, double longitude) {
+    public VibeEvent(String vibe, Date datetime, String reason, String socialSituation, String id, String image, double latitude, double longitude) {
         this.vibe = VibeFactory.getVibe(vibe);
-        this.dateTime = dateTime;
+        this.datetime = datetime;
         this.reason = reason;
         this.socialSituation = socialSituation;
         this.id = id;
@@ -84,43 +84,43 @@ public class VibeEvent implements Serializable {
     public void setVibe(String vibeString) {
         this.vibe = VibeFactory.getVibe(vibeString);
     }
-
-    /**
-     * This sets the vibe of a VibeEvent
-     * @param vibeEmoticon The integer representing the emoticon of a vibe
-     */
-    public void setVibe(int vibeEmoticon) {
-        this.vibe = VibeFactory.getVibe(vibeEmoticon);
-    }
-
-    /**
-     * This sets the vibe of a VibeEvent
-     * @param vibe The vibe to set
-     */
-    public void setVibe(Vibe vibe) {
-        this.vibe = vibe;
-    }
+    
+//    /**
+//     * This sets the vibe of a VibeEvent
+//     * @param vibeEmoticon The integer representing the emoticon of a vibe
+//     */
+//    public void setVibe(int vibeEmoticon) {
+//        this.vibe = VibeFactory.getVibe(vibeEmoticon);
+//    }
+//
+//    /**
+//     * This sets the vibe of a VibeEvent
+//     * @param vibe The vibe to set
+//     */
+//    public void setVibe(Vibe vibe) {
+//        this.vibe = vibe;
+//    }
 
     /**
      * This gets the date and time of the VibeEvent
      * @return The date and time of the event as a LocalDateTime object
      */
     public Date getDateTime() {
-        return dateTime;
+        return datetime;
     }
 
     /**
      * This sets the date and time in which a VibeEvent occurred
-     * @param dateTime The date and time of the event
+     * @param datetime The date and time of the event
      */
-    public void setDateTime(Date dateTime) {
-        this.dateTime = dateTime;
+    public void setDateTime(Date datetime) {
+        this.datetime = datetime;
     }
 
     public String getDateTimeString() {
         SimpleDateFormat formatter = new SimpleDateFormat("MMMM dd, yyyy hh:mm a");
-        Date dateTime = this.getDateTime();
-        return formatter.format(dateTime);
+        Date datetime = this.getDateTime();
+        return formatter.format(datetime);
     }
 
     /**

@@ -150,7 +150,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
 
     @Override
     public void onVibeSelected(Vibe vibe) {
-        vibeEvent.setVibe(vibe);
+        vibeEvent.setVibe(vibe.getName());
         setTheme(vibe);
     }
 

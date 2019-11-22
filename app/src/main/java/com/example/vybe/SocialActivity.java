@@ -12,9 +12,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.vybe.Models.User;
 import com.example.vybe.Models.VibeEvent;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -59,6 +62,34 @@ public class SocialActivity extends AppCompatActivity {
         searchBtn.setOnClickListener((View v) -> {
             startActivity(new Intent(SocialActivity.this, SearchProfilesActivity.class));
         });
+
+        CollectionReference collectionReference = db.collection("Users");
+
+        collectionReference.document(mAuth.getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot doc) {
+                User myProfile = doc.toObject(User.class);
+                ArrayList<String> myFollowing = myProfile.getFollowing();
+                if (myFollowing != null){
+                    vibeEventList.clear();
+                    for (String uid: myFollowing){
+                        collectionReference.document(uid)
+                                .collection("VibeEvents")
+                                .orderBy("datetime", Query.Direction.DESCENDING)
+                                .limit(1)
+                                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDoc) {
+                                for (QueryDocumentSnapshot document: queryDoc){
+                                    vibeEventList.add(document.toObject(VibeEvent.class));
+                                }
+                                socialVibesAdapter.notifyDataSetChanged();
+                            }
+                        });
+                    }
+                }
+            }
+        });
     }
 
     //TODO: Add onStart() method to populate social vibes list
@@ -66,16 +97,18 @@ public class SocialActivity extends AppCompatActivity {
     private void buildRecyclerView() {
         vibeEventList = new ArrayList<>();
 
-        // TODO: remove this temp. hardcoded in list
-        VibeEvent socialtest = new VibeEvent();
-        socialtest.setVibe("surprised");
-        vibeEventList.add(socialtest);
-
         socialVibesAdapter = new MyVibesAdapter(this, R.layout.my_vibe_item, vibeEventList);
         socialVibesRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         socialVibesRecyclerView.setAdapter(socialVibesAdapter);
 
         DividerItemDecoration itemDecor = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         socialVibesRecyclerView.addItemDecoration(itemDecor);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+
     }
 }
