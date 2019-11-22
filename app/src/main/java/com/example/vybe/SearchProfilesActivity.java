@@ -78,9 +78,11 @@ public class SearchProfilesActivity extends AppCompatActivity implements Profile
             for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                 String username = (String) doc.getData().get("username");
                 String email = (String) doc.getData().get("email");
+                ArrayList<String> followers = (ArrayList) doc.getData().get("followers");
                 String uid = doc.getId();
                 User searchedUser = new User(username, email);
                 searchedUser.setUserID(uid);
+                searchedUser.setFollowers(followers);
                 usersList.add(searchedUser);   // Populate users list
             }
         });
