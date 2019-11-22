@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#744EAA</color>
     <color name="colorPrimaryDark">#473D70</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorAccent">#B399C8</color>
 
     <color name="Red">#EA5A47</color>
     <color name="Orange">#F4AA41</color>
@@ -11,4 +11,7 @@
     <color name="Blue">#61B2E4</color>
     <color name="Gray">#D0CFCE</color>
     <color name="White">#FFFFFF</color>
+    <color name="Peach">#E67A94</color>
+    <color name="Salmon">#EC5F67</color>
+    <color name="Baby">#92D3F5</color>
 </resources>

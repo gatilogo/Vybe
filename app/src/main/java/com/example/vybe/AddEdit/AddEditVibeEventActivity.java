@@ -70,7 +70,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
         toolbar = findViewById(R.id.add_edit_vibes_toolbar);
         reasonField = findViewById(R.id.reason_edit_text);
         addBtn = findViewById(R.id.add_btn);
-        pageTitle = findViewById(R.id.add_edit_vybe_title);
+        pageTitle = findViewById(R.id.add_edit_vibe_title);
         pickLocationButton = findViewById(R.id.btn_add_location);
         vibeImage = findViewById(R.id.vibe_image);
         imageView = findViewById(R.id.imageView);
@@ -82,7 +82,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             editMode = true;
-            pageTitle.setText(getString(R.string.edit_vybe_name));
+            pageTitle.setText(getString(R.string.edit_vibe_name));
             vibeEvent = (VibeEvent) extras.getSerializable("vibeEvent");
 
             reasonField.setText(vibeEvent.getReason());

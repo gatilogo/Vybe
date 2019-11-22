@@ -36,7 +36,7 @@
             android:id="@+id/view_vibe_image_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_vibeless" />  <!-- Placeholder till we get emoticons to work-->
+            android:src="@drawable/ic_vibeless" />
 
         <TableLayout
             android:layout_width="match_parent"

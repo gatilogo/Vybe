@@ -2,13 +2,13 @@ package com.example.vybe;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -35,7 +35,7 @@ public class SearchProfilesActivity extends AppCompatActivity {
     private ProfileAdapter profileAdapter;
 
     private SearchView searchView;
-    private ListView searchListView;
+    private RecyclerView searchRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +44,7 @@ public class SearchProfilesActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate: In search profiles");
 
         searchView = findViewById(R.id.search_view);
-        searchListView = findViewById(R.id.search_list_view);
+        searchRecyclerView = findViewById(R.id.search_list_view);
 
         // Initialize list of users
         usersList = new ArrayList<>();
@@ -57,16 +57,34 @@ public class SearchProfilesActivity extends AppCompatActivity {
             for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                 String username = (String) doc.getData().get("username");
                 String email = (String) doc.getData().get("email");
-                usersList.add(new User(username, email));   // Populate users list
+                ArrayList<String> followers = (ArrayList) doc.getData().get("followers");
+                String uid = doc.getId();
+                User searchedUser = new User(username, email);
+                searchedUser.setUserID(uid);
+                searchedUser.setFollowers(followers);
+                usersList.add(searchedUser);   // Populate users list
             }
         });
 
         // Initialize search list
         searchList = new ArrayList<>();
-        // Create adapter
-        profileAdapter = new ProfileAdapter(this, R.layout.user_item, searchList);
-        // Set adapter
-        searchListView.setAdapter(profileAdapter);
+
+        profileAdapter = new ProfileAdapter(R.layout.user_item, searchList);
+        profileAdapter.setOnItemClickLister(new ProfileAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                User user = searchList.get(position);
+                Intent intent = new Intent(SearchProfilesActivity.this, ViewProfileActivity.class);
+                intent.putExtra("user", user);
+                startActivity(intent);
+            }
+        });
+
+        searchRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        searchRecyclerView.setAdapter(profileAdapter);
+
+        DividerItemDecoration itemDecor = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        searchRecyclerView.addItemDecoration(itemDecor);
 
         // Listener for the search view
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -97,13 +115,6 @@ public class SearchProfilesActivity extends AppCompatActivity {
             public boolean onQueryTextChange(String newText) {
                 return false;
             }
-        });
-
-        searchListView.setOnItemClickListener((AdapterView<?> parent, View view, int position, long id) -> {
-            User user = profileAdapter.getItem(position);
-            Intent intent = new Intent(this, ViewProfileActivity.class);
-            intent.putExtra("user", user);
-            startActivity(intent);
         });
     }
 }
