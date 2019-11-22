@@ -1,11 +1,12 @@
 <resources>
     <string name="app_name">Vybe</string>
 
-    <string name="add_vybe_name">Add Vybe</string>
-    <string name="view_vybe_name">View Vybe</string>
-    <string name="edit_vybe_name">Edit Vybe</string>
+    <string name="add_vibe_name">Add Vibe</string>
+    <string name="view_vibe_name">View Vibe</string>
+    <string name="edit_vibe_name">Edit Vibe</string>
     <string name="social_name">Social</string>
     <string name="explore_vibes_name">Explore Vibes</string>
+    <string name="follower_requests">Follower Requests</string>
 
     <string name="date_time">Date/Time</string>
     <string name="reason">Reason</string>

@@ -22,14 +22,8 @@
         <activity android:name=".SocialActivity" />
         <activity android:name=".ViewProfileActivity" />
         <activity android:name=".CreateAccountActivity" />
-        <activity
-            android:name=".ViewVibeActivity"
-            android:label="@string/view_vybe_name"
-            android:parentActivityName=".MyVibesActivity" />
-        <activity
-            android:name=".AddEdit.AddEditVibeEventActivity"
-            android:label="@string/add_vybe_name"
-            android:parentActivityName=".MyVibesActivity" />
+        <activity android:name=".ViewVibeActivity" />
+        <activity android:name=".AddEdit.AddEditVibeEventActivity" />
         <activity android:name=".MyVibesActivity" />
         <activity android:name=".MapViewActivity" />
         <activity android:name=".MainActivity">
