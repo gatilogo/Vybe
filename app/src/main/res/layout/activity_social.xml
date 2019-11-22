@@ -24,6 +24,13 @@
             android:textSize="30sp" />
     </androidx.appcompat.widget.Toolbar>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/social_vibe_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/social_menu_layout"
+        android:layout_below="@id/social_toolbar" />
+
     <LinearLayout
         android:id="@+id/social_menu_layout"
         android:layout_width="match_parent"
