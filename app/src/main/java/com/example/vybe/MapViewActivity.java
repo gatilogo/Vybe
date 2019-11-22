@@ -18,6 +18,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -34,6 +35,8 @@ public class MapViewActivity extends AppCompatActivity implements MapFragment.On
     private static final String TAG = "MapViewActivity";
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private String vibeEventDBPath;
     private MapFragment mapFragment;
 
 
@@ -41,6 +44,7 @@ public class MapViewActivity extends AppCompatActivity implements MapFragment.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_view);
+        vibeEventDBPath = "Users/" + mAuth.getCurrentUser().getUid() + "/VibeEvents";
         mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(map_view_fragment);
     }
 
@@ -51,7 +55,7 @@ public class MapViewActivity extends AppCompatActivity implements MapFragment.On
 
     public void addVibeLocations() {
         // TODO: add condition for user ID
-        db.collection("VibeEvent").get().addOnSuccessListener((QuerySnapshot queryDocumentSnapshots) -> {
+        db.collection(vibeEventDBPath).get().addOnSuccessListener((QuerySnapshot queryDocumentSnapshots) -> {
             for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                 if ((doc.getData().get("latitude") != null) && (doc.getData().get("latitude") != null)) {
                     double latitude = doc.getDouble("latitude");
