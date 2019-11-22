@@ -6,13 +6,9 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.vybe.AddEdit.AddEditVibeEventActivity;
 import com.example.vybe.Models.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
@@ -36,8 +32,6 @@ public class MyRequestsActivity extends AppCompatActivity implements ProfileAdap
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private String userRequestDBPath;
-    private Button addVibeEventBtn;
-    private Button myVibesBtn;
 
     @Override
     public void onItemClick(int position) {
@@ -81,8 +75,6 @@ public class MyRequestsActivity extends AppCompatActivity implements ProfileAdap
         setContentView(R.layout.activity_my_requests);
 
         userRecyclerView = findViewById(R.id.my_request_list);
-        addVibeEventBtn = findViewById(R.id.add_vibe_event_btn);
-        myVibesBtn = findViewById(R.id.my_vibes_btn);
 
         userRequestDBPath = "Users/" + mAuth.getCurrentUser().getUid() + "/Requests";
 
@@ -102,7 +94,6 @@ public class MyRequestsActivity extends AppCompatActivity implements ProfileAdap
                 user.setUserID(userID);
                 user.setUsername(username);
                 requestList.add(user);
-
             }
         });
 
@@ -112,16 +103,6 @@ public class MyRequestsActivity extends AppCompatActivity implements ProfileAdap
 
         DividerItemDecoration itemDecor = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         userRecyclerView.addItemDecoration(itemDecor);
-
-        myVibesBtn.setOnClickListener((View v) -> {
-            finish();
-        });
-
-        addVibeEventBtn.setOnClickListener((View view) -> {
-            Intent addIntent = new Intent(MyRequestsActivity.this, AddEditVibeEventActivity.class);
-            startActivity(addIntent);
-        });
-
     }
 
     @Override
