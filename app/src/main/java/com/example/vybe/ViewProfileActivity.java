@@ -89,9 +89,8 @@ public class ViewProfileActivity extends AppCompatActivity {
             self.setUsername(selfFB.getDisplayName());
 
             db.collection(requestPath).document(self.getUserID()).set(self);
+            Toast.makeText(this,"Request sent!", Toast.LENGTH_LONG).show();
         });
-
-
 
     }
 }
