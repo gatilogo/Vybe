@@ -59,9 +59,11 @@ public class ViewProfileActivity extends AppCompatActivity {
                 logoutBtn.setVisibility(View.GONE);
                 // TODO: hide both buttons if other user is already followed pls and tnx
                 // Refactor user class arraylist pls and thx ask jakey
-//                if (user.getFollowers().contains(mAuth.getCurrentUser().getUid())){
-//                    sendRequestBtn.setVisibility(View.GONE);
-//                }
+                if (user.getFollowers() != null){
+                    if (user.getFollowers().contains(mAuth.getCurrentUser().getUid())) {
+                        sendRequestBtn.setVisibility(View.GONE);
+                    }
+                }
             }
 
             usernameTextView.setText(user.getUsername());

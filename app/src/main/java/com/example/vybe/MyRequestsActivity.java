@@ -61,10 +61,10 @@ public class MyRequestsActivity extends AppCompatActivity implements ProfileAdap
         String myID = mAuth.getCurrentUser().getUid();
         String theirID = user.getUserID();
         db.collection("Users").document(myID)
-                .update("Followers", FieldValue.arrayUnion(theirID));
+                .update("followers", FieldValue.arrayUnion(theirID));
 
         db.collection("Users").document(theirID)
-                .update("Following", FieldValue.arrayUnion(myID));
+                .update("following", FieldValue.arrayUnion(myID));
 
     }
 
