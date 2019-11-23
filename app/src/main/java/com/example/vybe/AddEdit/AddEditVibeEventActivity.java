@@ -51,6 +51,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
     private Button addBtn;
     private TextView pageTitle;
     private Button pickLocationButton;
+    private Button removeImageBtn;
     private Toolbar toolbar;
     private MapFragment mapFragment;
     private ImageView imageView;
@@ -72,6 +73,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
         addBtn = findViewById(R.id.add_btn);
         pageTitle = findViewById(R.id.add_edit_vibe_title);
         pickLocationButton = findViewById(R.id.btn_add_location);
+        removeImageBtn = findViewById(R.id.remove_image_btn);
         vibeImage = findViewById(R.id.vibe_image);
         imageView = findViewById(R.id.imageView);
         mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.add_edit_map_fragment);
@@ -111,6 +113,13 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
         pickLocationButton.setOnClickListener((View v) -> {
             DialogFragment locationFragment = new LocationSelectionDialog();
             locationFragment.show(getSupportFragmentManager(), "tag");
+        });
+
+        // TODO: Move to fragment but then idk how to update the VibeEvent
+        // ---Remove Image Button---
+        removeImageBtn.setOnClickListener((View v) -> {
+            imageView.setImageResource(android.R.color.transparent);
+            imageIsSelected = false;
         });
 
         // --- Show Output on button click ---
@@ -205,6 +214,9 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
         if (imageIsSelected) {
             uploadImage(imageBitmap, vibeEvent.getId());
             vibeEvent.setImage("reasons/" + vibeEvent.getId() + ".jpg");
+        }
+        else {
+            vibeEvent.setImage("");
         }
 
         HashMap<String, Object> data = createVibeEventData(vibeEvent);
