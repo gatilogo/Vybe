@@ -37,22 +37,6 @@ public enum SocialSituation {
         return SocialSituation.values()[position];
     }
 
-//    /**
-//     * Get a SocialSituation using its desc
-//     * @param desc
-//     * Description of the SocialSituation Enum
-//     * @return SocialSituation that has the description desc
-//     */
-//    public static SocialSituation of(SocialSituation desc) {
-//        for (SocialSituation ss: SocialSituation.values()) {
-//            if (ss.toString().equals(desc)) {
-//                return ss;
-//            }
-//        }
-//
-//        return null;
-//    }
-
     /**
      * Get a String ArrayList of all the SocialSituation enums
      * @return ArrayList of Social Situation String
