@@ -16,12 +16,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -37,21 +35,15 @@ import com.example.vybe.Models.VibeEvent;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
 
 import static com.example.vybe.util.Constants.ERROR_DIALOG_REQUEST;
 import static com.example.vybe.util.Constants.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
@@ -143,7 +135,7 @@ public class MyVibesActivity extends AppCompatActivity {
                                         VibeEvent vibeEvent = new VibeEvent();
                                         vibeEvent.setDateTime(doc.getDate("datetime"));
                                         vibeEvent.setReason(doc.getString("reason"));
-                                        vibeEvent.setSocialSituation(SocialSituation.valueOf(doc.getString("socSit")));
+                                        vibeEvent.setSocialSituation(SocialSituation.valueOfIfValid(doc.getString("socSit")));
                                         vibeEvent.setId(doc.getId());
                                         vibeEvent.setVibe(doc.getString("vibe"));
 
@@ -212,7 +204,7 @@ public class MyVibesActivity extends AppCompatActivity {
                     VibeEvent vibeEvent = new VibeEvent();
                     vibeEvent.setDateTime(doc.getDate("datetime"));
                     vibeEvent.setReason(doc.getString("reason"));
-                    vibeEvent.setSocialSituation(SocialSituation.valueOf(doc.getString("socSit")));
+                    vibeEvent.setSocialSituation(SocialSituation.valueOfIfValid(doc.getString("socSit")));
                     vibeEvent.setId(doc.getId());
                     vibeEvent.setVibe(doc.getString("vibe"));
                     if (doc.getData().get("image") != null) {
