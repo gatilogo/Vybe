@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.vybe.Models.User;
 import com.example.vybe.Models.VibeEvent;
@@ -41,6 +42,7 @@ public class SocialActivity extends AppCompatActivity {
 //    private String socialVibeEventDBPath;
     private Button myVibesBtn;
     private Button searchBtn;
+    private Button mapBtn;
     private RecyclerView socialVibesRecyclerView;
 
 
@@ -52,6 +54,7 @@ public class SocialActivity extends AppCompatActivity {
 
         myVibesBtn = findViewById(R.id.my_vibes_btn);
         searchBtn = findViewById(R.id.search_btn);
+        mapBtn = findViewById(R.id.social_map_btn);
         socialVibesRecyclerView = findViewById(R.id.social_vibe_list);
 
         buildRecyclerView();
@@ -62,6 +65,16 @@ public class SocialActivity extends AppCompatActivity {
 
         searchBtn.setOnClickListener((View v) -> {
             startActivity(new Intent(SocialActivity.this, SearchProfilesActivity.class));
+        });
+
+
+        mapBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent MapViewIntent = new Intent(SocialActivity.this, MapViewActivity.class);
+                MapViewIntent.putExtra("MapViewMode", "Social");
+                startActivity(MapViewIntent);
+            }
         });
 
         CollectionReference collectionReference = db.collection("Users");
@@ -113,7 +126,5 @@ public class SocialActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
-
     }
 }
