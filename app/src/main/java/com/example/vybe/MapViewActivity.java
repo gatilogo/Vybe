@@ -12,6 +12,8 @@ import androidx.annotation.DrawableRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
+import com.example.vybe.Models.User;
+import com.example.vybe.Models.VibeEvent;
 import com.example.vybe.Models.vibefactory.Vibe;
 import com.example.vybe.Models.vibefactory.VibeFactory;
 import com.google.android.gms.maps.model.BitmapDescriptor;
@@ -22,9 +24,15 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.Comparator;
 
 import static com.example.vybe.R.id.map_view_fragment;
 
@@ -57,10 +65,10 @@ public class MapViewActivity extends AppCompatActivity implements MapFragment.On
 
         //see where user came from
         Bundle extras = getIntent().getExtras();
-        if (extras.getSerializable("MapViewMode") == "Personal") {
-            viewMyVibes = true;
-        } else {
+        if (extras.getSerializable("MapViewMode").equals("Social")) {
             viewMyVibes = false;
+        } else {
+            viewMyVibes = true;
         }
 
         //changes view mode
@@ -80,6 +88,7 @@ public class MapViewActivity extends AppCompatActivity implements MapFragment.On
 
     @Override
     public void onMapFragmentReady() {
+        mapFragment.setToCurrentLocation();
         if (viewMyVibes) {
             addMyVibeLocations();
         } else {
@@ -112,6 +121,38 @@ public class MapViewActivity extends AppCompatActivity implements MapFragment.On
         viewMyVibes = false;
         mapFragment.clearMap();
 
+        CollectionReference collectionReference = db.collection("Users");
 
+        collectionReference.document(mAuth.getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot doc) {
+                User myProfile = doc.toObject(User.class);
+                ArrayList<String> myFollowing = myProfile.getFollowing();
+                if (myFollowing != null){
+                    for (String uid: myFollowing){
+                        collectionReference.document(uid)
+                                .collection("VibeEvents")
+                                .orderBy("datetime", Query.Direction.DESCENDING)
+                                .limit(1)
+                                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDoc) {
+                                for (QueryDocumentSnapshot document: queryDoc){
+                                    if ((document.getDouble("latitude") != 0) && (document.getDouble("latitude") != 0)) {
+                                        double latitude = document.getDouble("latitude");
+                                        double longitude = document.getDouble("longitude");
+                                        String vibeName = (String) document.getData().get("vibe");
+                                        Vibe vibe = VibeFactory.getVibe(vibeName);
+
+                                        mapFragment.addMarker(new LatLng(latitude, longitude), vibe.getEmoticon());
+
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        });
     }
 }
