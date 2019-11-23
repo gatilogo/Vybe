@@ -60,6 +60,7 @@ public class VibeCarouselDialogFragment extends DialogFragment {
 
         CarouselPicker carouselPicker = view.findViewById(R.id.carousel_picker);
 
+        // Populate the carousel with all the vibes
         List<CarouselPicker.PickerItem> imageItems = new ArrayList<>();
         for (Integer emoticon : Vibe.getEmoticons()) {
             imageItems.add(new CarouselPicker.DrawableItem(emoticon));

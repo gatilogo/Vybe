@@ -24,12 +24,24 @@ public enum Vibe {
         this.emoticon = emoticon;
     }
 
+    /**
+     * Get a Vibe Enum using the name of the vibe. If a Vibe is not found, an exception will be thrown.
+     * NOTE: It's case insensitive. "happy", "HAPPY", "Happy" are all valid
+     * @param name
+     * The name of the vibe
+     * @return A Vibe Enum
+     */
     public static Vibe ofName(String name) {
         return Vibe.valueOf(name.toUpperCase());
     }
 
+    /**
+     * Get a Vibe Enum using it's emoticon id. If a vibe is not found, an exception will be thrown.
+     * @param emoticon
+     * The int value of the emoticon of the vibe
+     * @return A Vibe Enum
+     */
     public static Vibe ofEmoticon(int emoticon) {
-
         for (Vibe vibe: Vibe.values()) {
             if (vibe.emoticon == emoticon) {
                 return vibe;
@@ -37,11 +49,14 @@ public enum Vibe {
         }
 
         throw new IllegalArgumentException("Emoticon is not a vibe: " + emoticon);
-
     }
 
+    /**
+     * Get an ArrayList of all the emoticons of all the vibes
+     * @return
+     * An ArrayList of all the emoticons of all the vibes
+     */
     public static ArrayList<Integer> getEmoticons() {
-        Vibe[] vibes = Vibe.values();
         ArrayList<Integer> emoticons = new ArrayList<>();
 
         for (Vibe vibe : Vibe.values()) {
@@ -51,6 +66,7 @@ public enum Vibe {
         return emoticons;
     }
 
+    @NonNull
     public String getName() {
         return name;
     }
@@ -68,6 +84,4 @@ public enum Vibe {
     public String toString() {
         return name;
     }
-
-
 }

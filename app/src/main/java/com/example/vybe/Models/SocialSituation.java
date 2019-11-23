@@ -37,7 +37,6 @@ public enum SocialSituation {
      * @param position Index of SocialSituation
      * @return SocialSituation at index position
      */
-    //
     public static SocialSituation at(int position) {
         return SocialSituation.values()[position];
     }
