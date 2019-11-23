@@ -11,6 +11,11 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+/**
+ * Tests the User Class
+ *
+ * These tests ensure that the data of a User is properly stored and returned from a User Object
+ */
 public class UserTest {
 
     private User mockEmptyUser() {

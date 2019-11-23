@@ -16,6 +16,11 @@ import java.util.Date;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
+/**
+ * Tests the VibeEvent Class
+ *
+ * These tests ensure that the data of a Vibe Event is properly stored and returned from a VibeEvent Object
+ */
 public class VibeEventTest {
 
     private VibeEvent mockEmptyVibeEvent() {
@@ -105,6 +110,11 @@ public class VibeEventTest {
         Date testDate = new Date();
 
         testVibeEvent.setDateTime(testDate);
+
+    }
+
+    @Test
+    public void GetDateTimeString(){
 
     }
 
