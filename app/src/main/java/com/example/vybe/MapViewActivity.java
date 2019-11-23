@@ -65,7 +65,7 @@ public class MapViewActivity extends AppCompatActivity implements MapFragment.On
 
         //see where user came from
         Bundle extras = getIntent().getExtras();
-        if (extras.getSerializable("MapViewMode") == "Social") {
+        if (extras.getSerializable("MapViewMode").equals("Social")) {
             viewMyVibes = false;
         } else {
             viewMyVibes = true;

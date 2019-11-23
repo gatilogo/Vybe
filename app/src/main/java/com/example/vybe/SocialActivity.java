@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 /**
  * SocialActivity displays the screen for a user to view a list of their followers' vibe events
@@ -17,6 +18,7 @@ public class SocialActivity extends AppCompatActivity {
 
     private Button myVibesBtn;
     private Button searchBtn;
+    private Button mapBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +28,7 @@ public class SocialActivity extends AppCompatActivity {
 
         myVibesBtn = findViewById(R.id.my_vibes_btn);
         searchBtn = findViewById(R.id.search_btn);
+        mapBtn = findViewById(R.id.social_map_btn);
 
         myVibesBtn.setOnClickListener((View v) -> {
             finish();
@@ -33,6 +36,15 @@ public class SocialActivity extends AppCompatActivity {
 
         searchBtn.setOnClickListener((View v) -> {
             startActivity(new Intent(SocialActivity.this, SearchProfilesActivity.class));
+        });
+
+        mapBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent MapViewIntent = new Intent(SocialActivity.this, MapViewActivity.class);
+                MapViewIntent.putExtra("MapViewMode", "Social");
+                startActivity(MapViewIntent);
+            }
         });
     }
 }

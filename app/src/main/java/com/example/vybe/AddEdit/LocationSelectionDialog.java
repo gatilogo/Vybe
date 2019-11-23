@@ -25,6 +25,8 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.model.RectangularBounds;
+import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
@@ -84,14 +86,22 @@ public class LocationSelectionDialog extends DialogFragment {
         openLocationAutofill.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 // Set the fields to specify which types of place data to
                 // return after the user has made a selection.
                 List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG);
 
+                //get location for bias area
+                Location currentLoc = LocationController.getUserLocation(getContext());
+                double currentLat = currentLoc.getLatitude();
+                double currentLng = currentLoc.getLongitude();
+                double biasOffset = 0.1;
+
                 // Start the autocomplete intent.
                 Intent intent = new Autocomplete.IntentBuilder(
                         AutocompleteActivityMode.OVERLAY, fields)
+                        .setLocationBias(RectangularBounds.newInstance(
+                        new LatLng(currentLat - biasOffset, currentLng - biasOffset),
+                        new LatLng(currentLat + biasOffset, currentLng + biasOffset)))
                         .build(getContext());
                 startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
 
