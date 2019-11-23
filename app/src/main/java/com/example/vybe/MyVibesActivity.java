@@ -138,7 +138,8 @@ public class MyVibesActivity extends AppCompatActivity {
                                         vibeEvent.setReason(doc.getString("reason"));
                                         vibeEvent.setSocialSituation(SocialSituation.of(doc.getString("socSit")));
                                         vibeEvent.setId(doc.getId());
-                                        vibeEvent.setVibe(Vibe.ofName(doc.getString("vibe")));
+                                        vibeEvent.setVibe(doc.getString("vibe"));
+                                        vibeEvent.setOwner(mAuth.getCurrentUser().getDisplayName());
 
                                         if (doc.getData().get("image") != null) {
                                             vibeEvent.setImage(doc.getString("image"));
@@ -174,6 +175,7 @@ public class MyVibesActivity extends AppCompatActivity {
         myMapBtn.setOnClickListener((View view) -> {
             if (mLocationPermissionGranted) {
                 Intent MapViewIntent = new Intent(MyVibesActivity.this, MapViewActivity.class);
+                MapViewIntent.putExtra("MapViewMode", "Personal");
                 startActivity(MapViewIntent);
             } else {
                 Toast.makeText(MyVibesActivity.this, "Please enable GPS services", Toast.LENGTH_SHORT);
@@ -207,7 +209,7 @@ public class MyVibesActivity extends AppCompatActivity {
                     vibeEvent.setReason(doc.getString("reason"));
                     vibeEvent.setSocialSituation(SocialSituation.of(doc.getString("socSit")));
                     vibeEvent.setId(doc.getId());
-                    vibeEvent.setVibe(Vibe.ofName(doc.getString("vibe")));
+                    vibeEvent.setVibe(doc.getString("vibe"));
                     if (doc.getData().get("image") != null) {
                         vibeEvent.setImage(doc.getString("image"));
                     }

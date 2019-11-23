@@ -166,7 +166,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     public void setToLocation(LatLng latLng) {
         Log.d(TAG, "setToLocation: Here");
-        mMap.clear();
+        clearMap();
         addMarker(latLng, R.drawable.ic_map_marker);
         setCamera(latLng);
     }
@@ -187,6 +187,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private void setCamera(LatLng latLng) {
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, MAP_ZOOM_LEVEL);
         mMap.moveCamera(cameraUpdate);
+    }
+
+    public void clearMap() {
+        mMap.clear();
     }
 
 

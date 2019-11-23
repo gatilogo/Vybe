@@ -7,6 +7,11 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
+/**
+ * Tests the VibeFactory Class and Subclasses
+ *
+ * These tests ensure that the data of a Vibe is properly stored and returned from a Vibe Object
+ */
 public class VibeFactoryTest {
 
     @Test
