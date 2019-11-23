@@ -7,10 +7,10 @@ import androidx.annotation.NonNull;
 import java.util.ArrayList;
 
 public enum SocialSituation {
-    Alone("Alone"),
-    WithAnotherPerson("With one other person"),
-    WithSeveralPeople("With two or several people"),
-    WithCrowd("With a crowd");
+    ALONE("Alone"),
+    WITH_ANOTHER_PERSON("With one other person"),
+    WITH_SEVERAL_PEOPLE("With two or several people"),
+    WITH_A_CROWD("With a crowd");
 
     private static final String TAG = "SocialSituation";
 
@@ -57,7 +57,16 @@ public enum SocialSituation {
         return stringValues;
     }
 
-    public static SocialSituation valueOfIfValid(String name) {
+    /**
+     * Get the Social Situation of a string. If no matching Social Situation is found, return null.
+     * @param name
+     * Name of Social Situation eg. ALONE, WITH_ANOTHER_PERSON, etc..
+     * NOTE: "Alone", "With another person", etc... are not the names of Social Situation and this function will return NULL if they are entered
+     * @return
+     * A SocialSocituation using it's name
+     */
+
+    public static SocialSituation of(String name) {
 
         if (name == null)
             return null;
@@ -66,7 +75,7 @@ public enum SocialSituation {
             return SocialSituation.valueOf(name);
 
         } catch (IllegalArgumentException e) {
-            Log.d(TAG,"[valueOfIfValid()] Trying to get value of Invalid Social Situation: " + name);
+            Log.d(TAG,"[of()] Trying to get value of Invalid Social Situation: " + name);
             return null;
         }
     }

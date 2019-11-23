@@ -136,7 +136,7 @@ public class MyVibesActivity extends AppCompatActivity {
                                         VibeEvent vibeEvent = new VibeEvent();
                                         vibeEvent.setDateTime(doc.getDate("datetime"));
                                         vibeEvent.setReason(doc.getString("reason"));
-                                        vibeEvent.setSocialSituation(SocialSituation.valueOfIfValid(doc.getString("socSit")));
+                                        vibeEvent.setSocialSituation(SocialSituation.of(doc.getString("socSit")));
                                         vibeEvent.setId(doc.getId());
                                         vibeEvent.setVibe(Vibe.ofName(doc.getString("vibe")));
 
@@ -205,7 +205,7 @@ public class MyVibesActivity extends AppCompatActivity {
                     VibeEvent vibeEvent = new VibeEvent();
                     vibeEvent.setDateTime(doc.getDate("datetime"));
                     vibeEvent.setReason(doc.getString("reason"));
-                    vibeEvent.setSocialSituation(SocialSituation.valueOfIfValid(doc.getString("socSit")));
+                    vibeEvent.setSocialSituation(SocialSituation.of(doc.getString("socSit")));
                     vibeEvent.setId(doc.getId());
                     vibeEvent.setVibe(Vibe.ofName(doc.getString("vibe")));
                     if (doc.getData().get("image") != null) {
