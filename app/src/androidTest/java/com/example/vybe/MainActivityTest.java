@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 /**
@@ -17,14 +18,23 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
  used
  */
 @RunWith(AndroidJUnit4.class)
-public class MainActivityTest{
+public class MainActivityTest {
+    private String invalidLoginEmailNoExist = "non-existent@user.ca";
+    private String invalidLoginPassword = "invalid123";
+    private String invalidLengthPassword = "1234";
+
+
+    private String validLoginEmail = "espresso@test.ca";
+    private String validLoginPassword = "vibecheck";
+
     @Rule
     public ActivityTestRule<MainActivity> activityRule =
-        new ActivityTestRule<>(MainActivity.class, true, true);
+            new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void listGoesOverTheFold(){
-        onView(withText("Vybe")).check(matches(isDisplayed()));
+    public void InvalidLogin_NonexistantUser(){
+//        onView(withId())
     }
+
 
 }
