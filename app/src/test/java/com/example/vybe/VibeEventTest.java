@@ -60,6 +60,11 @@ public class VibeEventTest {
         assertEquals("image", testVibeEvent.getImage());
     }
 
+    /*
+    * TODO: Discuss if we want test methods for each getter since we're mainly just
+    *  doing the same thing we do for testing the constructor tests
+     * */
+
     @Test
     public void GetVibe() {
         VibeEvent testVibeEvent = mockVibeEvent();
@@ -78,9 +83,135 @@ public class VibeEventTest {
 
         Vibe testVibe = mockVibe();
 
+        testVibeEvent.setVibe(testVibe);
+
         assertEquals(testVibe.getName(), testVibeEvent.getVibe().getName());
         assertEquals(testVibe.getEmoticon(), testVibeEvent.getVibe().getEmoticon());
         assertEquals(testVibe.getColor(), testVibeEvent.getVibe().getColor());
+
+    }
+
+    // TODO: Still not sure how we want to test DateTime Methods
+    @Test
+    public void GetDateTime(){
+        VibeEvent testVibeEvent = mockEmptyVibeEvent();
+
+    }
+
+    @Test
+    public void SetDateTime(){
+        VibeEvent testVibeEvent = mockEmptyVibeEvent();
+
+        Date testDate = new Date();
+
+        testVibeEvent.setDateTime(testDate);
+
+    }
+
+    @Test
+    public void GetReason(){
+        VibeEvent testVibeEvent = mockVibeEvent();
+
+        assertEquals("just really happy", testVibeEvent.getReason());
+
+    }
+
+    @Test
+    public void SetReason(){
+        VibeEvent testVibeEvent = mockEmptyVibeEvent();
+
+        testVibeEvent.setReason("Not so happy");
+
+        assertEquals("Not so happy", testVibeEvent.getReason());
+
+    }
+
+    // TODO: These will likely have to change in the next few merges
+    @Test
+    public void GetSocialSituation(){
+        VibeEvent testVibeEvent = mockVibeEvent();
+
+        assertEquals("Alone", testVibeEvent.getSocialSituation());
+
+    }
+
+    @Test
+    public void SetSocialSituation(){
+        VibeEvent testVibeEvent = mockEmptyVibeEvent();
+
+        testVibeEvent.setSocialSituation("In A Crowd");
+
+        assertEquals("In A Crowd", testVibeEvent.getSocialSituation());
+
+    }
+
+    @Test
+    public void GetId(){
+        VibeEvent testVibeEvent = mockVibeEvent();
+
+        assertEquals("", testVibeEvent.getId());
+
+    }
+
+    @Test
+    public void SetId(){
+        VibeEvent testVibeEvent = mockEmptyVibeEvent();
+
+        testVibeEvent.setId("123");
+
+        assertEquals("123", testVibeEvent.getId());
+
+    }
+    @Test
+    public void GetImage(){
+        VibeEvent testVibeEvent = mockVibeEvent();
+
+        assertEquals("image", testVibeEvent.getImage());
+
+    }
+
+    @Test
+    public void SetImage(){
+        VibeEvent testVibeEvent = mockEmptyVibeEvent();
+
+        testVibeEvent.setImage("test.png");
+
+        assertEquals("test.png", testVibeEvent.getImage());
+
+    }
+    @Test
+    public void GetLatitude(){
+        VibeEvent testVibeEvent = mockVibeEvent();
+
+        assertEquals(2.0, testVibeEvent.getLatitude(),0 );
+
+    }
+
+    @Test
+    public void SetLatitude(){
+        VibeEvent testVibeEvent = mockEmptyVibeEvent();
+
+        testVibeEvent.setLatitude(5);
+
+        assertEquals(5, testVibeEvent.getLatitude(),0 );
+
+    }
+
+    @Test
+    public void GetLongitude(){
+        VibeEvent testVibeEvent = mockVibeEvent();
+
+        assertEquals(2.0, testVibeEvent.getLongitude(), 0);
+
+    }
+
+    @Test
+    public void SetLongitude(){
+        VibeEvent testVibeEvent = mockEmptyVibeEvent();
+
+        testVibeEvent.setLongitude(5);
+
+        assertEquals(5, testVibeEvent.getLongitude(),0 );
 
     }
 
