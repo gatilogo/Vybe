@@ -86,22 +86,6 @@ public class VibeEvent implements Serializable {
         this.vibe = VibeFactory.getVibe(vibeString);
     }
 
-//    /**
-//     * This sets the vibe of a VibeEvent
-//     * @param vibeEmoticon The integer representing the emoticon of a vibe
-//     */
-//    public void setVibe(int vibeEmoticon) {
-//        this.vibe = VibeFactory.getVibe(vibeEmoticon);
-//    }
-//
-//    /**
-//     * This sets the vibe of a VibeEvent
-//     * @param vibe The vibe to set
-//     */
-//    public void setVibe(Vibe vibe) {
-//        this.vibe = vibe;
-//    }
-
     /**
      * This gets the date and time of the VibeEvent
      * @return The date and time of the event as a LocalDateTime object
