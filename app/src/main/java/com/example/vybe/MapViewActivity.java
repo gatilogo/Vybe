@@ -55,6 +55,7 @@ public class MapViewActivity extends AppCompatActivity implements MapFragment.On
         mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(map_view_fragment);
         mapToggleButton = findViewById(R.id.btn_map_toggle);
 
+        //see where user came from
         Bundle extras = getIntent().getExtras();
         if (extras.getSerializable("MapViewMode") == "Personal") {
             viewMyVibes = true;
@@ -62,6 +63,7 @@ public class MapViewActivity extends AppCompatActivity implements MapFragment.On
             viewMyVibes = false;
         }
 
+        //changes view mode
         mapToggleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,7 +93,7 @@ public class MapViewActivity extends AppCompatActivity implements MapFragment.On
         mapFragment.clearMap();
         db.collection(vibeEventDBPath).get().addOnSuccessListener((QuerySnapshot queryDocumentSnapshots) -> {
             for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                if ((doc.getData().get("latitude") != null) && (doc.getData().get("latitude") != null)) {
+                if ((doc.getDouble("latitude") != 0) && (doc.getDouble("latitude") != 0)) {
                     double latitude = doc.getDouble("latitude");
                     double longitude = doc.getDouble("longitude");
                     String vibeName = (String) doc.getData().get("vibe");
