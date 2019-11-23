@@ -65,7 +65,6 @@ public class MyVibesAdapter extends RecyclerView.Adapter<MyVibesAdapter.VibeEven
 
         // TODO: FIX THIS ITS UGLY
         String displaytext = vibeEvent.getVibe().getName();
-        // IF userID != mAuth My own id then set displayText = notmyUsername + displayText;
         if (!vibeEvent.getOwner().equals(mAuth.getCurrentUser().getDisplayName())) {
             displaytext = "@" + vibeEvent.getOwner() + " is " + displaytext;
         }

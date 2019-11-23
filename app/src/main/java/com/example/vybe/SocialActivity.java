@@ -24,6 +24,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 /**
  * SocialActivity displays the screen for a user to view a list of their followers' vibe events
@@ -83,7 +84,10 @@ public class SocialActivity extends AppCompatActivity {
                                 for (QueryDocumentSnapshot document: queryDoc){
                                     vibeEventList.add(document.toObject(VibeEvent.class));
                                 }
-                                // TODO: Sort by datetime
+                                // Sort by datetime
+                                Comparator<VibeEvent> comparator = (s1, s2) -> s2.getDateTime().compareTo(s1.getDateTime());
+                                vibeEventList.sort(comparator);
+                                
                                 socialVibesAdapter.notifyDataSetChanged();
                             }
                         });
