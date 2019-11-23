@@ -1,8 +1,8 @@
 package com.example.vybe;
 
+import com.example.vybe.Models.SocialSituation;
+import com.example.vybe.Models.Vibe;
 import com.example.vybe.Models.VibeEvent;
-import com.example.vybe.Models.vibefactory.Vibe;
-import com.example.vybe.Models.vibefactory.VibeFactory;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -23,12 +23,12 @@ public class VibeEventTest {
     }
 
     private VibeEvent mockVibeEvent() {
-        return new VibeEvent(mockVibe().getName(), date,
-                "just really happy", "Alone", "", "image", 2.0, 2.0);
+        return new VibeEvent(mockVibe(), date,
+                "just really happy", SocialSituation.ALONE, "", "image", 2.0, 2.0);
     }
 
     private Vibe mockVibe() {
-        return VibeFactory.getVibe("happy");
+        return Vibe.HAPPY;
     }
 
     @Test
@@ -46,7 +46,7 @@ public class VibeEventTest {
         assertEquals(mockVibe().getName(), mockVibeEvent().getVibe().getName());
 //        assertEquals(ldt, mockVibeEvent().getDateTime());
         assertEquals("just really happy", mockVibeEvent().getReason());
-        assertEquals("Alone", mockVibeEvent().getSocialSituation());
+        assertEquals("Alone", mockVibeEvent().getSocialSituation().toString());
         assertEquals("", mockVibeEvent().getId());
         assertEquals("image", mockVibeEvent().getImage());
     }

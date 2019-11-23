@@ -55,8 +55,8 @@ public class VibeEvent implements Serializable {
      * @param longitude
      *      This is the longitude coordinate of where a vibe event occurred
      */
-    public VibeEvent(String vibe, Date dateTime, String reason, SocialSituation socialSituation, String id, String image, double latitude, double longitude) {
-        this.vibe = Vibe.ofName(vibe);
+    public VibeEvent(Vibe vibe, Date dateTime, String reason, SocialSituation socialSituation, String id, String image, double latitude, double longitude) {
+        this.vibe = vibe;
         this.dateTime = dateTime;
         this.reason = reason;
         this.socialSituation = socialSituation;
