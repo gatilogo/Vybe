@@ -213,6 +213,7 @@ public class MyVibesActivity extends AppCompatActivity {
         myMapBtn.setOnClickListener((View view) -> {
             if (mLocationPermissionGranted) {
                 Intent MapViewIntent = new Intent(MyVibesActivity.this, MapViewActivity.class);
+                MapViewIntent.putExtra("MapViewMode", "Personal");
                 startActivity(MapViewIntent);
             } else {
                 Toast.makeText(MyVibesActivity.this, "Please enable GPS services", Toast.LENGTH_SHORT);
