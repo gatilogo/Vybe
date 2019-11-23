@@ -22,12 +22,22 @@ public class UserTest {
         return new User("test", "mock@test.ca", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
     }
 
-    private ArrayList<User> getList(){
+    private ArrayList<String> getUserStringList(){
+        ArrayList<String> userList = new ArrayList<>();
+
+        userList.add("user1");
+        userList.add("user2");
+        userList.add("user3");
+
+        return userList;
+    }
+
+    private ArrayList<User> getUserObjectList(){
         ArrayList<User> userList = new ArrayList<>();
 
-        userList.add(new User("test_user_1@test.ca", "user1"));
-        userList.add(new User("test_user_2@test.ca", "user2"));
-        userList.add(new User("test_user_3@test.ca", "user3"));
+        userList.add(new User("user1", "test_user_1@test.ca"));
+        userList.add(new User( "user2", "test_user_2@test.ca"));
+        userList.add(new User("user3", "test_user_3@test.ca"));
 
         return userList;
     }
@@ -131,7 +141,16 @@ public class UserTest {
 
     @Test
     public void SetFollowerList() {
+        User testUser = mockUser();
 
+        assertTrue(mockUser().isFollowersEmpty());
+
+        testUser.setFollowers(getUserStringList());
+
+        ArrayList<String> verificationList = getUserStringList();
+        for(int i = 0; i < verificationList.size(); i++){
+            assertEquals(verificationList.get(i), testUser.getFollowers().get(i));
+        }
 
     }
 
