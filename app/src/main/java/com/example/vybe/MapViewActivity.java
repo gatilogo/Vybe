@@ -5,6 +5,8 @@ import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.annotation.DrawableRes;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +20,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -38,6 +41,9 @@ public class MapViewActivity extends AppCompatActivity implements MapFragment.On
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private String vibeEventDBPath;
     private MapFragment mapFragment;
+    private FloatingActionButton mapToggleButton;
+    //if this is true, the map mode is viewing personal vibes
+    private boolean viewMyVibes;
 
 
     @Override
@@ -45,19 +51,49 @@ public class MapViewActivity extends AppCompatActivity implements MapFragment.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_view);
         vibeEventDBPath = "Users/" + mAuth.getCurrentUser().getUid() + "/VibeEvents";
+
         mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(map_view_fragment);
+        mapToggleButton = findViewById(R.id.btn_map_toggle);
+
+        //see where user came from
+        Bundle extras = getIntent().getExtras();
+        if (extras.getSerializable("MapViewMode") == "Personal") {
+            viewMyVibes = true;
+        } else {
+            viewMyVibes = false;
+        }
+
+        //changes view mode
+        mapToggleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mapFragment.clearMap();
+                if (viewMyVibes) {
+                    addFollowedVibeLocations();
+                } else {
+                    addMyVibeLocations();
+                }
+
+            }
+        });
     }
 
     @Override
     public void onMapFragmentReady() {
-        addVibeLocations();
+        if (viewMyVibes) {
+            addMyVibeLocations();
+        } else {
+            addFollowedVibeLocations();
+        }
     }
 
-    public void addVibeLocations() {
+    public void addMyVibeLocations() {
+        viewMyVibes = true;
         // TODO: add condition for user ID
+        mapFragment.clearMap();
         db.collection(vibeEventDBPath).get().addOnSuccessListener((QuerySnapshot queryDocumentSnapshots) -> {
             for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                if ((doc.getData().get("latitude") != null) && (doc.getData().get("latitude") != null)) {
+                if ((doc.getDouble("latitude") != 0) && (doc.getDouble("latitude") != 0)) {
                     double latitude = doc.getDouble("latitude");
                     double longitude = doc.getDouble("longitude");
                     String vibeName = (String) doc.getData().get("vibe");
@@ -69,6 +105,13 @@ public class MapViewActivity extends AppCompatActivity implements MapFragment.On
             }
 
         });
+
+    }
+
+    public void addFollowedVibeLocations() {
+        viewMyVibes = false;
+        mapFragment.clearMap();
+
 
     }
 }
