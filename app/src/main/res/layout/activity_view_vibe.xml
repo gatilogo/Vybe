@@ -27,7 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="@string/view_vybe_name"
+                android:text="@string/view_vibe_name"
                 android:textColor="@android:color/white"
                 android:textSize="30sp" />
         </androidx.appcompat.widget.Toolbar>
