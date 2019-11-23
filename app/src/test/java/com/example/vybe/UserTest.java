@@ -42,6 +42,31 @@ public class UserTest {
         return userList;
     }
 
+    @Test
+
+    public void EmptyMethodVerify(){
+        User testUser = mockUser();
+
+        assertTrue(testUser.isFollowingEmpty());
+        testUser.getFollowing().add("test2");
+        assertFalse(testUser.isFollowingEmpty());
+    }
+
+    @Test
+    public void CountMethodVerify(){
+        User testUser = mockUser();
+
+        assertEquals(0, testUser.followerCount());
+
+        testUser.setFollowers(getUserStringList());
+
+        assertEquals(getUserStringList().size(), testUser.followerCount());
+
+        testUser.getFollowers().add("newUser");
+
+        assertEquals(getUserStringList().size() + 1, testUser.followerCount());
+    }
+
 
     @Test
     public void UserConstructor_EmptyInit() {
@@ -135,6 +160,7 @@ public class UserTest {
     public void GetFollowerList() {
         User testUser = mockUser();
 
+        assertTrue(testUser.isFollowersEmpty());
         testUser.getFollowers().add("test2");
         assertFalse(testUser.isFollowersEmpty());
     }
@@ -148,6 +174,9 @@ public class UserTest {
         testUser.setFollowers(getUserStringList());
 
         ArrayList<String> verificationList = getUserStringList();
+
+        assertEquals(verificationList.size(), testUser.followerCount());
+
         for(int i = 0; i < verificationList.size(); i++){
             assertEquals(verificationList.get(i), testUser.getFollowers().get(i));
         }
@@ -156,10 +185,58 @@ public class UserTest {
 
     @Test
     public void GetFollowingList() {
+        User testUser = mockUser();
+
+        assertTrue(testUser.isFollowingEmpty());
+        testUser.getFollowing().add("test2");
+        assertFalse(testUser.isFollowingEmpty());
     }
 
     @Test
     public void SetFollowingList() {
+
+        User testUser = mockUser();
+
+        assertTrue(mockUser().isFollowingEmpty());
+
+        testUser.setFollowing(getUserStringList());
+
+        ArrayList<String> verificationList = getUserStringList();
+
+        assertEquals(verificationList.size(), testUser.followingCount());
+
+        for(int i = 0; i < verificationList.size(); i++){
+            assertEquals(verificationList.get(i), testUser.getFollowing().get(i));
+        }
     }
+
+    @Test
+    public void GetRequestsList() {
+        User testUser = mockUser();
+
+        assertTrue(testUser.isRequestsEmpty());
+        testUser.getRequests().add(mockUser());
+        assertFalse(testUser.isRequestsEmpty());
+    }
+
+    @Test
+    public void SetRequestsList() {
+
+        User testUser = mockUser();
+
+        assertTrue(mockUser().isRequestsEmpty());
+
+        testUser.setRequests(getUserObjectList());
+
+        ArrayList<User> verificationList = getUserObjectList();
+
+        assertEquals(verificationList.size(), testUser.requestCount());
+
+        for(int i = 0; i < verificationList.size(); i++){
+            assertEquals(verificationList.get(i).getUsername(), testUser.getRequests().get(i).getUsername());
+            assertEquals(verificationList.get(i).getEmail(), testUser.getRequests().get(i).getEmail());
+        }
+    }
+
 
 }
