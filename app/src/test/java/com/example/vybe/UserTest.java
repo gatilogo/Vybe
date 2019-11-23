@@ -4,58 +4,85 @@ import com.example.vybe.Models.User;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 public class UserTest {
 
-    private User mockUser() {
+    private User mockEmptyUser() {
         return new User();
     }
 
+    private User mockUser()
+    {
+        return new User("test", "mock@test.ca", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+    }
+
+    private ArrayList<User> getList(){
+        ArrayList<User> userList = new ArrayList<>();
+
+        userList.add(new User("test_user_1@test.ca", "user1"));
+        userList.add(new User("test_user_2@test.ca", "user2"));
+        userList.add(new User("test_user_3@test.ca", "user3"));
+
+        return userList;
+    }
+
+
     @Test
     public void UserConstructor_EmptyInit() {
-        User emptyUser = mockUser();
+        User testUser = mockEmptyUser();
 
-        assertNull(emptyUser.getUsername());
-        assertNull(emptyUser.getEmail());
-        assertNull(emptyUser.getFollowers());
-        assertNull(emptyUser.getFollowing());
+        assertNull(testUser.getUsername());
+        assertNull(testUser.getEmail());
+        assertNull(testUser.getFollowers());
+        assertNull(testUser.getFollowing());
     }
 
     @Test
     public void UserConstructor_EmailInit() {
-        User emailUser = new User("mock@test.ca");
+        User testUser = new User("mock@test.ca");
 
-        assertEquals("mock@test.ca", emailUser.getEmail());
-        assertEquals("", emailUser.getUsername());
-        assertTrue(emailUser.getFollowers().isEmpty());
-        assertTrue(emailUser.getFollowing().isEmpty());
+        assertEquals("mock@test.ca", testUser.getEmail());
+        assertEquals("", testUser.getUsername());
+        assertTrue(testUser.isFollowersEmpty());
+        assertTrue(testUser.isFollowingEmpty());
+        assertTrue(testUser.isRequestsEmpty());
+
     }
 
     @Test
     public void UserConstructor_UserEmailInit() {
-        User ueUser = new User("test", "mock@test.ca");
+        User testUser = new User("test", "mock@test.ca");
 
-        assertEquals("mock@test.ca", ueUser.getEmail());
-        assertEquals("test", ueUser.getUsername());
-        assertTrue(ueUser.getFollowers().isEmpty());
-        assertTrue(ueUser.getFollowing().isEmpty());
+        assertEquals("mock@test.ca", testUser.getEmail());
+        assertEquals("test", testUser.getUsername());
+        assertTrue(testUser.isFollowersEmpty());
+        assertTrue(testUser.isFollowingEmpty());
+        assertTrue(testUser.isRequestsEmpty());
+
     }
 
-    /**
-     * Placeholder test. May not be necessary
-     */
+
     @Test
-    public void UserConstructor_FullInit() {
+    public void UserConstructor_FullInit_EmptyLists() {
+        User testUser = mockUser();
+        assertEquals("mock@test.ca", testUser.getEmail());
+        assertEquals("test", testUser.getUsername());
+        assertTrue(testUser.isFollowersEmpty());
+        assertTrue(testUser.isFollowingEmpty());
+        assertTrue(testUser.isRequestsEmpty());
 
     }
 
     @Test
     public void GetUsername() {
         // Test Method for empty constructor
-        User testUser = mockUser();
+        User testUser = mockEmptyUser();
         assertNull(testUser.getUsername());
 
         // Test Method for non-empty constructor
@@ -66,7 +93,7 @@ public class UserTest {
 
     @Test
     public void SetUsername() {
-        User testUser = new User("test", "mock@test.ca");
+        User testUser = mockUser();
         assertEquals("test", testUser.getUsername());
 
         testUser.setUsername("vibes");
@@ -77,7 +104,7 @@ public class UserTest {
     @Test
     public void GetEmail() {
         // Test Method for empty constructor
-        User testUser = mockUser();
+        User testUser = mockEmptyUser();
         assertNull(testUser.getEmail());
 
         // Test Method for non-empty constructor
@@ -94,18 +121,18 @@ public class UserTest {
         assertEquals("vybe@test.ca", testUser.getEmail());
     }
 
-    /**
-     * The following tests will be written when the appropriate
-     * user stories/issues relating to them are completed so we
-     * have a better understanding of what exactly we will be
-     * wanting to test
-     */
     @Test
     public void GetFollowerList() {
+        User testUser = mockUser();
+
+        testUser.getFollowers().add("test2");
+        assertFalse(testUser.isFollowersEmpty());
     }
 
     @Test
     public void SetFollowerList() {
+
+
     }
 
     @Test
