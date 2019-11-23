@@ -1,15 +1,20 @@
 package com.example.vybe;
 
+import android.content.Intent;
+
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 
+import org.hamcrest.Matcher;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
@@ -33,7 +38,16 @@ public class MainActivityTest {
 
     @Test
     public void InvalidLogin_NonexistantUser(){
-//        onView(withId())
+        onView(withId(R.id.email_edit_text))
+                .perform(typeText(invalidLoginEmailNoExist), closeSoftKeyboard());
+        onView(withId(R.id.password_edit_text))
+                .perform(typeText(invalidLoginPassword), closeSoftKeyboard());
+        onView(withId(R.id.login_button)).perform(click());
+
+        // Check we are still in login page
+        onView(withId(R.id.signup_button))
+                .check(matches(withText("Sign Up")));
+
     }
 
 
