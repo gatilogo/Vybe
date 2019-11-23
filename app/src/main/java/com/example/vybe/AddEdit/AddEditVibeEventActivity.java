@@ -43,6 +43,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
     private static final String TAG = "AddEditVibeEventActivity";
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private StorageReference storageRef = FirebaseStorage.getInstance().getReference();
     private String vibeEventDBPath;
 
     // --- XML Elements ---
@@ -192,7 +193,6 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
         byte[] byteArray = baos.toByteArray();
 
         String imgPath = "reasons/" + id + ".jpg";
-        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
         StorageReference mountainsRef = storageRef.child(imgPath);
 
         UploadTask uploadTask = mountainsRef.putBytes(byteArray);
@@ -216,7 +216,11 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
             vibeEvent.setImage("reasons/" + vibeEvent.getId() + ".jpg");
         }
         else {
-            vibeEvent.setImage("");
+            if (!vibeEvent.getImage().equals("")){
+                StorageReference imageRef = storageRef.child(vibeEvent.getImage());
+                imageRef.delete();
+                vibeEvent.setImage("");
+            }
         }
 
         HashMap<String, Object> data = createVibeEventData(vibeEvent);
