@@ -18,7 +18,7 @@ import androidx.fragment.app.DialogFragment;
 import com.bumptech.glide.Glide;
 import com.example.vybe.MapFragment;
 import com.example.vybe.Models.SocialSituation;
-import com.example.vybe.Models.vibefactory.Vibe;
+import com.example.vybe.Models.Vibe;
 import com.example.vybe.R;
 import com.example.vybe.Models.VibeEvent;
 import com.google.android.gms.maps.model.LatLng;
@@ -215,7 +215,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
     public HashMap<String, Object> createVibeEventData(VibeEvent vibeEvent) {
         HashMap<String, Object> data = new HashMap<>();
         data.put("ID", vibeEvent.getId());
-        data.put("vibe", vibeEvent.getVibe().getName());
+        data.put("vibe", vibeEvent.getVibe());
         data.put("datetime", vibeEvent.getDateTime());
         data.put("reason", vibeEvent.getReason());
         data.put("socSit", vibeEvent.getSocialSituation());

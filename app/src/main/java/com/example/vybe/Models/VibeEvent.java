@@ -2,9 +2,6 @@ package com.example.vybe.Models;
 
 import android.icu.text.SimpleDateFormat;
 
-import com.example.vybe.Models.vibefactory.Vibe;
-import com.example.vybe.Models.vibefactory.VibeFactory;
-
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -59,7 +56,7 @@ public class VibeEvent implements Serializable {
      *      This is the longitude coordinate of where a vibe event occurred
      */
     public VibeEvent(String vibe, Date dateTime, String reason, SocialSituation socialSituation, String id, String image, double latitude, double longitude) {
-        this.vibe = VibeFactory.getVibe(vibe);
+        this.vibe = Vibe.ofName(vibe);
         this.dateTime = dateTime;
         this.reason = reason;
         this.socialSituation = socialSituation;
@@ -79,18 +76,18 @@ public class VibeEvent implements Serializable {
 
     /**
      * This sets the vibe of a VibeEvent
-     * @param vibeString The string representation of a vibe
+     * @param name The string representation of a vibe
      */
-    public void setVibe(String vibeString) {
-        this.vibe = VibeFactory.getVibe(vibeString);
+    public void setVibe(String name) {
+        this.vibe = Vibe.ofName(name);
     }
 
     /**
      * This sets the vibe of a VibeEvent
-     * @param vibeEmoticon The integer representing the emoticon of a vibe
+     * @param emoticon The integer representing the emoticon of a vibe
      */
-    public void setVibe(int vibeEmoticon) {
-        this.vibe = VibeFactory.getVibe(vibeEmoticon);
+    public void setVibe(int emoticon) {
+        this.vibe = Vibe.ofEmoticon(emoticon);
     }
 
     /**

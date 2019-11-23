@@ -14,8 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.vybe.Models.vibefactory.Vibe;
-import com.example.vybe.Models.vibefactory.VibeFactory;
+import com.example.vybe.Models.Vibe;
 import com.example.vybe.R;
 
 import java.util.ArrayList;
@@ -62,23 +61,23 @@ public class VibeCarouselDialogFragment extends DialogFragment {
         CarouselPicker carouselPicker = view.findViewById(R.id.carousel_picker);
 
         List<CarouselPicker.PickerItem> imageItems = new ArrayList<>();
-        imageItems.add(new CarouselPicker.DrawableItem(R.drawable.ic_no_vibe));
-        imageItems.add(new CarouselPicker.DrawableItem(R.drawable.ic_angry));
-        imageItems.add(new CarouselPicker.DrawableItem(R.drawable.ic_disgusted));
-        imageItems.add(new CarouselPicker.DrawableItem(R.drawable.ic_happy));
-        imageItems.add(new CarouselPicker.DrawableItem(R.drawable.ic_sad));
-        imageItems.add(new CarouselPicker.DrawableItem(R.drawable.ic_scared));
-        imageItems.add(new CarouselPicker.DrawableItem(R.drawable.ic_surprised));
+        for (Integer emoticon : Vibe.getEmoticons()) {
+            imageItems.add(new CarouselPicker.DrawableItem(emoticon));
+        }
 
         CarouselPicker.CarouselViewAdapter imageAdapter = new CarouselPicker.CarouselViewAdapter(getActivity(), imageItems, 0);
         carouselPicker.setAdapter(imageAdapter);
 
+        // Set default selected vibe to be the first one
+        selectedEmoticon = imageItems.get(0).getDrawable();
+
         carouselPicker.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
             }
 
-            // on selection of an emoticon, set the vibe for a vibe event
+            // on selection of an emoticon, set the selectedEmoticon to that emoticon
             @Override
             public void onPageSelected(int position) {
                 selectedEmoticon = imageItems.get(position).getDrawable();
@@ -86,6 +85,7 @@ public class VibeCarouselDialogFragment extends DialogFragment {
 
             @Override
             public void onPageScrollStateChanged(int state) {
+
             }
         });
 
@@ -95,10 +95,7 @@ public class VibeCarouselDialogFragment extends DialogFragment {
                 .setTitle("Select a Vibe")
                 .setNegativeButton("Cancel", null)
                 .setPositiveButton("OK", (dialog, which) -> {
-                    // if no vibe selected just exit
-                    if (selectedEmoticon != R.drawable.ic_no_vibe) {
-                        onVibeSelectedListener.onVibeSelected(VibeFactory.getVibe(selectedEmoticon));
-                    }
+                    onVibeSelectedListener.onVibeSelected(Vibe.ofEmoticon(selectedEmoticon));
                 }).create();
     }
 

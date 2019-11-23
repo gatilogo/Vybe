@@ -31,6 +31,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.vybe.AddEdit.AddEditVibeEventActivity;
 import com.example.vybe.Models.SocialSituation;
 import com.example.vybe.Models.User;
+import com.example.vybe.Models.Vibe;
 import com.example.vybe.Models.VibeEvent;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -137,7 +138,7 @@ public class MyVibesActivity extends AppCompatActivity {
                                         vibeEvent.setReason(doc.getString("reason"));
                                         vibeEvent.setSocialSituation(SocialSituation.valueOfIfValid(doc.getString("socSit")));
                                         vibeEvent.setId(doc.getId());
-                                        vibeEvent.setVibe(doc.getString("vibe"));
+                                        vibeEvent.setVibe(Vibe.ofName(doc.getString("vibe")));
 
                                         if (doc.getData().get("image") != null) {
                                             vibeEvent.setImage(doc.getString("image"));
@@ -206,7 +207,7 @@ public class MyVibesActivity extends AppCompatActivity {
                     vibeEvent.setReason(doc.getString("reason"));
                     vibeEvent.setSocialSituation(SocialSituation.valueOfIfValid(doc.getString("socSit")));
                     vibeEvent.setId(doc.getId());
-                    vibeEvent.setVibe(doc.getString("vibe"));
+                    vibeEvent.setVibe(Vibe.ofName(doc.getString("vibe")));
                     if (doc.getData().get("image") != null) {
                         vibeEvent.setImage(doc.getString("image"));
                     }
