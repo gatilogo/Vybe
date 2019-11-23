@@ -17,6 +17,7 @@ import androidx.fragment.app.DialogFragment;
 
 import com.bumptech.glide.Glide;
 import com.example.vybe.MapFragment;
+import com.example.vybe.Models.SocialSituation;
 import com.example.vybe.Models.vibefactory.Vibe;
 import com.example.vybe.R;
 import com.example.vybe.Models.VibeEvent;
@@ -138,7 +139,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
     }
 
     @Override
-    public void onSocStnSelected(String socStn) {
+    public void onSocStnSelected(SocialSituation socStn) {
         vibeEvent.setSocialSituation(socStn);
     }
 

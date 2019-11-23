@@ -29,7 +29,7 @@ public class SocialSituationFieldFragment extends Fragment {
     private ImageButton clearBtn;
 
     interface OnSocStnSelectedListener {
-        void onSocStnSelected(String socStn);
+        void onSocStnSelected(SocialSituation socStn);
     }
 
     @Override
@@ -59,7 +59,7 @@ public class SocialSituationFieldFragment extends Fragment {
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
 
                 if (position != hintPosition) {
-                    onSocStnSelectedListener.onSocStnSelected(SocialSituation.at(position).toString());
+                    onSocStnSelectedListener.onSocStnSelected(SocialSituation.at(position));
 
                 } else {
                     onSocStnSelectedListener.onSocStnSelected(null);
@@ -97,13 +97,10 @@ public class SocialSituationFieldFragment extends Fragment {
     }
 
     /**
-     * Set the default Social Situation. If the string doesn't match any of the social situations,
-     * the social situation is not set (it is null aka "Select a Social Situation")
-     * @param socStnDesc
+     * Set the default Social Situation.
+     * @param socStn
      */
-    public void setDefaultSocStn(String socStnDesc) {
-        SocialSituation socStn = SocialSituation.of(socStnDesc);
-
+    public void setDefaultSocStn(SocialSituation socStn) {
         if (socStn != null) {
             int position = socStn.ordinal();
             socStnDropdown.setSelection(position);

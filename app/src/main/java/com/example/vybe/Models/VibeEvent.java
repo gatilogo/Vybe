@@ -22,7 +22,7 @@ public class VibeEvent implements Serializable {
     private Vibe vibe;
     private Date dateTime;
     private String reason;
-    private String socialSituation;
+    private SocialSituation socialSituation;
     private String id;
     private String image;
     private double latitude;
@@ -58,7 +58,7 @@ public class VibeEvent implements Serializable {
      * @param longitude
      *      This is the longitude coordinate of where a vibe event occurred
      */
-    public VibeEvent(String vibe, Date dateTime, String reason, String socialSituation, String id, String image, double latitude, double longitude) {
+    public VibeEvent(String vibe, Date dateTime, String reason, SocialSituation socialSituation, String id, String image, double latitude, double longitude) {
         this.vibe = VibeFactory.getVibe(vibe);
         this.dateTime = dateTime;
         this.reason = reason;
@@ -143,7 +143,7 @@ public class VibeEvent implements Serializable {
      * This gets the social situation of the VibeEvent
      * @return The social situation which a vibe event occurred
      */
-    public String getSocialSituation() {
+    public SocialSituation getSocialSituation() {
         return socialSituation;
     }
 
@@ -151,7 +151,7 @@ public class VibeEvent implements Serializable {
      * This sets the social situation of the VibeEvent
      * @param socialSituation The social situation in which the event occurred
      */
-    public void setSocialSituation(String socialSituation) {
+    public void setSocialSituation(SocialSituation socialSituation) {
         this.socialSituation = socialSituation;
     }
 

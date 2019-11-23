@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
+import com.example.vybe.Models.SocialSituation;
 import com.example.vybe.Models.VibeEvent;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -84,7 +85,7 @@ public class ViewVibeActivity extends AppCompatActivity implements MapFragment.O
         String datetimeText = vibeEvent.getDateTimeString();
         dateField.setText(datetimeText);
         String reason = vibeEvent.getReason();
-        String socialSituation = vibeEvent.getSocialSituation();
+        SocialSituation socialSituation = vibeEvent.getSocialSituation();
         String reasonImagePath = vibeEvent.getImage();
 
         if (reasonImagePath != null){
@@ -101,11 +102,11 @@ public class ViewVibeActivity extends AppCompatActivity implements MapFragment.O
             reasonField.setText(reason);
         }
 
-        if (socialSituation == null || socialSituation.equals("")) { // Social Situation is optional
+        if (socialSituation == null) { // Social Situation is optional
             socialSituationLabel.setVisibility(TextView.GONE);
             socialSituationField.setVisibility(TextView.GONE);
         } else {
-            socialSituationField.setText(socialSituation);
+            socialSituationField.setText(socialSituation.toString());
         }
 
     }
