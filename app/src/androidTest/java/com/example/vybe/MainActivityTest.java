@@ -37,7 +37,7 @@ public class MainActivityTest {
             new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void InvalidLogin_NonexistantUser(){
+    public void InvalidLogin_NonExistantUser(){
         onView(withId(R.id.email_edit_text))
                 .perform(typeText(invalidLoginEmailNoExist), closeSoftKeyboard());
         onView(withId(R.id.password_edit_text))
@@ -47,6 +47,32 @@ public class MainActivityTest {
         // Check we are still in login page
         onView(withId(R.id.signup_button))
                 .check(matches(withText("Sign Up")));
+    }
+
+    @Test
+    public void InvalidLogin_TooShortPassword() {
+        onView(withId(R.id.email_edit_text))
+                .perform(typeText(invalidLoginEmailNoExist), closeSoftKeyboard());
+        onView(withId(R.id.password_edit_text))
+                .perform(typeText(invalidLengthPassword), closeSoftKeyboard());
+        onView(withId(R.id.login_button)).perform(click());
+
+        // Check we are still in login page
+        onView(withId(R.id.signup_button))
+                .check(matches(withText("Sign Up")));
+    }
+
+    @Test
+    public void validLogin() {
+        onView(withId(R.id.email_edit_text))
+                .perform(typeText(validLoginEmail), closeSoftKeyboard());
+        onView(withId(R.id.password_edit_text))
+                .perform(typeText(validLoginPassword), closeSoftKeyboard());
+        onView(withId(R.id.login_button)).perform(click());
+
+        // Check we logged in and we are on myVibes page
+        onView(withId(R.id.filter_spinner))
+                .check(matches(withText("Filter Vibe")));
 
     }
 
