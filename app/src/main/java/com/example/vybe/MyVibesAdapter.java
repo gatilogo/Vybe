@@ -26,6 +26,7 @@ public class MyVibesAdapter extends RecyclerView.Adapter<MyVibesAdapter.VibeEven
     private static final String TAG = "MyVibesAdapter";
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private String mUsername = mAuth.getCurrentUser().getDisplayName();
     private Context context;
     private ArrayList<VibeEvent> vibeEventList;
     private int resource;
@@ -63,13 +64,13 @@ public class MyVibesAdapter extends RecyclerView.Adapter<MyVibesAdapter.VibeEven
         holder.dateField.setText(datetimeText);
         holder.vibeImage.setImageResource(vibeEvent.getVibe().getEmoticon());
 
-        // TODO: FIX THIS ITS UGLY
-        String displaytext = vibeEvent.getVibe().getName();
-        if (!vibeEvent.getOwner().equals(mAuth.getCurrentUser().getDisplayName())) {
-            displaytext = "@" + vibeEvent.getOwner() + " is " + displaytext;
+        String itemText = vibeEvent.getVibe().getName();
+        if (!vibeEvent.getOwner().equals(mUsername)) {
+            // TODO: replace this with setText for username
+            itemText = "@" + vibeEvent.getOwner() + " is " + itemText;
         }
 
-        holder.vibeNameField.setText(displaytext);
+        holder.vibeNameField.setText(itemText);
 
         holder.itemView.setOnClickListener((View v) -> {
             Intent viewVibe = new Intent(context, ViewVibeActivity.class);

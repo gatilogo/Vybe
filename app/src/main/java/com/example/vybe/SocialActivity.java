@@ -115,6 +115,7 @@ public class SocialActivity extends AppCompatActivity {
     private void buildRecyclerView() {
         vibeEventList = new ArrayList<>();
 
+        // TODO: PASS IN DIFFERENT XML RESOURCE FOR SOCIAL ITEM LAYOUT
         socialVibesAdapter = new MyVibesAdapter(this, R.layout.my_vibe_item, vibeEventList);
         socialVibesRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         socialVibesRecyclerView.setAdapter(socialVibesAdapter);
