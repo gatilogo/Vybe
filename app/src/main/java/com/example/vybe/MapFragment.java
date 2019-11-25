@@ -32,8 +32,10 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -52,6 +54,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     //widgets
     private MapView mMapView;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private String currUsername = mAuth.getCurrentUser().getDisplayName();
     private GoogleMap mMap;
     private OnMapFragmentReadyListener onMapFragmentReadyListener;
 
@@ -167,7 +171,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void setToLocation(LatLng latLng) {
         Log.d(TAG, "setToLocation: Here");
         clearMap();
-        addMarker(latLng, R.drawable.ic_map_marker);
+        addMarker(latLng, R.drawable.ic_map_marker, currUsername);
         setCamera(latLng);
     }
 
@@ -179,9 +183,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         setCamera(new LatLng(location.getLatitude(), location.getLongitude()));
     }
 
-    public void addMarker(LatLng latLng, @DrawableRes int drawableRes) {
+    public void addMarker(LatLng latLng, @DrawableRes int drawableRes, String owner) {
         BitmapDescriptor marker = vectorToBitmap(drawableRes);
-        mMap.addMarker(new MarkerOptions().position(latLng).icon(marker));
+        MarkerOptions markerOptions = new MarkerOptions().position(latLng).icon(marker);
+
+        if (owner != currUsername) {
+            markerOptions.title(owner);
+        }
+        mMap.addMarker(markerOptions);
     }
 
     private void setCamera(LatLng latLng) {
