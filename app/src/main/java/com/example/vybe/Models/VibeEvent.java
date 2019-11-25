@@ -20,8 +20,8 @@ public class VibeEvent implements Serializable {
     private SocSit socSit;
     private String id;
     private String image;
-    private double latitude;
-    private double longitude;
+    private Double latitude;
+    private Double longitude;
     private String owner = "";
 
     /**
@@ -31,8 +31,6 @@ public class VibeEvent implements Serializable {
     public VibeEvent() {
 
         this.datetime = new Date();
-        this.latitude = 0;
-        this.longitude = 0;
     }
 
     /**
@@ -55,7 +53,7 @@ public class VibeEvent implements Serializable {
      *      This is the longitude coordinate of where a vibe event occurred
      */
 
-    public VibeEvent(Vibe vibe, Date datetime, String reason, SocSit socSit, String id, String image, double latitude, double longitude) {
+    public VibeEvent(Vibe vibe, Date datetime, String reason, SocSit socSit, String id, String image, Double latitude, Double longitude) {
         this.vibe = vibe;
         this.datetime = datetime;
         this.reason = reason;
@@ -160,19 +158,19 @@ public class VibeEvent implements Serializable {
      */
     public void setImage(String image) { this.image = image; }
 
-    public double getLatitude() {
+    public Double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(double latitude) {
+    public void setLatitude(Double latitude) {
         this.latitude = latitude;
     }
 
-    public double getLongitude() {
+    public Double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(double longitude) {
+    public void setLongitude(Double longitude) {
         this.longitude = longitude;
     }
 

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,6 +53,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
     private Button addBtn;
     private TextView pageTitle;
     private Button pickLocationButton;
+    private ImageButton deleteLocationButton;
     private Toolbar toolbar;
     private MapFragment mapFragment;
     private ImageView imageView;
@@ -73,6 +75,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
         addBtn = findViewById(R.id.add_btn);
         pageTitle = findViewById(R.id.add_edit_vibe_title);
         pickLocationButton = findViewById(R.id.btn_add_location);
+        deleteLocationButton = findViewById(R.id.btn_remove_location);
         vibeImage = findViewById(R.id.vibe_image);
         imageView = findViewById(R.id.imageView);
         mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.add_edit_map_fragment);
@@ -96,11 +99,16 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
                 socSitFragment.setDefaultSocSit(vibeEvent.getSocSit());
             }
 
+            if (vibeEvent.getLatitude() == null && vibeEvent.getLongitude() == null) {
+                deleteLocationButton.setVisibility(View.GONE);
+            }
+
 
             setTheme(vibeEvent.getVibe());
 
         } else {
             vibeEvent = new VibeEvent();
+            deleteLocationButton.setVisibility(View.GONE);
         }
 
         // --- Vibe Carousel Picker ---
@@ -112,6 +120,18 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
         pickLocationButton.setOnClickListener((View v) -> {
             DialogFragment locationFragment = new LocationSelectionDialog();
             locationFragment.show(getSupportFragmentManager(), "tag");
+        });
+
+        //---Remove Location---
+        deleteLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                vibeEvent.setLatitude(null);
+                vibeEvent.setLongitude(null);
+                mapFragment.clearMap();
+                mapFragment.hideMap();
+                deleteLocationButton.setVisibility(View.GONE);
+            }
         });
 
         // --- Show Output on button click ---
@@ -163,11 +183,11 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
 
     @Override
     public void onMapFragmentReady() {
-        if (vibeEvent.getLatitude() != 0 && vibeEvent.getLongitude() != 0) {
+        if (vibeEvent.getLatitude() != null && vibeEvent.getLongitude() != null) {
             mapFragment.setToLocation(new LatLng(vibeEvent.getLatitude(), vibeEvent.getLongitude()));
 
         } else {
-            mapFragment.setToCurrentLocation();
+            mapFragment.hideMap();
         }
     }
 
@@ -175,6 +195,10 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
     public void onLocationSelected(double latitude, double longitude) {
         vibeEvent.setLatitude(latitude);
         vibeEvent.setLongitude(longitude);
+
+        deleteLocationButton.setVisibility(View.VISIBLE);
+
+        mapFragment.showMap();
         mapFragment.setToLocation(new LatLng(latitude, longitude));
     }
 
@@ -201,6 +225,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
         if (!editMode) {
             String id = db.collection(vibeEventDBPath).document().getId();
             vibeEvent.setId(id);
+            vibeEvent.setOwner(mAuth.getCurrentUser().getDisplayName());
         }
 
         if (imageIsSelected) {
@@ -222,6 +247,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
         data.put("image", vibeEvent.getImage());
         data.put("latitude", vibeEvent.getLatitude());
         data.put("longitude", vibeEvent.getLongitude());
+        data.put("owner", vibeEvent.getOwner());
         return data;
     }
 
