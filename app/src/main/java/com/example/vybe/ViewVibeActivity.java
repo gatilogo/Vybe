@@ -1,7 +1,6 @@
 package com.example.vybe;
 
 import android.content.Intent;
-import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,7 +9,7 @@ import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
-import com.example.vybe.Models.SocialSituation;
+import com.example.vybe.Models.SocSit;
 import com.example.vybe.Models.VibeEvent;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -18,12 +17,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.TextStyle;
-import java.util.Date;
-import java.util.Locale;
 
 /**
  * This Activity displays the screen for a vibe event and all its available details
@@ -85,7 +78,7 @@ public class ViewVibeActivity extends AppCompatActivity implements MapFragment.O
         String datetimeText = vibeEvent.getDateTimeString();
         dateField.setText(datetimeText);
         String reason = vibeEvent.getReason();
-        SocialSituation socialSituation = vibeEvent.getSocialSituation();
+        SocSit socSit = vibeEvent.getSocSit();
         String reasonImagePath = vibeEvent.getImage();
 
         if (reasonImagePath != null){
@@ -102,11 +95,11 @@ public class ViewVibeActivity extends AppCompatActivity implements MapFragment.O
             reasonField.setText(reason);
         }
 
-        if (socialSituation == null) { // Social Situation is optional
+        if (socSit == null) { // Social Situation is optional
             socialSituationLabel.setVisibility(TextView.GONE);
             socialSituationField.setVisibility(TextView.GONE);
         } else {
-            socialSituationField.setText(socialSituation.toString());
+            socialSituationField.setText(socSit.toString());
         }
 
     }

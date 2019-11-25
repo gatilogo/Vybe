@@ -6,18 +6,18 @@ import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 
-public enum SocialSituation {
+public enum SocSit {
     ALONE("Alone"),
     WITH_ANOTHER_PERSON("With one other person"),
     WITH_SEVERAL_PEOPLE("With two or several people"),
     WITH_A_CROWD("With a crowd");
 
-    private static final String TAG = "SocialSituation";
+    private static final String TAG = "SocSit";
 
     // Add a desc to every Enum
     private String desc;
 
-    SocialSituation(String desc) {
+    SocSit(String desc) {
         this.desc = desc;
     }
 
@@ -33,25 +33,25 @@ public enum SocialSituation {
     }
 
     /**
-     * Get a SocialSituation using its index
-     * @param position Index of SocialSituation
-     * @return SocialSituation at index position
+     * Get a SocSit using its index
+     * @param position Index of SocSit
+     * @return SocSit at index position
      */
-    public static SocialSituation at(int position) {
-        return SocialSituation.values()[position];
+    public static SocSit at(int position) {
+        return SocSit.values()[position];
     }
 
     /**
-     * Get a String ArrayList of all the SocialSituation enums
+     * Get a String ArrayList of all the SocSit enums
      * @return ArrayList of Social Situation String
      */
     public static ArrayList<String> stringValues() {
-        SocialSituation[] socialSituations = SocialSituation.values();
+        SocSit[] socSits = SocSit.values();
 
         ArrayList<String> stringValues = new ArrayList<>();
 
-        for (int i = 0; i < socialSituations.length; ++i) {
-            stringValues.add(socialSituations[i].toString());
+        for (int i = 0; i < socSits.length; ++i) {
+            stringValues.add(socSits[i].toString());
         }
 
         return stringValues;
@@ -66,13 +66,13 @@ public enum SocialSituation {
      * A SocialSocituation using it's name
      */
 
-    public static SocialSituation of(String name) {
+    public static SocSit of(String name) {
 
         if (name == null)
             return null;
 
         try {
-            return SocialSituation.valueOf(name);
+            return SocSit.valueOf(name);
 
         } catch (IllegalArgumentException e) {
             Log.d(TAG,"[of()] Trying to get value of Invalid Social Situation: " + name);

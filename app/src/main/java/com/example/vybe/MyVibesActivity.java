@@ -29,9 +29,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.vybe.AddEdit.AddEditVibeEventActivity;
-import com.example.vybe.Models.SocialSituation;
+import com.example.vybe.Models.SocSit;
 import com.example.vybe.Models.User;
-import com.example.vybe.Models.Vibe;
 import com.example.vybe.Models.VibeEvent;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -136,7 +135,7 @@ public class MyVibesActivity extends AppCompatActivity {
                                         VibeEvent vibeEvent = new VibeEvent();
                                         vibeEvent.setDateTime(doc.getDate("datetime"));
                                         vibeEvent.setReason(doc.getString("reason"));
-                                        vibeEvent.setSocialSituation(SocialSituation.of(doc.getString("socSit")));
+                                        vibeEvent.setSocSit(SocSit.of(doc.getString("socSit")));
                                         vibeEvent.setId(doc.getId());
                                         vibeEvent.setVibe(doc.getString("vibe"));
                                         vibeEvent.setOwner(mAuth.getCurrentUser().getDisplayName());
@@ -207,7 +206,7 @@ public class MyVibesActivity extends AppCompatActivity {
                     VibeEvent vibeEvent = new VibeEvent();
                     vibeEvent.setDateTime(doc.getDate("datetime"));
                     vibeEvent.setReason(doc.getString("reason"));
-                    vibeEvent.setSocialSituation(SocialSituation.of(doc.getString("socSit")));
+                    vibeEvent.setSocSit(SocSit.of(doc.getString("socSit")));
                     vibeEvent.setId(doc.getId());
                     vibeEvent.setVibe(doc.getString("vibe"));
                     if (doc.getData().get("image") != null) {

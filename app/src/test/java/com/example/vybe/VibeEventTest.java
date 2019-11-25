@@ -1,17 +1,14 @@
 package com.example.vybe;
 
-import com.example.vybe.Models.SocialSituation;
+import com.example.vybe.Models.SocSit;
 import com.example.vybe.Models.Vibe;
 
 import android.icu.text.SimpleDateFormat;
 
 import com.example.vybe.Models.VibeEvent;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
@@ -32,7 +29,7 @@ public class VibeEventTest {
         Date date = new Date();
 
         return new VibeEvent(mockVibe(), date,
-                "just really happy", SocialSituation.ALONE, "", "image", 2.0, 2.0);
+                "just really happy", SocSit.ALONE, "", "image", 2.0, 2.0);
     }
 
     private Vibe mockVibe() {
@@ -45,7 +42,7 @@ public class VibeEventTest {
 
         assertNull(testVibeEvent.getVibe());
         assertNull(testVibeEvent.getReason());
-        assertNull(testVibeEvent.getSocialSituation());
+        assertNull(testVibeEvent.getSocSit());
         assertNull(testVibeEvent.getId());
         assertNull(testVibeEvent.getImage());
     }
@@ -61,7 +58,7 @@ public class VibeEventTest {
         assertEquals(testVibe.getName(), testVibeEvent.getVibe().getName());
         assertEquals("just really happy", testVibeEvent.getReason());
         assertEquals(testDate.getClass(), testVibeEvent.getDateTime().getClass());
-        assertEquals("Alone", testVibeEvent.getSocialSituation().toString());
+        assertEquals("Alone", testVibeEvent.getSocSit().toString());
         assertEquals("", testVibeEvent.getId());
         assertEquals("image", testVibeEvent.getImage());
     }
@@ -142,7 +139,7 @@ public class VibeEventTest {
     public void GetSocialSituation() {
         VibeEvent testVibeEvent = mockVibeEvent();
 
-        assertEquals("Alone", testVibeEvent.getSocialSituation().toString());
+        assertEquals("Alone", testVibeEvent.getSocSit().toString());
 
     }
 
@@ -150,9 +147,9 @@ public class VibeEventTest {
     public void SetSocialSituation() {
         VibeEvent testVibeEvent = mockEmptyVibeEvent();
 
-        testVibeEvent.setSocialSituation(SocialSituation.WITH_A_CROWD);
+        testVibeEvent.setSocSit(SocSit.WITH_A_CROWD);
 
-        assertEquals("With a crowd", testVibeEvent.getSocialSituation().toString());
+        assertEquals("With a crowd", testVibeEvent.getSocSit().toString());
 
     }
 
@@ -204,7 +201,7 @@ public class VibeEventTest {
     public void testNonEmptyConstructor() {
         assertEquals(mockVibe().getName(), mockVibeEvent().getVibe().getName());
         assertEquals("just really happy", mockVibeEvent().getReason());
-        assertEquals("Alone", mockVibeEvent().getSocialSituation().toString());
+        assertEquals("Alone", mockVibeEvent().getSocSit().toString());
         assertEquals("", mockVibeEvent().getId());
         assertEquals("image", mockVibeEvent().getImage());
     }

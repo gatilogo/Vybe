@@ -3,8 +3,6 @@ package com.example.vybe.Models;
 import android.icu.text.SimpleDateFormat;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Date;
 
 /**
@@ -19,7 +17,7 @@ public class VibeEvent implements Serializable {
     private Vibe vibe;
     private Date datetime;
     private String reason;
-    private SocialSituation socialSituation;
+    private SocSit socSit;
     private String id;
     private String image;
     private double latitude;
@@ -45,7 +43,7 @@ public class VibeEvent implements Serializable {
      *      This is the timestamp in which a vibe event occurs/occurred
      * @param reason
      *      This is the reason a vibe event occurred
-     * @param socialSituation
+     * @param socSit
      *      This is the social situation in which a vibe event occurred
      * @param id
      *      This is the unique identifier for a particular instance of a vibe event
@@ -57,11 +55,11 @@ public class VibeEvent implements Serializable {
      *      This is the longitude coordinate of where a vibe event occurred
      */
 
-    public VibeEvent(Vibe vibe, Date datetime, String reason, SocialSituation socialSituation, String id, String image, double latitude, double longitude) {
+    public VibeEvent(Vibe vibe, Date datetime, String reason, SocSit socSit, String id, String image, double latitude, double longitude) {
         this.vibe = vibe;
         this.datetime = datetime;
         this.reason = reason;
-        this.socialSituation = socialSituation;
+        this.socSit = socSit;
         this.id = id;
         this.image = image;
         this.latitude = latitude;
@@ -126,16 +124,16 @@ public class VibeEvent implements Serializable {
      * This gets the social situation of the VibeEvent
      * @return The social situation which a vibe event occurred
      */
-    public SocialSituation getSocialSituation() {
-        return socialSituation;
+    public SocSit getSocSit() {
+        return socSit;
     }
 
     /**
      * This sets the social situation of the VibeEvent
-     * @param socialSituation The social situation in which the event occurred
+     * @param socSit The social situation in which the event occurred
      */
-    public void setSocialSituation(SocialSituation socialSituation) {
-        this.socialSituation = socialSituation;
+    public void setSocSit(SocSit socSit) {
+        this.socSit = socSit;
     }
 
     /**

@@ -17,7 +17,7 @@ import androidx.fragment.app.DialogFragment;
 
 import com.bumptech.glide.Glide;
 import com.example.vybe.MapFragment;
-import com.example.vybe.Models.SocialSituation;
+import com.example.vybe.Models.SocSit;
 import com.example.vybe.Models.Vibe;
 import com.example.vybe.R;
 import com.example.vybe.Models.VibeEvent;
@@ -92,8 +92,8 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
                 loadImageFirebase(imageView, vibeEvent.getImage());
             }
 
-            if (vibeEvent.getSocialSituation() != null) {
-                socStnFragment.setDefaultSocStn(vibeEvent.getSocialSituation());
+            if (vibeEvent.getSocSit() != null) {
+                socStnFragment.setDefaultSocStn(vibeEvent.getSocSit());
             }
 
 
@@ -139,8 +139,8 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
     }
 
     @Override
-    public void onSocStnSelected(SocialSituation socStn) {
-        vibeEvent.setSocialSituation(socStn);
+    public void onSocStnSelected(SocSit socStn) {
+        vibeEvent.setSocSit(socStn);
     }
 
     @Override
@@ -218,7 +218,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
         data.put("vibe", vibeEvent.getVibe());
         data.put("datetime", vibeEvent.getDateTime());
         data.put("reason", vibeEvent.getReason());
-        data.put("socSit", vibeEvent.getSocialSituation());
+        data.put("socSit", vibeEvent.getSocSit());
         data.put("image", vibeEvent.getImage());
         data.put("latitude", vibeEvent.getLatitude());
         data.put("longitude", vibeEvent.getLongitude());

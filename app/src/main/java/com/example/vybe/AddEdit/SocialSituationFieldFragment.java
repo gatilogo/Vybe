@@ -10,13 +10,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.vybe.Models.SocialSituation;
+import com.example.vybe.Models.SocSit;
 import com.example.vybe.R;
 
 import java.util.List;
@@ -29,7 +28,7 @@ public class SocialSituationFieldFragment extends Fragment {
     private ImageButton clearBtn;
 
     interface OnSocStnSelectedListener {
-        void onSocStnSelected(SocialSituation socStn);
+        void onSocStnSelected(SocSit socStn);
     }
 
     @Override
@@ -59,7 +58,7 @@ public class SocialSituationFieldFragment extends Fragment {
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
 
                 if (position != hintPosition) {
-                    onSocStnSelectedListener.onSocStnSelected(SocialSituation.at(position));
+                    onSocStnSelectedListener.onSocStnSelected(SocSit.at(position));
 
                 } else {
                     onSocStnSelectedListener.onSocStnSelected(null);
@@ -80,7 +79,7 @@ public class SocialSituationFieldFragment extends Fragment {
 
     private ArrayAdapter<String> createSocStnAdapter() {
         // List of all the social situation options
-        List<String> options = SocialSituation.stringValues();
+        List<String> options = SocSit.stringValues();
 
         // Add hint to the end of the options list
         options.add("Select a Social Situation");
@@ -100,7 +99,7 @@ public class SocialSituationFieldFragment extends Fragment {
      * Set the default Social Situation.
      * @param socStn
      */
-    public void setDefaultSocStn(SocialSituation socStn) {
+    public void setDefaultSocStn(SocSit socStn) {
         if (socStn != null) {
             int position = socStn.ordinal();
             socStnDropdown.setSelection(position);
