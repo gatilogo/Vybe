@@ -167,7 +167,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
             mapFragment.setToLocation(new LatLng(vibeEvent.getLatitude(), vibeEvent.getLongitude()));
 
         } else {
-            mapFragment.setToCurrentLocation();
+            mapFragment.hideMap();
         }
     }
 
@@ -175,6 +175,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
     public void onLocationSelected(double latitude, double longitude) {
         vibeEvent.setLatitude(latitude);
         vibeEvent.setLongitude(longitude);
+        mapFragment.showMap();
         mapFragment.setToLocation(new LatLng(latitude, longitude));
     }
 

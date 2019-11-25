@@ -224,4 +224,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         getView().setVisibility(View.GONE);
     }
 
+    public void showMap() {getView().setVisibility(View.VISIBLE);}
+
 }

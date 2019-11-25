@@ -45,6 +45,7 @@ public class LocationSelectionDialog extends DialogFragment {
     private Button openLocationAutofill;
     private Button useCurrentLocation;
     private View view;
+    private AlertDialog dialog;
 
     public interface OnLocationSelectedListener {
         void onLocationSelected(double latitude, double longitude);
@@ -78,7 +79,7 @@ public class LocationSelectionDialog extends DialogFragment {
         useCurrentLocation = view.findViewById(R.id.btn_current_location);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        final AlertDialog dialog = builder
+        dialog = builder
                 .setCustomTitle(customTitle())
                 .setView(view)
                 .create();
@@ -104,8 +105,6 @@ public class LocationSelectionDialog extends DialogFragment {
                         new LatLng(currentLat + biasOffset, currentLng + biasOffset)))
                         .build(getContext());
                 startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
-
-
             }
         });
 
@@ -145,6 +144,7 @@ public class LocationSelectionDialog extends DialogFragment {
                 Place place = Autocomplete.getPlaceFromIntent(data);
                 LatLng coordinates = place.getLatLng();
                 onLocationSelectedListener.onLocationSelected(coordinates.latitude, coordinates.longitude);
+                dialog.dismiss();
                 Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 // TODO: Handle the error.
@@ -153,6 +153,4 @@ public class LocationSelectionDialog extends DialogFragment {
             }
         }
     }
-
-
 }
