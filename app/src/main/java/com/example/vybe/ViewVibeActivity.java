@@ -1,7 +1,6 @@
 package com.example.vybe;
 
 import android.content.Intent;
-import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +9,7 @@ import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
+import com.example.vybe.Models.SocSit;
 import com.example.vybe.Models.VibeEvent;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -17,12 +17,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.TextStyle;
-import java.util.Date;
-import java.util.Locale;
 
 /**
  * This Activity displays the screen for a vibe event and all its available details
@@ -37,8 +31,8 @@ public class ViewVibeActivity extends AppCompatActivity implements MapFragment.O
     private TextView dateField;
     private TextView reasonField;
     private TextView reasonLabel;
-    private TextView socialSituationField;
-    private TextView socialSituationLabel;
+    private TextView socSitField;
+    private TextView socSitLabel;
     private ImageView reasonImage;
     private Toolbar toolbar;
     private MapFragment mapFragment;
@@ -53,8 +47,8 @@ public class ViewVibeActivity extends AppCompatActivity implements MapFragment.O
         dateField = findViewById(R.id.view_date_text_view);
         reasonField = findViewById(R.id.view_reason_text_view);
         reasonLabel = findViewById(R.id.view_reason_label);
-        socialSituationField = findViewById(R.id.view_social_situation_text_view);
-        socialSituationLabel = findViewById(R.id.view_social_situation_label);
+        socSitField = findViewById(R.id.view_soc_sit_text_view);
+        socSitLabel = findViewById(R.id.view_soc_sit_label);
         reasonImage = findViewById(R.id.reason_image);
 
         reasonImage.setDrawingCacheEnabled(true);
@@ -84,7 +78,7 @@ public class ViewVibeActivity extends AppCompatActivity implements MapFragment.O
         String datetimeText = vibeEvent.getDateTimeString();
         dateField.setText(datetimeText);
         String reason = vibeEvent.getReason();
-        String socialSituation = vibeEvent.getSocialSituation();
+        SocSit socSit = vibeEvent.getSocSit();
         String reasonImagePath = vibeEvent.getImage();
 
         if (reasonImagePath != null){
@@ -101,11 +95,11 @@ public class ViewVibeActivity extends AppCompatActivity implements MapFragment.O
             reasonField.setText(reason);
         }
 
-        if (socialSituation == null || socialSituation.equals("")) { // Social Situation is optional
-            socialSituationLabel.setVisibility(TextView.GONE);
-            socialSituationField.setVisibility(TextView.GONE);
+        if (socSit == null) { // Social Situation is optional
+            socSitLabel.setVisibility(TextView.GONE);
+            socSitField.setVisibility(TextView.GONE);
         } else {
-            socialSituationField.setText(socialSituation);
+            socSitField.setText(socSit.toString());
         }
 
     }

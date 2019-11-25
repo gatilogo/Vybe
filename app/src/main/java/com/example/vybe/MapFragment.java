@@ -24,8 +24,6 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.vybe.Models.VibeEvent;
-import com.example.vybe.Models.vibefactory.Vibe;
-import com.example.vybe.Models.vibefactory.VibeFactory;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
