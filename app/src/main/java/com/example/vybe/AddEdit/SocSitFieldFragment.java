@@ -24,11 +24,11 @@ public class SocSitFieldFragment extends Fragment {
 
     private OnSocSitSelectedListener onSocSitSelectedListener;
     private Context context;
-    private Spinner socStnDropdown;
+    private Spinner socSitDropdown;
     private ImageButton clearBtn;
 
     interface OnSocSitSelectedListener {
-        void onSocSitSelected(SocSit socStn);
+        void onSocSitSelected(SocSit socSit);
     }
 
     @Override
@@ -44,16 +44,16 @@ public class SocSitFieldFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_social_situation_field, container, false);
 
-        socStnDropdown = view.findViewById(R.id.soc_stn_dropdown);
+        socSitDropdown = view.findViewById(R.id.soc_stn_dropdown);
         clearBtn = view.findViewById(R.id.clear_btn);
 
-        ArrayAdapter<String> socStnAdapter = createSocStnAdapter();
-        socStnDropdown.setAdapter(socStnAdapter);
+        ArrayAdapter<String> socSitAdapter = createSocSitAdapter();
+        socSitDropdown.setAdapter(socSitAdapter);
 
-        int hintPosition = socStnAdapter.getCount();
-        socStnDropdown.setSelection(hintPosition);
+        int hintPosition = socSitAdapter.getCount();
+        socSitDropdown.setSelection(hintPosition);
 
-        socStnDropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        socSitDropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
 
@@ -70,14 +70,14 @@ public class SocSitFieldFragment extends Fragment {
         });
 
         clearBtn.setOnClickListener((View v) -> {
-            socStnDropdown.setSelection(hintPosition);
+            socSitDropdown.setSelection(hintPosition);
         });
 
         return view;
     }
 
 
-    private ArrayAdapter<String> createSocStnAdapter() {
+    private ArrayAdapter<String> createSocSitAdapter() {
         // List of all the social situation options
         List<String> options = SocSit.stringValues();
 
@@ -97,12 +97,12 @@ public class SocSitFieldFragment extends Fragment {
 
     /**
      * Set the default Social Situation.
-     * @param socStn
+     * @param socSit
      */
-    public void setDefaultSocStn(SocSit socStn) {
-        if (socStn != null) {
-            int position = socStn.ordinal();
-            socStnDropdown.setSelection(position);
+    public void setDefaultSocSit(SocSit socSit) {
+        if (socSit != null) {
+            int position = socSit.ordinal();
+            socSitDropdown.setSelection(position);
         }
 
     }

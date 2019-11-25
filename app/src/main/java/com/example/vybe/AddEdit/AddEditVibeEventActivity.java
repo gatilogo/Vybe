@@ -55,7 +55,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
     private Toolbar toolbar;
     private MapFragment mapFragment;
     private ImageView imageView;
-    private SocSitFieldFragment socStnFragment;
+    private SocSitFieldFragment socSitFragment;
     // -------------------
 
     private VibeEvent vibeEvent;
@@ -76,7 +76,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
         vibeImage = findViewById(R.id.vibe_image);
         imageView = findViewById(R.id.imageView);
         mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.add_edit_map_fragment);
-        socStnFragment = (SocSitFieldFragment) getSupportFragmentManager().findFragmentById(R.id.social_situation_field_fragment);
+        socSitFragment = (SocSitFieldFragment) getSupportFragmentManager().findFragmentById(R.id.social_situation_field_fragment);
 
         vibeEventDBPath = "Users/" + mAuth.getCurrentUser().getUid() + "/VibeEvents";
 
@@ -93,7 +93,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
             }
 
             if (vibeEvent.getSocSit() != null) {
-                socStnFragment.setDefaultSocStn(vibeEvent.getSocSit());
+                socSitFragment.setDefaultSocSit(vibeEvent.getSocSit());
             }
 
 
@@ -139,8 +139,8 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
     }
 
     @Override
-    public void onSocSitSelected(SocSit socStn) {
-        vibeEvent.setSocSit(socStn);
+    public void onSocSitSelected(SocSit socSit) {
+        vibeEvent.setSocSit(socSit);
     }
 
     @Override
