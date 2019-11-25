@@ -12,10 +12,10 @@ import androidx.annotation.DrawableRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
+
+import com.example.vybe.Models.Vibe;
 import com.example.vybe.Models.User;
 import com.example.vybe.Models.VibeEvent;
-import com.example.vybe.Models.vibefactory.Vibe;
-import com.example.vybe.Models.vibefactory.VibeFactory;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -106,7 +106,7 @@ public class MapViewActivity extends AppCompatActivity implements MapFragment.On
                     double latitude = doc.getDouble("latitude");
                     double longitude = doc.getDouble("longitude");
                     String vibeName = (String) doc.getData().get("vibe");
-                    Vibe vibe = VibeFactory.getVibe(vibeName);
+                    Vibe vibe = Vibe.ofName(vibeName);
 
                     mapFragment.addMarker(new LatLng(latitude, longitude), vibe.getEmoticon());
 
@@ -142,7 +142,7 @@ public class MapViewActivity extends AppCompatActivity implements MapFragment.On
                                         double latitude = document.getDouble("latitude");
                                         double longitude = document.getDouble("longitude");
                                         String vibeName = (String) document.getData().get("vibe");
-                                        Vibe vibe = VibeFactory.getVibe(vibeName);
+                                        Vibe vibe = Vibe.ofName(vibeName);
 
                                         mapFragment.addMarker(new LatLng(latitude, longitude), vibe.getEmoticon());
 
