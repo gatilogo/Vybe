@@ -12,4 +12,18 @@ import com.google.firebase.storage.StorageReference;
 import java.util.HashMap;
 
 public class AddEditController {
+    private static AddEditController instance;
+
+    private AddEditVibeEventActivity activity;
+
+    private AddEditController(AddEditVibeEventActivity activity) {
+        this.activity = activity;
+    }
+
+    public AddEditController getInstance(AddEditVibeEventActivity activity) {
+        if (instance == null)
+            instance = new AddEditController(activity);
+
+        return instance;
+    }
 }
