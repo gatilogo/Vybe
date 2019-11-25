@@ -78,8 +78,10 @@ public class MapViewActivity extends AppCompatActivity implements MapFragment.On
                 mapFragment.clearMap();
                 if (viewMyVibes) {
                     addFollowedVibeLocations();
+                    mapToggleButton.setImageResource(R.drawable.button_toggle_personal);
                 } else {
                     addMyVibeLocations();
+                    mapToggleButton.setImageResource(R.drawable.button_group);
                 }
 
             }
