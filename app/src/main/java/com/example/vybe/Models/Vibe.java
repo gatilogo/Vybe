@@ -7,6 +7,7 @@ import com.example.vybe.R;
 import java.util.ArrayList;
 
 public enum Vibe {
+    BLANK       ("Blank", R.color.Black, R.drawable.ic_no_vibe),
     ANGRY       ("Angry", R.color.Red, R.drawable.ic_angry),
     DISGUSTED   ("Disgusted", R.color.Green, R.drawable.ic_disgusted),
     HAPPY       ("Happy", R.color.Yellow, R.drawable.ic_happy),
