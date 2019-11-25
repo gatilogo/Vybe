@@ -119,7 +119,7 @@ public class MyVibesActivity extends AppCompatActivity {
         filterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                    String filterVibe = vibes[position].toLowerCase();
+                    String filterVibe = vibes[position];
                     allFlag = true;
                     if (position != 0){ allFlag = false;}
                     db.collection(vibeEventDBPath)
