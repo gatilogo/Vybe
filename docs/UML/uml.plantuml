@@ -178,12 +178,12 @@ class VibeFactory <<Controller>> {
 }
 
 class AddVibeEventController <<Controller>> {
-    + addVibeEvent(Vibe, date: LocaleDateTime, reason: String, picture: ImageView, socialSituation: String)
+    + addVibeEvent(Vibe, date: LocaleDateTime, reason: String, picture: ImageView, socSit: String)
     + pushToDatabase(vibeEvent: VibeEvent)
 }
 
 class EditVibeEventController <<Controller>> {
-    + editVibeEvent(vibe: Vibe, date: LocaleDateTime, reason: String, picture: ImageView, socialSituation: String)
+    + editVibeEvent(vibe: Vibe, date: LocaleDateTime, reason: String, picture: ImageView, socSit: String)
     + pushToDatabase(vibeEvent: VibeEvent)
 }
 
