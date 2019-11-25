@@ -44,6 +44,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
     private static final String TAG = "AddEditVibeEventActivity";
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private AddEditController addEditController = AddEditController.getInstance(AddEditVibeEventActivity.this);
     private String vibeEventDBPath;
 
     // --- XML Elements ---
@@ -86,18 +87,11 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
             pageTitle.setText(getString(R.string.edit_vibe_name));
             vibeEvent = (VibeEvent) extras.getSerializable("vibeEvent");
 
-            reasonField.setText(vibeEvent.getReason());
+            addEditController.editVibeEvent(vibeEvent);
 
             if (vibeEvent.getImage() != null) {
                 loadImageFirebase(imageView, vibeEvent.getImage());
             }
-
-            if (vibeEvent.getSocSit() != null) {
-                socSitFragment.setDefaultSocSit(vibeEvent.getSocSit());
-            }
-
-
-            setTheme(vibeEvent.getVibe());
 
         } else {
             vibeEvent = new VibeEvent();
@@ -138,6 +132,25 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
 
     }
 
+    // ------------- Setters --------------
+
+    public void setVibe(Vibe vibe) {
+        vibeImage.setImageResource(vibe.getEmoticon());
+        toolbar.setBackgroundResource(vibe.getColor());
+        addBtn.setBackgroundResource(vibe.getColor());
+    }
+
+    public void setReason(String reason) {
+        reasonField.setText(reason);
+    }
+
+    public void setSocSit(SocSit socSit) {
+        socSitFragment.setDefaultSocSit(socSit);
+    }
+
+
+    // ------------- Overrides --------------
+
     @Override
     public void onSocSitSelected(SocSit socSit) {
         vibeEvent.setSocSit(socSit);
@@ -152,13 +165,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
     @Override
     public void onVibeSelected(Vibe vibe) {
         vibeEvent.setVibe(vibe.getName());
-        setTheme(vibe);
-    }
-
-    private void setTheme(Vibe vibe) {
-        vibeImage.setImageResource(vibe.getEmoticon());
-        toolbar.setBackgroundResource(vibe.getColor());
-        addBtn.setBackgroundResource(vibe.getColor());
+        setVibe(vibe);
     }
 
     @Override
