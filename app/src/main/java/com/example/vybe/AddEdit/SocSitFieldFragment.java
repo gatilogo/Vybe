@@ -20,7 +20,7 @@ import com.example.vybe.R;
 
 import java.util.List;
 
-public class SocialSituationFieldFragment extends Fragment {
+public class SocSitFieldFragment extends Fragment {
 
     private OnSocStnSelectedListener onSocStnSelectedListener;
     private Context context;
