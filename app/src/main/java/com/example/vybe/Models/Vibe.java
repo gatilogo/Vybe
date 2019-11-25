@@ -42,7 +42,7 @@ public enum Vibe {
             return Vibe.valueOf(name.toUpperCase());
 
         } catch (IllegalArgumentException e) {
-            Log.d(TAG, "[ofName(String name)] Vibe Name: " + name + " is invalid. Defaulting to BLANK Vibe.");;
+            Log.d(TAG, "[ofName(String name)] Vibe Name: " + name + " is invalid. Defaulting to BLANK Vibe.");
             return Vibe.BLANK;
 
         }
