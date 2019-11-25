@@ -10,26 +10,25 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.vybe.Models.SocialSituation;
+import com.example.vybe.Models.SocSit;
 import com.example.vybe.R;
 
 import java.util.List;
 
-public class SocialSituationFieldFragment extends Fragment {
+public class SocSitFieldFragment extends Fragment {
 
-    private OnSocStnSelectedListener onSocStnSelectedListener;
+    private OnSocSitSelectedListener onSocSitSelectedListener;
     private Context context;
-    private Spinner socStnDropdown;
+    private Spinner socSitDropdown;
     private ImageButton clearBtn;
 
-    interface OnSocStnSelectedListener {
-        void onSocStnSelected(String socStn);
+    interface OnSocSitSelectedListener {
+        void onSocSitSelected(SocSit socSit);
     }
 
     @Override
@@ -37,7 +36,7 @@ public class SocialSituationFieldFragment extends Fragment {
         super.onAttach(context);
         this.context = context;
         Activity activity = (Activity) context;
-        onSocStnSelectedListener = (OnSocStnSelectedListener) activity;
+        onSocSitSelectedListener = (OnSocSitSelectedListener) activity;
     }
 
     @Nullable
@@ -45,24 +44,24 @@ public class SocialSituationFieldFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_social_situation_field, container, false);
 
-        socStnDropdown = view.findViewById(R.id.soc_stn_dropdown);
+        socSitDropdown = view.findViewById(R.id.soc_sit_dropdown);
         clearBtn = view.findViewById(R.id.clear_btn);
 
-        ArrayAdapter<String> socStnAdapter = createSocStnAdapter();
-        socStnDropdown.setAdapter(socStnAdapter);
+        ArrayAdapter<String> socSitAdapter = createSocSitAdapter();
+        socSitDropdown.setAdapter(socSitAdapter);
 
-        int hintPosition = socStnAdapter.getCount();
-        socStnDropdown.setSelection(hintPosition);
+        int hintPosition = socSitAdapter.getCount();
+        socSitDropdown.setSelection(hintPosition);
 
-        socStnDropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        socSitDropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
 
                 if (position != hintPosition) {
-                    onSocStnSelectedListener.onSocStnSelected(SocialSituation.at(position).toString());
+                    onSocSitSelectedListener.onSocSitSelected(SocSit.at(position));
 
                 } else {
-                    onSocStnSelectedListener.onSocStnSelected(null);
+                    onSocSitSelectedListener.onSocSitSelected(null);
                 }
             }
 
@@ -71,16 +70,16 @@ public class SocialSituationFieldFragment extends Fragment {
         });
 
         clearBtn.setOnClickListener((View v) -> {
-            socStnDropdown.setSelection(hintPosition);
+            socSitDropdown.setSelection(hintPosition);
         });
 
         return view;
     }
 
 
-    private ArrayAdapter<String> createSocStnAdapter() {
+    private ArrayAdapter<String> createSocSitAdapter() {
         // List of all the social situation options
-        List<String> options = SocialSituation.stringValues();
+        List<String> options = SocSit.stringValues();
 
         // Add hint to the end of the options list
         options.add("Select a Social Situation");
@@ -97,16 +96,13 @@ public class SocialSituationFieldFragment extends Fragment {
     }
 
     /**
-     * Set the default Social Situation. If the string doesn't match any of the social situations,
-     * the social situation is not set (it is null aka "Select a Social Situation")
-     * @param socStnDesc
+     * Set the default Social Situation.
+     * @param socSit
      */
-    public void setDefaultSocStn(String socStnDesc) {
-        SocialSituation socStn = SocialSituation.of(socStnDesc);
-
-        if (socStn != null) {
-            int position = socStn.ordinal();
-            socStnDropdown.setSelection(position);
+    public void setDefaultSocSit(SocSit socSit) {
+        if (socSit != null) {
+            int position = socSit.ordinal();
+            socSitDropdown.setSelection(position);
         }
 
     }

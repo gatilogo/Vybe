@@ -151,7 +151,7 @@ implements java.io.Serializable</pre>
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../com/example/vybe/VibeEvent.html#VibeEvent-java.lang.String-java.time.LocalDateTime-java.lang.String-java.lang.String-java.lang.String-java.lang.String-">VibeEvent</a></span>(java.lang.String&nbsp;vibe,
          java.time.LocalDateTime&nbsp;dateTime,
          java.lang.String&nbsp;reason,
-         java.lang.String&nbsp;socialSituation,
+         java.lang.String&nbsp;socSit,
          java.lang.String&nbsp;id,
          java.lang.String&nbsp;image)</code>
 <div class="block">Default constructor for VibeEvent with provided vibe event parameters</div>
@@ -240,7 +240,7 @@ implements java.io.Serializable</pre>
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/example/vybe/VibeEvent.html#setSocialSituation-java.lang.String-">setSocialSituation</a></span>(java.lang.String&nbsp;socialSituation)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/example/vybe/VibeEvent.html#setSocialSituation-java.lang.String-">setSocialSituation</a></span>(java.lang.String&nbsp;socSit)</code>
 <div class="block">This sets the social situation of the VibeEvent</div>
 </td>
 </tr>
@@ -291,7 +291,7 @@ implements java.io.Serializable</pre>
 <pre>public&nbsp;VibeEvent(java.lang.String&nbsp;vibe,
                  java.time.LocalDateTime&nbsp;dateTime,
                  java.lang.String&nbsp;reason,
-                 java.lang.String&nbsp;socialSituation,
+                 java.lang.String&nbsp;socSit,
                  java.lang.String&nbsp;id,
                  java.lang.String&nbsp;image)</pre>
 <div class="block">Default constructor for VibeEvent with provided vibe event parameters</div>
@@ -300,7 +300,7 @@ implements java.io.Serializable</pre>
 <dd><code>vibe</code> - This is the name of the user selected vibe</dd>
 <dd><code>dateTime</code> - This is the timestamp in which a vibe event occurs/occurred</dd>
 <dd><code>reason</code> - This is the reason a vibe event occurred</dd>
-<dd><code>socialSituation</code> - This is the social situation in which a vibe event occurred</dd>
+<dd><code>socSit</code> - This is the social situation in which a vibe event occurred</dd>
 <dd><code>id</code> - This is the unique identifier for a particular instance of a vibe event</dd>
 <dd><code>image</code> - This is a photograph expressing the reason a vibe event occurred</dd>
 </dl>
@@ -418,11 +418,11 @@ implements java.io.Serializable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>setSocialSituation</h4>
-<pre>public&nbsp;void&nbsp;setSocialSituation(java.lang.String&nbsp;socialSituation)</pre>
+<pre>public&nbsp;void&nbsp;setSocialSituation(java.lang.String&nbsp;socSit)</pre>
 <div class="block">This sets the social situation of the VibeEvent</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>socialSituation</code> - The social situation in which the event occurred</dd>
+<dd><code>socSit</code> - The social situation in which the event occurred</dd>
 </dl>
 </li>
 </ul>

@@ -27,7 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="@string/view_vybe_name"
+                android:text="@string/view_vibe_name"
                 android:textColor="@android:color/white"
                 android:textSize="30sp" />
         </androidx.appcompat.widget.Toolbar>
@@ -91,14 +91,14 @@
             </TableRow>
 
             <TableRow
-                android:id="@+id/view_social_situation_layout"
+                android:id="@+id/view_soc_sit_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp">
 
                 <TextView
-                    android:id="@+id/view_social_situation_label"
+                    android:id="@+id/view_soc_sit_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -107,7 +107,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/view_social_situation_text_view"
+                    android:id="@+id/view_soc_sit_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

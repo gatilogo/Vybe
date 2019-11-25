@@ -2,12 +2,7 @@ package com.example.vybe.Models;
 
 import android.icu.text.SimpleDateFormat;
 
-import com.example.vybe.Models.vibefactory.Vibe;
-import com.example.vybe.Models.vibefactory.VibeFactory;
-
 import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Date;
 
 /**
@@ -20,13 +15,14 @@ import java.util.Date;
  */
 public class VibeEvent implements Serializable {
     private Vibe vibe;
-    private Date dateTime;
+    private Date datetime;
     private String reason;
-    private String socialSituation;
+    private SocSit socSit;
     private String id;
     private String image;
     private double latitude;
     private double longitude;
+    private String owner = "";
 
     /**
      * Constructor called for serialization. Always requires
@@ -34,7 +30,7 @@ public class VibeEvent implements Serializable {
      */
     public VibeEvent() {
 
-        this.dateTime = new Date();
+        this.datetime = new Date();
         this.latitude = 0;
         this.longitude = 0;
     }
@@ -43,11 +39,11 @@ public class VibeEvent implements Serializable {
      * Default constructor for VibeEvent with provided vibe event parameters
      * @param vibe
      *      This is the name of the user selected vibe
-     * @param dateTime
+     * @param datetime
      *      This is the timestamp in which a vibe event occurs/occurred
      * @param reason
      *      This is the reason a vibe event occurred
-     * @param socialSituation
+     * @param socSit
      *      This is the social situation in which a vibe event occurred
      * @param id
      *      This is the unique identifier for a particular instance of a vibe event
@@ -58,11 +54,12 @@ public class VibeEvent implements Serializable {
      * @param longitude
      *      This is the longitude coordinate of where a vibe event occurred
      */
-    public VibeEvent(String vibe, Date dateTime, String reason, String socialSituation, String id, String image, double latitude, double longitude) {
-        this.vibe = VibeFactory.getVibe(vibe);
-        this.dateTime = dateTime;
+
+    public VibeEvent(Vibe vibe, Date datetime, String reason, SocSit socSit, String id, String image, double latitude, double longitude) {
+        this.vibe = vibe;
+        this.datetime = datetime;
         this.reason = reason;
-        this.socialSituation = socialSituation;
+        this.socSit = socSit;
         this.id = id;
         this.image = image;
         this.latitude = latitude;
@@ -79,26 +76,10 @@ public class VibeEvent implements Serializable {
 
     /**
      * This sets the vibe of a VibeEvent
-     * @param vibeString The string representation of a vibe
+     * @param name The string representation of a vibe
      */
-    public void setVibe(String vibeString) {
-        this.vibe = VibeFactory.getVibe(vibeString);
-    }
-
-    /**
-     * This sets the vibe of a VibeEvent
-     * @param vibeEmoticon The integer representing the emoticon of a vibe
-     */
-    public void setVibe(int vibeEmoticon) {
-        this.vibe = VibeFactory.getVibe(vibeEmoticon);
-    }
-
-    /**
-     * This sets the vibe of a VibeEvent
-     * @param vibe The vibe to set
-     */
-    public void setVibe(Vibe vibe) {
-        this.vibe = vibe;
+    public void setVibe(String name) {
+        this.vibe = Vibe.ofName(name);
     }
 
     /**
@@ -106,21 +87,21 @@ public class VibeEvent implements Serializable {
      * @return The date and time of the event as a LocalDateTime object
      */
     public Date getDateTime() {
-        return dateTime;
+        return datetime;
     }
 
     /**
      * This sets the date and time in which a VibeEvent occurred
-     * @param dateTime The date and time of the event
+     * @param datetime The date and time of the event
      */
-    public void setDateTime(Date dateTime) {
-        this.dateTime = dateTime;
+    public void setDateTime(Date datetime) {
+        this.datetime = datetime;
     }
 
     public String getDateTimeString() {
         SimpleDateFormat formatter = new SimpleDateFormat("MMMM dd, yyyy hh:mm a");
-        Date dateTime = this.getDateTime();
-        return formatter.format(dateTime);
+        Date datetime = this.getDateTime();
+        return formatter.format(datetime);
     }
 
     /**
@@ -143,16 +124,16 @@ public class VibeEvent implements Serializable {
      * This gets the social situation of the VibeEvent
      * @return The social situation which a vibe event occurred
      */
-    public String getSocialSituation() {
-        return socialSituation;
+    public SocSit getSocSit() {
+        return socSit;
     }
 
     /**
      * This sets the social situation of the VibeEvent
-     * @param socialSituation The social situation in which the event occurred
+     * @param socSit The social situation in which the event occurred
      */
-    public void setSocialSituation(String socialSituation) {
-        this.socialSituation = socialSituation;
+    public void setSocSit(SocSit socSit) {
+        this.socSit = socSit;
     }
 
     /**
@@ -194,4 +175,8 @@ public class VibeEvent implements Serializable {
     public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
+
+    public String getOwner() { return owner; }
+
+    public void setOwner(String owner) { this.owner = owner; }
 }

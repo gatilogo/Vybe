@@ -17,7 +17,8 @@ import androidx.fragment.app.DialogFragment;
 
 import com.bumptech.glide.Glide;
 import com.example.vybe.MapFragment;
-import com.example.vybe.Models.vibefactory.Vibe;
+import com.example.vybe.Models.SocSit;
+import com.example.vybe.Models.Vibe;
 import com.example.vybe.R;
 import com.example.vybe.Models.VibeEvent;
 import com.google.android.gms.maps.model.LatLng;
@@ -38,7 +39,7 @@ import static com.example.vybe.util.Constants.REASON_FIELD_MAX_WORD_COUNT;
  * This Activity displays the screen for a user to add a vibe event, or
  * edit an existing vibe event by adding or modifying the different vibe attributes
  */
-public class AddEditVibeEventActivity extends AppCompatActivity implements SocialSituationFieldFragment.OnSocStnSelectedListener, ImageFieldFragment.OnImageSelectedListener, VibeCarouselDialogFragment.OnVibeSelectedListener, LocationSelectionDialog.OnLocationSelectedListener, MapFragment.OnMapFragmentReadyListener {
+public class AddEditVibeEventActivity extends AppCompatActivity implements SocSitFieldFragment.OnSocSitSelectedListener, ImageFieldFragment.OnImageSelectedListener, VibeCarouselDialogFragment.OnVibeSelectedListener, LocationSelectionDialog.OnLocationSelectedListener, MapFragment.OnMapFragmentReadyListener {
 
     private static final String TAG = "AddEditVibeEventActivity";
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -54,7 +55,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
     private Toolbar toolbar;
     private MapFragment mapFragment;
     private ImageView imageView;
-    private SocialSituationFieldFragment socStnFragment;
+    private SocSitFieldFragment socSitFragment;
     // -------------------
 
     private VibeEvent vibeEvent;
@@ -75,7 +76,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
         vibeImage = findViewById(R.id.vibe_image);
         imageView = findViewById(R.id.imageView);
         mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.add_edit_map_fragment);
-        socStnFragment = (SocialSituationFieldFragment) getSupportFragmentManager().findFragmentById(R.id.social_situation_field_fragment);
+        socSitFragment = (SocSitFieldFragment) getSupportFragmentManager().findFragmentById(R.id.soc_sit_field_fragment);
 
         vibeEventDBPath = "Users/" + mAuth.getCurrentUser().getUid() + "/VibeEvents";
 
@@ -91,8 +92,8 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
                 loadImageFirebase(imageView, vibeEvent.getImage());
             }
 
-            if (vibeEvent.getSocialSituation() != null) {
-                socStnFragment.setDefaultSocStn(vibeEvent.getSocialSituation());
+            if (vibeEvent.getSocSit() != null) {
+                socSitFragment.setDefaultSocSit(vibeEvent.getSocSit());
             }
 
 
@@ -138,8 +139,8 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
     }
 
     @Override
-    public void onSocStnSelected(String socStn) {
-        vibeEvent.setSocialSituation(socStn);
+    public void onSocSitSelected(SocSit socSit) {
+        vibeEvent.setSocSit(socSit);
     }
 
     @Override
@@ -150,7 +151,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
 
     @Override
     public void onVibeSelected(Vibe vibe) {
-        vibeEvent.setVibe(vibe);
+        vibeEvent.setVibe(vibe.getName());
         setTheme(vibe);
     }
 
@@ -214,10 +215,10 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
     public HashMap<String, Object> createVibeEventData(VibeEvent vibeEvent) {
         HashMap<String, Object> data = new HashMap<>();
         data.put("ID", vibeEvent.getId());
-        data.put("vibe", vibeEvent.getVibe().getName());
+        data.put("vibe", vibeEvent.getVibe());
         data.put("datetime", vibeEvent.getDateTime());
         data.put("reason", vibeEvent.getReason());
-        data.put("socSit", vibeEvent.getSocialSituation());
+        data.put("socSit", vibeEvent.getSocSit());
         data.put("image", vibeEvent.getImage());
         data.put("latitude", vibeEvent.getLatitude());
         data.put("longitude", vibeEvent.getLongitude());
