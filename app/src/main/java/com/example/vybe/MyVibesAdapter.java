@@ -33,13 +33,13 @@ public class MyVibesAdapter extends RecyclerView.Adapter<MyVibesAdapter.VibeEven
 
     public class VibeEventHolder extends RecyclerView.ViewHolder {
         private TextView dateField;
-        private TextView vibeNameField;
+        private TextView vibeTitleField;
         private ImageView vibeImage;
 
         public VibeEventHolder(View view) {
             super(view);
             dateField = view.findViewById(R.id.view_date_text_view);
-            vibeNameField = view.findViewById(R.id.vibe_name_text_view);
+            vibeTitleField = view.findViewById(R.id.vibe_title_text_view);
             vibeImage = view.findViewById(R.id.image_view);
         }
     }
@@ -66,11 +66,9 @@ public class MyVibesAdapter extends RecyclerView.Adapter<MyVibesAdapter.VibeEven
 
         String itemText = vibeEvent.getVibe().getName();
         if (!vibeEvent.getOwner().equals(mUsername)) {
-            // TODO: replace this with setText for username
-            itemText = "@" + vibeEvent.getOwner() + " is " + itemText;
+            itemText = "@" + vibeEvent.getOwner();
         }
-
-        holder.vibeNameField.setText(itemText);
+        holder.vibeTitleField.setText(itemText);
 
         holder.itemView.setOnClickListener((View v) -> {
             Intent viewVibe = new Intent(context, ViewVibeActivity.class);

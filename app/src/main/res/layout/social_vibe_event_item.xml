@@ -22,16 +22,17 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/view_date_text_view"
+            android:id="@+id/vibe_title_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="18sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/vibe_title_text_view"
+            android:id="@+id/view_date_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
     </LinearLayout>
 
 </LinearLayout>
