@@ -201,6 +201,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
         if (!editMode) {
             String id = db.collection(vibeEventDBPath).document().getId();
             vibeEvent.setId(id);
+            vibeEvent.setOwner(mAuth.getCurrentUser().getDisplayName());
         }
 
         if (imageIsSelected) {
@@ -222,6 +223,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
         data.put("image", vibeEvent.getImage());
         data.put("latitude", vibeEvent.getLatitude());
         data.put("longitude", vibeEvent.getLongitude());
+        data.put("owner", vibeEvent.getOwner());
         return data;
     }
 
