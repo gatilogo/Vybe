@@ -26,19 +26,20 @@ public class MyVibesAdapter extends RecyclerView.Adapter<MyVibesAdapter.VibeEven
     private static final String TAG = "MyVibesAdapter";
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private String mUsername = mAuth.getCurrentUser().getDisplayName();
     private Context context;
     private ArrayList<VibeEvent> vibeEventList;
     private int resource;
 
     public class VibeEventHolder extends RecyclerView.ViewHolder {
         private TextView dateField;
-        private TextView vibeNameField;
+        private TextView vibeTitleField;
         private ImageView vibeImage;
 
         public VibeEventHolder(View view) {
             super(view);
             dateField = view.findViewById(R.id.view_date_text_view);
-            vibeNameField = view.findViewById(R.id.vibe_name_text_view);
+            vibeTitleField = view.findViewById(R.id.vibe_title_text_view);
             vibeImage = view.findViewById(R.id.image_view);
         }
     }
@@ -63,13 +64,11 @@ public class MyVibesAdapter extends RecyclerView.Adapter<MyVibesAdapter.VibeEven
         holder.dateField.setText(datetimeText);
         holder.vibeImage.setImageResource(vibeEvent.getVibe().getEmoticon());
 
-        // TODO: FIX THIS ITS UGLY
-        String displaytext = vibeEvent.getVibe().getName();
-        if (!vibeEvent.getOwner().equals(mAuth.getCurrentUser().getDisplayName())) {
-            displaytext = "@" + vibeEvent.getOwner() + " is " + displaytext;
+        String itemText = vibeEvent.getVibe().getName();
+        if (!vibeEvent.getOwner().equals(mUsername)) {
+            itemText = "@" + vibeEvent.getOwner();
         }
-
-        holder.vibeNameField.setText(displaytext);
+        holder.vibeTitleField.setText(itemText);
 
         holder.itemView.setOnClickListener((View v) -> {
             Intent viewVibe = new Intent(context, ViewVibeActivity.class);
