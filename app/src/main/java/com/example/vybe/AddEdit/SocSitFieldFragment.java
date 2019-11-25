@@ -22,13 +22,13 @@ import java.util.List;
 
 public class SocSitFieldFragment extends Fragment {
 
-    private OnSocStnSelectedListener onSocStnSelectedListener;
+    private OnSocSitSelectedListener onSocSitSelectedListener;
     private Context context;
     private Spinner socStnDropdown;
     private ImageButton clearBtn;
 
-    interface OnSocStnSelectedListener {
-        void onSocStnSelected(SocSit socStn);
+    interface OnSocSitSelectedListener {
+        void onSocSitSelected(SocSit socStn);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class SocSitFieldFragment extends Fragment {
         super.onAttach(context);
         this.context = context;
         Activity activity = (Activity) context;
-        onSocStnSelectedListener = (OnSocStnSelectedListener) activity;
+        onSocSitSelectedListener = (OnSocSitSelectedListener) activity;
     }
 
     @Nullable
@@ -58,10 +58,10 @@ public class SocSitFieldFragment extends Fragment {
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
 
                 if (position != hintPosition) {
-                    onSocStnSelectedListener.onSocStnSelected(SocSit.at(position));
+                    onSocSitSelectedListener.onSocSitSelected(SocSit.at(position));
 
                 } else {
-                    onSocStnSelectedListener.onSocStnSelected(null);
+                    onSocSitSelectedListener.onSocSitSelected(null);
                 }
             }
 

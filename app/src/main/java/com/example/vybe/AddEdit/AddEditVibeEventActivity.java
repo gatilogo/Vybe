@@ -39,7 +39,7 @@ import static com.example.vybe.util.Constants.REASON_FIELD_MAX_WORD_COUNT;
  * This Activity displays the screen for a user to add a vibe event, or
  * edit an existing vibe event by adding or modifying the different vibe attributes
  */
-public class AddEditVibeEventActivity extends AppCompatActivity implements SocSitFieldFragment.OnSocStnSelectedListener, ImageFieldFragment.OnImageSelectedListener, VibeCarouselDialogFragment.OnVibeSelectedListener, LocationSelectionDialog.OnLocationSelectedListener, MapFragment.OnMapFragmentReadyListener {
+public class AddEditVibeEventActivity extends AppCompatActivity implements SocSitFieldFragment.OnSocSitSelectedListener, ImageFieldFragment.OnImageSelectedListener, VibeCarouselDialogFragment.OnVibeSelectedListener, LocationSelectionDialog.OnLocationSelectedListener, MapFragment.OnMapFragmentReadyListener {
 
     private static final String TAG = "AddEditVibeEventActivity";
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -139,7 +139,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
     }
 
     @Override
-    public void onSocStnSelected(SocSit socStn) {
+    public void onSocSitSelected(SocSit socStn) {
         vibeEvent.setSocSit(socStn);
     }
 
