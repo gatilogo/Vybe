@@ -142,12 +142,9 @@ public class MapViewActivity extends AppCompatActivity implements MapFragment.On
                                         double latitude = document.getDouble("latitude");
                                         double longitude = document.getDouble("longitude");
                                         String vibeName = (String) document.getData().get("vibe");
-                                        if (vibeName != null && vibeName.equals("disgusted")) {
-                                            mapFragment.addMarker(new LatLng(latitude, longitude), R.drawable.ic_disgusted_marker);
-                                        }
-//                                        Vibe vibe = VibeFactory.getVibe(vibeName);
-//
-                                        mapFragment.addMarker(new LatLng(latitude, longitude), R.drawable.ic_scared_marker);
+                                        Vibe vibe = VibeFactory.getVibe(vibeName);
+
+                                        mapFragment.addMarker(new LatLng(latitude, longitude), vibe.getEmoticon());
 
                                     }
                                 }
