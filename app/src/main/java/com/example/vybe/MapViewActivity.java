@@ -47,6 +47,7 @@ public class MapViewActivity extends AppCompatActivity implements MapFragment.On
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private String currUsername = mAuth.getCurrentUser().getDisplayName();
     private String vibeEventDBPath;
     private MapFragment mapFragment;
     private FloatingActionButton mapToggleButton;
@@ -78,8 +79,10 @@ public class MapViewActivity extends AppCompatActivity implements MapFragment.On
                 mapFragment.clearMap();
                 if (viewMyVibes) {
                     addFollowedVibeLocations();
+                    mapToggleButton.setImageResource(R.drawable.button_toggle_personal);
                 } else {
                     addMyVibeLocations();
+                    mapToggleButton.setImageResource(R.drawable.button_group);
                 }
 
             }
@@ -108,7 +111,7 @@ public class MapViewActivity extends AppCompatActivity implements MapFragment.On
                     String vibeName = (String) doc.getData().get("vibe");
                     Vibe vibe = Vibe.ofName(vibeName);
 
-                    mapFragment.addMarker(new LatLng(latitude, longitude), vibe.getEmoticon());
+                    mapFragment.addMarker(new LatLng(latitude, longitude), vibe.getEmoticon(), currUsername);
 
                 }
             }
@@ -143,8 +146,9 @@ public class MapViewActivity extends AppCompatActivity implements MapFragment.On
                                         double longitude = document.getDouble("longitude");
                                         String vibeName = (String) document.getData().get("vibe");
                                         Vibe vibe = Vibe.ofName(vibeName);
+                                        String vibeOwner = (String) document.getData().get("owner");
 
-                                        mapFragment.addMarker(new LatLng(latitude, longitude), vibe.getEmoticon());
+                                        mapFragment.addMarker(new LatLng(latitude, longitude), vibe.getEmoticon(), vibeOwner);
 
                                     }
                                 }
