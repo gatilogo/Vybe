@@ -59,7 +59,6 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
     private Button pickLocationButton;
     private Toolbar toolbar;
     private MapFragment mapFragment;
-    private ImageView imageView;
     private SocSitFieldFragment socSitFragment;
     private ImageFieldFragment imageFieldFragment;
     // -------------------
@@ -70,7 +69,6 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
     private Bitmap image;
     private double latitude;
     private double longitude;
-    private boolean mapFragmentIsReady = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +81,6 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
         pageTitle = findViewById(R.id.add_edit_vibe_title);
         pickLocationButton = findViewById(R.id.btn_add_location);
         vibeImage = findViewById(R.id.vibe_image);
-        imageView = findViewById(R.id.imageView);
         mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.add_edit_map_fragment);
         socSitFragment = (SocSitFieldFragment) getSupportFragmentManager().findFragmentById(R.id.soc_sit_field_fragment);
         imageFieldFragment = (ImageFieldFragment) getSupportFragmentManager().findFragmentById(R.id.image_field_fragment);
