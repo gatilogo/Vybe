@@ -30,7 +30,7 @@ import in.goodiebag.carouselpicker.CarouselPicker;
 public class VibeCarouselDialogFragment extends DialogFragment {
 
     private Context context;
-    private int selectedEmoticon = R.drawable.ic_no_vibe;
+    private int selectedPosition = 0;
     private OnVibeSelectedListener onVibeSelectedListener;
 
     public interface OnVibeSelectedListener {
@@ -69,9 +69,6 @@ public class VibeCarouselDialogFragment extends DialogFragment {
         CarouselPicker.CarouselViewAdapter imageAdapter = new CarouselPicker.CarouselViewAdapter(getActivity(), imageItems, 0);
         carouselPicker.setAdapter(imageAdapter);
 
-        // Set default selected vibe to be the first one
-        selectedEmoticon = imageItems.get(0).getDrawable();
-
         carouselPicker.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -81,7 +78,7 @@ public class VibeCarouselDialogFragment extends DialogFragment {
             // on selection of an emoticon, set the selectedEmoticon to that emoticon
             @Override
             public void onPageSelected(int position) {
-                selectedEmoticon = imageItems.get(position).getDrawable();
+                selectedPosition = position;
             }
 
             @Override
@@ -96,7 +93,13 @@ public class VibeCarouselDialogFragment extends DialogFragment {
                 .setTitle("Select a Vibe")
                 .setNegativeButton("Cancel", null)
                 .setPositiveButton("OK", (dialog, which) -> {
-                    onVibeSelectedListener.onVibeSelected(Vibe.ofEmoticon(selectedEmoticon));
+                    int selectedEmoticon = imageItems.get(selectedPosition).getDrawable();
+                    Vibe selectedVibe = Vibe.ofEmoticon(selectedEmoticon);
+
+                    if (selectedVibe != Vibe.BLANK) {
+                        onVibeSelectedListener.onVibeSelected(selectedVibe);
+                    }
+
                 }).create();
     }
 

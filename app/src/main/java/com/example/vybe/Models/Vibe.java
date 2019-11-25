@@ -33,7 +33,13 @@ public enum Vibe {
      * @return A Vibe Enum
      */
     public static Vibe ofName(String name) {
-        return Vibe.valueOf(name.toUpperCase());
+        try {
+            return Vibe.valueOf(name.toUpperCase());
+
+        } catch (IllegalArgumentException e) {
+            return Vibe.BLANK;
+
+        }
     }
 
     /**
