@@ -1,5 +1,8 @@
 package com.example.vybe.Models;
 
+import android.util.Log;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 
 import com.example.vybe.R;
@@ -14,6 +17,8 @@ public enum Vibe {
     SAD         ("Sad", R.color.Gray, R.drawable.ic_sad),
     SCARED      ("Scared", R.color.Blue, R.drawable.ic_scared),
     SURPRISED   ("Surprised", R.color.Orange, R.drawable.ic_surprised);
+
+    private static final String TAG = "Vibe (Enum)";
 
     private String name;
     private int color;
@@ -37,6 +42,7 @@ public enum Vibe {
             return Vibe.valueOf(name.toUpperCase());
 
         } catch (IllegalArgumentException e) {
+            Log.d(TAG, "[ofName(String name)] Vibe Name: " + name + " is invalid. Defaulting to BLANK Vibe.");;
             return Vibe.BLANK;
 
         }
