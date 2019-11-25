@@ -31,8 +31,8 @@ public class ViewVibeActivity extends AppCompatActivity implements MapFragment.O
     private TextView dateField;
     private TextView reasonField;
     private TextView reasonLabel;
-    private TextView socialSituationField;
-    private TextView socialSituationLabel;
+    private TextView socSitField;
+    private TextView socSitLabel;
     private ImageView reasonImage;
     private Toolbar toolbar;
     private MapFragment mapFragment;
@@ -47,8 +47,8 @@ public class ViewVibeActivity extends AppCompatActivity implements MapFragment.O
         dateField = findViewById(R.id.view_date_text_view);
         reasonField = findViewById(R.id.view_reason_text_view);
         reasonLabel = findViewById(R.id.view_reason_label);
-        socialSituationField = findViewById(R.id.view_social_situation_text_view);
-        socialSituationLabel = findViewById(R.id.view_social_situation_label);
+        socSitField = findViewById(R.id.view_social_situation_text_view);
+        socSitLabel = findViewById(R.id.view_social_situation_label);
         reasonImage = findViewById(R.id.reason_image);
 
         reasonImage.setDrawingCacheEnabled(true);
@@ -96,10 +96,10 @@ public class ViewVibeActivity extends AppCompatActivity implements MapFragment.O
         }
 
         if (socSit == null) { // Social Situation is optional
-            socialSituationLabel.setVisibility(TextView.GONE);
-            socialSituationField.setVisibility(TextView.GONE);
+            socSitLabel.setVisibility(TextView.GONE);
+            socSitField.setVisibility(TextView.GONE);
         } else {
-            socialSituationField.setText(socSit.toString());
+            socSitField.setText(socSit.toString());
         }
 
     }
