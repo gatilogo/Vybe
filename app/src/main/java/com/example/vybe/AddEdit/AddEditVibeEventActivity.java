@@ -167,7 +167,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
             mapFragment.setToLocation(new LatLng(vibeEvent.getLatitude(), vibeEvent.getLongitude()));
 
         } else {
-            mapFragment.setToCurrentLocation();
+            mapFragment.hideMap();
         }
     }
 
@@ -175,6 +175,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
     public void onLocationSelected(double latitude, double longitude) {
         vibeEvent.setLatitude(latitude);
         vibeEvent.setLongitude(longitude);
+        mapFragment.showMap();
         mapFragment.setToLocation(new LatLng(latitude, longitude));
     }
 
@@ -201,6 +202,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
         if (!editMode) {
             String id = db.collection(vibeEventDBPath).document().getId();
             vibeEvent.setId(id);
+            vibeEvent.setOwner(mAuth.getCurrentUser().getDisplayName());
         }
 
         if (imageIsSelected) {
@@ -222,6 +224,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
         data.put("image", vibeEvent.getImage());
         data.put("latitude", vibeEvent.getLatitude());
         data.put("longitude", vibeEvent.getLongitude());
+        data.put("owner", vibeEvent.getOwner());
         return data;
     }
 
