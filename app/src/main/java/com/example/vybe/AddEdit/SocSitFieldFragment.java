@@ -44,7 +44,7 @@ public class SocSitFieldFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_social_situation_field, container, false);
 
-        socSitDropdown = view.findViewById(R.id.soc_stn_dropdown);
+        socSitDropdown = view.findViewById(R.id.soc_sit_dropdown);
         clearBtn = view.findViewById(R.id.clear_btn);
 
         ArrayAdapter<String> socSitAdapter = createSocSitAdapter();

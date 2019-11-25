@@ -76,7 +76,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
         vibeImage = findViewById(R.id.vibe_image);
         imageView = findViewById(R.id.imageView);
         mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.add_edit_map_fragment);
-        socSitFragment = (SocSitFieldFragment) getSupportFragmentManager().findFragmentById(R.id.social_situation_field_fragment);
+        socSitFragment = (SocSitFieldFragment) getSupportFragmentManager().findFragmentById(R.id.soc_sit_field_fragment);
 
         vibeEventDBPath = "Users/" + mAuth.getCurrentUser().getUid() + "/VibeEvents";
 

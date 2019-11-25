@@ -61,7 +61,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <fragment
-                android:id="@+id/social_situation_field_fragment"
+                android:id="@+id/soc_sit_field_fragment"
                 android:name="com.example.vybe.AddEdit.SocSitFieldFragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
