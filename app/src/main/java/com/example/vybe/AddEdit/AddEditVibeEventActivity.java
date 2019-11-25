@@ -1,6 +1,8 @@
 package com.example.vybe.AddEdit;
 
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -11,11 +13,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.ViewTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.example.vybe.MapFragment;
 import com.example.vybe.Models.SocSit;
 import com.example.vybe.Models.Vibe;
@@ -42,10 +49,7 @@ import static com.example.vybe.util.Constants.REASON_FIELD_MAX_WORD_COUNT;
 public class AddEditVibeEventActivity extends AppCompatActivity implements SocSitFieldFragment.OnSocSitSelectedListener, ImageFieldFragment.OnImageSelectedListener, VibeCarouselDialogFragment.OnVibeSelectedListener, LocationSelectionDialog.OnLocationSelectedListener, MapFragment.OnMapFragmentReadyListener {
 
     private static final String TAG = "AddEditVibeEventActivity";
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private AddEditController addEditController = AddEditController.getInstance(AddEditVibeEventActivity.this);
-    private String vibeEventDBPath;
 
     // --- XML Elements ---
     private ImageView vibeImage;
@@ -57,12 +61,16 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
     private MapFragment mapFragment;
     private ImageView imageView;
     private SocSitFieldFragment socSitFragment;
+    private ImageFieldFragment imageFieldFragment;
     // -------------------
 
-    private VibeEvent vibeEvent;
-    private boolean editMode = false;
-    private boolean imageIsSelected = false;
-    private Bitmap imageBitmap;
+    private Vibe vibe;
+    private String reason;
+    private SocSit socSit;
+    private Bitmap image;
+    private double latitude;
+    private double longitude;
+    private boolean mapFragmentIsReady = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,23 +86,16 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
         imageView = findViewById(R.id.imageView);
         mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.add_edit_map_fragment);
         socSitFragment = (SocSitFieldFragment) getSupportFragmentManager().findFragmentById(R.id.soc_sit_field_fragment);
-
-        vibeEventDBPath = "Users/" + mAuth.getCurrentUser().getUid() + "/VibeEvents";
+        imageFieldFragment = (ImageFieldFragment) getSupportFragmentManager().findFragmentById(R.id.image_field_fragment);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            editMode = true;
             pageTitle.setText(getString(R.string.edit_vibe_name));
-            vibeEvent = (VibeEvent) extras.getSerializable("vibeEvent");
-
+            VibeEvent vibeEvent = (VibeEvent) extras.getSerializable("vibeEvent");
             addEditController.editVibeEvent(vibeEvent);
 
-            if (vibeEvent.getImage() != null) {
-                loadImageFirebase(imageView, vibeEvent.getImage());
-            }
-
         } else {
-            vibeEvent = new VibeEvent();
+            addEditController.addVibeEvent();
         }
 
         // --- Vibe Carousel Picker ---
@@ -110,31 +111,44 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
 
         // --- Show Output on button click ---
         addBtn.setOnClickListener(view -> {
-
-            if (reasonField.getText().toString().trim().split("\\s").length <= REASON_FIELD_MAX_WORD_COUNT) {
-                reasonField.setError(null);
-                vibeEvent.setReason(reasonField.getText().toString());
-            } else {
-                reasonField.setError(String.format(Locale.CANADA, "Max %d words allowed", REASON_FIELD_MAX_WORD_COUNT));
-                return;
+            if (fieldAreValid()) {
+                addEditController.saveVibeEvent(vibe, reason, socSit, image, latitude, longitude);
+                finish();
             }
-
-            if (vibeEvent.getVibe() == null) {
-                Toast.makeText(getApplicationContext(), "Select a Vibe!", Toast.LENGTH_LONG).show();
-                return;
-            }
-
-
-            uploadVibeEvent();
-
-            finish();
         });
 
+    }
+
+    // ------------- Validation -------------
+    public boolean fieldAreValid() {
+        return vibeFieldIsValid() && reasonFieldIsValid();
+    }
+
+    public boolean vibeFieldIsValid() {
+        if (vibe == null) {
+            Toast.makeText(getApplicationContext(), "Select a Vibe!", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean reasonFieldIsValid() {
+        reason = reasonField.getText().toString().trim();
+        if (reason.split("\\s").length <= REASON_FIELD_MAX_WORD_COUNT) {
+            reasonField.setError(null);
+            return true;
+
+        } else {
+            reasonField.setError(String.format(Locale.CANADA, "Max %d words allowed", REASON_FIELD_MAX_WORD_COUNT));
+            return false;
+        }
     }
 
     // ------------- Setters --------------
 
     public void setVibe(Vibe vibe) {
+        this.vibe = vibe;
         vibeImage.setImageResource(vibe.getEmoticon());
         toolbar.setBackgroundResource(vibe.getColor());
         addBtn.setBackgroundResource(vibe.getColor());
@@ -145,115 +159,50 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
     }
 
     public void setSocSit(SocSit socSit) {
+        this.socSit = socSit;
         socSitFragment.setDefaultSocSit(socSit);
     }
 
+    public void setImage(Bitmap image) {
+        this.image = image;
+        imageFieldFragment.setImage(image);
+    }
+
+    public void setLocation(double latitude, double longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+
+        mapFragment.setToLocation(new LatLng(latitude, longitude));
+    }
+
+    public void setToCurrentLocation() {
+        mapFragment.setToCurrentLocation();
+    }
 
     // ------------- Overrides --------------
 
     @Override
     public void onSocSitSelected(SocSit socSit) {
-        vibeEvent.setSocSit(socSit);
+        this.socSit = socSit;
     }
 
     @Override
-    public void onImageSelected(Bitmap selectedImageBitmap) {
-        imageBitmap = selectedImageBitmap;
-        imageIsSelected = true;
+    public void onImageSelected(Bitmap image) {
+        this.image = image;
     }
 
     @Override
     public void onVibeSelected(Vibe vibe) {
-        vibeEvent.setVibe(vibe.getName());
         setVibe(vibe);
     }
 
     @Override
     public void onMapFragmentReady() {
-        if (vibeEvent.getLatitude() != 0 && vibeEvent.getLongitude() != 0) {
-            mapFragment.setToLocation(new LatLng(vibeEvent.getLatitude(), vibeEvent.getLongitude()));
-
-        } else {
-            mapFragment.setToCurrentLocation();
-        }
+        addEditController.onMapFragmentReady();
     }
 
     @Override
     public void onLocationSelected(double latitude, double longitude) {
-        vibeEvent.setLatitude(latitude);
-        vibeEvent.setLongitude(longitude);
-        mapFragment.setToLocation(new LatLng(latitude, longitude));
-    }
-
-    private void uploadImage(Bitmap bitmap, String id) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] byteArray = baos.toByteArray();
-
-        String imgPath = "reasons/" + id + ".jpg";
-        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-        StorageReference mountainsRef = storageRef.child(imgPath);
-
-        UploadTask uploadTask = mountainsRef.putBytes(byteArray);
-        uploadTask.addOnFailureListener((@NonNull Exception exception) -> {
-            Toast.makeText(getApplicationContext(), "Image Upload Failed", Toast.LENGTH_LONG).show();
-
-        }).addOnSuccessListener((UploadTask.TaskSnapshot taskSnapshot) -> {
-            Toast.makeText(getApplicationContext(), "Image Upload Successful", Toast.LENGTH_LONG).show();
-        });
-
-    }
-
-    public void uploadVibeEvent() {
-        if (!editMode) {
-            String id = db.collection(vibeEventDBPath).document().getId();
-            vibeEvent.setId(id);
-        }
-
-        if (imageIsSelected) {
-            uploadImage(imageBitmap, vibeEvent.getId());
-            vibeEvent.setImage("reasons/" + vibeEvent.getId() + ".jpg");
-        }
-
-        HashMap<String, Object> data = createVibeEventData(vibeEvent);
-        db.collection(vibeEventDBPath).document(vibeEvent.getId()).set(data);
-    }
-
-    public HashMap<String, Object> createVibeEventData(VibeEvent vibeEvent) {
-        HashMap<String, Object> data = new HashMap<>();
-        data.put("ID", vibeEvent.getId());
-        data.put("vibe", vibeEvent.getVibe());
-        data.put("datetime", vibeEvent.getDateTime());
-        data.put("reason", vibeEvent.getReason());
-        data.put("socSit", vibeEvent.getSocSit());
-        data.put("image", vibeEvent.getImage());
-        data.put("latitude", vibeEvent.getLatitude());
-        data.put("longitude", vibeEvent.getLongitude());
-        return data;
-    }
-
-    ;
-
-    /**
-     * This will load an image from Firebase Storage into an ImageView
-     *
-     * @param imageView The destination ImageView
-     * @param imagePath Path to the image in Firebase Storage
-     */
-    public void loadImageFirebase(ImageView imageView, String imagePath) {
-        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-
-        // Get the path to the image
-        StorageReference imageRef = storageRef.child(imagePath);
-
-        // Get the download URL for Glide
-        imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                Glide.with(getApplicationContext())
-                        .load(uri) // Load the image
-                        .into(imageView); // Destination to load image into
-            }
-        });
+        setLocation(latitude, longitude);
     }
 }

@@ -77,4 +77,8 @@ public class ImageFieldFragment extends Fragment {
             }
         }
     }
+
+    public void setImage(Bitmap image) {
+        imageView.setImageBitmap(image);
+    }
 }
