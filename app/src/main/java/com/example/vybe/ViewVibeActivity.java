@@ -131,7 +131,7 @@ public class ViewVibeActivity extends AppCompatActivity implements MapFragment.O
     @Override
     public void onMapFragmentReady() {
         //if the vibe has a location, show it on the map
-        if (vibeEvent.getLatitude() != 0 && vibeEvent.getLongitude() != 0) {
+        if (vibeEvent.getLatitude() != null && vibeEvent.getLongitude() != null) {
             mapFragment.setToLocation(new LatLng(vibeEvent.getLatitude(), vibeEvent.getLongitude()));
         } else {
             mapFragment.hideMap();

@@ -55,11 +55,16 @@ public class AddEditController {
         String reason = vibeEvent.getReason();
         SocSit socSit = vibeEvent.getSocSit();
         String imagePath = vibeEvent.getImage();
+        Double latitude = vibeEvent.getLatitude();
+        Double longitude = vibeEvent.getLongitude();
         assert vibeEvent.getId() != null : "Editing a VibeEvent that doesn't have an ID";
 
         activity.setVibe(vibe);
         if (reason != null) activity.setReason(reason);
         if (socSit != null) activity.setSocSit(socSit);
+        if (latitude == null && longitude == null) {
+            activity.hideDeleteLocationBtn();
+        }
         if (imagePath != null) {
             loadAndSetImage(imagePath);
         }
@@ -70,25 +75,27 @@ public class AddEditController {
 
         String id = db.collection(vibeEventDBPath).document().getId();
         vibeEvent.setId(id);
+
+        activity.hideDeleteLocationBtn();
     }
 
-    public void saveVibeEvent(Vibe vibe, String reason, SocSit socSit, Bitmap image, double latitude, double longitude) {
+    public void saveVibeEvent(Vibe vibe, String reason, SocSit socSit, Bitmap image, Double latitude, Double longitude) {
         vibeEvent.setVibe(vibe.toString());
         if (reason != null) vibeEvent.setReason(reason);
         if (socSit != null) vibeEvent.setSocSit(socSit);
         if (image != null) vibeEvent.setImage(uploadImage(image));
-        vibeEvent.setLatitude(latitude);
-        vibeEvent.setLongitude(longitude);
+        if (latitude != null) vibeEvent.setLatitude(latitude);
+        if (longitude != null) vibeEvent.setLongitude(longitude);
 
         uploadVibeEvent();
     }
 
     public void onMapFragmentReady() {
-        if (vibeEvent.getLatitude() != 0 && vibeEvent.getLongitude() != 0) {
+        if (vibeEvent.getLatitude() != null && vibeEvent.getLongitude() != null) {
             activity.setLocation(vibeEvent.getLatitude(), vibeEvent.getLongitude());
 
         } else {
-            activity.setToCurrentLocation();
+            activity.hideMap();
         }
     }
 

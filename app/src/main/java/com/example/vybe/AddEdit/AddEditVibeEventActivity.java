@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,6 +58,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
     private Button addBtn;
     private TextView pageTitle;
     private Button pickLocationButton;
+    private ImageButton deleteLocationButton;
     private Toolbar toolbar;
     private MapFragment mapFragment;
     private SocSitFieldFragment socSitFragment;
@@ -67,8 +69,8 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
     private String reason;
     private SocSit socSit;
     private Bitmap image;
-    private double latitude;
-    private double longitude;
+    private Double latitude;
+    private Double longitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +82,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
         addBtn = findViewById(R.id.add_btn);
         pageTitle = findViewById(R.id.add_edit_vibe_title);
         pickLocationButton = findViewById(R.id.btn_add_location);
+        deleteLocationButton = findViewById(R.id.btn_remove_location);
         vibeImage = findViewById(R.id.vibe_image);
         mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.add_edit_map_fragment);
         socSitFragment = (SocSitFieldFragment) getSupportFragmentManager().findFragmentById(R.id.soc_sit_field_fragment);
@@ -104,6 +107,11 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
         pickLocationButton.setOnClickListener((View v) -> {
             DialogFragment locationFragment = new LocationSelectionDialog();
             locationFragment.show(getSupportFragmentManager(), "tag");
+        });
+
+        //---Remove Location---
+        deleteLocationButton.setOnClickListener((View v) -> {
+            clearLocation();
         });
 
         // --- Show Output on button click ---
@@ -168,13 +176,39 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
     public void setLocation(double latitude, double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
-
+        mapFragment.showMap();
+        showDeleteLocationBtn();
         mapFragment.setToLocation(new LatLng(latitude, longitude));
+    }
+
+    public void clearLocation() {
+        latitude = null;
+        longitude = null;
+        mapFragment.clearMap();
+        hideMap();
+        hideDeleteLocationBtn();
     }
 
     public void setToCurrentLocation() {
         mapFragment.setToCurrentLocation();
     }
+
+    public void hideMap() {
+        mapFragment.hideMap();
+    }
+
+    public void showMap() {
+        mapFragment.showMap();
+    }
+
+    public void hideDeleteLocationBtn() {
+        deleteLocationButton.setVisibility(View.GONE);
+    }
+
+    public void showDeleteLocationBtn() {
+        deleteLocationButton.setVisibility(View.VISIBLE);
+    }
+
 
     // ------------- Overrides --------------
 

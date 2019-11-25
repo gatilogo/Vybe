@@ -29,5 +29,5 @@
         android:clickable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@android:drawable/ic_lock_silent_mode" />
+        android:src="@drawable/button_group" />
 </androidx.constraintlayout.widget.ConstraintLayout>
