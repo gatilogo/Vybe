@@ -40,11 +40,19 @@ public class VibeEventTest {
     public void VibeEventConstructor_EmptyInit() {
         VibeEvent testVibeEvent = mockEmptyVibeEvent();
 
+        Date testDate = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("MMMM dd, yyyy hh:mm a");
+
         assertNull(testVibeEvent.getVibe());
         assertNull(testVibeEvent.getReason());
         assertNull(testVibeEvent.getSocSit());
+        assertEquals(testDate.getClass(), testVibeEvent.getDateTime().getClass());
+        assertEquals(formatter.format(testDate), testVibeEvent.getDateTimeString());
         assertNull(testVibeEvent.getId());
         assertNull(testVibeEvent.getImage());
+        assertNull(testVibeEvent.getLatitude());
+        assertNull(testVibeEvent.getLongitude());
+
     }
 
     @Test
@@ -62,6 +70,9 @@ public class VibeEventTest {
         assertEquals("Alone", testVibeEvent.getSocSit().toString());
         assertEquals("", testVibeEvent.getId());
         assertEquals("image", testVibeEvent.getImage());
+        assertEquals(2.0, testVibeEvent.getLongitude(), 0);
+        assertEquals(2.0, testVibeEvent.getLongitude(), 0);
+
     }
 
     @Test
