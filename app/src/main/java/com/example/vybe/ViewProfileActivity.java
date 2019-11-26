@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -80,15 +81,12 @@ public class ViewProfileActivity extends AppCompatActivity {
 
         sendRequestBtn.setOnClickListener(view -> {
             String otherUserID = user.getUserID();
-            String requestPath = "Users/" + otherUserID + "/Requests";
             FirebaseUser selfFB = mAuth.getCurrentUser();
 
-            // TODO: set the correct username/display name from/for mAuth.getCurrentUser()
-            User self = new User(selfFB.getEmail());
-            self.setUserID(selfFB.getUid());
-            self.setUsername(selfFB.getDisplayName());
+            db.collection("Users").document(otherUserID)
+                    .update("requests", FieldValue.arrayUnion(selfFB.getUid()));
 
-            db.collection(requestPath).document(self.getUserID()).set(self);
+            // TODO: set the correct username/display name from/for mAuth.getCurrentUser()
             Toast.makeText(this,"Request sent!", Toast.LENGTH_LONG).show();
         });
 

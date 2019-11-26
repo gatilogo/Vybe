@@ -34,7 +34,6 @@ public class MyRequestsActivity extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private String myUID = mAuth.getCurrentUser().getUid();
-    private String userRequestDBPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +41,6 @@ public class MyRequestsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_my_requests);
 
         userRecyclerView = findViewById(R.id.my_request_list);
-
-        userRequestDBPath = "Users/" + mAuth.getCurrentUser().getUid() + "/Requests";
 
         requestList = new ArrayList<>();
 
@@ -53,13 +50,7 @@ public class MyRequestsActivity extends AppCompatActivity {
         query.addSnapshotListener((@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) -> {
             requestList.clear();
             for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                String email = (String) doc.get("email");
-                String userID = (String) doc.get("userID");
-                String username = (String) doc.get("username");
-
-                User user = new User(username, email);
-                user.setUserID(userID);
-                user.setUsername(username);
+                User user = doc.toObject(User.class);
                 requestList.add(user);
             }
         });
@@ -88,17 +79,17 @@ public class MyRequestsActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         // Want to get the most recent list of requests
-        CollectionReference collectionReference = db.collection(userRequestDBPath);
+        CollectionReference collectionReference = db.collection("Users");
         Query query = collectionReference.orderBy("username", Query.Direction.DESCENDING);
 
-        query.get().addOnSuccessListener((QuerySnapshot queryDocumentSnapshots) -> {
-            requestList.clear();
-            for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                User user = doc.toObject(User.class);
-                requestList.add(user);
-            }
-            profileAdapter.notifyDataSetChanged();
-        });
+//        query.get().addOnSuccessListener((QuerySnapshot queryDocumentSnapshots) -> {
+//            requestList.clear();
+//            for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+//                User user = doc.toObject(User.class);
+//                requestList.add(user);
+//            }
+//            profileAdapter.notifyDataSetChanged();
+//        });
 
         collectionReference.document(mAuth.getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
