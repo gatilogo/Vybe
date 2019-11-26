@@ -35,7 +35,7 @@ import static org.hamcrest.Matchers.not;
 @RunWith(AndroidJUnit4.class)
 public class LoginActivityTest {
     FirebaseFirestore db;
-    FirebaseAuth auth;
+    FirebaseAuth mAuth;
     private String invalidLoginEmailNoExist = "non-existent@user.ca";
     private String invalidLoginPassword = "invaliduser";
     private String invalidLengthPassword = "1234";
@@ -51,7 +51,7 @@ public class LoginActivityTest {
     @Before
     public void initialize_db(){
         db = FirebaseFirestore.getInstance();
-        auth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
     }
 
     // Log In Tests
@@ -115,7 +115,7 @@ public class LoginActivityTest {
         onView(withId(R.id.filter_spinner))
                 .check(matches(isDisplayed()));
 
-        auth.getInstance().signOut();
+        mAuth.getInstance().signOut();
     }
 
 
