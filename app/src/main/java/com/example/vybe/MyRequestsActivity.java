@@ -45,17 +45,6 @@ public class MyRequestsActivity extends AppCompatActivity {
 
         requestList = new ArrayList<>();
 
-        // Get users from the database
-//        final CollectionReference collectionReference = db.collection("Users");
-//        Query query = collectionReference.orderBy("username", Query.Direction.DESCENDING);
-//        query.addSnapshotListener((@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) -> {
-//            requestList.clear();
-//            for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-//                User user = doc.toObject(User.class);
-//                requestList.add(user);
-//            }
-//        });
-
         profileAdapter = new ProfileAdapter(R.layout.user_item, requestList);
         profileAdapter.setRequestClickListener(new ProfileAdapter.OnRequestClickListener() {
             @Override
@@ -81,16 +70,6 @@ public class MyRequestsActivity extends AppCompatActivity {
         super.onStart();
         // Want to get the most recent list of requests
         CollectionReference collectionReference = db.collection("Users");
-        Query query = collectionReference.orderBy("username", Query.Direction.DESCENDING);
-
-//        query.get().addOnSuccessListener((QuerySnapshot queryDocumentSnapshots) -> {
-//            requestList.clear();
-//            for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-//                User user = doc.toObject(User.class);
-//                requestList.add(user);
-//            }
-//            profileAdapter.notifyDataSetChanged();
-//        });
 
         collectionReference.document(mAuth.getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
