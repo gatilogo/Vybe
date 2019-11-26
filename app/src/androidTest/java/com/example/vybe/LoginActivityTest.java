@@ -25,12 +25,12 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 
 /**
- * This tests for user login and authentication on the main login  activity
- * This also tests for registration and creating a user account and using it to login
+ * This tests for user login and authentication on the main login activity
+ * This also tests for getting to the registration screen
  *
  */
 @RunWith(AndroidJUnit4.class)
-public class MainActivityTest {
+public class LoginActivityTest {
     private String invalidLoginEmailNoExist = "non-existent@user.ca";
     private String invalidLoginPassword = "invaliduser";
     private String invalidLengthPassword = "1234";
@@ -39,20 +39,15 @@ public class MainActivityTest {
     private String validLoginEmail = "espresso@test.ca";
     private String validLoginPassword = "vibecheck";
 
-    MainActivity activity;
-
     @Rule
     public ActivityTestRule<MainActivity> activityRule =
             new ActivityTestRule<>(MainActivity.class);
 
-    @Before
-    public void init(){
-        activity = activityRule.getActivity();
-    }
 
+    // Log In Tests
     @Test
     public void InvalidLogin_EmptyParameters() throws InterruptedException {
-        onView(withId(R.id.login_button)).perform(click());
+        onView(withId(R.id.confirm_button)).perform(click());
 
         Thread.sleep(1000);
 
@@ -77,8 +72,8 @@ public class MainActivityTest {
           If time allows */
 
         // Check we are still in login page
-        onView(withId(R.id.signup_button))
-                .check(matches(withText("Sign Up")));
+        onView(withId(R.id.login_button))
+                .check(matches(isDisplayed()));
     }
 
     @Test
@@ -92,12 +87,12 @@ public class MainActivityTest {
         Thread.sleep(1000);
 
         // Check we are still in login page
-        onView(withId(R.id.signup_button))
-                .check(matches(withText("Sign Up")));
+        onView(withId(R.id.login_button))
+                .check(matches(isDisplayed()));
     }
 
     @Test
-    public void validLogin() throws InterruptedException {
+    public void Login_AuthorizationPasses() throws InterruptedException {
         onView(withId(R.id.email_edit_text))
                 .perform(typeText(validLoginEmail), closeSoftKeyboard());
         onView(withId(R.id.password_edit_text))
@@ -111,5 +106,17 @@ public class MainActivityTest {
                 .check(matches(isDisplayed()));
     }
 
+
+    @Test
+    public void Signup_GetToActivity() throws InterruptedException {
+        // Click on Signup button
+        onView(withId(R.id.signup_button)).perform(click());
+
+        Thread.sleep(2000);
+
+        // Check we logged in and we are on myVibes page
+        onView(withId(R.id.username_create))
+                .check(matches(isDisplayed()));
+    }
 
 }
