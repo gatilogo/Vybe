@@ -40,11 +40,19 @@ public class VibeEventTest {
     public void VibeEventConstructor_EmptyInit() {
         VibeEvent testVibeEvent = mockEmptyVibeEvent();
 
+        Date testDate = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("MMMM dd, yyyy hh:mm a");
+
         assertNull(testVibeEvent.getVibe());
         assertNull(testVibeEvent.getReason());
         assertNull(testVibeEvent.getSocSit());
+        assertEquals(testDate.getClass(), testVibeEvent.getDateTime().getClass());
+        assertEquals(formatter.format(testDate), testVibeEvent.getDateTimeString());
         assertNull(testVibeEvent.getId());
         assertNull(testVibeEvent.getImage());
+        assertNull(testVibeEvent.getLatitude());
+        assertNull(testVibeEvent.getLongitude());
+
     }
 
     @Test
@@ -58,15 +66,14 @@ public class VibeEventTest {
         assertEquals(testVibe.getName(), testVibeEvent.getVibe().getName());
         assertEquals("just really happy", testVibeEvent.getReason());
         assertEquals(testDate.getClass(), testVibeEvent.getDateTime().getClass());
+        assertEquals(formatter.format(testDate), testVibeEvent.getDateTimeString());
         assertEquals("Alone", testVibeEvent.getSocSit().toString());
         assertEquals("", testVibeEvent.getId());
         assertEquals("image", testVibeEvent.getImage());
-    }
+        assertEquals(2.0, testVibeEvent.getLongitude(), 0);
+        assertEquals(2.0, testVibeEvent.getLongitude(), 0);
 
-    /*
-     * TODO: Discuss if we want test methods for each getter since we're mainly just
-     *  doing the same thing we do for testing the constructor tests
-     * */
+    }
 
     @Test
     public void GetVibe() {
@@ -94,10 +101,14 @@ public class VibeEventTest {
 
     }
 
-    // TODO: Still not sure how we want to test DateTime Methods
     @Test
-    public void GetDateTime() {
-        VibeEvent testVibeEvent = mockEmptyVibeEvent();
+    public void GetDateTimeString() {
+        VibeEvent testVibeEvent = mockVibeEvent();
+        Date testDate = new Date();
+
+        SimpleDateFormat formatter = new SimpleDateFormat("MMMM dd, yyyy hh:mm a");
+
+        assertEquals(formatter.format(testDate), testVibeEvent.getDateTimeString());
 
     }
 
@@ -106,15 +117,15 @@ public class VibeEventTest {
         VibeEvent testVibeEvent = mockEmptyVibeEvent();
 
         Date testDate = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("MMMM dd, yyyy hh:mm a");
 
         testVibeEvent.setDateTime(testDate);
 
-    }
+        assertEquals(formatter.format(testDate), testVibeEvent.getDateTimeString());
 
-    @Test
-    public void GetDateTimeString() {
 
     }
+
 
     @Test
     public void GetReason() {
@@ -134,7 +145,6 @@ public class VibeEventTest {
 
     }
 
-    // TODO: These will likely have to change in the next few merges
     @Test
     public void GetSocialSituation() {
         VibeEvent testVibeEvent = mockVibeEvent();
@@ -210,9 +220,9 @@ public class VibeEventTest {
     public void SetLatitude() {
         VibeEvent testVibeEvent = mockEmptyVibeEvent();
 
-        testVibeEvent.setLatitude(5);
+        testVibeEvent.setLatitude(5.0);
 
-        assertEquals(5, testVibeEvent.getLatitude(), 0);
+        assertEquals(5.0, testVibeEvent.getLatitude(), 0);
 
     }
 
@@ -228,9 +238,9 @@ public class VibeEventTest {
     public void SetLongitude() {
         VibeEvent testVibeEvent = mockEmptyVibeEvent();
 
-        testVibeEvent.setLongitude(5);
+        testVibeEvent.setLongitude(5.0);
 
-        assertEquals(5, testVibeEvent.getLongitude(), 0);
+        assertEquals(5.0, testVibeEvent.getLongitude(), 0);
     }
 
 
