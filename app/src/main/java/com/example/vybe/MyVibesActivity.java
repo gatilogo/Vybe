@@ -70,7 +70,6 @@ public class MyVibesActivity extends AppCompatActivity {
     private String vibeEventDBPath;
     private boolean allFlag;
     private String filterVibe = "Filter Vibe";
-
     private Spinner filterSpinner;
     private RecyclerView vibesRecyclerView;
     private Button addVibeEventBtn;

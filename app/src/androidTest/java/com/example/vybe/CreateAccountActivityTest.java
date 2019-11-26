@@ -33,7 +33,7 @@ import static org.hamcrest.Matchers.not;
 @RunWith(AndroidJUnit4.class)
 public class CreateAccountActivityTest {
     FirebaseFirestore db;
-    FirebaseAuth auth;
+    FirebaseAuth mAuth;
     private String invalidEmail = "email";
     private String invalidLengthPassword = "1234";
 
@@ -41,8 +41,9 @@ public class CreateAccountActivityTest {
     private String existingEmail = "espresso@test.ca";
     private String existingUsername = "espresso";
 
-    private String validNewEmail = "expressoCAAT@test.ca";
-    private String validNewUsername = "expressoCAAT";
+    private String validNewEmail = "expresso_caat@test.ca";
+    private String validNewUsername = "expresso_caat";
+    private String validPassword = "StrongPassword";
 
 
     @Rule
@@ -52,19 +53,129 @@ public class CreateAccountActivityTest {
     @Before
     public void initialize_db(){
         db = FirebaseFirestore.getInstance();
-        auth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+
     }
 
     @Test
-    public void InvalidLogin_EmptyParameters() throws InterruptedException {
+    public void InvalidSignUp_EmptyParameters() throws InterruptedException {
         onView(withId(R.id.confirm_button)).perform(click());
 
         Thread.sleep(1000);
 
-        // Check we are still in login page
+        // Check we are still in sign up page
         onView(withId(R.id.confirm_button))
                 .check(matches(isDisplayed()));
+    }
 
+    @Test
+    public void InvalidSignUp_Password() throws InterruptedException {
+        onView(withId(R.id.username_create))
+                .perform(typeText(validNewUsername), closeSoftKeyboard());
+
+        onView(withId(R.id.email_create))
+                .perform(typeText(validNewEmail), closeSoftKeyboard());
+
+        onView(withId(R.id.password_create))
+                .perform(typeText(invalidLengthPassword), closeSoftKeyboard());
+
+
+        onView(withId(R.id.confirm_button)).perform(click());
+
+        Thread.sleep(1000);
+
+        // Check we are still in sign up page
+        onView(withId(R.id.confirm_button))
+                .check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void InvalidSignUp_BadEmail() throws InterruptedException {
+        onView(withId(R.id.username_create))
+                .perform(typeText(validNewUsername), closeSoftKeyboard());
+
+        onView(withId(R.id.email_create))
+                .perform(typeText(invalidEmail), closeSoftKeyboard());
+
+        onView(withId(R.id.password_create))
+                .perform(typeText(validPassword), closeSoftKeyboard());
+
+
+        onView(withId(R.id.confirm_button)).perform(click());
+
+        Thread.sleep(1000);
+
+        // Check we are still in sign up page
+        onView(withId(R.id.confirm_button))
+                .check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void InvalidSignUp_TakenEmail() throws InterruptedException {
+        onView(withId(R.id.username_create))
+                .perform(typeText(validNewUsername), closeSoftKeyboard());
+
+        onView(withId(R.id.email_create))
+                .perform(typeText(existingEmail), closeSoftKeyboard());
+
+        onView(withId(R.id.password_create))
+                .perform(typeText(validPassword), closeSoftKeyboard());
+
+
+        onView(withId(R.id.confirm_button)).perform(click());
+
+        Thread.sleep(1000);
+
+        // Check we are still in sign up page
+        onView(withId(R.id.confirm_button))
+                .check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void InvalidSignUp_TakenUsername() throws InterruptedException {
+        onView(withId(R.id.username_create))
+                .perform(typeText(existingUsername), closeSoftKeyboard());
+
+        onView(withId(R.id.email_create))
+                .perform(typeText(validNewEmail), closeSoftKeyboard());
+
+        onView(withId(R.id.password_create))
+                .perform(typeText(validPassword), closeSoftKeyboard());
+
+
+        onView(withId(R.id.confirm_button)).perform(click());
+
+        Thread.sleep(1000);
+
+        // Check we are still in sign up page
+        onView(withId(R.id.confirm_button))
+                .check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void ValidRegistration() throws InterruptedException {
+        onView(withId(R.id.username_create))
+                .perform(typeText(validNewUsername), closeSoftKeyboard());
+
+        onView(withId(R.id.email_create))
+                .perform(typeText(validNewEmail), closeSoftKeyboard());
+
+        onView(withId(R.id.password_create))
+                .perform(typeText(validPassword), closeSoftKeyboard());
+
+
+        onView(withId(R.id.confirm_button)).perform(click());
+
+        Thread.sleep(2000);
+
+        // Check we logged in and we are on myVibes page
+        onView(withId(R.id.filter_spinner))
+                .check(matches(isDisplayed()));
+
+        // Delete test entry after
+        Thread.sleep(30000);
+        db.collection("users").document(validNewEmail).delete();
+        mAuth.getCurrentUser().delete();
     }
 
 }

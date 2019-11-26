@@ -5,6 +5,9 @@ import android.content.Intent;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -31,6 +34,8 @@ import static org.hamcrest.Matchers.not;
  */
 @RunWith(AndroidJUnit4.class)
 public class LoginActivityTest {
+    FirebaseFirestore db;
+    FirebaseAuth auth;
     private String invalidLoginEmailNoExist = "non-existent@user.ca";
     private String invalidLoginPassword = "invaliduser";
     private String invalidLengthPassword = "1234";
@@ -43,6 +48,11 @@ public class LoginActivityTest {
     public ActivityTestRule<MainActivity> activityRule =
             new ActivityTestRule<>(MainActivity.class);
 
+    @Before
+    public void initialize_db(){
+        db = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
+    }
 
     // Log In Tests
     @Test
@@ -104,6 +114,8 @@ public class LoginActivityTest {
         // Check we logged in and we are on myVibes page
         onView(withId(R.id.filter_spinner))
                 .check(matches(isDisplayed()));
+
+        auth.getInstance().signOut();
     }
 
 
