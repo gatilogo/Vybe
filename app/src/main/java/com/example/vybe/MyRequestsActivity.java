@@ -10,8 +10,10 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import com.example.vybe.Models.User;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -31,6 +33,7 @@ public class MyRequestsActivity extends AppCompatActivity {
     private RecyclerView userRecyclerView;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private String myUID = mAuth.getCurrentUser().getUid();
     private String userRequestDBPath;
 
     @Override
@@ -96,25 +99,46 @@ public class MyRequestsActivity extends AppCompatActivity {
             }
             profileAdapter.notifyDataSetChanged();
         });
+
+        collectionReference.document(mAuth.getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot doc) {
+                User myProfile = doc.toObject(User.class);
+                ArrayList<String> myRequests = myProfile.getRequests();
+
+                if (myRequests != null) {
+                    final CollectionReference collectionReference = db.collection("Users");
+                    Query query = collectionReference.orderBy("username", Query.Direction.DESCENDING);
+                    query.addSnapshotListener((@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) -> {
+                        requestList.clear();
+                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            User user = doc.toObject(User.class);
+                            requestList.add(user);
+                        }
+                    });
+                    profileAdapter.notifyDataSetChanged();
+                    }
+                }
+        });
     }
 
     //TODO: stub out request functionality into its own, singleton class maybe?
     public void acceptFollowRequest(int position) {
         User user = requestList.get(position);
         removeFollowRequest(position);
-        String myID = mAuth.getCurrentUser().getUid();
         String theirID = user.getUserID();
-        db.collection("Users").document(myID)
+        db.collection("Users").document(myUID)
                 .update("followers", FieldValue.arrayUnion(theirID));
 
         db.collection("Users").document(theirID)
-                .update("following", FieldValue.arrayUnion(myID));
+                .update("following", FieldValue.arrayUnion(myUID));
     }
 
     public void removeFollowRequest(int position) {
         User user = requestList.get(position);
-        String requestDBPath = "Users/" + mAuth.getCurrentUser().getUid() + "/Requests";
-        db.collection(requestDBPath).document(user.getUserID()).delete();
+        String theirID = user.getUserID();
+        db.collection("Users").document(myUID)
+                .update("requests", FieldValue.arrayRemove(theirID));
         profileAdapter.deleteItem(position);
     }
 }
