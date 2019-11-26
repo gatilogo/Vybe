@@ -55,7 +55,7 @@ public class ViewProfileActivityTest {
                 .perform(typeText(validLoginPassword), closeSoftKeyboard());
         onView(withId(R.id.login_button)).perform(click());
 
-        Thread.sleep(2000);
+        Thread.sleep(5000);
 
         // Check we logged in and we are on myVibes page
         onView(withId(R.id.filter_spinner))

@@ -14,15 +14,18 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
+import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 
@@ -41,8 +44,8 @@ public class CreateAccountActivityTest {
     private String existingEmail = "espresso@test.ca";
     private String existingUsername = "espresso";
 
-    private String validNewEmail = "expresso_caat@test.ca";
-    private String validNewUsername = "expresso_caat";
+    private String validNewEmail = "espresso_CAATest@test.ca";
+    private String validNewUsername = "espresso_CAATest";
     private String validPassword = "StrongPassword";
 
 
@@ -166,15 +169,18 @@ public class CreateAccountActivityTest {
 
         onView(withId(R.id.confirm_button)).perform(click());
 
-        Thread.sleep(2000);
+        Thread.sleep(10000);
 
         // Check we logged in and we are on myVibes page
         onView(withId(R.id.filter_spinner))
                 .check(matches(isDisplayed()));
 
+        // Check Vibe list is empty
+        onView(withId(R.id.image_view))
+                .check((doesNotExist()));
+
         // Delete test entry after
-        Thread.sleep(30000);
-        db.collection("users").document(validNewEmail).delete();
+        db.collection("Users").document(mAuth.getCurrentUser().getUid()).delete();
         mAuth.getCurrentUser().delete();
     }
 
