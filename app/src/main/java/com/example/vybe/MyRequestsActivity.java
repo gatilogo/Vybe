@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.vybe.Models.User;
@@ -45,15 +46,15 @@ public class MyRequestsActivity extends AppCompatActivity {
         requestList = new ArrayList<>();
 
         // Get users from the database
-        final CollectionReference collectionReference = db.collection("Users");
-        Query query = collectionReference.orderBy("username", Query.Direction.DESCENDING);
-        query.addSnapshotListener((@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) -> {
-            requestList.clear();
-            for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                User user = doc.toObject(User.class);
-                requestList.add(user);
-            }
-        });
+//        final CollectionReference collectionReference = db.collection("Users");
+//        Query query = collectionReference.orderBy("username", Query.Direction.DESCENDING);
+//        query.addSnapshotListener((@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) -> {
+//            requestList.clear();
+//            for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+//                User user = doc.toObject(User.class);
+//                requestList.add(user);
+//            }
+//        });
 
         profileAdapter = new ProfileAdapter(R.layout.user_item, requestList);
         profileAdapter.setRequestClickListener(new ProfileAdapter.OnRequestClickListener() {
@@ -98,18 +99,19 @@ public class MyRequestsActivity extends AppCompatActivity {
                 ArrayList<String> myRequests = myProfile.getRequests();
 
                 if (myRequests != null) {
-                    final CollectionReference collectionReference = db.collection("Users");
-                    Query query = collectionReference.orderBy("username", Query.Direction.DESCENDING);
-                    query.addSnapshotListener((@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) -> {
-                        requestList.clear();
-                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                            User user = doc.toObject(User.class);
-                            requestList.add(user);
-                        }
-                    });
-                    profileAdapter.notifyDataSetChanged();
+                    requestList.clear();
+                    for (String uid: myRequests){
+                        db.collection("Users").document(uid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                User user = documentSnapshot.toObject(User.class);
+                                requestList.add(user);
+                                profileAdapter.notifyDataSetChanged();
+                            }
+                        });
                     }
                 }
+            }
         });
     }
 
