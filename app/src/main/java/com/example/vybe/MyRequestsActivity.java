@@ -84,6 +84,7 @@ public class MyRequestsActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(DocumentSnapshot documentSnapshot) {
                                 User user = documentSnapshot.toObject(User.class);
+                                user.setUserID(uid);
                                 requestList.add(user);
                                 profileAdapter.notifyDataSetChanged();
                             }
