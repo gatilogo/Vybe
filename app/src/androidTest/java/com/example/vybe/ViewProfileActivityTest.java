@@ -69,7 +69,7 @@ public class ViewProfileActivityTest {
         Thread.sleep(1000);
 
         // Confirm profile information is correct
-        onView(withId(R.id.username_profile)).check(matches(withText(containsString(validUsername))));
+        onView(withId(R.id.view_date_text_view)).check(matches(withText(containsString(validUsername))));
         onView(withId(R.id.email_profile)).check(matches(withText(containsString(validLoginEmail))));
 
         // Try signing out
