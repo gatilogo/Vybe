@@ -50,7 +50,7 @@ public class ViewProfileActivityTest {
 
     // Tests US 03.01.01
     @Test
-    public void ViewPersonalProfile() throws InterruptedException {
+    public void Test01_ViewPersonalProfile() throws InterruptedException {
         onView(withId(R.id.email_edit_text))
                 .perform(typeText(validLoginEmail), closeSoftKeyboard());
         onView(withId(R.id.password_edit_text))

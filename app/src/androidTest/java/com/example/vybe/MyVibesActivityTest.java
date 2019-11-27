@@ -4,6 +4,7 @@ import android.icu.text.SimpleDateFormat;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.action.GeneralLocation;
@@ -27,15 +28,18 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 
 import java.text.ParseException;
 import java.util.Date;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
@@ -58,6 +62,7 @@ import static org.hamcrest.Matchers.is;
  * as well as Other Vibe Details
  *
  */
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(AndroidJUnit4.class)
 public class MyVibesActivityTest {
 
@@ -68,6 +73,8 @@ public class MyVibesActivityTest {
     private String validUsername = "espresso";
     private String validLoginPassword = "vibecheck";
     private SimpleDateFormat formatter = new SimpleDateFormat("MMMM dd, yyyy hh:mm a");
+    private Date date1;
+    private Date date2;
 
     @Rule
     public ActivityTestRule<MainActivity> activityRule =
@@ -96,7 +103,7 @@ public class MyVibesActivityTest {
     }
 
     @Test
-    public void CheckVibeHistory_IsEmpty() throws InterruptedException {
+    public void Test01_CheckVibeHistory_IsEmpty() throws InterruptedException {
 
         LogIntoActivity();
 
@@ -106,7 +113,7 @@ public class MyVibesActivityTest {
     }
 
     @Test
-    public void AddVibeEvent_RequiredFields() throws InterruptedException, UiObjectNotFoundException {
+    public void Test02_AddVibeEvent_RequiredFields() throws InterruptedException, UiObjectNotFoundException {
 
         LogIntoActivity();
 
@@ -146,7 +153,7 @@ public class MyVibesActivityTest {
                 .check(matches(isDisplayed()));
 
         // Get date Vibe was created
-        Date testDate = new Date();
+        date1 = new Date();
 
         // Save our Vibe
         onView(withId(R.id.add_btn)).perform(click());
@@ -166,12 +173,12 @@ public class MyVibesActivityTest {
 
         Thread.sleep(1000);
 
-        onView(withId(R.id.view_date_text_view)).check(matches(withText(containsString(formatter.format(testDate)))));
+        onView(withId(R.id.view_date_text_view)).check(matches(withText(containsString(formatter.format(date1)))));
 
     }
 
     @Test
-    public void AddVibeEvent_AllFields() throws InterruptedException, UiObjectNotFoundException {
+    public void Test03_AddVibeEvent_AllFields() throws InterruptedException, UiObjectNotFoundException {
 
         LogIntoActivity();
 
@@ -226,7 +233,7 @@ public class MyVibesActivityTest {
         Thread.sleep(500);
 
         // Get date vibe was created
-        Date testDate = new Date();
+        date2 = new Date();
 
         // Save our Vybe
         onView(withId(R.id.add_btn)).perform(click());
@@ -246,7 +253,7 @@ public class MyVibesActivityTest {
 
         Thread.sleep(1000);
 
-        onView(withId(R.id.view_date_text_view)).check(matches(withText(containsString(formatter.format(testDate)))));
+        onView(withId(R.id.view_date_text_view)).check(matches(withText(containsString(formatter.format(date2)))));
 
         onView(withId(R.id.view_reason_text_view)).check(matches(withText(containsString("I am Sad"))));
         onView(withId(R.id.view_soc_sit_text_view)).check(matches(withText(containsString(SocSit.ALONE.toString()))));
@@ -255,13 +262,31 @@ public class MyVibesActivityTest {
 
     // TODO: Get dates of two items and compare their dates to verify ordering
     @Test
-    public void ConfirmCorrectListOrder() throws InterruptedException, ParseException {
+    public void Test04_ConfirmCorrectListOrder() throws InterruptedException, ParseException {
         LogIntoActivity();
-        onView(withId(R.id.my_vibe_list));
+        Thread.sleep(5000);
+
+        // Click on index 0 list item
+        onView(withId(R.id.my_vibe_list)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        Thread.sleep(2000);
+
+        // Verify it has the more recent date
+        onView(withId(R.id.view_date_text_view)).check(matches(withText(containsString(formatter.format(date2)))));
+        // Go back
+        pressBack();
+        Thread.sleep(2000);
+        // Click on index 1 list item
+        onView(withId(R.id.my_vibe_list)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        Thread.sleep(2000);
+
+        // Verify it has the less recent date
+        onView(withId(R.id.view_date_text_view)).check(matches(withText(containsString(formatter.format(date1)))));
+
+
     }
 
     @Test
-    public void Filter_VerifyList() throws InterruptedException, ParseException {
+    public void Test05_Filter_VerifyList() throws InterruptedException, ParseException {
         LogIntoActivity();
 
         // Click on spinner and select angry (no vibes)
@@ -290,7 +315,7 @@ public class MyVibesActivityTest {
     }
 
     @Test
-    public void EditExistingVibe() throws InterruptedException, UiObjectNotFoundException {
+    public void Test06_EditExistingVibe() throws InterruptedException, UiObjectNotFoundException {
         LogIntoActivity();
 
         onView(withId(R.id.my_vibe_list)).perform(RecyclerViewActions.actionOnItemAtPosition(0, LeftSwipe()));
@@ -354,7 +379,7 @@ public class MyVibesActivityTest {
     }
 
     @Test
-    public void DeleteVibes() throws InterruptedException, UiObjectNotFoundException {
+    public void Test07_DeleteVibes() throws InterruptedException, UiObjectNotFoundException {
         LogIntoActivity();
         onView(withId(R.id.my_vibe_list)).perform(RecyclerViewActions.actionOnItemAtPosition(1, RightSwipe()));
         Thread.sleep(2000);
@@ -403,3 +428,25 @@ public class MyVibesActivityTest {
         mAuth.getInstance().signOut();
     }
  }
+class GetTextAction implements ViewAction {
+
+    private CharSequence text;
+
+    @Override public Matcher<View> getConstraints() {
+        return isAssignableFrom(TextView.class);
+    }
+
+    @Override public String getDescription() {
+        return "get text";
+    }
+
+    @Override public void perform(UiController uiController, View view) {
+        TextView textView = (TextView) view;
+        text = textView.getText();
+    }
+
+    @Nullable
+    public CharSequence getText() {
+        return text;
+    }
+}
