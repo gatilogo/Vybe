@@ -53,6 +53,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
     private TextView pageTitle;
     private Button pickLocationButton;
     private Button removeImageBtn;
+    private ImageView imageFragment;
     private Toolbar toolbar;
     private MapFragment mapFragment;
     private ImageView imageView;
@@ -75,6 +76,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
         pageTitle = findViewById(R.id.add_edit_vibe_title);
         pickLocationButton = findViewById(R.id.btn_add_location);
         removeImageBtn = findViewById(R.id.remove_image_btn);
+        imageFragment = findViewById(R.id.image_view);
         vibeImage = findViewById(R.id.vibe_image);
         imageView = findViewById(R.id.imageView);
         mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.add_edit_map_fragment);
@@ -91,7 +93,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
             reasonField.setText(vibeEvent.getReason());
 
             if (vibeEvent.getImage() != null) {
-                loadImageFirebase(imageView, vibeEvent.getImage());
+                loadImageFirebase(imageFragment, vibeEvent.getImage());
             }
 
             if (vibeEvent.getSocialSituation() != null) {
@@ -116,10 +118,10 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
             locationFragment.show(getSupportFragmentManager(), "tag");
         });
 
-        // TODO: Move to fragment but then idk how to update the VibeEvent
+        // TODO: Move to fragment but then idk how to update the VibeEvent via imageIsSelected flag
         // ---Remove Image Button---
         removeImageBtn.setOnClickListener((View v) -> {
-            imageView.setImageResource(android.R.color.transparent);
+            imageFragment.setImageBitmap(null);
             imageIsSelected = false;
         });
 
@@ -216,10 +218,10 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
             vibeEvent.setImage("reasons/" + vibeEvent.getId() + ".jpg");
         }
         else {
-            if (!vibeEvent.getImage().equals("")){
+            if (vibeEvent.getImage() != null){
                 StorageReference imageRef = storageRef.child(vibeEvent.getImage());
                 imageRef.delete();
-                vibeEvent.setImage("");
+                vibeEvent.setImage(null);
             }
         }
 

@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.vybe.Models.VibeEvent;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
@@ -26,6 +28,7 @@ public class MyVibesAdapter extends RecyclerView.Adapter<MyVibesAdapter.VibeEven
     private static final String TAG = "MyVibesAdapter";
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private StorageReference storageRef = FirebaseStorage.getInstance().getReference();
     private Context context;
     private ArrayList<VibeEvent> vibeEventList;
     private int resource;
@@ -85,6 +88,11 @@ public class MyVibesAdapter extends RecyclerView.Adapter<MyVibesAdapter.VibeEven
 
     public void deleteItem(int position, String vibeEventDBPath) {
         VibeEvent vibeEvent = vibeEventList.get(position);
+        // TODO: Stub this out as it is the exact same code in AddEditVibeEventActivity but it should go in the Controller
+        if (vibeEvent.getImage() != null){
+            StorageReference imageRef = storageRef.child(vibeEvent.getImage());
+            imageRef.delete();
+        }
         db.collection(vibeEventDBPath).document(vibeEvent.getId()).delete();
         vibeEventList.remove(position);
         notifyItemRemoved(position);
