@@ -1,8 +1,10 @@
 package com.example.vybe;
 
 import android.icu.text.SimpleDateFormat;
+import android.view.View;
+import android.widget.TextView;
 
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.action.GeneralLocation;
 import androidx.test.espresso.action.GeneralSwipeAction;
@@ -17,17 +19,18 @@ import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 
-import com.example.vybe.AddEdit.SocSitFieldFragment;
 import com.example.vybe.Models.SocSit;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.text.ParseException;
 import java.util.Date;
 
 import static androidx.test.espresso.Espresso.onData;
@@ -35,10 +38,10 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
-import static androidx.test.espresso.action.ViewActions.swipeRight;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -129,7 +132,7 @@ public class MyVibesActivityTest {
         Thread.sleep(1000);
         onView(withText("Select a Vibe")).check(matches(isDisplayed()));
 
-        onView(withId(R.id.carousel_picker)).perform(customSwipe());
+        onView(withId(R.id.carousel_picker)).perform(RightSwipe());
         Thread.sleep(1000);
 
         UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
@@ -141,10 +144,10 @@ public class MyVibesActivityTest {
         onView(withId(R.id.add_edit_vibes_toolbar))
                 .check(matches(isDisplayed()));
 
-        // Get date vibe was created
+        // Get date Vibe was created
         Date testDate = new Date();
 
-        // Save our Vybe
+        // Save our Vibe
         onView(withId(R.id.add_btn)).perform(click());
 
         Thread.sleep(2000);
@@ -186,9 +189,9 @@ public class MyVibesActivityTest {
         Thread.sleep(1000);
         onView(withText("Select a Vibe")).check(matches(isDisplayed()));
 
-        onView(withId(R.id.carousel_picker)).perform(customSwipe());
+        onView(withId(R.id.carousel_picker)).perform(RightSwipe());
         Thread.sleep(1000);
-        onView(withId(R.id.carousel_picker)).perform(customSwipe());
+        onView(withId(R.id.carousel_picker)).perform(RightSwipe());
         Thread.sleep(1000);
 
         UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
@@ -249,15 +252,120 @@ public class MyVibesActivityTest {
 
     }
 
+    // TODO: Get dates of two items and compare their dates to verify tests
     @Test
-    public void EditExistingVibe() throws InterruptedException {
+    public void ConfirmCorrectListOrder() throws InterruptedException, ParseException {
         LogIntoActivity();
+        onView(withId(R.id.my_vibe_list));
+    }
+
+    @Test
+    public void EditExistingVibe() throws InterruptedException, UiObjectNotFoundException {
+        LogIntoActivity();
+
+        onView(withId(R.id.my_vibe_list)).perform(RecyclerViewActions.actionOnItemAtPosition(0, LeftSwipe()));
+        Thread.sleep(2000);
+
+        // Check we are in add/edit activity
+        onView(withId(R.id.add_edit_vibes_toolbar))
+                .check(matches(isDisplayed()));
+
+
+        // Add a suprised vibe
+        onView(withId(R.id.vibe_image)).perform(click());
+
+        Thread.sleep(1000);
+        onView(withText("Select a Vibe")).check(matches(isDisplayed()));
+
+        onView(withId(R.id.carousel_picker)).perform(RightSwipe());
+        Thread.sleep(1000);
+        onView(withId(R.id.carousel_picker)).perform(RightSwipe());
+        Thread.sleep(1000);
+        onView(withId(R.id.carousel_picker)).perform(RightSwipe());
+        Thread.sleep(1000);
+
+        UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        UiObject obj = device.findObject(new UiSelector().textContains("OK").clickable(true));
+        obj.click();
+
+        Thread.sleep(1000);
+
+        // Edit textual reason
+        onView(withId(R.id.reason_edit_text))
+                .perform(replaceText("I'm Now Surprised"), closeSoftKeyboard());
+
+        // Click on spinner and select with others
+        onView(withId(R.id.soc_sit_field_fragment)).perform(click());
+        Thread.sleep(500);
+        onData(allOf(is(instanceOf(String.class)), is(SocSit.WITH_SEVERAL_PEOPLE.toString()))).perform(click());
+        Thread.sleep(500);
+
+        // Save our Vybe
+        onView(withId(R.id.add_btn)).perform(click());
+
+        Thread.sleep(2000);
+
+        // Check we get back to my vibes activity
+        onView(withId(R.id.filter_spinner))
+                .check(matches(isDisplayed()));
+
+        // Click on created vibe list item to check it exists
+        onView(withId(R.id.my_vibe_list)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+
+        // Check we are on the view page of the vibe
+        onView(withId(R.id.view_vibes_toolbar))
+                .check(matches(isDisplayed()));
+
+        Thread.sleep(1000);
+
+        onView(withId(R.id.view_reason_text_view)).check(matches(withText(containsString("I'm Now Surprised"))));
+        onView(withId(R.id.view_soc_sit_text_view)).check(matches(withText(containsString(SocSit.WITH_SEVERAL_PEOPLE.toString()))));
 
     }
 
-    private static ViewAction customSwipe() {
+    @Test
+    public void DeleteVibes() throws InterruptedException, UiObjectNotFoundException {
+        LogIntoActivity();
+        onView(withId(R.id.my_vibe_list)).perform(RecyclerViewActions.actionOnItemAtPosition(1, RightSwipe()));
+        Thread.sleep(2000);
+        onView(withId(R.id.my_vibe_list)).perform(RecyclerViewActions.actionOnItemAtPosition(0, RightSwipe()));
+        Thread.sleep(2000);
+
+        // Check Vibe list is empty
+        onView(withId(R.id.image_view))
+                .check((doesNotExist()));
+    }
+
+    private static ViewAction RightSwipe() {
         return new GeneralSwipeAction(Swipe.SLOW, GeneralLocation.CENTER_RIGHT,
                 GeneralLocation.CENTER_LEFT, Press.FINGER);
+    }
+
+    private static ViewAction LeftSwipe() {
+        return new GeneralSwipeAction(Swipe.SLOW, GeneralLocation.CENTER_LEFT,
+                GeneralLocation.CENTER_RIGHT, Press.FINGER);
+    }
+
+    String getText(final Matcher<View> matcher) {
+        final String[] stringHolder = { null };
+        onView(matcher).perform(new ViewAction() {
+            @Override
+            public Matcher<View> getConstraints() {
+                return isAssignableFrom(TextView.class);
+            }
+
+            @Override
+            public String getDescription() {
+                return "getting text from a TextView";
+            }
+
+            @Override
+            public void perform(UiController uiController, View view) {
+                TextView tv = (TextView)view; //Save, because of check in getConstraints()
+                stringHolder[0] = tv.getText().toString();
+            }
+        });
+        return stringHolder[0];
     }
 
     @After
