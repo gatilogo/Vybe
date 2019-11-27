@@ -44,8 +44,8 @@ import static com.example.vybe.util.Constants.MAPVIEW_BUNDLE_KEY;
 import static com.example.vybe.util.Constants.MAP_ZOOM_LEVEL;
 
 /**
- * This fragment displays the map view for your personal vibes. Will
- * be changed in the future to specify so.
+ * This fragment displays the map
+ * the activity that calls it can add/remove markers
  */
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
@@ -91,6 +91,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         return view;
     }
 
+    /**
+     * initialized the google map to a default state
+     * @param savedInstanceState
+     * parameters passed into the map
+     */
     private void initGoogleMap(Bundle savedInstanceState) {
         // *** IMPORTANT ***
         // MapView requires that the Bundle you pass contain _ONLY_ MapView SDK
@@ -168,6 +173,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mMapView.onLowMemory();
     }
 
+    /**
+     * sets the camera around a location
+     * @param latLng
+     * the coordinates the map should be centered at
+     */
     public void setToLocation(LatLng latLng) {
         Log.d(TAG, "setToLocation: Here");
         clearMap();
@@ -175,6 +185,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         setCamera(latLng);
     }
 
+    /**
+     * sets the camera to the user's current location
+     */
     public void setToCurrentLocation() {
         Location location = LocationController.getUserLocation(getContext());
         if (location == null) {
@@ -183,6 +196,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         setCamera(new LatLng(location.getLatitude(), location.getLongitude()));
     }
 
+    /**
+     * Adds a marker to the map
+     * @param latLng
+     * coordinates where the marker should be placed
+     * @param drawableRes
+     * icon for the marker
+     * @param owner
+     * user who created the vibe
+     */
     public void addMarker(LatLng latLng, @DrawableRes int drawableRes, String owner) {
 //        BitmapDescriptor marker = vectorToBitmap(drawableRes);
         BitmapDescriptor marker = vectorToBitmap(getContext(), drawableRes);

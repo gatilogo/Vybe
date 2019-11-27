@@ -89,6 +89,9 @@ public class MapViewActivity extends AppCompatActivity implements MapFragment.On
         });
     }
 
+    /**
+     * Fills map markers once map is ready - based on map mode
+     */
     @Override
     public void onMapFragmentReady() {
         mapFragment.setToCurrentLocation();
@@ -99,6 +102,9 @@ public class MapViewActivity extends AppCompatActivity implements MapFragment.On
         }
     }
 
+    /**
+     * Adds personal vibe markers to the map
+     */
     public void addMyVibeLocations() {
         viewMyVibes = true;
         // TODO: add condition for user ID
@@ -120,6 +126,9 @@ public class MapViewActivity extends AppCompatActivity implements MapFragment.On
 
     }
 
+    /**
+     * Adds most recent vibe marker from each person you follow to the map
+     */
     public void addFollowedVibeLocations() {
         viewMyVibes = false;
         mapFragment.clearMap();
