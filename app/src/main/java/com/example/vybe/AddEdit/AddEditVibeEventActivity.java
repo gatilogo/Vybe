@@ -181,6 +181,9 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
         addBtn.setBackgroundResource(vibe.getColor());
     }
 
+    /**
+     * if the vibe has a location, the map is displayed, centered on the location
+     */
     @Override
     public void onMapFragmentReady() {
         if (vibeEvent.getLatitude() != null && vibeEvent.getLongitude() != null) {
@@ -191,6 +194,13 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
         }
     }
 
+    /**
+     * when the location is selected, it shows the map and centers it on the vibe
+     * @param latitude
+     * latitude of the vibe
+     * @param longitude
+     * longitude of the vibe
+     */
     @Override
     public void onLocationSelected(double latitude, double longitude) {
         vibeEvent.setLatitude(latitude);

@@ -19,6 +19,13 @@ public class CustomScrollView extends ScrollView {
         super(context, attrs, defStyle);
     }
 
+    /**
+     * allows the map to be scrolled within a scrollview
+     * @param ev
+     * how the user is swiping
+     * @return
+     * wether the motion event was intercepted
+     */
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         final int action = ev.getAction();
