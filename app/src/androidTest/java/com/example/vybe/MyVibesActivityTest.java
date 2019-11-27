@@ -1,5 +1,6 @@
 package com.example.vybe;
 
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.action.GeneralLocation;
 import androidx.test.espresso.action.GeneralSwipeAction;
@@ -116,7 +117,6 @@ public class MyVibesActivityTest {
 
         onView(withId(R.id.carousel_picker)).perform(customSwipe());
         Thread.sleep(1000);
-        onView(withId(R.id.carousel_picker)).perform(customSwipe());
 
         UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         UiObject obj = device.findObject(new UiSelector().textContains("OK").clickable(true));
@@ -134,6 +134,7 @@ public class MyVibesActivityTest {
         // Check we get back to my vibes activity
         onView(withId(R.id.filter_spinner))
                 .check(matches(isDisplayed()));
+
     }
 
     private static ViewAction customSwipe() {
