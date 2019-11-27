@@ -105,7 +105,7 @@ public class MapViewActivity extends AppCompatActivity implements MapFragment.On
         mapFragment.clearMap();
         db.collection(vibeEventDBPath).get().addOnSuccessListener((QuerySnapshot queryDocumentSnapshots) -> {
             for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                if ((doc.getDouble("latitude") != 0) && (doc.getDouble("latitude") != 0)) {
+                if ((doc.getDouble("latitude") != null) && (doc.getDouble("latitude") != null)) {
                     double latitude = doc.getDouble("latitude");
                     double longitude = doc.getDouble("longitude");
                     String vibeName = (String) doc.getData().get("vibe");
