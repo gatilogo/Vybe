@@ -233,8 +233,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
      * @return BitmapDescriptor generated from provided vector asset
      */
     private BitmapDescriptor vectorToBitmap(Context context, @DrawableRes  int markerID) {
-        Drawable background = ContextCompat.getDrawable(context, R.drawable.ic_map_marker);
-        // TODO: change marker background color
+
+        int mapMarker = markerID;
+        // TODO: clean up checking twice
+        if (mapMarker != R.drawable.ic_map_marker) {
+            mapMarker = R.drawable.ic_map_marker_vibe;
+        }
+
+        Drawable background = ContextCompat.getDrawable(context, mapMarker);
         background.setBounds(0, 0, background.getIntrinsicWidth(), background.getIntrinsicHeight());
         Drawable emoticon = ContextCompat.getDrawable(context, markerID);
         int bgwidth = background.getIntrinsicWidth() * 4 / 5;
