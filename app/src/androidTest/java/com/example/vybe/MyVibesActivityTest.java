@@ -5,8 +5,11 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
+import androidx.test.espresso.ViewAssertion;
 import androidx.test.espresso.action.GeneralLocation;
 import androidx.test.espresso.action.GeneralSwipeAction;
 import androidx.test.espresso.action.Press;
@@ -50,6 +53,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.instanceOf;
@@ -73,8 +77,8 @@ public class MyVibesActivityTest {
     private String validUsername = "espresso";
     private String validLoginPassword = "vibecheck";
     private SimpleDateFormat formatter = new SimpleDateFormat("MMMM dd, yyyy hh:mm a");
-    private Date date1;
-    private Date date2;
+    private static Date date1;
+    private static Date date2;
 
     @Rule
     public ActivityTestRule<MainActivity> activityRule =
@@ -173,12 +177,76 @@ public class MyVibesActivityTest {
 
         Thread.sleep(1000);
 
-        onView(withId(R.id.view_date_text_view)).check(matches(withText(containsString(formatter.format(date1)))));
+        onView(withId(R.id.view_date_text_view)).check(matches(withText(containsString(formatter.format(date1).split(" ")[0]))));
 
     }
 
     @Test
-    public void Test03_AddVibeEvent_AllFields() throws InterruptedException, UiObjectNotFoundException {
+    public void Test03_EditExistingVibe() throws InterruptedException, UiObjectNotFoundException {
+        LogIntoActivity();
+
+        onView(withId(R.id.my_vibe_list)).perform(RecyclerViewActions.actionOnItemAtPosition(0, LeftSwipe()));
+        Thread.sleep(2000);
+
+        // Check we are in add/edit activity
+        onView(withId(R.id.add_edit_vibes_toolbar))
+                .check(matches(isDisplayed()));
+
+
+        // Add a surprised vibe
+        onView(withId(R.id.vibe_image)).perform(click());
+
+        Thread.sleep(1000);
+        onView(withText("Select a Vibe")).check(matches(isDisplayed()));
+
+        onView(withId(R.id.carousel_picker)).perform(RightSwipe());
+        Thread.sleep(1000);
+        onView(withId(R.id.carousel_picker)).perform(RightSwipe());
+        Thread.sleep(1000);
+        onView(withId(R.id.carousel_picker)).perform(RightSwipe());
+        Thread.sleep(1000);
+
+        UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        UiObject obj = device.findObject(new UiSelector().textContains("OK").clickable(true));
+        obj.click();
+
+        Thread.sleep(1000);
+
+        // Edit textual reason
+        onView(withId(R.id.reason_edit_text))
+                .perform(replaceText("I'm Now Surprised"), closeSoftKeyboard());
+
+        // Click on spinner and select with others
+        onView(withId(R.id.soc_sit_field_fragment)).perform(click());
+        Thread.sleep(500);
+        onData(allOf(is(instanceOf(String.class)), is(SocSit.WITH_SEVERAL_PEOPLE.toString()))).perform(click());
+        Thread.sleep(500);
+
+        // Save our Vybe
+        onView(withId(R.id.add_btn)).perform(click());
+
+        Thread.sleep(2000);
+
+        // Check we get back to my vibes activity
+        onView(withId(R.id.filter_spinner))
+                .check(matches(isDisplayed()));
+
+        // Click on created vibe list item to check it exists
+        onView(withId(R.id.my_vibe_list)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+
+        // Check we are on the view page of the vibe
+        onView(withId(R.id.view_vibes_toolbar))
+                .check(matches(isDisplayed()));
+
+        Thread.sleep(1000);
+
+        onView(withId(R.id.view_reason_text_view)).check(matches(withText(containsString("I'm Now Surprised"))));
+        onView(withId(R.id.view_soc_sit_text_view)).check(matches(withText(containsString(SocSit.WITH_SEVERAL_PEOPLE.toString()))));
+
+    }
+
+    @Test
+    public void Test04_AddVibeEvent_AllFields() throws InterruptedException, UiObjectNotFoundException {
 
         LogIntoActivity();
 
@@ -253,7 +321,7 @@ public class MyVibesActivityTest {
 
         Thread.sleep(1000);
 
-        onView(withId(R.id.view_date_text_view)).check(matches(withText(containsString(formatter.format(date2)))));
+        onView(withId(R.id.view_date_text_view)).check(matches(withText(containsString(formatter.format(date2).split(" ")[0]))));
 
         onView(withId(R.id.view_reason_text_view)).check(matches(withText(containsString("I am Sad"))));
         onView(withId(R.id.view_soc_sit_text_view)).check(matches(withText(containsString(SocSit.ALONE.toString()))));
@@ -262,7 +330,7 @@ public class MyVibesActivityTest {
 
     // TODO: Get dates of two items and compare their dates to verify ordering
     @Test
-    public void Test04_ConfirmCorrectListOrder() throws InterruptedException, ParseException {
+    public void Test05_ConfirmCorrectListOrder() throws InterruptedException, ParseException {
         LogIntoActivity();
         Thread.sleep(5000);
 
@@ -271,7 +339,7 @@ public class MyVibesActivityTest {
         Thread.sleep(2000);
 
         // Verify it has the more recent date
-        onView(withId(R.id.view_date_text_view)).check(matches(withText(containsString(formatter.format(date2)))));
+        onView(withId(R.id.view_date_text_view)).check(matches(withText(containsString(formatter.format(date2).split(" ")[0]))));
         // Go back
         pressBack();
         Thread.sleep(2000);
@@ -280,13 +348,13 @@ public class MyVibesActivityTest {
         Thread.sleep(2000);
 
         // Verify it has the less recent date
-        onView(withId(R.id.view_date_text_view)).check(matches(withText(containsString(formatter.format(date1)))));
+        onView(withId(R.id.view_date_text_view)).check(matches(withText(containsString(formatter.format(date1).split(" ")[0]))));
 
 
     }
 
     @Test
-    public void Test05_Filter_VerifyList() throws InterruptedException, ParseException {
+    public void Test06_Filter_VerifyList() throws InterruptedException, ParseException {
         LogIntoActivity();
 
         // Click on spinner and select angry (no vibes)
@@ -302,81 +370,18 @@ public class MyVibesActivityTest {
         // Click on spinner and select disgusted (1 vibe)
         onView(withId(R.id.filter_spinner)).perform(click());
         Thread.sleep(500);
-        onData(allOf(is(instanceOf(String.class)), is(Vibe.DISGUSTED.toString()))).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is(Vibe.SURPRISED.toString()))).perform(click());
         Thread.sleep(3000);
-        // TODO: Check We have only one list item
+        onView(withId(R.id.my_vibe_list)).check(new RecyclerViewItemCountAssertion(1));
         // Click on spinner and select sad (1 vibe)
         onView(withId(R.id.filter_spinner)).perform(click());
         Thread.sleep(500);
         onData(allOf(is(instanceOf(String.class)), is(Vibe.SAD.toString()))).perform(click());
         Thread.sleep(3000);
-        // TODO: Check We have only one list item
+        onView(withId(R.id.my_vibe_list)).check(new RecyclerViewItemCountAssertion(1));
 
     }
 
-    @Test
-    public void Test06_EditExistingVibe() throws InterruptedException, UiObjectNotFoundException {
-        LogIntoActivity();
-
-        onView(withId(R.id.my_vibe_list)).perform(RecyclerViewActions.actionOnItemAtPosition(0, LeftSwipe()));
-        Thread.sleep(2000);
-
-        // Check we are in add/edit activity
-        onView(withId(R.id.add_edit_vibes_toolbar))
-                .check(matches(isDisplayed()));
-
-
-        // Add a surprised vibe
-        onView(withId(R.id.vibe_image)).perform(click());
-
-        Thread.sleep(1000);
-        onView(withText("Select a Vibe")).check(matches(isDisplayed()));
-
-        onView(withId(R.id.carousel_picker)).perform(RightSwipe());
-        Thread.sleep(1000);
-        onView(withId(R.id.carousel_picker)).perform(RightSwipe());
-        Thread.sleep(1000);
-        onView(withId(R.id.carousel_picker)).perform(RightSwipe());
-        Thread.sleep(1000);
-
-        UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
-        UiObject obj = device.findObject(new UiSelector().textContains("OK").clickable(true));
-        obj.click();
-
-        Thread.sleep(1000);
-
-        // Edit textual reason
-        onView(withId(R.id.reason_edit_text))
-                .perform(replaceText("I'm Now Surprised"), closeSoftKeyboard());
-
-        // Click on spinner and select with others
-        onView(withId(R.id.soc_sit_field_fragment)).perform(click());
-        Thread.sleep(500);
-        onData(allOf(is(instanceOf(String.class)), is(SocSit.WITH_SEVERAL_PEOPLE.toString()))).perform(click());
-        Thread.sleep(500);
-
-        // Save our Vybe
-        onView(withId(R.id.add_btn)).perform(click());
-
-        Thread.sleep(2000);
-
-        // Check we get back to my vibes activity
-        onView(withId(R.id.filter_spinner))
-                .check(matches(isDisplayed()));
-
-        // Click on created vibe list item to check it exists
-        onView(withId(R.id.my_vibe_list)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-
-        // Check we are on the view page of the vibe
-        onView(withId(R.id.view_vibes_toolbar))
-                .check(matches(isDisplayed()));
-
-        Thread.sleep(1000);
-
-        onView(withId(R.id.view_reason_text_view)).check(matches(withText(containsString("I'm Now Surprised"))));
-        onView(withId(R.id.view_soc_sit_text_view)).check(matches(withText(containsString(SocSit.WITH_SEVERAL_PEOPLE.toString()))));
-
-    }
 
     @Test
     public void Test07_DeleteVibes() throws InterruptedException, UiObjectNotFoundException {
@@ -401,26 +406,23 @@ public class MyVibesActivityTest {
                 GeneralLocation.CENTER_RIGHT, Press.FINGER);
     }
 
-    String getText(final Matcher<View> matcher) {
-        final String[] stringHolder = { null };
-        onView(matcher).perform(new ViewAction() {
-            @Override
-            public Matcher<View> getConstraints() {
-                return isAssignableFrom(TextView.class);
+    public class RecyclerViewItemCountAssertion implements ViewAssertion {
+        private final int expectedCount;
+
+        public RecyclerViewItemCountAssertion(int expectedCount) {
+            this.expectedCount = expectedCount;
+        }
+
+        @Override
+        public void check(View view, NoMatchingViewException noViewFoundException) {
+            if (noViewFoundException != null) {
+                throw noViewFoundException;
             }
 
-            @Override
-            public String getDescription() {
-                return "getting text from a TextView";
-            }
-
-            @Override
-            public void perform(UiController uiController, View view) {
-                TextView tv = (TextView)view; //Save, because of check in getConstraints()
-                stringHolder[0] = tv.getText().toString();
-            }
-        });
-        return stringHolder[0];
+            RecyclerView recyclerView = (RecyclerView) view;
+            RecyclerView.Adapter adapter = recyclerView.getAdapter();
+            assertThat(adapter.getItemCount(), is(expectedCount));
+        }
     }
 
     @After
@@ -428,25 +430,3 @@ public class MyVibesActivityTest {
         mAuth.getInstance().signOut();
     }
  }
-class GetTextAction implements ViewAction {
-
-    private CharSequence text;
-
-    @Override public Matcher<View> getConstraints() {
-        return isAssignableFrom(TextView.class);
-    }
-
-    @Override public String getDescription() {
-        return "get text";
-    }
-
-    @Override public void perform(UiController uiController, View view) {
-        TextView textView = (TextView) view;
-        text = textView.getText();
-    }
-
-    @Nullable
-    public CharSequence getText() {
-        return text;
-    }
-}
