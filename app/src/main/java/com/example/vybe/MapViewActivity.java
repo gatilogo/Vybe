@@ -105,9 +105,9 @@ public class MapViewActivity extends AppCompatActivity implements MapFragment.On
         mapFragment.clearMap();
         db.collection(vibeEventDBPath).get().addOnSuccessListener((QuerySnapshot queryDocumentSnapshots) -> {
             for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                if ((doc.getDouble("latitude") != null) && (doc.getDouble("latitude") != null)) {
-                    double latitude = doc.getDouble("latitude");
-                    double longitude = doc.getDouble("longitude");
+                Double latitude = doc.getDouble("latitude");
+                Double longitude = doc.getDouble("longitude");
+                if ((latitude != null) && (longitude != null)) {
                     String vibeName = (String) doc.getData().get("vibe");
                     Vibe vibe = Vibe.ofName(vibeName);
 
@@ -141,9 +141,9 @@ public class MapViewActivity extends AppCompatActivity implements MapFragment.On
                             @Override
                             public void onSuccess(QuerySnapshot queryDoc) {
                                 for (QueryDocumentSnapshot document: queryDoc){
-                                    if ((document.getDouble("latitude") != 0) && (document.getDouble("latitude") != 0)) {
-                                        double latitude = document.getDouble("latitude");
-                                        double longitude = document.getDouble("longitude");
+                                    Double latitude = document.getDouble("latitude");
+                                    Double longitude = document.getDouble("longitude");
+                                    if ((latitude != null) && (longitude != null)) {
                                         String vibeName = (String) document.getData().get("vibe");
                                         Vibe vibe = Vibe.ofName(vibeName);
                                         String vibeOwner = (String) document.getData().get("owner");
