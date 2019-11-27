@@ -47,6 +47,8 @@ public class ViewProfileActivityTest {
         mAuth = FirebaseAuth.getInstance();
     }
 
+
+    // Tests US 03.01.01
     @Test
     public void ViewPersonalProfile() throws InterruptedException {
         onView(withId(R.id.email_edit_text))
