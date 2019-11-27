@@ -37,16 +37,6 @@ public class UserTest {
         return userList;
     }
 
-    private ArrayList<User> getUserObjectList(){
-        ArrayList<User> userList = new ArrayList<>();
-
-        userList.add(new User("user1", "test_user_1@test.ca"));
-        userList.add(new User( "user2", "test_user_2@test.ca"));
-        userList.add(new User("user3", "test_user_3@test.ca"));
-
-        return userList;
-    }
-
     @Test
 
     public void EmptyMethodVerify(){
@@ -220,7 +210,7 @@ public class UserTest {
         User testUser = mockUser();
 
         assertTrue(testUser.isRequestsEmpty());
-        testUser.getRequests().add(mockUser());
+        testUser.getRequests().add("test2");
         assertFalse(testUser.isRequestsEmpty());
     }
 
@@ -231,15 +221,14 @@ public class UserTest {
 
         assertTrue(mockUser().isRequestsEmpty());
 
-        testUser.setRequests(getUserObjectList());
+        testUser.setRequests(getUserStringList());
 
-        ArrayList<User> verificationList = getUserObjectList();
+        ArrayList<String> verificationList = getUserStringList();
 
         assertEquals(verificationList.size(), testUser.requestCount());
 
         for(int i = 0; i < verificationList.size(); i++){
-            assertEquals(verificationList.get(i).getUsername(), testUser.getRequests().get(i).getUsername());
-            assertEquals(verificationList.get(i).getEmail(), testUser.getRequests().get(i).getEmail());
+            assertEquals(verificationList.get(i), testUser.getRequests().get(i));
         }
     }
 
