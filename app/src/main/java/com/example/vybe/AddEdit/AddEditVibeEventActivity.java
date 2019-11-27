@@ -129,9 +129,10 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
         // TODO: Move to fragment but then idk how to update the VibeEvent via imageIsSelected flag
         // ---Remove Image Button---
         removeImageBtn.setOnClickListener((View v) -> {
-            imageFragment.setImageBitmap(null);
-            imageIsSelected = false;
-
+                    imageFragment.setImageBitmap(null);
+                    imageIsSelected = false;
+        });
+        
         //---Remove Location---
         deleteLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
