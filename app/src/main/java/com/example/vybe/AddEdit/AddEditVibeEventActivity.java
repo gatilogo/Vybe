@@ -56,7 +56,6 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
     private ImageView imageFragment;
     private Toolbar toolbar;
     private MapFragment mapFragment;
-    private ImageView imageView;
     private SocialSituationFieldFragment socStnFragment;
     // -------------------
 
@@ -78,7 +77,6 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements Socia
         removeImageBtn = findViewById(R.id.remove_image_btn);
         imageFragment = findViewById(R.id.image_view);
         vibeImage = findViewById(R.id.vibe_image);
-        imageView = findViewById(R.id.imageView);
         mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.add_edit_map_fragment);
         socStnFragment = (SocialSituationFieldFragment) getSupportFragmentManager().findFragmentById(R.id.social_situation_field_fragment);
 
