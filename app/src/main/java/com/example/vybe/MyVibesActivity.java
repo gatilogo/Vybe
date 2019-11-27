@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
@@ -16,7 +17,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -31,26 +31,21 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.vybe.AddEdit.AddEditVibeEventActivity;
+import com.example.vybe.Models.SocSit;
 import com.example.vybe.Models.User;
 import com.example.vybe.Models.VibeEvent;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
 
 import static com.example.vybe.util.Constants.ERROR_DIALOG_REQUEST;
 import static com.example.vybe.util.Constants.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
@@ -74,7 +69,7 @@ public class MyVibesActivity extends AppCompatActivity {
     private MyVibesAdapter myVibesAdapter;
     private String vibeEventDBPath;
     private boolean allFlag;
-
+    private String filterVibe = "Filter Vibe";
     private Spinner filterSpinner;
     private RecyclerView vibesRecyclerView;
     private Button addVibeEventBtn;
@@ -102,9 +97,7 @@ public class MyVibesActivity extends AppCompatActivity {
 
         buildRecyclerView();
 
-        profileBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        profileBtn.setOnClickListener((View v) -> {
                 Intent intent = new Intent(MyVibesActivity.this, ViewProfileActivity.class);
                 // Get the current user's profile information
                 db.collection("Users").document(mAuth.getCurrentUser().getUid()).get()
@@ -114,58 +107,20 @@ public class MyVibesActivity extends AppCompatActivity {
                             intent.putExtra("user", new User(username, email));
                             startActivity(intent);
                         });
-
-            }
         });
 
         // --- Vibes Dropdown ---
-        // TODO: Refactor with custom spinner and/or different filtering methodology
-        String[] vibes = new String[]{"Filter Vibe", "Angry", "Disgusted", "Happy", "Sad", "Scared", "Surprised"};
+        // TODO: Refactor with custom spinner containing emoticons and using Vibe Enum
+        String[] vibes = new String[]{"All", "Angry", "Disgusted", "Happy", "Sad", "Scared", "Surprised"};
         ArrayAdapter<String> vibesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, vibes);
         filterSpinner.setAdapter(vibesAdapter);
         filterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                    String filterVibe = vibes[position].toLowerCase();
-                    allFlag = true;
-                    if (position != 0){ allFlag = false;}
-                    db.collection(vibeEventDBPath)
-                            .orderBy("datetime", Query.Direction.DESCENDING)
-                            .get()
-                            .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                @Override
-                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                    // TODO: Stub out with other query below
-                                    vibeEventList.clear();
-                                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
-
-                                        VibeEvent vibeEvent = new VibeEvent();
-                                        vibeEvent.setDateTime(doc.getDate("datetime"));
-                                        vibeEvent.setReason(doc.getString("reason"));
-                                        vibeEvent.setSocialSituation(doc.getString("socSit"));
-                                        vibeEvent.setId(doc.getId());
-                                        vibeEvent.setVibe(doc.getString("vibe"));
-
-                                        if (doc.getData().get("image") != null) {
-                                            vibeEvent.setImage(doc.getString("image"));
-                                        }
-
-                                        if (doc.getData().get("latitude") != null && doc.getData().get("longitude") != null) {
-                                            vibeEvent.setLatitude(doc.getDouble("latitude"));
-                                            vibeEvent.setLongitude(doc.getDouble("longitude"));
-                                        }
-
-                                        if (allFlag) {
-                                            vibeEventList.add(vibeEvent);
-                                        } else {
-                                            if (filterVibe.equals(vibeEvent.getVibe().getName())){
-                                                vibeEventList.add(vibeEvent);
-                                            }
-                                        }
-                                    }
-                                    myVibesAdapter.notifyDataSetChanged();
-                                }
-                            });
+                filterVibe = vibes[position];
+                allFlag = true;
+                if (position != 0){ allFlag = false;}
+                getVibeHistory(filterVibe);
             }
 
             @Override
@@ -202,30 +157,8 @@ public class MyVibesActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        // Want to get the most recent list of mood history
-        CollectionReference collectionReference = db.collection(vibeEventDBPath);
-        Query query = collectionReference.orderBy("datetime", Query.Direction.DESCENDING);
-
-        query.get().addOnSuccessListener((QuerySnapshot queryDocumentSnapshots) -> {
-                vibeEventList.clear();
-                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                    VibeEvent vibeEvent = new VibeEvent();
-                    vibeEvent.setDateTime(doc.getDate("datetime"));
-                    vibeEvent.setReason(doc.getString("reason"));
-                    vibeEvent.setSocialSituation(doc.getString("socSit"));
-                    vibeEvent.setId(doc.getId());
-                    vibeEvent.setVibe(doc.getString("vibe"));
-                    if (doc.getData().get("image") != null) {
-                        vibeEvent.setImage(doc.getString("image"));
-                    }
-                    if (doc.getData().get("latitude") != null && doc.getData().get("longitude") != null) {
-                        vibeEvent.setLatitude(doc.getDouble("latitude"));
-                        vibeEvent.setLongitude(doc.getDouble("longitude"));
-                    }
-                    vibeEventList.add(vibeEvent);
-                }
-                myVibesAdapter.notifyDataSetChanged();
-        });
+        // Should get Vibe History with the previous state if we click the back button
+        getVibeHistory(filterVibe);
     }
 
     @Override
@@ -327,7 +260,7 @@ public class MyVibesActivity extends AppCompatActivity {
         switch (requestCode) {
             case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
                 if (grantResults.length > 0
-                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     mLocationPermissionGranted = true;
                 }
             }
@@ -350,5 +283,43 @@ public class MyVibesActivity extends AppCompatActivity {
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(vibesRecyclerView);
         DividerItemDecoration itemDecor = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         vibesRecyclerView.addItemDecoration(itemDecor);
+    }
+
+    public void getVibeHistory(String vibeFilter){
+        db.collection(vibeEventDBPath)
+                .orderBy("datetime", Query.Direction.DESCENDING)
+                .get()
+                .addOnSuccessListener((QuerySnapshot queryDocumentSnapshots) -> {
+                    // TODO: Stub out with other query below
+                    vibeEventList.clear();
+                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
+
+                        VibeEvent vibeEvent = new VibeEvent();
+                        vibeEvent.setDateTime(doc.getDate("datetime"));
+                        vibeEvent.setReason(doc.getString("reason"));
+                        vibeEvent.setSocSit(SocSit.of(doc.getString("socSit")));
+                        vibeEvent.setId(doc.getId());
+                        vibeEvent.setVibe(doc.getString("vibe"));
+                        vibeEvent.setOwner(mAuth.getCurrentUser().getDisplayName());
+
+                        if (doc.getData().get("image") != null) {
+                            vibeEvent.setImage(doc.getString("image"));
+                        }
+
+                        if (doc.getData().get("latitude") != null && doc.getData().get("longitude") != null) {
+                            vibeEvent.setLatitude(doc.getDouble("latitude"));
+                            vibeEvent.setLongitude(doc.getDouble("longitude"));
+                        }
+
+                        if (allFlag) {
+                            vibeEventList.add(vibeEvent);
+                        } else {
+                            if (vibeFilter.equals(vibeEvent.getVibe().getName())){
+                                vibeEventList.add(vibeEvent);
+                            }
+                        }
+                    }
+                    myVibesAdapter.notifyDataSetChanged();
+                });
     }
 }

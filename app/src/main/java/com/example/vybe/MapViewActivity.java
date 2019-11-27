@@ -12,10 +12,10 @@ import androidx.annotation.DrawableRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
+
+import com.example.vybe.Models.Vibe;
 import com.example.vybe.Models.User;
 import com.example.vybe.Models.VibeEvent;
-import com.example.vybe.Models.vibefactory.Vibe;
-import com.example.vybe.Models.vibefactory.VibeFactory;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -47,6 +47,7 @@ public class MapViewActivity extends AppCompatActivity implements MapFragment.On
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private String currUsername = mAuth.getCurrentUser().getDisplayName();
     private String vibeEventDBPath;
     private MapFragment mapFragment;
     private FloatingActionButton mapToggleButton;
@@ -78,8 +79,10 @@ public class MapViewActivity extends AppCompatActivity implements MapFragment.On
                 mapFragment.clearMap();
                 if (viewMyVibes) {
                     addFollowedVibeLocations();
+                    mapToggleButton.setImageResource(R.drawable.button_toggle_personal);
                 } else {
                     addMyVibeLocations();
+                    mapToggleButton.setImageResource(R.drawable.button_group);
                 }
 
             }
@@ -106,9 +109,9 @@ public class MapViewActivity extends AppCompatActivity implements MapFragment.On
                     double latitude = doc.getDouble("latitude");
                     double longitude = doc.getDouble("longitude");
                     String vibeName = (String) doc.getData().get("vibe");
-                    Vibe vibe = VibeFactory.getVibe(vibeName);
+                    Vibe vibe = Vibe.ofName(vibeName);
 
-                    mapFragment.addMarker(new LatLng(latitude, longitude), vibe.getEmoticon());
+                    mapFragment.addMarker(new LatLng(latitude, longitude), vibe.getEmoticon(), currUsername);
 
                 }
             }
@@ -142,9 +145,10 @@ public class MapViewActivity extends AppCompatActivity implements MapFragment.On
                                         double latitude = document.getDouble("latitude");
                                         double longitude = document.getDouble("longitude");
                                         String vibeName = (String) document.getData().get("vibe");
-                                        Vibe vibe = VibeFactory.getVibe(vibeName);
+                                        Vibe vibe = Vibe.ofName(vibeName);
+                                        String vibeOwner = (String) document.getData().get("owner");
 
-                                        mapFragment.addMarker(new LatLng(latitude, longitude), vibe.getEmoticon());
+                                        mapFragment.addMarker(new LatLng(latitude, longitude), vibe.getEmoticon(), vibeOwner);
 
                                     }
                                 }

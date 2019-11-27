@@ -9,7 +9,7 @@ public class User implements Serializable {
     private String email;
     private ArrayList<String> followers;
     private ArrayList<String> following;
-    private ArrayList<User> requests;
+    private ArrayList<String> requests;
 
     /**
      * Default constructor for user with provided parameters
@@ -25,7 +25,7 @@ public class User implements Serializable {
      * @param requests
      *      This is a list of all user IDs requesting to follow this user
      */
-    public User(String username, String email, ArrayList<String> followers, ArrayList<String> following, ArrayList<User> requests) {
+    public User(String username, String email, ArrayList<String> followers, ArrayList<String> following, ArrayList<String> requests) {
         this.username = username;
         this.email = email;
         this.followers = followers;
@@ -148,7 +148,7 @@ public class User implements Serializable {
      * This gets the list of users that have requested to follow this user
      * @return The list of users that want to follow this user
      */
-    public ArrayList<User> getRequests() {
+    public ArrayList<String> getRequests() {
         return requests;
     }
 
@@ -157,7 +157,7 @@ public class User implements Serializable {
      * @param requests
      *      List of users that want to follow this user
      */
-    public void setRequests(ArrayList<User> requests) {
+    public void setRequests(ArrayList<String> requests) {
         this.requests = requests;
     }
 

@@ -61,8 +61,8 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <fragment
-                android:id="@+id/social_situation_field_fragment"
-                android:name="com.example.vybe.AddEdit.SocialSituationFieldFragment"
+                android:id="@+id/soc_sit_field_fragment"
+                android:name="com.example.vybe.AddEdit.SocSitFieldFragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -73,11 +73,27 @@
                 android:layout_height="wrap_content"
                 android:text="Pick Image" />
 
-            <Button
-                android:id="@+id/btn_add_location"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Pick Location" />
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_add_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Pick Location" />
+
+                <ImageButton
+                    android:id="@+id/btn_remove_location"
+                    android:layout_width="48dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0"
+                    android:background="@color/Red"
+                    app:srcCompat="@drawable/quantum_ic_clear_grey600_24" />
+
+            </LinearLayout>
 
             <fragment
                 android:id="@+id/add_edit_map_fragment"

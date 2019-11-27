@@ -115,7 +115,7 @@ public class SocialActivity extends AppCompatActivity {
     private void buildRecyclerView() {
         vibeEventList = new ArrayList<>();
 
-        socialVibesAdapter = new MyVibesAdapter(this, R.layout.my_vibe_item, vibeEventList);
+        socialVibesAdapter = new MyVibesAdapter(this, R.layout.social_vibe_event_item, vibeEventList);
         socialVibesRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         socialVibesRecyclerView.setAdapter(socialVibesAdapter);
 
