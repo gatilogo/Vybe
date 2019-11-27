@@ -20,6 +20,7 @@ import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 
 import com.example.vybe.Models.SocSit;
+import com.example.vybe.Models.Vibe;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -252,11 +253,40 @@ public class MyVibesActivityTest {
 
     }
 
-    // TODO: Get dates of two items and compare their dates to verify tests
+    // TODO: Get dates of two items and compare their dates to verify ordering
     @Test
     public void ConfirmCorrectListOrder() throws InterruptedException, ParseException {
         LogIntoActivity();
         onView(withId(R.id.my_vibe_list));
+    }
+
+    @Test
+    public void Filter_VerifyList() throws InterruptedException, ParseException {
+        LogIntoActivity();
+
+        // Click on spinner and select angry (no vibes)
+        onView(withId(R.id.filter_spinner)).perform(click());
+        Thread.sleep(500);
+        onData(allOf(is(instanceOf(String.class)), is(Vibe.ANGRY.toString()))).perform(click());
+        Thread.sleep(500);
+
+        // Check Vibe list is empty
+        onView(withId(R.id.image_view))
+                .check((doesNotExist()));
+
+        // Click on spinner and select disgusted (1 vibe)
+        onView(withId(R.id.filter_spinner)).perform(click());
+        Thread.sleep(500);
+        onData(allOf(is(instanceOf(String.class)), is(Vibe.DISGUSTED.toString()))).perform(click());
+        Thread.sleep(3000);
+        // TODO: Check We have only one list item
+        // Click on spinner and select sad (1 vibe)
+        onView(withId(R.id.filter_spinner)).perform(click());
+        Thread.sleep(500);
+        onData(allOf(is(instanceOf(String.class)), is(Vibe.SAD.toString()))).perform(click());
+        Thread.sleep(3000);
+        // TODO: Check We have only one list item
+
     }
 
     @Test
@@ -271,7 +301,7 @@ public class MyVibesActivityTest {
                 .check(matches(isDisplayed()));
 
 
-        // Add a suprised vibe
+        // Add a surprised vibe
         onView(withId(R.id.vibe_image)).perform(click());
 
         Thread.sleep(1000);
