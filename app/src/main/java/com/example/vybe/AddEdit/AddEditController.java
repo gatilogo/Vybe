@@ -81,11 +81,15 @@ public class AddEditController {
 
     public void saveVibeEvent(Vibe vibe, String reason, SocSit socSit, Bitmap image, Double latitude, Double longitude) {
         vibeEvent.setVibe(vibe.toString());
-        if (reason != null) vibeEvent.setReason(reason);
-        if (socSit != null) vibeEvent.setSocSit(socSit);
-        if (image != null) vibeEvent.setImage(uploadImage(image));
-        if (latitude != null) vibeEvent.setLatitude(latitude);
-        if (longitude != null) vibeEvent.setLongitude(longitude);
+        vibeEvent.setReason(reason);
+        vibeEvent.setSocSit(socSit);
+        if (image != null) {
+            vibeEvent.setImage(uploadImage(image));
+        } else {
+            vibeEvent.setImage(null);
+        }
+        vibeEvent.setLatitude(latitude);
+        vibeEvent.setLongitude(longitude);
 
         uploadVibeEvent();
     }
