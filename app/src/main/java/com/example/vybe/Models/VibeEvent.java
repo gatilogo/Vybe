@@ -130,8 +130,8 @@ public class VibeEvent implements Serializable {
      * This sets the social situation of the VibeEvent
      * @param socSit The social situation in which the event occurred
      */
-    public void setSocSit(SocSit socSit) {
-        this.socSit = socSit;
+    public void setSocSit(String socSit) {
+        this.socSit = SocSit.of(socSit);
     }
 
     /**

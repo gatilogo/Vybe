@@ -31,11 +31,11 @@ public class ViewProfileActivity extends AppCompatActivity {
     private TextView emailTextView;
     private Button logoutBtn;
     private Button sendRequestBtn;
-
-    private User user;
+    private User otherUser;
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseUser mUser = mAuth.getCurrentUser();
+    private RequestController requestController = RequestController.getInstance(ViewProfileActivity.this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,28 +47,27 @@ public class ViewProfileActivity extends AppCompatActivity {
         logoutBtn = findViewById(R.id.logout_btn);
         sendRequestBtn = findViewById(R.id.send_request_btn);
 
-        Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
+        Bundle extras = getIntent().getExtras();
 
         if (extras.containsKey("user")) {
-            user = (User) extras.getSerializable("user");
+            // TODO: move this logic to a profile controller
+            otherUser = (User) extras.getSerializable("user");
 
-            if (user.getEmail().equals(mAuth.getCurrentUser().getEmail())) {
+            if (otherUser.getEmail().equals(mUser.getEmail())) {
                 sendRequestBtn.setVisibility(View.GONE);
 
             } else {
                 logoutBtn.setVisibility(View.GONE);
-                // TODO: hide both buttons if other user is already followed pls and tnx
-                // Refactor user class arraylist pls and thx ask jakey
-                if (user.getFollowers() != null){
-                    if (user.getFollowers().contains(mAuth.getCurrentUser().getUid())) {
+
+                if (otherUser.getFollowers() != null){
+                    if (otherUser.getFollowers().contains(mUser.getUid())) {
                         sendRequestBtn.setVisibility(View.GONE);
                     }
                 }
             }
 
-            usernameTextView.setText(user.getUsername());
-            emailTextView.setText(user.getEmail());
+            usernameTextView.setText(otherUser.getUsername());
+            emailTextView.setText(otherUser.getEmail());
         }
 
         logoutBtn.setOnClickListener(view -> {
@@ -79,16 +78,8 @@ public class ViewProfileActivity extends AppCompatActivity {
             startActivity(restart);
         });
 
-        sendRequestBtn.setOnClickListener(view -> {
-            String otherUserID = user.getUserID();
-            FirebaseUser selfFB = mAuth.getCurrentUser();
-
-            db.collection("Users").document(otherUserID)
-                    .update("requests", FieldValue.arrayUnion(selfFB.getUid()));
-
-            // TODO: set the correct username/display name from/for mAuth.getCurrentUser()
-            Toast.makeText(this,"Request sent!", Toast.LENGTH_LONG).show();
-        });
+        sendRequestBtn.setOnClickListener((view)
+                -> requestController.sendFollowRequest(otherUser));
 
     }
 }
