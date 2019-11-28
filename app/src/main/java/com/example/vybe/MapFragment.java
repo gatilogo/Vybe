@@ -206,8 +206,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
      * user who created the vibe
      */
     public void addMarker(LatLng latLng, @DrawableRes int drawableRes, String owner) {
-//        BitmapDescriptor marker = vectorToBitmap(drawableRes);
-        BitmapDescriptor marker = vectorToBitmap(getContext(), drawableRes);
+        BitmapDescriptor marker;
+
+        if (drawableRes != R.drawable.ic_map_marker) {
+            marker = vectorToBitmap(getContext(), drawableRes);
+        } else {
+            marker = vectorToBitmap(getContext());
+        }
         MarkerOptions markerOptions = new MarkerOptions().position(latLng).icon(marker);
 
         if (owner != currUsername) {
@@ -234,26 +239,36 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
      */
     private BitmapDescriptor vectorToBitmap(Context context, @DrawableRes  int markerID) {
 
-        int mapMarker = markerID;
-        // TODO: clean up checking twice
-        if (mapMarker != R.drawable.ic_map_marker) {
-            mapMarker = R.drawable.ic_map_marker_vibe;
-        }
-
-        Drawable background = ContextCompat.getDrawable(context, mapMarker);
+        Drawable background = ContextCompat.getDrawable(context, R.drawable.ic_map_marker_vibe);
         background.setBounds(0, 0, background.getIntrinsicWidth(), background.getIntrinsicHeight());
-        Drawable emoticon = ContextCompat.getDrawable(context, markerID);
-        int bgwidth = background.getIntrinsicWidth() * 4 / 5;
-        int bgheight = background.getIntrinsicHeight() * 4 / 5;
-        emoticon.setBounds(20, 0, bgwidth + 20, bgheight);
         Bitmap bitmap = Bitmap.createBitmap(background.getIntrinsicWidth(),
                 background.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         background.draw(canvas);
 
-        if (markerID != R.drawable.ic_map_marker) {
-            emoticon.draw(canvas);
-        }
+        Drawable emoticon = ContextCompat.getDrawable(context, markerID);
+        int bg_width = background.getIntrinsicWidth() * 4 / 5;
+        int bg_height = background.getIntrinsicHeight() * 4 / 5;
+        emoticon.setBounds(20, 0, bg_width + 20, bg_height);
+        emoticon.draw(canvas);
+
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
+    }
+
+    /**
+     * Demonstrates converting a {@link Drawable} to a {@link BitmapDescriptor},
+     * for use as a marker icon.
+     * @param context the context for which the bitmap descriptor is to be drawn on
+     * @return BitmapDescriptor generated from provided vector asset
+     */
+    private BitmapDescriptor vectorToBitmap(Context context) {
+
+        Drawable background = ContextCompat.getDrawable(context, R.drawable.ic_map_marker);
+        background.setBounds(0, 0, background.getIntrinsicWidth(), background.getIntrinsicHeight());
+        Bitmap bitmap = Bitmap.createBitmap(background.getIntrinsicWidth(),
+                background.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        background.draw(canvas);
 
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
