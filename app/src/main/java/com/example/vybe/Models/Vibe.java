@@ -1,7 +1,6 @@
 package com.example.vybe.Models;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -10,7 +9,7 @@ import com.example.vybe.R;
 import java.util.ArrayList;
 
 public enum Vibe {
-    BLANK       ("All", R.color.Black, R.drawable.ic_no_vibe),
+    NONE        ("None", R.color.Black, R.drawable.ic_no_vibe),
     ANGRY       ("Angry", R.color.Red, R.drawable.ic_angry),
     DISGUSTED   ("Disgusted", R.color.Green, R.drawable.ic_disgusted),
     HAPPY       ("Happy", R.color.Yellow, R.drawable.ic_happy),
@@ -42,8 +41,8 @@ public enum Vibe {
             return Vibe.valueOf(name.toUpperCase());
 
         } catch (IllegalArgumentException e) {
-            Log.d(TAG, "[ofName(String name)] Vibe Name: " + name + " is invalid. Defaulting to BLANK Vibe.");
-            return Vibe.BLANK;
+            Log.d(TAG, "[ofName(String name)] Vibe Name: " + name + " is invalid. Defaulting to NONE Vibe.");
+            return Vibe.NONE;
 
         }
     }
@@ -77,16 +76,6 @@ public enum Vibe {
         }
 
         return emoticons;
-    }
-
-    public static ArrayList<String> getNames() {
-        ArrayList<String> names = new ArrayList<>();
-
-        for (Vibe vibe : Vibe.values()) {
-            names.add(vibe.getName());
-        }
-
-        return names;
     }
 
     @NonNull

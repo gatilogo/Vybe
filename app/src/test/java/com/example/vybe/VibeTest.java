@@ -130,12 +130,12 @@ public class VibeTest {
 
     @Test
     public void GetBlankVibe() {
-        Vibe blank = Vibe.BLANK;
-        assertEquals("Blank", blank.getName());
+        Vibe blank = Vibe.NONE;
+        assertEquals("NONE", blank.getName());
         assertEquals(R.color.Black, blank.getColor());
         assertEquals(R.drawable.ic_no_vibe, blank.getEmoticon());
 
-        blank = Vibe.ofName("blank");
+        blank = Vibe.ofName("none");
         assertEquals("Blank", blank.getName());
         assertEquals(R.color.Black, blank.getColor());
         assertEquals(R.drawable.ic_no_vibe, blank.getEmoticon());
@@ -149,8 +149,8 @@ public class VibeTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void InvalidVibeInputs_ThrowException() {
-        // Invalid names should result in the BLANK Vibe
-        assertEquals(Vibe.BLANK,  Vibe.ofName("AntiVibe"));
+        // Invalid names should result in the NONE Vibe
+        assertEquals(Vibe.NONE,  Vibe.ofName("AntiVibe"));
 
         // Invalid emoticons should throw an error
         Vibe.ofEmoticon(20);

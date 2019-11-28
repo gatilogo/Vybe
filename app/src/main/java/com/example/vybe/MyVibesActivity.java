@@ -10,8 +10,6 @@ import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -26,7 +24,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.vybe.AddEdit.AddEditVibeEventActivity;
-import com.example.vybe.Models.SocSit;
 import com.example.vybe.Models.User;
 import com.example.vybe.Models.Vibe;
 import com.example.vybe.Models.VibeEvent;
@@ -35,9 +32,6 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
@@ -52,30 +46,32 @@ import static com.example.vybe.util.Constants.PERMISSIONS_REQUEST_ENABLE_GPS;
  * order
  */
 
-public class MyVibesActivity extends AppCompatActivity implements VibeFilterFragment.OnVibeSelectedListener {
+public class MyVibesActivity extends AppCompatActivity implements VibeFilterFragment.OnVibeSelectedListener, VibeEventListController.OnMyVibeEventsUpdatedListener {
 
     private static final String TAG = "MyVibesActivity";
     private boolean mLocationPermissionGranted = false;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private String vibeEventDBPath = "Users/" + mAuth.getCurrentUser().getUid() + "/VibeEvents";
+    private VibeEventListController vibeEventListController = VibeEventListController.getInstance();
 
-    private ArrayList<VibeEvent> vibeEventList;
+    private ArrayList<VibeEvent> myVibeEvents = vibeEventListController.getMyVibeEvents();
+    private ArrayList<VibeEvent> shownVibeEvents = new ArrayList<>();
+    private Vibe filterVibe = Vibe.NONE;
     private MyVibesAdapter myVibesAdapter;
-    private String vibeEventDBPath;
-    private boolean allFlag;
-    private String filterVibe = "Filter Vibe";
-    private RecyclerView vibesRecyclerView;
+
+    // ------------ XML ------------
     private Button addVibeEventBtn;
     private Button myMapBtn;
     private Button socialBtn;
     private Button requestBtn;
     private ImageButton profileBtn;
+    private RecyclerView vibesRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_vibes);
-        Log.d(TAG, "onCreate: In my vibes");
 
         vibesRecyclerView = findViewById(R.id.my_vibe_list);
         addVibeEventBtn = findViewById(R.id.add_vibe_event_btn);
@@ -84,47 +80,28 @@ public class MyVibesActivity extends AppCompatActivity implements VibeFilterFrag
         profileBtn = findViewById(R.id.profile_btn);
         requestBtn = findViewById(R.id.request_btn);
 
-        vibeEventDBPath = "Users/" + mAuth.getCurrentUser().getUid() + "/VibeEvents";
-        allFlag = true; // Ask jakey
+        vibeEventListController.listenForMyVibeEvents(this);
 
         buildRecyclerView();
 
-        profileBtn.setOnClickListener((View v) -> {
-                Intent intent = new Intent(MyVibesActivity.this, ViewProfileActivity.class);
-                // Get the current user's profile information
-                db.collection("Users").document(mAuth.getCurrentUser().getUid()).get()
-                        .addOnSuccessListener((DocumentSnapshot doc) -> {
-                            String username = (String) doc.get("username");
-                            String email = (String) doc.get("email");
-                            intent.putExtra("user", new User(username, email));
-                            startActivity(intent);
-                        });
+        profileBtn.setOnClickListener(view -> {
+            Intent intent = new Intent(MyVibesActivity.this, ViewProfileActivity.class);
+            // Get the current user's profile information
+            db.collection("Users").document(mAuth.getCurrentUser().getUid()).get()
+                    .addOnSuccessListener((DocumentSnapshot doc) -> {
+                        String username = (String) doc.get("username");
+                        String email = (String) doc.get("email");
+                        intent.putExtra("user", new User(username, email));
+                        startActivity(intent);
+                    });
         });
 
-        // --- Vibes Dropdown ---
-//        // TODO: Refactor with custom spinner containing emoticons and using Vibe Enum
-//        String[] vibes = new String[]{"All", "Angry", "Disgusted", "Happy", "Sad", "Scared", "Surprised"};
-//        ArrayAdapter<String> vibesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, vibes);
-//        filterSpinner.setAdapter(vibesAdapter);
-//        filterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-//                filterVibe = vibes[position];
-//                allFlag = true;
-//                if (position != 0){ allFlag = false;}
-//                getVibeHistory(filterVibe);
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> adapterView) {}
-//        });
-
-        addVibeEventBtn.setOnClickListener((View view) -> {
+        addVibeEventBtn.setOnClickListener(view -> {
             Intent addIntent = new Intent(MyVibesActivity.this, AddEditVibeEventActivity.class);
             startActivity(addIntent);
         });
 
-        myMapBtn.setOnClickListener((View view) -> {
+        myMapBtn.setOnClickListener(view -> {
             if (mLocationPermissionGranted) {
                 Intent MapViewIntent = new Intent(MyVibesActivity.this, MapViewActivity.class);
                 MapViewIntent.putExtra("MapViewMode", "Personal");
@@ -134,11 +111,9 @@ public class MyVibesActivity extends AppCompatActivity implements VibeFilterFrag
             }
         });
 
-        socialBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MyVibesActivity.this, SocialActivity.class));
-            }
+        socialBtn.setOnClickListener(view -> {
+            startActivity(new Intent(MyVibesActivity.this, SocialActivity.class));
+
         });
 
         requestBtn.setOnClickListener(view -> {
@@ -147,53 +122,68 @@ public class MyVibesActivity extends AppCompatActivity implements VibeFilterFrag
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        // Should get Vibe History with the previous state if we click the back button
-        getVibeHistory(filterVibe);
+    public void onVibeSelected(Vibe vibe) {
+        filterVibe = vibe;
+        updateShownVibes();
+    }
+
+    @Override
+    public void onMyVibeEventsUpdated() {
+        updateShownVibes();
+    }
+
+    private void updateShownVibes() {
+        shownVibeEvents.clear();
+        for (VibeEvent event : myVibeEvents) {
+            if (filterVibe == Vibe.NONE || event.getVibe() == filterVibe) {
+                shownVibeEvents.add(event);
+            }
+        }
+
+        myVibesAdapter.notifyDataSetChanged();
+    }
+
+
+    private void buildRecyclerView() {
+        myVibesAdapter = new MyVibesAdapter(this, R.layout.my_vibe_item, shownVibeEvents);
+        vibesRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        vibesRecyclerView.setAdapter(myVibesAdapter);
+
+        SwipeItemTouchHelper itemTouchHelperCallback = new SwipeItemTouchHelper(
+                this,
+                0,
+                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT,
+                myVibesAdapter,
+                vibeEventDBPath);
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(vibesRecyclerView);
+        DividerItemDecoration itemDecor = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        vibesRecyclerView.addItemDecoration(itemDecor);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        //this is just the easiest way to consistently make sure the user has gps enabled
-        if (checkMapServices()) {
-            if (!mLocationPermissionGranted){
-                getLocationPermission();
-            }
+        // this is just the easiest way to consistently make sure the user has gps enabled
+        if (GoogleServicesWorks() && GpsIsEnabled() && !mLocationPermissionGranted) {
+            getLocationPermission();
         }
     }
 
-    @Override
-    public void onVibeSelected(Vibe vibe) {
-        Log.d(TAG, "onVibeSelected: " + vibe);
-    }
-
-    private boolean checkMapServices() {
-        if (GoogleServicesWorks()){
-            if(isMapsEnabled()){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean GoogleServicesWorks(){
-        //Makes sure that google api services are installed and enabled
+    public boolean GoogleServicesWorks() {
+        // Makes sure that google api services are installed and enabled
         int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(MyVibesActivity.this);
 
         if (available == ConnectionResult.SUCCESS) {
             return true;
-        }
-        else if (GoogleApiAvailability.getInstance().isUserResolvableError(available)) {
+        } else if (GoogleApiAvailability.getInstance().isUserResolvableError(available)) {
             Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(MyVibesActivity.this, available, ERROR_DIALOG_REQUEST);
             dialog.show();
         }
         return false;
     }
 
-    public boolean isMapsEnabled() {
-        //Makes sure user has gps services enabled
+    public boolean GpsIsEnabled() {
+        // Makes sure user has gps services enabled
         final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
@@ -204,7 +194,7 @@ public class MyVibesActivity extends AppCompatActivity implements VibeFilterFrag
     }
 
     private void NoGpsMessage() {
-        //alert for if user does not have gps enabled
+        // alert for if user does not have gps enabled
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("We need you to vybe with us using your GPS services, please enable it for us")
                 .setCancelable(false)
@@ -220,14 +210,13 @@ public class MyVibesActivity extends AppCompatActivity implements VibeFilterFrag
     }
 
 
-    protected void OnActivityResult (int requestCode, int resultCode, Intent data) {
+    protected void OnActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case PERMISSIONS_REQUEST_ENABLE_GPS: {
-                if (mLocationPermissionGranted){
-                    //everything is fine
-                }
-                else {
+                if (mLocationPermissionGranted) {
+                    // Everything is fine
+                } else {
                     getLocationPermission();
                 }
             }
@@ -235,24 +224,20 @@ public class MyVibesActivity extends AppCompatActivity implements VibeFilterFrag
     }
 
     private void getLocationPermission() {
-        //asks user for permission
-        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
+        // Asks user for permission
+        if (ContextCompat.checkSelfPermission(this.getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             mLocationPermissionGranted = true;
-            //do stuff
+
         } else {
             ActivityCompat.requestPermissions(this,
-                    new String[] {Manifest.permission.ACCESS_FINE_LOCATION},
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
         }
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String permissions[],
-                                           @NonNull int[] grantResults) {
-        //method ran after user closes the get permission window
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        // Method ran after user closes the get permission window
         mLocationPermissionGranted = false;
         switch (requestCode) {
             case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
@@ -264,59 +249,4 @@ public class MyVibesActivity extends AppCompatActivity implements VibeFilterFrag
         }
     }
 
-    private void buildRecyclerView() {
-        vibeEventList = new ArrayList<>();
-
-        myVibesAdapter = new MyVibesAdapter(this, R.layout.my_vibe_item, vibeEventList);
-        vibesRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        vibesRecyclerView.setAdapter(myVibesAdapter);
-
-        SwipeItemTouchHelper itemTouchHelperCallback = new SwipeItemTouchHelper(
-                this,
-                0,
-                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT,
-                myVibesAdapter,
-                vibeEventDBPath);
-        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(vibesRecyclerView);
-        DividerItemDecoration itemDecor = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
-        vibesRecyclerView.addItemDecoration(itemDecor);
-    }
-
-    public void getVibeHistory(String vibeFilter){
-        db.collection(vibeEventDBPath)
-                .orderBy("datetime", Query.Direction.DESCENDING)
-                .get()
-                .addOnSuccessListener((QuerySnapshot queryDocumentSnapshots) -> {
-                    // TODO: Stub out with other query below
-                    vibeEventList.clear();
-                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
-
-                        VibeEvent vibeEvent = new VibeEvent();
-                        vibeEvent.setDateTime(doc.getDate("datetime"));
-                        vibeEvent.setReason(doc.getString("reason"));
-                        vibeEvent.setSocSit(SocSit.of(doc.getString("socSit")));
-                        vibeEvent.setId(doc.getId());
-                        vibeEvent.setVibe(doc.getString("vibe"));
-                        vibeEvent.setOwner(mAuth.getCurrentUser().getDisplayName());
-
-                        if (doc.getData().get("image") != null) {
-                            vibeEvent.setImage(doc.getString("image"));
-                        }
-
-                        if (doc.getData().get("latitude") != null && doc.getData().get("longitude") != null) {
-                            vibeEvent.setLatitude(doc.getDouble("latitude"));
-                            vibeEvent.setLongitude(doc.getDouble("longitude"));
-                        }
-
-                        if (allFlag) {
-                            vibeEventList.add(vibeEvent);
-                        } else {
-                            if (vibeFilter.equals(vibeEvent.getVibe().getName())){
-                                vibeEventList.add(vibeEvent);
-                            }
-                        }
-                    }
-                    myVibesAdapter.notifyDataSetChanged();
-                });
-    }
 }

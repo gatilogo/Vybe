@@ -1,10 +1,8 @@
 package com.example.vybe.AddEdit;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -96,7 +94,7 @@ public class VibeCarouselDialogFragment extends DialogFragment {
                     int selectedEmoticon = imageItems.get(selectedPosition).getDrawable();
                     Vibe selectedVibe = Vibe.ofEmoticon(selectedEmoticon);
 
-                    if (selectedVibe != Vibe.BLANK) {
+                    if (selectedVibe != Vibe.NONE) {
                         onVibeSelectedListener.onVibeSelected(selectedVibe);
                     }
 
