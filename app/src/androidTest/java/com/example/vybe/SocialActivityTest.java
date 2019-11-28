@@ -6,6 +6,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.junit.After;
@@ -34,9 +35,11 @@ public class SocialActivityTest {
 
     private String espressoEmail = "espresso@test.ca";
     private String espressoUser = "espresso";
+    private String espressoUID = "5fDHBHFmWqb6hCkb3DkwYUlS2ys1";
 
     private String decafEmail = "decaf@test.ca";
     private String decafUser = "decaf";
+    private String decafUID = "ka1gQkqFcvYjmFl8FAKNV4Ewvx13";
 
     private String mochaUser = "mocha";
 
@@ -55,7 +58,10 @@ public class SocialActivityTest {
 
     @AfterClass
     public void DeleteFollower(){
-//        db.collection("Users").document(mAuth.getCurrentUser().getUid()).delete();
+        db.collection("Users").document(espressoUID)
+                .update("followers", FieldValue.arrayRemove(decafUID));
+        db.collection("Users").document(decafUID)
+                .update("following", FieldValue.arrayRemove(espressoUID));
 
     }
 }
