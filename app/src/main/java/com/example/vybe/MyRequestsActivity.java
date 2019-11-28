@@ -1,26 +1,17 @@
 package com.example.vybe;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.example.vybe.Models.User;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
@@ -35,7 +26,8 @@ public class MyRequestsActivity extends AppCompatActivity {
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     private RequestController requestController = RequestController.getInstance(MyRequestsActivity.this);
-    private ArrayList<User> requestList = requestController.getMyRequestList();
+    private ArrayList<String> myRequestList = requestController.getMyRequestList();
+    private ArrayList<User> userRequestList = requestController.getMyUserRequestList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,20 +35,25 @@ public class MyRequestsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_my_requests);
 
         userRecyclerView = findViewById(R.id.my_request_list);
-        profileAdapter = new ProfileAdapter(R.layout.user_item, requestList);
+        profileAdapter = new ProfileAdapter(R.layout.user_item, userRequestList);
 
         profileAdapter.setRequestClickListener(new ProfileAdapter.OnRequestClickListener() {
-            // TODO: move deleteItem calls from profileAdapter into controller?
+
+            // TODO: move deleteItem calls from profileAdapter into controller? - use listener
             @Override
             public void onAcceptClick(int position) {
-                requestController.acceptFollowRequest(position);
+                User selectedUser = userRequestList.get(position);
+                String selectedID = selectedUser.getUserID();
+                requestController.acceptFollowRequest(selectedID);
                 profileAdapter.deleteItem(position);
 
             }
 
             @Override
             public void onRejectClick(int position) {
-                requestController.removeFollowRequest(position);
+                User selectedUser = userRequestList.get(position);
+                String selectedID = selectedUser.getUserID();
+                requestController.removeFollowRequest(selectedID);
                 profileAdapter.deleteItem(position);
 
             }
@@ -72,9 +69,13 @@ public class MyRequestsActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        // Want to get the most recent list of requests
-        // requestController.getRequestUsernames();
+//        ArrayList<String> myRequestList = requestController.getMyRequestList();
+//
+//        if (myRequestList != null) {
+//            displayMyRequests(myRequestList);
+//        }
 
+        // get most recent list of requests
         CollectionReference collectionReference = db.collection("Users");
 
         collectionReference.document(mAuth.getCurrentUser().getUid()).get()
@@ -89,15 +90,15 @@ public class MyRequestsActivity extends AppCompatActivity {
     }
 
     protected void displayMyRequests(ArrayList<String> myRequests) {
-        requestList.clear();
+        // TODO: fill in requestController.displayMyRequests() and replace all below with that
 
-        // requestController.queryRequests()
+        userRequestList.clear();
         for (String uid: myRequests){
             db.collection("Users").document(uid).get()
                     .addOnSuccessListener((DocumentSnapshot documentSnapshot) -> {
                         User user = documentSnapshot.toObject(User.class);
                         user.setUserID(uid);
-                        requestList.add(user);
+                        userRequestList.add(user);
                         profileAdapter.notifyDataSetChanged();
                     });
         }

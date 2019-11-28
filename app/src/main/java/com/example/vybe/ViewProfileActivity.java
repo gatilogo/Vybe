@@ -31,7 +31,6 @@ public class ViewProfileActivity extends AppCompatActivity {
     private TextView emailTextView;
     private Button logoutBtn;
     private Button sendRequestBtn;
-
     private User otherUser;
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -48,10 +47,10 @@ public class ViewProfileActivity extends AppCompatActivity {
         logoutBtn = findViewById(R.id.logout_btn);
         sendRequestBtn = findViewById(R.id.send_request_btn);
 
-        Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
+        Bundle extras = getIntent().getExtras();
 
         if (extras.containsKey("user")) {
+            // TODO: move this logic to a profile controller
             otherUser = (User) extras.getSerializable("user");
 
             if (otherUser.getEmail().equals(mUser.getEmail())) {
@@ -59,7 +58,7 @@ public class ViewProfileActivity extends AppCompatActivity {
 
             } else {
                 logoutBtn.setVisibility(View.GONE);
-                // TODO: hide both buttons if other user is already followed pls and tnx
+
                 if (otherUser.getFollowers() != null){
                     if (otherUser.getFollowers().contains(mUser.getUid())) {
                         sendRequestBtn.setVisibility(View.GONE);
