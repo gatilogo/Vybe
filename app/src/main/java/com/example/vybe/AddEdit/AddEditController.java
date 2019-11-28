@@ -31,6 +31,7 @@ public class AddEditController {
     private AddEditVibeEventActivity activity;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private StorageReference storageRef = FirebaseStorage.getInstance().getReference();
     private String vibeEventDBPath = "Users/" + mAuth.getCurrentUser().getUid() + "/VibeEvents";
     private VibeEvent vibeEvent;
 
@@ -83,6 +84,10 @@ public class AddEditController {
         vibeEvent.setVibe(vibe.toString());
         vibeEvent.setReason(reason);
         vibeEvent.setSocSit(socSit);
+
+        String imagePath = vibeEvent.getImage();
+        if (imagePath != null) deleteImageFromDB(imagePath);
+
         if (image != null) {
             vibeEvent.setImage(uploadImage(image));
         } else {
@@ -131,7 +136,6 @@ public class AddEditController {
         byte[] byteArray = baos.toByteArray();
 
         String imagePath = "reasons/" + vibeEvent.getId() + ".jpg";
-        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
         StorageReference imageRef = storageRef.child(imagePath);
 
         UploadTask uploadTask = imageRef.putBytes(byteArray);
@@ -144,6 +148,11 @@ public class AddEditController {
 
         return imagePath;
 
+    }
+
+    private void deleteImageFromDB(String imagePath) {
+        StorageReference imageRef = storageRef.child(imagePath);
+        imageRef.delete();
     }
 
     private void uploadVibeEvent() {

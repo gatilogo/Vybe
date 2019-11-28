@@ -58,6 +58,8 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
     private Button addBtn;
     private TextView pageTitle;
     private Button pickLocationButton;
+    private Button removeImageBtn;
+    private ImageView imageFragment;
     private ImageButton deleteLocationButton;
     private Toolbar toolbar;
     private MapFragment mapFragment;
@@ -82,6 +84,8 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
         addBtn = findViewById(R.id.add_btn);
         pageTitle = findViewById(R.id.add_edit_vibe_title);
         pickLocationButton = findViewById(R.id.btn_add_location);
+        removeImageBtn = findViewById(R.id.remove_image_btn);
+        imageFragment = findViewById(R.id.image_view);
         deleteLocationButton = findViewById(R.id.btn_remove_location);
         vibeImage = findViewById(R.id.vibe_image);
         mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.add_edit_map_fragment);
@@ -109,6 +113,13 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
             locationFragment.show(getSupportFragmentManager(), "tag");
         });
 
+
+        // TODO: Move to fragment but then idk how to update the VibeEvent via imageIsSelected flag
+        // ---Remove Image Button---
+        removeImageBtn.setOnClickListener((View v) -> {
+                    imageFragment.setImageBitmap(null);
+        });
+        
         //---Remove Location---
         deleteLocationButton.setOnClickListener((View v) -> {
             clearLocation();
@@ -208,7 +219,6 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
     public void showDeleteLocationBtn() {
         deleteLocationButton.setVisibility(View.VISIBLE);
     }
-
 
     // ------------- Overrides --------------
 
