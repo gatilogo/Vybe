@@ -69,11 +69,12 @@ public class MyRequestsActivity extends AppCompatActivity {
         userRecyclerView.addItemDecoration(itemDecor);
     }
 
-    // TODO: MOVE THIS TO CONTROLLER USING LISTENER(?)
     @Override
     protected void onStart() {
         super.onStart();
         // Want to get the most recent list of requests
+        // requestController.getRequestUsernames();
+
         CollectionReference collectionReference = db.collection("Users");
 
         collectionReference.document(mAuth.getCurrentUser().getUid()).get()
@@ -87,9 +88,10 @@ public class MyRequestsActivity extends AppCompatActivity {
                 });
     }
 
-    // TODO: MOVE THIS TO CONTROLLER(?)
     protected void displayMyRequests(ArrayList<String> myRequests) {
         requestList.clear();
+
+        // requestController.queryRequests()
         for (String uid: myRequests){
             db.collection("Users").document(uid).get()
                     .addOnSuccessListener((DocumentSnapshot documentSnapshot) -> {

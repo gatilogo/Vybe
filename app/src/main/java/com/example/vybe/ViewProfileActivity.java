@@ -36,6 +36,7 @@ public class ViewProfileActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private RequestController requestController = RequestController.getInstance(ViewProfileActivity.this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +60,6 @@ public class ViewProfileActivity extends AppCompatActivity {
             } else {
                 logoutBtn.setVisibility(View.GONE);
                 // TODO: hide both buttons if other user is already followed pls and tnx
-                // Refactor user class arraylist pls and thx ask jakey
                 if (user.getFollowers() != null){
                     if (user.getFollowers().contains(mAuth.getCurrentUser().getUid())) {
                         sendRequestBtn.setVisibility(View.GONE);
@@ -79,16 +79,8 @@ public class ViewProfileActivity extends AppCompatActivity {
             startActivity(restart);
         });
 
-        sendRequestBtn.setOnClickListener(view -> {
-            String otherUserID = user.getUserID();
-            FirebaseUser selfFB = mAuth.getCurrentUser();
-
-            db.collection("Users").document(otherUserID)
-                    .update("requests", FieldValue.arrayUnion(selfFB.getUid()));
-
-            // TODO: set the correct username/display name from/for mAuth.getCurrentUser()
-            Toast.makeText(this,"Request sent!", Toast.LENGTH_LONG).show();
-        });
+        sendRequestBtn.setOnClickListener((view)
+                -> requestController.sendFollowRequest(user));
 
     }
 }

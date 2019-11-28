@@ -1,5 +1,7 @@
 package com.example.vybe;
 
+import android.widget.Toast;
+
 import com.example.vybe.Models.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FieldValue;
@@ -11,7 +13,8 @@ public class RequestController {
 
     private static RequestController instance;
     private static final String TAG = "RequestController";
-    private MyRequestsActivity activity;
+    private MyRequestsActivity myRequestsActivity;
+    private ViewProfileActivity viewProfileActivity;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -22,7 +25,11 @@ public class RequestController {
     private RequestController() { }
 
     private void setActivity(MyRequestsActivity requestsActivity) {
-        this.activity = requestsActivity;
+        this.myRequestsActivity = requestsActivity;
+    }
+
+    private void setActivity(ViewProfileActivity viewProfileActivity) {
+        this.viewProfileActivity = viewProfileActivity;
     }
 
     public static RequestController getInstance(MyRequestsActivity requestsActivity) {
@@ -33,8 +40,26 @@ public class RequestController {
         return instance;
     }
 
+    public static RequestController getInstance(ViewProfileActivity viewProfileActivity) {
+        if (instance == null)
+            instance = new RequestController();
+
+        instance.setActivity(viewProfileActivity);
+        return instance;
+    }
+
     public ArrayList<User> getMyRequestList() {
         return myRequestList;
+    }
+
+    public void sendFollowRequest(User user) {
+        String otherUserID = user.getUserID();
+
+        db.collection("Users").document(otherUserID)
+                .update("requests", FieldValue.arrayUnion(myUID));
+
+        String requestSentToast = "Request sent to " + user.getUsername() + "!";
+        Toast.makeText(this.viewProfileActivity, requestSentToast, Toast.LENGTH_LONG).show();
     }
 
     public void acceptFollowRequest(int position) {
