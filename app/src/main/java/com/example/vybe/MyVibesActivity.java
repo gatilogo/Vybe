@@ -9,19 +9,14 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -33,12 +28,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.vybe.AddEdit.AddEditVibeEventActivity;
 import com.example.vybe.Models.SocSit;
 import com.example.vybe.Models.User;
+import com.example.vybe.Models.Vibe;
 import com.example.vybe.Models.VibeEvent;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -58,7 +52,7 @@ import static com.example.vybe.util.Constants.PERMISSIONS_REQUEST_ENABLE_GPS;
  * order
  */
 
-public class MyVibesActivity extends AppCompatActivity {
+public class MyVibesActivity extends AppCompatActivity implements VibeFilterFragment.OnVibeSelectedListener {
 
     private static final String TAG = "MyVibesActivity";
     private boolean mLocationPermissionGranted = false;
@@ -70,7 +64,6 @@ public class MyVibesActivity extends AppCompatActivity {
     private String vibeEventDBPath;
     private boolean allFlag;
     private String filterVibe = "Filter Vibe";
-    private Spinner filterSpinner;
     private RecyclerView vibesRecyclerView;
     private Button addVibeEventBtn;
     private Button myMapBtn;
@@ -84,7 +77,6 @@ public class MyVibesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_my_vibes);
         Log.d(TAG, "onCreate: In my vibes");
 
-        filterSpinner = findViewById(R.id.filter_spinner);
         vibesRecyclerView = findViewById(R.id.my_vibe_list);
         addVibeEventBtn = findViewById(R.id.add_vibe_event_btn);
         myMapBtn = findViewById(R.id.my_map_btn);
@@ -110,22 +102,22 @@ public class MyVibesActivity extends AppCompatActivity {
         });
 
         // --- Vibes Dropdown ---
-        // TODO: Refactor with custom spinner containing emoticons and using Vibe Enum
-        String[] vibes = new String[]{"All", "Angry", "Disgusted", "Happy", "Sad", "Scared", "Surprised"};
-        ArrayAdapter<String> vibesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, vibes);
-        filterSpinner.setAdapter(vibesAdapter);
-        filterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                filterVibe = vibes[position];
-                allFlag = true;
-                if (position != 0){ allFlag = false;}
-                getVibeHistory(filterVibe);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {}
-        });
+//        // TODO: Refactor with custom spinner containing emoticons and using Vibe Enum
+//        String[] vibes = new String[]{"All", "Angry", "Disgusted", "Happy", "Sad", "Scared", "Surprised"};
+//        ArrayAdapter<String> vibesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, vibes);
+//        filterSpinner.setAdapter(vibesAdapter);
+//        filterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+//                filterVibe = vibes[position];
+//                allFlag = true;
+//                if (position != 0){ allFlag = false;}
+//                getVibeHistory(filterVibe);
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> adapterView) {}
+//        });
 
         addVibeEventBtn.setOnClickListener((View view) -> {
             Intent addIntent = new Intent(MyVibesActivity.this, AddEditVibeEventActivity.class);
@@ -170,6 +162,11 @@ public class MyVibesActivity extends AppCompatActivity {
                 getLocationPermission();
             }
         }
+    }
+
+    @Override
+    public void onVibeSelected(Vibe vibe) {
+        Log.d(TAG, "onVibeSelected: " + vibe);
     }
 
     private boolean checkMapServices() {
