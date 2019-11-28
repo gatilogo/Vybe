@@ -17,6 +17,7 @@ import androidx.test.espresso.action.Press;
 import androidx.test.espresso.action.Swipe;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.filters.LargeTest;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.uiautomator.UiDevice;
@@ -52,7 +53,7 @@ import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
+//import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -71,6 +72,7 @@ import static org.hamcrest.Matchers.is;
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(AndroidJUnit4.class)
+@LargeTest
 public class MyVibesActivityTest {
 
     FirebaseFirestore db;
@@ -106,7 +108,6 @@ public class MyVibesActivityTest {
         // Check we logged in and we are on myVibes page
         onView(withId(R.id.filter_spinner))
                 .check(matches(isDisplayed()));
-
     }
 
     @Test
@@ -209,9 +210,9 @@ public class MyVibesActivityTest {
         onView(withId(R.id.carousel_picker)).perform(RightSwipe());
         Thread.sleep(1000);
 
-        UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
-        UiObject obj = device.findObject(new UiSelector().textContains("OK").clickable(true));
-        obj.click();
+//        UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+//        UiObject obj = device.findObject(new UiSelector().textContains("OK").clickable(true));
+//        obj.click();
 
         Thread.sleep(1000);
 
@@ -273,9 +274,9 @@ public class MyVibesActivityTest {
         onView(withId(R.id.carousel_picker)).perform(RightSwipe());
         Thread.sleep(1000);
 
-        UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
-        UiObject obj = device.findObject(new UiSelector().textContains("OK").clickable(true));
-        obj.click();
+//        UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+//        UiObject obj = device.findObject(new UiSelector().textContains("OK").clickable(true));
+//        obj.click();
 
         // Check we are in add/edit activity
         onView(withId(R.id.add_edit_vibes_toolbar))
