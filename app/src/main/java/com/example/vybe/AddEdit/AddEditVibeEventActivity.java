@@ -45,6 +45,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
     private static final String TAG = "AddEditVibeEventActivity";
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private StorageReference storageRef = FirebaseStorage.getInstance().getReference();
     private String vibeEventDBPath;
 
     // --- XML Elements ---
@@ -53,10 +54,11 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
     private Button addBtn;
     private TextView pageTitle;
     private Button pickLocationButton;
+    private Button removeImageBtn;
+    private ImageView imageFragment;
     private ImageButton deleteLocationButton;
     private Toolbar toolbar;
     private MapFragment mapFragment;
-    private ImageView imageView;
     private SocSitFieldFragment socSitFragment;
     // -------------------
 
@@ -75,9 +77,10 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
         addBtn = findViewById(R.id.add_btn);
         pageTitle = findViewById(R.id.add_edit_vibe_title);
         pickLocationButton = findViewById(R.id.btn_add_location);
+        removeImageBtn = findViewById(R.id.remove_image_btn);
+        imageFragment = findViewById(R.id.image_view);
         deleteLocationButton = findViewById(R.id.btn_remove_location);
         vibeImage = findViewById(R.id.vibe_image);
-        imageView = findViewById(R.id.imageView);
         mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.add_edit_map_fragment);
         socSitFragment = (SocSitFieldFragment) getSupportFragmentManager().findFragmentById(R.id.soc_sit_field_fragment);
 
@@ -92,7 +95,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
             reasonField.setText(vibeEvent.getReason());
 
             if (vibeEvent.getImage() != null) {
-                loadImageFirebase(imageView, vibeEvent.getImage());
+                loadImageFirebase(imageFragment, vibeEvent.getImage());
             }
 
             if (vibeEvent.getSocSit() != null) {
@@ -122,6 +125,14 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
             locationFragment.show(getSupportFragmentManager(), "tag");
         });
 
+
+        // TODO: Move to fragment but then idk how to update the VibeEvent via imageIsSelected flag
+        // ---Remove Image Button---
+        removeImageBtn.setOnClickListener((View v) -> {
+                    imageFragment.setImageBitmap(null);
+                    imageIsSelected = false;
+        });
+        
         //---Remove Location---
         deleteLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,6 +143,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
                 mapFragment.hideMap();
                 deleteLocationButton.setVisibility(View.GONE);
             }
+
         });
 
         // --- Show Output on button click ---
@@ -181,6 +193,9 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
         addBtn.setBackgroundResource(vibe.getColor());
     }
 
+    /**
+     * if the vibe has a location, the map is displayed, centered on the location
+     */
     @Override
     public void onMapFragmentReady() {
         if (vibeEvent.getLatitude() != null && vibeEvent.getLongitude() != null) {
@@ -191,6 +206,13 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
         }
     }
 
+    /**
+     * when the location is selected, it shows the map and centers it on the vibe
+     * @param latitude
+     * latitude of the vibe
+     * @param longitude
+     * longitude of the vibe
+     */
     @Override
     public void onLocationSelected(double latitude, double longitude) {
         vibeEvent.setLatitude(latitude);
@@ -208,7 +230,6 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
         byte[] byteArray = baos.toByteArray();
 
         String imgPath = "reasons/" + id + ".jpg";
-        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
         StorageReference mountainsRef = storageRef.child(imgPath);
 
         UploadTask uploadTask = mountainsRef.putBytes(byteArray);
@@ -231,6 +252,13 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
         if (imageIsSelected) {
             uploadImage(imageBitmap, vibeEvent.getId());
             vibeEvent.setImage("reasons/" + vibeEvent.getId() + ".jpg");
+        }
+        else {
+            if (vibeEvent.getImage() != null){
+                StorageReference imageRef = storageRef.child(vibeEvent.getImage());
+                imageRef.delete();
+                vibeEvent.setImage(null);
+            }
         }
 
         HashMap<String, Object> data = createVibeEventData(vibeEvent);
