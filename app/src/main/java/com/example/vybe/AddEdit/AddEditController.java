@@ -3,6 +3,7 @@ package com.example.vybe.AddEdit;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,6 +25,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 
 public class AddEditController {
+    private static final String TAG = "AddEditController";
     private static AddEditController instance;
 
     private AddEditVibeEventActivity activity;
@@ -77,16 +79,21 @@ public class AddEditController {
         vibeEvent.setOwner(mAuth.getCurrentUser().getDisplayName());
         vibeEvent.setVibe(vibe.toString());
         vibeEvent.setReason(reason);
-        vibeEvent.setSocSit(socSit.toString());
+
+        if (socSit != null)
+            vibeEvent.setSocSit(socSit.toString());
+        else
+            vibeEvent.setSocSit(null);
 
         String imagePath = vibeEvent.getImage();
-        if (imagePath != null) deleteImageFromDB(imagePath);
+        if (imagePath != null)
+            deleteImageFromDB(imagePath);
 
-        if (image != null) {
+        if (image != null)
             vibeEvent.setImage(uploadImage(image));
-        } else {
+        else
             vibeEvent.setImage(null);
-        }
+
         vibeEvent.setLatitude(latitude);
         vibeEvent.setLongitude(longitude);
 

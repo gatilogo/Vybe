@@ -1,5 +1,6 @@
 package com.example.vybe;
 
+import android.app.Activity;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -25,13 +26,13 @@ import java.util.ArrayList;
 public class VibeEventListController {
     private static final String TAG = "VibeEventListController";
     private static VibeEventListController instance;
-    private ArrayList<OnMyVibeEventsUpdatedListener> myVibeEventListeners = new ArrayList<>();
-    private ArrayList<OnSocialVibeEventsUpdatedListener> socialVibeEventListeners = new ArrayList<>();
+    private OnMyVibeEventsUpdatedListener myVibeEventListener;
+    private OnSocialVibeEventsUpdatedListener socialVibeEventListener;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    private String myVibeEventsPath = "Users/" + mAuth.getCurrentUser().getUid() + "/VibeEvents";
-    private String profilePath = "Users/" + mAuth.getCurrentUser().getUid();
+    private String myVibeEventsPath;
+    private String profilePath;
 
     private ArrayList<VibeEvent> myVibeEvents = new ArrayList<>();
     private ArrayList<VibeEvent> socialVibeEvents = new ArrayList<>();
@@ -45,6 +46,9 @@ public class VibeEventListController {
     }
 
     private VibeEventListController() {
+        myVibeEventsPath = "Users/" + mAuth.getCurrentUser().getUid() + "/VibeEvents";
+        profilePath = "Users/" + mAuth.getCurrentUser().getUid();
+
         db.collection(myVibeEventsPath)
                 .orderBy("datetime", Query.Direction.DESCENDING)
                 .addSnapshotListener((queryDocumentSnapshots, firebaseFirestoreException) -> {
@@ -57,7 +61,7 @@ public class VibeEventListController {
                         myVibeEvents.add(vibeEvent);
                     }
 
-                    notifyMyVibeEventsListeners();
+                    notifyMyVibeEventsListener();
 
                     Log.d(TAG, "MyVibeEvents Updated");
                 });
@@ -86,10 +90,10 @@ public class VibeEventListController {
 
                                         int doc = documentSnapshots.size();
                                         Log.d(TAG, "onEvent: " + doc);
-                            });
+                                    });
                         }
 
-                        notifySocialVibeEventsListeners();
+                        notifySocialVibeEventsListener();
                     }
                 });
 
@@ -126,31 +130,31 @@ public class VibeEventListController {
 //        }
     }
 
-    private void notifySocialVibeEventsListeners() {
-        for (OnSocialVibeEventsUpdatedListener listener : socialVibeEventListeners) {
-            listener.onSocialVibeEventsUpdated();
-        }
+    private void notifySocialVibeEventsListener() {
+        if (socialVibeEventListener != null)
+            socialVibeEventListener.onSocialVibeEventsUpdated();
     }
 
-    private void notifyMyVibeEventsListeners() {
-        for (OnMyVibeEventsUpdatedListener listener : myVibeEventListeners) {
-            listener.onMyVibeEventsUpdated();
-        }
+    private void notifyMyVibeEventsListener() {
+        if (myVibeEventListener != null)
+            myVibeEventListener.onMyVibeEventsUpdated();
+
     }
 
-    public static VibeEventListController getInstance() {
+    public static VibeEventListController getInstance(Activity activity) {
         if (instance == null)
             instance = new VibeEventListController();
 
+        if (activity instanceof OnMyVibeEventsUpdatedListener) {
+            instance.myVibeEventListener = (OnMyVibeEventsUpdatedListener) activity;
+
+        } else if (activity instanceof OnSocialVibeEventsUpdatedListener) {
+            instance.socialVibeEventListener = (OnSocialVibeEventsUpdatedListener) activity;
+
+        } else {
+            throw new RuntimeException(activity.toString() + " must Listen to VibeEventListController");
+        }
         return instance;
-    }
-
-    public void listenForMyVibeEvents(OnMyVibeEventsUpdatedListener listener) {
-        myVibeEventListeners.add(listener);
-    }
-
-    public void listenForSocialVibeEvents(OnSocialVibeEventsUpdatedListener listener) {
-        socialVibeEventListeners.add(listener);
     }
 
     public ArrayList<VibeEvent> getMyVibeEvents() {

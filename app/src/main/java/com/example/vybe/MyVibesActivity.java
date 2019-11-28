@@ -53,7 +53,7 @@ public class MyVibesActivity extends AppCompatActivity implements VibeFilterFrag
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private String vibeEventDBPath = "Users/" + mAuth.getCurrentUser().getUid() + "/VibeEvents";
-    private VibeEventListController vibeEventListController = VibeEventListController.getInstance();
+    private VibeEventListController vibeEventListController = VibeEventListController.getInstance(this);
 
     private ArrayList<VibeEvent> myVibeEvents = vibeEventListController.getMyVibeEvents();
     private ArrayList<VibeEvent> shownVibeEvents = new ArrayList<>();
@@ -79,8 +79,6 @@ public class MyVibesActivity extends AppCompatActivity implements VibeFilterFrag
         socialBtn = findViewById(R.id.social_btn);
         profileBtn = findViewById(R.id.profile_btn);
         requestBtn = findViewById(R.id.request_btn);
-
-        vibeEventListController.listenForMyVibeEvents(this);
 
         buildRecyclerView();
 
