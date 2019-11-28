@@ -8,6 +8,7 @@ import androidx.test.rule.ActivityTestRule;
 
 import com.example.vybe.Helpers.ClickOnInternalView;
 import com.example.vybe.Helpers.RecyclerViewItemCountAssertion;
+import com.example.vybe.Helpers.RecyclerViewMatcher;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -177,8 +178,14 @@ public class SocialActivityTest {
         // check 2 items are on the recycler view
         onView(withId(R.id.social_vibe_list)).check(new RecyclerViewItemCountAssertion(2));
 
-//        - make sure @Mocha is the older item/vibe displayed
-//                - check that @Espresso is at the top or something
+        // make sure @Mocha is the older item/vibe displayed
+        onView(new RecyclerViewMatcher(R.id.social_vibe_list)
+                .atPositionOnView(1, R.id.vibe_title_text_view))
+                .check(matches(withText("@mocha")));
+        // check that @Espresso is at the top
+        onView(new RecyclerViewMatcher(R.id.social_vibe_list)
+                .atPositionOnView(0, R.id.vibe_title_text_view))
+                .check(matches(withText("@espresso")));
     }
 
     @AfterClass
@@ -195,5 +202,6 @@ public class SocialActivityTest {
     public void Exit(){
         mAuth.getInstance().signOut();
     }
+
 }
 
