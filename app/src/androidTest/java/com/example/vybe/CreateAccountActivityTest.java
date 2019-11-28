@@ -10,9 +10,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
@@ -33,6 +35,7 @@ import static org.hamcrest.Matchers.not;
  * This tests for user Registration and on the sign up activity
  *
  */
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(AndroidJUnit4.class)
 public class CreateAccountActivityTest {
     FirebaseFirestore db;
