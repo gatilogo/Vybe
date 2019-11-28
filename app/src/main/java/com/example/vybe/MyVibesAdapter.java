@@ -92,7 +92,7 @@ public class MyVibesAdapter extends RecyclerView.Adapter<MyVibesAdapter.VibeEven
             StorageReference imageRef = storageRef.child(vibeEvent.getImage());
             imageRef.delete();
         }
-        db.collection(vibeEventDBPath).document(vibeEvent.getId()).delete();
+        db.collection(vibeEventDBPath).document(vibeEvent.getID()).delete();
         vibeEventList.remove(position);
         notifyItemRemoved(position);
     }

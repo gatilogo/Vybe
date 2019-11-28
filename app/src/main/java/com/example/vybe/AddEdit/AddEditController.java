@@ -3,7 +3,6 @@ package com.example.vybe.AddEdit;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -15,7 +14,6 @@ import com.bumptech.glide.request.transition.Transition;
 import com.example.vybe.Models.SocSit;
 import com.example.vybe.Models.Vibe;
 import com.example.vybe.Models.VibeEvent;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -58,7 +56,7 @@ public class AddEditController {
         String imagePath = vibeEvent.getImage();
         Double latitude = vibeEvent.getLatitude();
         Double longitude = vibeEvent.getLongitude();
-        assert vibeEvent.getId() != null : "Editing a VibeEvent that doesn't have an ID";
+        assert vibeEvent.getID() != null : "Editing a VibeEvent that doesn't have an ID";
 
         activity.setVibe(vibe);
         if (reason != null) activity.setReason(reason);
@@ -72,7 +70,7 @@ public class AddEditController {
         vibeEvent = new VibeEvent();
 
         String id = db.collection(vibeEventDBPath).document().getId();
-        vibeEvent.setId(id);
+        vibeEvent.setID(id);
     }
 
     public void saveVibeEvent(Vibe vibe, String reason, SocSit socSit, Bitmap image, Double latitude, Double longitude) {
@@ -130,7 +128,7 @@ public class AddEditController {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] byteArray = baos.toByteArray();
 
-        String imagePath = "reasons/" + vibeEvent.getId() + ".jpg";
+        String imagePath = "reasons/" + vibeEvent.getID() + ".jpg";
         StorageReference imageRef = storageRef.child(imagePath);
 
         UploadTask uploadTask = imageRef.putBytes(byteArray);
@@ -152,7 +150,7 @@ public class AddEditController {
 
     private void uploadVibeEvent() {
         HashMap<String, Object> data = new HashMap<>();
-        data.put("ID", vibeEvent.getId());
+        data.put("ID", vibeEvent.getID());
         data.put("vibe", vibeEvent.getVibe());
         data.put("datetime", vibeEvent.getDateTime());
         data.put("reason", vibeEvent.getReason());
@@ -161,6 +159,6 @@ public class AddEditController {
         data.put("latitude", vibeEvent.getLatitude());
         data.put("longitude", vibeEvent.getLongitude());
 
-        db.collection(vibeEventDBPath).document(vibeEvent.getId()).set(data);
+        db.collection(vibeEventDBPath).document(vibeEvent.getID()).set(data);
     }
 }
