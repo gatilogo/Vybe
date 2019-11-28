@@ -37,6 +37,7 @@ public class ViewProfileActivity extends AppCompatActivity {
     private LinearLayout vibesLayout;
     private LinearLayout followersLayout;
     private LinearLayout followingLayout;
+    private LinearLayout statisticsLayout;
     private TextView vibeCount;
     private TextView followerCount;
     private TextView followingCount;
@@ -61,6 +62,7 @@ public class ViewProfileActivity extends AppCompatActivity {
         vibeCount = findViewById(R.id.vibe_count);
         followerCount = findViewById(R.id.follower_count);
         followingCount = findViewById(R.id.following_count);
+        statisticsLayout = findViewById(R.id.statistics_layout);
 
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
@@ -70,11 +72,14 @@ public class ViewProfileActivity extends AppCompatActivity {
 
             if (user.getEmail().equals(mAuth.getCurrentUser().getEmail())) {
                 sendRequestBtn.setVisibility(View.GONE);
+                statisticsLayout.setVisibility(View.VISIBLE);
             } else {
                 logoutBtn.setVisibility(View.GONE);
+
                 if (user.getFollowers() != null){
                     if (user.getFollowers().contains(mAuth.getCurrentUser().getUid())) {
                         sendRequestBtn.setVisibility(View.GONE);
+                        statisticsLayout.setVisibility(View.VISIBLE);
                     }
                 }
             }
@@ -116,16 +121,16 @@ public class ViewProfileActivity extends AppCompatActivity {
             Toast.makeText(this,"Request sent!", Toast.LENGTH_LONG).show();
         });
 
-        vibesLayout.setOnClickListener(view -> {
-
-        });
-
         followersLayout.setOnClickListener(view -> {
-            startActivity(new Intent(this, ConnectionsActivity.class));
+            Intent followersIntent = new Intent(this, ConnectionsActivity.class);
+            followersIntent.putExtra("user", user);
+            startActivity(followersIntent);
         });
 
         followingLayout.setOnClickListener(view -> {
-
+            Intent followingIntent = new Intent(this, ConnectionsActivity.class);
+            followingIntent.putExtra("user", user);
+            startActivity(followingIntent);
         });
     }
 }

@@ -65,10 +65,12 @@
         android:layout_weight="1">
 
         <LinearLayout
+            android:id="@+id/statistics_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:orientation="horizontal"
+            android:visibility="gone"
             android:weightSum="3">
 
             <LinearLayout
