@@ -28,13 +28,14 @@ public class MyRequestsActivity extends AppCompatActivity {
 
     private static final String TAG = "MyRequestsActivity";
 
-    private ArrayList<User> requestList;
     private ProfileAdapter profileAdapter;
 
     private RecyclerView userRecyclerView;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    private String myUID = mAuth.getCurrentUser().getUid();
+
+    private RequestController requestController = RequestController.getInstance(MyRequestsActivity.this);
+    private ArrayList<User> requestList = requestController.getMyRequestList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,19 +43,22 @@ public class MyRequestsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_my_requests);
 
         userRecyclerView = findViewById(R.id.my_request_list);
-
-        requestList = new ArrayList<>();
-
         profileAdapter = new ProfileAdapter(R.layout.user_item, requestList);
+
         profileAdapter.setRequestClickListener(new ProfileAdapter.OnRequestClickListener() {
+            // TODO: move deleteItem calls from profileAdapter into controller?
             @Override
             public void onAcceptClick(int position) {
-                acceptFollowRequest(position);
+                requestController.acceptFollowRequest(position);
+                profileAdapter.deleteItem(position);
+
             }
 
             @Override
             public void onRejectClick(int position) {
-                removeFollowRequest(position);
+                requestController.removeFollowRequest(position);
+                profileAdapter.deleteItem(position);
+
             }
         });
 
@@ -65,53 +69,35 @@ public class MyRequestsActivity extends AppCompatActivity {
         userRecyclerView.addItemDecoration(itemDecor);
     }
 
+    // TODO: MOVE THIS TO CONTROLLER USING LISTENER(?)
     @Override
     protected void onStart() {
         super.onStart();
         // Want to get the most recent list of requests
         CollectionReference collectionReference = db.collection("Users");
 
-        collectionReference.document(mAuth.getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot doc) {
-                User myProfile = doc.toObject(User.class);
-                ArrayList<String> myRequests = myProfile.getRequests();
+        collectionReference.document(mAuth.getCurrentUser().getUid()).get()
+                .addOnSuccessListener((DocumentSnapshot doc) -> {
+                    User myProfile = doc.toObject(User.class);
+                    ArrayList<String> myRequests = myProfile.getRequests();
 
-                if (myRequests != null) {
-                    requestList.clear();
-                    for (String uid: myRequests){
-                        db.collection("Users").document(uid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                            @Override
-                            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                User user = documentSnapshot.toObject(User.class);
-                                user.setUserID(uid);
-                                requestList.add(user);
-                                profileAdapter.notifyDataSetChanged();
-                            }
-                        });
+                    if (myRequests != null) {
+                        displayMyRequests(myRequests);
                     }
-                }
-            }
-        });
+                });
     }
 
-    //TODO: stub out request functionality into its own, singleton class maybe?
-    public void acceptFollowRequest(int position) {
-        User user = requestList.get(position);
-        removeFollowRequest(position);
-        String theirID = user.getUserID();
-        db.collection("Users").document(myUID)
-                .update("followers", FieldValue.arrayUnion(theirID));
-
-        db.collection("Users").document(theirID)
-                .update("following", FieldValue.arrayUnion(myUID));
-    }
-
-    public void removeFollowRequest(int position) {
-        User user = requestList.get(position);
-        String theirID = user.getUserID();
-        db.collection("Users").document(myUID)
-                .update("requests", FieldValue.arrayRemove(theirID));
-        profileAdapter.deleteItem(position);
+    // TODO: MOVE THIS TO CONTROLLER(?)
+    protected void displayMyRequests(ArrayList<String> myRequests) {
+        requestList.clear();
+        for (String uid: myRequests){
+            db.collection("Users").document(uid).get()
+                    .addOnSuccessListener((DocumentSnapshot documentSnapshot) -> {
+                        User user = documentSnapshot.toObject(User.class);
+                        user.setUserID(uid);
+                        requestList.add(user);
+                        profileAdapter.notifyDataSetChanged();
+                    });
+        }
     }
 }
