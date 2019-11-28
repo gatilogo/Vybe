@@ -1,6 +1,14 @@
 package com.example.vybe;
 
+import android.app.Activity;
+import android.app.Instrumentation;
+import android.content.ContentResolver;
+import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.BitmapFactory;
 import android.icu.text.SimpleDateFormat;
+import android.net.Uri;
+import android.os.Bundle;
 
 import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.action.GeneralLocation;
@@ -16,12 +24,14 @@ import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 
+import com.example.vybe.AddEdit.AddEditVibeEventActivity;
 import com.example.vybe.Helpers.RecyclerViewItemCountAssertion;
 import com.example.vybe.Models.SocSit;
 import com.example.vybe.Models.Vibe;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -42,6 +52,7 @@ import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -391,6 +402,8 @@ public class MyVibesActivityTest {
         onView(withId(R.id.my_vibe_list)).check(new RecyclerViewItemCountAssertion(1));
     }
 
+    // TODO: Refer to this tutorial to get this to work:
+    // https://www.tutorialspoint.com/espresso_testing/espresso_testing_intents.htm
     @Test
     public void Temp_Test_FigureOutPhotos() throws InterruptedException, UiObjectNotFoundException {
         LogIntoActivity();
@@ -402,7 +415,7 @@ public class MyVibesActivityTest {
         onView(withId(R.id.image_field_fragment)).perform(click());
 
         Thread.sleep(2000);
-
+        
     }
 
     private static ViewAction RightSwipe() {
@@ -419,5 +432,8 @@ public class MyVibesActivityTest {
     public void Exit(){
         mAuth.getInstance().signOut();
     }
+
  }
+
+
 
