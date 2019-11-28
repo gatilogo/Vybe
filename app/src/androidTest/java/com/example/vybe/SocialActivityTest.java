@@ -1,19 +1,19 @@
 package com.example.vybe;
 
 import android.view.KeyEvent;
-import android.view.View;
 
-import androidx.test.espresso.UiController;
-import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 
+import com.example.vybe.Helpers.ClickOnInternalView;
+import com.example.vybe.Helpers.RecyclerViewItemCountAssertion;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import org.hamcrest.Matcher;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Rule;
@@ -43,16 +43,16 @@ import static org.hamcrest.Matchers.containsString;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(AndroidJUnit4.class)
 public class SocialActivityTest {
-    FirebaseFirestore db;
-    FirebaseAuth mAuth;
+    public static FirebaseFirestore db;
+    public static FirebaseAuth mAuth;
 
     private String espressoEmail = "espresso@test.ca";
     private String espressoUser = "espresso";
-    private String espressoUID = "5fDHBHFmWqb6hCkb3DkwYUlS2ys1";
+    public static String espressoUID = "5fDHBHFmWqb6hCkb3DkwYUlS2ys1";
 
     private String decafEmail = "decaf@test.ca";
     private String decafUser = "decaf";
-    private String decafUID = "ka1gQkqFcvYjmFl8FAKNV4Ewvx13";
+    public static String decafUID = "ka1gQkqFcvYjmFl8FAKNV4Ewvx13";
 
     private String mochaUser = "mocha";
 
@@ -162,14 +162,34 @@ public class SocialActivityTest {
 
     }
 
-//    @AfterClass
-//    public void DeleteFollower(){
-////        db.collection("Users").document(espressoUID)
-////                .update("followers", FieldValue.arrayRemove(decafUID));
-////        db.collection("Users").document(decafUID)
-////                .update("following", FieldValue.arrayRemove(espressoUID));
-//
-//    }
+    @Test
+    public void Test02_ViewSocialActivity() throws InterruptedException {
+        LogIntoDecaf();
+
+        // Go to Social Activity TODO: Use different ID if button changes
+        onView(withId(R.id.social_btn)).perform(click());
+
+        Thread.sleep(3000);
+
+        // Check we are in Social activity
+        onView(withId(R.id.social_toolbar))
+                .check(matches(isDisplayed()));
+        // check 2 items are on the recycler view
+        onView(withId(R.id.social_vibe_list)).check(new RecyclerViewItemCountAssertion(2));
+
+//        - make sure @Mocha is the older item/vibe displayed
+//                - check that @Espresso is at the top or something
+    }
+
+    @AfterClass
+    public static void DeleteFollower(){
+        db.collection("Users").document(decafUID)
+                .update("following", FieldValue.arrayRemove(espressoUID));
+
+        db.collection("Users").document(espressoUID)
+                .update("followers", FieldValue.arrayRemove(decafUID));
+
+    }
 
     @After
     public void Exit(){
@@ -177,28 +197,3 @@ public class SocialActivityTest {
     }
 }
 
-class ClickOnInternalView implements ViewAction {
-
-    ViewAction click = click();
-    int viewID;
-
-    public ClickOnInternalView(int textViewId) {
-        this.viewID = textViewId;
-    }
-
-    @Override
-    public Matcher<View> getConstraints() {
-        return click.getConstraints();
-
-    }
-
-    @Override
-    public String getDescription() {
-        return " click on button with id: " + viewID;
-    }
-
-    @Override
-    public void perform(UiController uiController, View view) {
-        click.perform(uiController, view.findViewById(viewID));
-    }
-}

@@ -1,15 +1,8 @@
 package com.example.vybe;
 
 import android.icu.text.SimpleDateFormat;
-import android.view.View;
-import android.widget.TextView;
 
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.test.espresso.NoMatchingViewException;
-import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
-import androidx.test.espresso.ViewAssertion;
 import androidx.test.espresso.action.GeneralLocation;
 import androidx.test.espresso.action.GeneralSwipeAction;
 import androidx.test.espresso.action.Press;
@@ -23,12 +16,12 @@ import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 
+import com.example.vybe.Helpers.RecyclerViewItemCountAssertion;
 import com.example.vybe.Models.SocSit;
 import com.example.vybe.Models.Vibe;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -49,7 +42,6 @@ import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -406,27 +398,9 @@ public class MyVibesActivityTest {
                 GeneralLocation.CENTER_RIGHT, Press.FINGER);
     }
 
-    public class RecyclerViewItemCountAssertion implements ViewAssertion {
-        private final int expectedCount;
-
-        public RecyclerViewItemCountAssertion(int expectedCount) {
-            this.expectedCount = expectedCount;
-        }
-
-        @Override
-        public void check(View view, NoMatchingViewException noViewFoundException) {
-            if (noViewFoundException != null) {
-                throw noViewFoundException;
-            }
-
-            RecyclerView recyclerView = (RecyclerView) view;
-            RecyclerView.Adapter adapter = recyclerView.getAdapter();
-            assertThat(adapter.getItemCount(), is(expectedCount));
-        }
-    }
-
     @After
     public void Exit(){
         mAuth.getInstance().signOut();
     }
  }
+
