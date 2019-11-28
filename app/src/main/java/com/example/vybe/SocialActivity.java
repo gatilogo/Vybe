@@ -39,7 +39,7 @@ public class SocialActivity extends AppCompatActivity implements VibeEventListCo
     private VibeEventListController vibeEventListController = VibeEventListController.getInstance(this);
 
 
-    private ArrayList<VibeEvent> vibeEventList;
+    private ArrayList<VibeEvent> vibeEventList = vibeEventListController.getSocialVibeEvents();
     private MyVibesAdapter socialVibesAdapter;
 
     private Button myVibesBtn;
@@ -79,44 +79,21 @@ public class SocialActivity extends AppCompatActivity implements VibeEventListCo
                 startActivity(MapViewIntent);
             }
         });
-
-//        CollectionReference collectionReference = db.collection("Users");
-//
-//        collectionReference.document(mAuth.getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//            @Override
-//            public void onSuccess(DocumentSnapshot doc) {
-//                User myProfile = doc.toObject(User.class);
-//                ArrayList<String> myFollowing = myProfile.getFollowing();
-//                if (myFollowing != null){
-//                    vibeEventList.clear();
-//                    for (String uid: myFollowing){
-//                        collectionReference.document(uid)
-//                                .collection("VibeEvents")
-//                                .orderBy("datetime", Query.Direction.DESCENDING)
-//                                .limit(1)
-//                                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-//                            @Override
-//                            public void onSuccess(QuerySnapshot queryDoc) {
-//                                for (QueryDocumentSnapshot document: queryDoc){
-//                                    vibeEventList.add(document.toObject(VibeEvent.class));
-//                                }
-//                                // Sort by datetime
-//                                Comparator<VibeEvent> comparator = (s1, s2) -> s2.getDateTime().compareTo(s1.getDateTime());
-//                                vibeEventList.sort(comparator);
-//
-//                                socialVibesAdapter.notifyDataSetChanged();
-//                            }
-//                        });
-//                    }
-//                }
-//            }
-//        });
     }
 
-    //TODO: Add onStart() method to populate social vibes list
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Update the vibe event list every time the user enters this activity
+        vibeEventListController.updateSocialVibeEvents();
+    }
+
+    @Override
+    public void onSocialVibeEventsUpdated() {
+        socialVibesAdapter.notifyDataSetChanged();
+    }
 
     private void buildRecyclerView() {
-
         socialVibesAdapter = new MyVibesAdapter(this, R.layout.social_vibe_event_item, vibeEventList);
         socialVibesRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         socialVibesRecyclerView.setAdapter(socialVibesAdapter);
@@ -124,9 +101,5 @@ public class SocialActivity extends AppCompatActivity implements VibeEventListCo
         DividerItemDecoration itemDecor = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         socialVibesRecyclerView.addItemDecoration(itemDecor);
     }
-    
-    @Override
-    public void onSocialVibeEventsUpdated() {
-        Log.d(TAG, "onSocialVibeEventsUpdated: Updated");
-    }
+
 }
