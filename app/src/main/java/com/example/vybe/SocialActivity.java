@@ -36,11 +36,9 @@ public class SocialActivity extends AppCompatActivity implements VibeEventListCo
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    private VibeEventListController vibeEventListController = VibeEventListController.getInstance(this);
-
-
-    private ArrayList<VibeEvent> vibeEventList = vibeEventListController.getSocialVibeEvents();
+    private ArrayList<VibeEvent> vibeEventList = VibeEventListController.setOnSocialVibeEventsUpdatedListener(this);
     private MyVibesAdapter socialVibesAdapter;
+
 
     private Button myVibesBtn;
     private Button searchBtn;
@@ -59,7 +57,6 @@ public class SocialActivity extends AppCompatActivity implements VibeEventListCo
         mapBtn = findViewById(R.id.social_map_btn);
         socialVibesRecyclerView = findViewById(R.id.social_vibe_list);
 
-        vibeEventList = vibeEventListController.getSocialVibeEvents();
         buildRecyclerView();
 
         myVibesBtn.setOnClickListener((View v) -> {
@@ -85,7 +82,7 @@ public class SocialActivity extends AppCompatActivity implements VibeEventListCo
     protected void onStart() {
         super.onStart();
         // Update the vibe event list every time the user enters this activity
-        vibeEventListController.updateSocialVibeEvents();
+        VibeEventListController.updateSocialVibeEvents();
     }
 
     @Override

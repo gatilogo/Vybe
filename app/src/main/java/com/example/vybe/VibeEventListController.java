@@ -1,20 +1,14 @@
 package com.example.vybe;
 
-import android.app.Activity;
 import android.util.Log;
-
-import androidx.annotation.Nullable;
 
 import com.example.vybe.Models.User;
 import com.example.vybe.Models.VibeEvent;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -31,16 +25,14 @@ import java.util.List;
 public class VibeEventListController {
     private static final String TAG = "VibeEventListController";
     private static VibeEventListController instance;
-    private OnMyVibeEventsUpdatedListener myVibeEventListener;
-    private OnSocialVibeEventsUpdatedListener socialVibeEventListener;
 
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    private static String savedUID;
-    private String myVibeEventsPath;
-    private String profilePath;
+    private static String savedUid;
 
+    private OnMyVibeEventsUpdatedListener myVibeEventsListener;
     private ArrayList<VibeEvent> myVibeEvents = new ArrayList<>();
+    private OnSocialVibeEventsUpdatedListener socialVibeEventsListener;
     private ArrayList<VibeEvent> socialVibeEvents = new ArrayList<>();
 
     public interface OnMyVibeEventsUpdatedListener {
@@ -54,11 +46,9 @@ public class VibeEventListController {
     private VibeEventListController() {
     }
 
-    private void refresh() {
-        savedUID = mAuth.getCurrentUser().getUid();
-        myVibeEventsPath = "Users/" + savedUID + "/VibeEvents";
-        profilePath = "Users/" + savedUID;
-
+    // This should only be call once after the user is logged in
+    private void refreshMyVibeEventsQuery() {
+        String myVibeEventsPath = "Users/" + savedUid + "/VibeEvents";
         db.collection(myVibeEventsPath)
                 .orderBy("datetime", Query.Direction.DESCENDING)
                 .addSnapshotListener((queryDocumentSnapshots, firebaseFirestoreException) -> {
@@ -77,7 +67,9 @@ public class VibeEventListController {
                 });
     }
 
-    public void updateSocialVibeEvents() {
+    // This is meant to be called multiple times (ie not just once like refreshMyVibeEventsQuery is)
+    public void onUpdateSocialVibeEvents() {
+        String profilePath = "Users/" + savedUid;
         db.document(profilePath)
                 .get()
                 .addOnSuccessListener((DocumentSnapshot documentSnapshot) -> {
@@ -93,6 +85,9 @@ public class VibeEventListController {
 
                     ArrayList<Task<QuerySnapshot>> tasks = new ArrayList<>();
                     for (String userID : myFollowing) {
+                        // We cannot put all the queries in this for-loop because they are
+                        // asynchronous - there is no guarantee that the code after this for-loop
+                        // would execute after the queries are all done. So we need to wrap them like this.
                         tasks.add(getLatestVibeEvent(userID));
                     }
 
@@ -121,35 +116,44 @@ public class VibeEventListController {
 
 
     private void notifySocialVibeEventsListener() {
-        if (socialVibeEventListener != null)
-            socialVibeEventListener.onSocialVibeEventsUpdated();
+        if (socialVibeEventsListener != null)
+            socialVibeEventsListener.onSocialVibeEventsUpdated();
     }
 
     private void notifyMyVibeEventsListener() {
-        if (myVibeEventListener != null)
-            myVibeEventListener.onMyVibeEventsUpdated();
+        if (myVibeEventsListener != null)
+            myVibeEventsListener.onMyVibeEventsUpdated();
 
     }
 
-    public static VibeEventListController getInstance(Activity activity) {
+    private static void refreshInstance() {
         if (instance == null)
             instance = new VibeEventListController();
 
-        if (activity instanceof OnMyVibeEventsUpdatedListener) {
-            instance.myVibeEventListener = (OnMyVibeEventsUpdatedListener) activity;
-
-        } else if (activity instanceof OnSocialVibeEventsUpdatedListener) {
-            instance.socialVibeEventListener = (OnSocialVibeEventsUpdatedListener) activity;
-
-        } else {
-            throw new RuntimeException(activity.toString() + " must Listen to VibeEventListController");
+        // If a new user logged in, update the saved user id and the myVibes query
+        String Uid = mAuth.getCurrentUser().getUid();
+        if (!Uid.equals(savedUid)) {
+            savedUid = mAuth.getCurrentUser().getUid();
+            instance.refreshMyVibeEventsQuery();
         }
+    }
 
-        String currentUID = mAuth.getCurrentUser().getUid();
-        if (!currentUID.equals(savedUID))
-            instance.refresh();
+    public static ArrayList<VibeEvent> setOnMyVibeEventsUpdatedListener(OnMyVibeEventsUpdatedListener listener) {
+        refreshInstance();
+        instance.myVibeEventsListener = listener;
 
-        return instance;
+        return instance.myVibeEvents;
+    }
+
+    public static ArrayList<VibeEvent> setOnSocialVibeEventsUpdatedListener(OnSocialVibeEventsUpdatedListener listener) {
+        refreshInstance();
+        instance.socialVibeEventsListener = listener;
+
+        return instance.socialVibeEvents;
+    }
+
+    public static void updateSocialVibeEvents() {
+        instance.onUpdateSocialVibeEvents();
     }
 
     public ArrayList<VibeEvent> getMyVibeEvents() {

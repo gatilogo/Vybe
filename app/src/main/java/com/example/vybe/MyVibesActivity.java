@@ -53,9 +53,8 @@ public class MyVibesActivity extends AppCompatActivity implements VibeFilterFrag
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private String vibeEventDBPath = "Users/" + mAuth.getCurrentUser().getUid() + "/VibeEvents";
-    private VibeEventListController vibeEventListController = VibeEventListController.getInstance(this);
+    private ArrayList<VibeEvent> myVibeEvents = VibeEventListController.setOnMyVibeEventsUpdatedListener(this);
 
-    private ArrayList<VibeEvent> myVibeEvents = vibeEventListController.getMyVibeEvents();
     private ArrayList<VibeEvent> shownVibeEvents = new ArrayList<>();
     private Vibe filterVibe = Vibe.NONE;
     private MyVibesAdapter myVibesAdapter;
