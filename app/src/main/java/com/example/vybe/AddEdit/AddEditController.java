@@ -79,7 +79,7 @@ public class AddEditController {
         vibeEvent.setOwner(mAuth.getCurrentUser().getDisplayName());
         vibeEvent.setVibe(vibe.toString());
         vibeEvent.setReason(reason);
-        vibeEvent.setSocSit(socSit);
+        vibeEvent.setSocSit(socSit.toString());
 
         String imagePath = vibeEvent.getImage();
         if (imagePath != null) deleteImageFromDB(imagePath);
