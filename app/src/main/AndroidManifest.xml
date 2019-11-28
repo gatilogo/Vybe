@@ -17,37 +17,39 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <activity android:name=".MyRequestsActivity"
-            android:screenOrientation="nosensor"></activity>
-
-        <activity android:name=".SearchProfilesActivity"
+        <activity
+            android:name=".ConnectionsActivity"
             android:screenOrientation="nosensor"/>
-
-        <activity android:name=".SocialActivity"
-            android:screenOrientation="nosensor"/>
-
-        <activity android:name=".ViewProfileActivity"
-            android:screenOrientation="nosensor"/>
-
-        <activity android:name=".CreateAccountActivity"
-            android:screenOrientation="nosensor"/>
-
-        <activity android:name=".ViewVibeActivity"
-            android:screenOrientation="nosensor"/>
-
-        <activity android:name=".AddEdit.AddEditVibeEventActivity"
-            android:screenOrientation="nosensor"/>
-
-        <activity android:name=".MyVibesActivity"
-            android:screenOrientation="nosensor"/>
-
-        <activity android:name=".MapViewActivity"
-            android:screenOrientation="nosensor"/>
-
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".MyRequestsActivity"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".SearchProfilesActivity"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".SocialActivity"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".ViewProfileActivity"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".CreateAccountActivity"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".ViewVibeActivity"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".AddEdit.AddEditVibeEventActivity"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".MyVibesActivity"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".MapViewActivity"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".MainActivity"
             android:screenOrientation="nosensor">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

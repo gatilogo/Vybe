@@ -7,6 +7,7 @@
     <string name="social_name">Social</string>
     <string name="explore_vibes_name">Explore Vibes</string>
     <string name="follower_requests">Follower Requests</string>
+    <string name="connections">Connections</string>
 
     <string name="date_time">Date/Time</string>
     <string name="reason">Reason</string>
@@ -22,5 +23,8 @@
     <string name="vibes">Vibes</string>
 
     <string name="google_map_api_key">AIzaSyAQ0WGTWMUV_WBRCfc7B-_HifGn9sXIUV4</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
