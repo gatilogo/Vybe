@@ -31,22 +31,9 @@
     </androidx.appcompat.widget.Toolbar>
 
     <com.google.android.material.tabs.TabLayout
+        android:id="@+id/connections_tab_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/followers_tab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/followers" />
-
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/following_tab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/following" />
-
-    </com.google.android.material.tabs.TabLayout>
+        android:layout_height="wrap_content" />
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/connections_view_pager"

@@ -24,7 +24,4 @@
 
     <string name="google_map_api_key">AIzaSyAQ0WGTWMUV_WBRCfc7B-_HifGn9sXIUV4</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
 </resources>
