@@ -1,7 +1,13 @@
 package com.example.vybe;
 import android.content.Intent;
 
+import androidx.test.espresso.ViewAction;
+import androidx.test.espresso.action.GeneralLocation;
+import androidx.test.espresso.action.GeneralSwipeAction;
+import androidx.test.espresso.action.Press;
+import androidx.test.espresso.action.Swipe;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject;
@@ -84,8 +90,45 @@ public class MapFragmentTest {
     // Test Passes if user can get to the mapview switch to social view and click on a followed
     // Users vibe
     @Test
-    public void Test01_AddVibeWithLocation() throws InterruptedException {
+    public void Test01_AddVibeWithLocation() throws InterruptedException, UiObjectNotFoundException {
         LogIntoActivity();
+
+        onView(withId(R.id.add_vibe_event_btn)).perform(click());
+
+        Thread.sleep(3000);
+
+
+        // Add a sad vibe
+        onView(withId(R.id.vibe_image)).perform(click());
+
+        Thread.sleep(1000);
+        onView(withText("Select a Vibe")).check(matches(isDisplayed()));
+
+        onView(withId(R.id.carousel_picker)).perform(RightSwipe());
+        Thread.sleep(1000);
+        onView(withId(R.id.carousel_picker)).perform(RightSwipe());
+        Thread.sleep(1000);
+
+        UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        UiObject obj = device.findObject(new UiSelector().textContains("OK").clickable(true));
+        obj.click();
+
+        // Add Current Location
+        onView(withId(R.id.btn_add_location)).perform(click());
+        Thread.sleep(2000);
+        onView(withText("Add a Location")).check(matches(isDisplayed()));
+
+        onView(withId(R.id.btn_current_location)).perform(click());
+        Thread.sleep(2000);
+
+        // Save our Vybe
+        onView(withId(R.id.add_btn)).perform(click());
+
+        Thread.sleep(2000);
+
+        // Check we get back to my vibes activity
+        onView(withId(R.id.filter_spinner))
+                .check(matches(isDisplayed()));
 
     }
 
@@ -110,9 +153,14 @@ public class MapFragmentTest {
         marker.click();
         Thread.sleep(1000);
     }
+    private static ViewAction RightSwipe() {
+        return new GeneralSwipeAction(Swipe.SLOW, GeneralLocation.CENTER_RIGHT,
+                GeneralLocation.CENTER_LEFT, Press.FINGER);
+    }
 
     @After
     public void Exit(){
         mAuth.getInstance().signOut();
     }
 }
+
