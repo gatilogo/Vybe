@@ -63,9 +63,6 @@ public class AddEditController {
         activity.setVibe(vibe);
         if (reason != null) activity.setReason(reason);
         if (socSit != null) activity.setSocSit(socSit);
-        if (latitude == null && longitude == null) {
-            activity.hideDeleteLocationBtn();
-        }
         if (imagePath != null) {
             loadAndSetImage(imagePath);
         }
@@ -76,8 +73,6 @@ public class AddEditController {
 
         String id = db.collection(vibeEventDBPath).document().getId();
         vibeEvent.setId(id);
-
-        activity.hideDeleteLocationBtn();
     }
 
     public void saveVibeEvent(Vibe vibe, String reason, SocSit socSit, Bitmap image, Double latitude, Double longitude) {
@@ -104,7 +99,7 @@ public class AddEditController {
             activity.setLocation(vibeEvent.getLatitude(), vibeEvent.getLongitude());
 
         } else {
-            activity.hideMap();
+            activity.clearLocation();
         }
     }
 

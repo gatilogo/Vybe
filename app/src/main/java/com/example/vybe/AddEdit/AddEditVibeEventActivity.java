@@ -107,6 +107,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
             new VibeCarouselDialogFragment().show(getSupportFragmentManager(), "Select a Vibe");
         });
 
+
         // ---Location Picker---
         pickLocationButton.setOnClickListener((View v) -> {
             DialogFragment locationFragment = new LocationSelectionDialog();
@@ -188,36 +189,16 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
         this.latitude = latitude;
         this.longitude = longitude;
         mapFragment.showMap();
-        showDeleteLocationBtn();
         mapFragment.setToLocation(new LatLng(latitude, longitude));
+        deleteLocationButton.setVisibility(View.VISIBLE);
     }
 
     public void clearLocation() {
         latitude = null;
         longitude = null;
         mapFragment.clearMap();
-        hideMap();
-        hideDeleteLocationBtn();
-    }
-
-    public void setToCurrentLocation() {
-        mapFragment.setToCurrentLocation();
-    }
-
-    public void hideMap() {
         mapFragment.hideMap();
-    }
-
-    public void showMap() {
-        mapFragment.showMap();
-    }
-
-    public void hideDeleteLocationBtn() {
         deleteLocationButton.setVisibility(View.GONE);
-    }
-
-    public void showDeleteLocationBtn() {
-        deleteLocationButton.setVisibility(View.VISIBLE);
     }
 
     // ------------- Overrides --------------
