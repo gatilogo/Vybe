@@ -76,6 +76,7 @@ public class AddEditController {
     }
 
     public void saveVibeEvent(Vibe vibe, String reason, SocSit socSit, Bitmap image, Double latitude, Double longitude) {
+        vibeEvent.setOwner(mAuth.getCurrentUser().getDisplayName());
         vibeEvent.setVibe(vibe.toString());
         vibeEvent.setReason(reason);
         vibeEvent.setSocSit(socSit);
@@ -160,6 +161,7 @@ public class AddEditController {
         data.put("image", vibeEvent.getImage());
         data.put("latitude", vibeEvent.getLatitude());
         data.put("longitude", vibeEvent.getLongitude());
+        data.put("owner", mAuth.getCurrentUser().getDisplayName());
 
         db.collection(vibeEventDBPath).document(vibeEvent.getId()).set(data);
     }
