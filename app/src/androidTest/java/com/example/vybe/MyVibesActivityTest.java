@@ -274,9 +274,9 @@ public class MyVibesActivityTest {
         onView(withId(R.id.carousel_picker)).perform(RightSwipe());
         Thread.sleep(1000);
 
-//        UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
-//        UiObject obj = device.findObject(new UiSelector().textContains("OK").clickable(true));
-//        obj.click();
+        UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        UiObject obj = device.findObject(new UiSelector().textContains("OK").clickable(true));
+        obj.click();
 
         // Check we are in add/edit activity
         onView(withId(R.id.add_edit_vibes_toolbar))
@@ -303,6 +303,28 @@ public class MyVibesActivityTest {
         Thread.sleep(500);
         onData(allOf(is(instanceOf(String.class)), is(SocSit.ALONE.toString()))).perform(click());
         Thread.sleep(500);
+//          TODO: Implement espresso-intents and test for adding an image using this:
+        https://www.tutorialspoint.com/espresso_testing/espresso_testing_intents.htm
+//        // Click on image Fragment
+//        onView(withId(R.id.image_field_fragment)).perform(click());
+//
+//        Thread.sleep(2000);
+//
+//        // Check We are no longer in activity
+//        onView(withId(R.id.add_edit_vibes_toolbar))
+//                .check((doesNotExist()));
+//        // Go back
+//        pressBack();
+//        Thread.sleep(1000);
+
+
+        // Add Current Location
+        onView(withId(R.id.btn_add_location)).perform(click());
+        Thread.sleep(2000);
+        onView(withText("Add a Location")).check(matches(isDisplayed()));
+
+        onView(withId(R.id.btn_current_location)).perform(click());
+        Thread.sleep(2000);
 
         // Get date vibe was created
         date2 = new Date();
@@ -325,10 +347,14 @@ public class MyVibesActivityTest {
 
         Thread.sleep(1000);
 
+        // Check details of vibe are correct
         onView(withId(R.id.view_date_text_view)).check(matches(withText(containsString(formatter.format(date2).split(" ")[0]))));
-
         onView(withId(R.id.view_reason_text_view)).check(matches(withText(containsString("I am Sad"))));
         onView(withId(R.id.view_soc_sit_text_view)).check(matches(withText(containsString(SocSit.ALONE.toString()))));
+
+        // Check we can see the map view of the location
+        onView(withId(R.id.view_vibe_map))
+                .check(matches(isDisplayed()));
 
     }
 
@@ -353,7 +379,6 @@ public class MyVibesActivityTest {
 
         // Verify it has the less recent date
         onView(withId(R.id.view_date_text_view)).check(matches(withText(containsString(formatter.format(date1).split(" ")[0]))));
-
 
     }
 
@@ -403,21 +428,6 @@ public class MyVibesActivityTest {
         onView(withId(R.id.my_vibe_list)).check(new RecyclerViewItemCountAssertion(1));
     }
 
-    // TODO: Refer to this tutorial to get this to work:
-    // https://www.tutorialspoint.com/espresso_testing/espresso_testing_intents.htm
-    @Test
-    public void Temp_Test_FigureOutPhotos() throws InterruptedException, UiObjectNotFoundException {
-        LogIntoActivity();
-
-        onView(withId(R.id.add_vibe_event_btn)).perform(click());
-
-        Thread.sleep(3000);
-
-        onView(withId(R.id.image_field_fragment)).perform(click());
-
-        Thread.sleep(2000);
-        
-    }
 
     private static ViewAction RightSwipe() {
         return new GeneralSwipeAction(Swipe.SLOW, GeneralLocation.CENTER_RIGHT,

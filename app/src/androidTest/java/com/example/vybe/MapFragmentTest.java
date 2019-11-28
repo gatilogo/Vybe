@@ -81,8 +81,16 @@ public class MapFragmentTest {
                 .check(matches(isDisplayed()));
     }
 
+    // Test Passes if user can get to the mapview switch to social view and click on a followed
+    // Users vibe
     @Test
-    public void Test01_DisplayMapFragment() throws InterruptedException, UiObjectNotFoundException {
+    public void Test01_AddVibeWithLocation() throws InterruptedException {
+        LogIntoActivity();
+
+    }
+
+    @Test
+    public void Test02_DisplayMapFragment() throws InterruptedException, UiObjectNotFoundException {
         LogIntoActivity();
         // Click on Map Button
         onView(withId(R.id.my_map_btn)).perform(click());
