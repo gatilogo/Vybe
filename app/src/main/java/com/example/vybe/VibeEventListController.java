@@ -46,6 +46,39 @@ public class VibeEventListController {
     }
 
     private VibeEventListController() {
+//    addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//        @Override
+//        public void onSuccess (DocumentSnapshot doc){
+//            User myProfile = doc.toObject(User.class);
+//            ArrayList<String> myFollowing = myProfile.getFollowing();
+//
+//
+//            if (myFollowing != null) {
+//                vibeEventList.clear();
+//                for (String uid : myFollowing) {
+//                    collectionReference.document(uid)
+//                            .collection("VibeEvents")
+//                            .orderBy("datetime", Query.Direction.DESCENDING)
+//                            .limit(1)
+//                            .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+//                        @Override
+//                        public void onSuccess(QuerySnapshot queryDoc) {
+//                            for (QueryDocumentSnapshot document : queryDoc) {
+//                                vibeEventList.add(document.toObject(VibeEvent.class));
+//                            }
+//                            // Sort by datetime
+//                            Comparator<VibeEvent> comparator = (s1, s2) -> s2.getDateTime().compareTo(s1.getDateTime());
+//                            vibeEventList.sort(comparator);
+//
+//                            socialVibesAdapter.notifyDataSetChanged();
+//                        }
+//                    });
+//                }
+//            }
+//        }
+    }
+
+    private void refreshQueries() {
         myVibeEventsPath = "Users/" + mAuth.getCurrentUser().getUid() + "/VibeEvents";
         profilePath = "Users/" + mAuth.getCurrentUser().getUid();
 
@@ -96,38 +129,6 @@ public class VibeEventListController {
                         notifySocialVibeEventsListener();
                     }
                 });
-
-
-//    addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//        @Override
-//        public void onSuccess (DocumentSnapshot doc){
-//            User myProfile = doc.toObject(User.class);
-//            ArrayList<String> myFollowing = myProfile.getFollowing();
-//
-//
-//            if (myFollowing != null) {
-//                vibeEventList.clear();
-//                for (String uid : myFollowing) {
-//                    collectionReference.document(uid)
-//                            .collection("VibeEvents")
-//                            .orderBy("datetime", Query.Direction.DESCENDING)
-//                            .limit(1)
-//                            .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-//                        @Override
-//                        public void onSuccess(QuerySnapshot queryDoc) {
-//                            for (QueryDocumentSnapshot document : queryDoc) {
-//                                vibeEventList.add(document.toObject(VibeEvent.class));
-//                            }
-//                            // Sort by datetime
-//                            Comparator<VibeEvent> comparator = (s1, s2) -> s2.getDateTime().compareTo(s1.getDateTime());
-//                            vibeEventList.sort(comparator);
-//
-//                            socialVibesAdapter.notifyDataSetChanged();
-//                        }
-//                    });
-//                }
-//            }
-//        }
     }
 
     private void notifySocialVibeEventsListener() {
@@ -154,6 +155,8 @@ public class VibeEventListController {
         } else {
             throw new RuntimeException(activity.toString() + " must Listen to VibeEventListController");
         }
+
+        instance.refreshQueries();
         return instance;
     }
 
