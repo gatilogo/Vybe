@@ -161,6 +161,13 @@ public class MyVibesActivity extends AppCompatActivity implements VibeFilterFrag
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        // Reset swipe animation after pressing back button
+        updateShownVibes();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         // this is just the easiest way to consistently make sure the user has gps enabled
