@@ -32,10 +32,10 @@ public class ViewProfileActivity extends AppCompatActivity {
     private Button logoutBtn;
     private Button sendRequestBtn;
 
-    private User user;
+    private User otherUser;
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseUser mUser = mAuth.getCurrentUser();
     private RequestController requestController = RequestController.getInstance(ViewProfileActivity.this);
 
     @Override
@@ -52,23 +52,23 @@ public class ViewProfileActivity extends AppCompatActivity {
         Bundle extras = intent.getExtras();
 
         if (extras.containsKey("user")) {
-            user = (User) extras.getSerializable("user");
+            otherUser = (User) extras.getSerializable("user");
 
-            if (user.getEmail().equals(mAuth.getCurrentUser().getEmail())) {
+            if (otherUser.getEmail().equals(mUser.getEmail())) {
                 sendRequestBtn.setVisibility(View.GONE);
 
             } else {
                 logoutBtn.setVisibility(View.GONE);
                 // TODO: hide both buttons if other user is already followed pls and tnx
-                if (user.getFollowers() != null){
-                    if (user.getFollowers().contains(mAuth.getCurrentUser().getUid())) {
+                if (otherUser.getFollowers() != null){
+                    if (otherUser.getFollowers().contains(mUser.getUid())) {
                         sendRequestBtn.setVisibility(View.GONE);
                     }
                 }
             }
 
-            usernameTextView.setText(user.getUsername());
-            emailTextView.setText(user.getEmail());
+            usernameTextView.setText(otherUser.getUsername());
+            emailTextView.setText(otherUser.getEmail());
         }
 
         logoutBtn.setOnClickListener(view -> {
@@ -80,7 +80,7 @@ public class ViewProfileActivity extends AppCompatActivity {
         });
 
         sendRequestBtn.setOnClickListener((view)
-                -> requestController.sendFollowRequest(user));
+                -> requestController.sendFollowRequest(otherUser));
 
     }
 }
