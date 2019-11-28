@@ -209,9 +209,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         BitmapDescriptor marker;
 
         if (drawableRes != R.drawable.ic_map_marker) {
-            marker = vectorToBitmap(getContext(), drawableRes);
+            marker = emoticonVectorToBitmap(getContext(), drawableRes);
         } else {
-            marker = vectorToBitmap(getContext());
+            marker = defaultVectorToBitmap(getContext());
         }
         MarkerOptions markerOptions = new MarkerOptions().position(latLng).icon(marker);
 
@@ -237,7 +237,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
      * @param markerID the drawable vector asset to convert
      * @return BitmapDescriptor generated from provided vector asset
      */
-    private BitmapDescriptor vectorToBitmap(Context context, @DrawableRes  int markerID) {
+    private BitmapDescriptor emoticonVectorToBitmap(Context context, @DrawableRes  int markerID) {
 
         Drawable background = ContextCompat.getDrawable(context, R.drawable.ic_map_marker_vibe);
         background.setBounds(0, 0, background.getIntrinsicWidth(), background.getIntrinsicHeight());
@@ -261,7 +261,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
      * @param context the context for which the bitmap descriptor is to be drawn on
      * @return BitmapDescriptor generated from provided vector asset
      */
-    private BitmapDescriptor vectorToBitmap(Context context) {
+    private BitmapDescriptor defaultVectorToBitmap(Context context) {
 
         Drawable background = ContextCompat.getDrawable(context, R.drawable.ic_map_marker);
         background.setBounds(0, 0, background.getIntrinsicWidth(), background.getIntrinsicHeight());
