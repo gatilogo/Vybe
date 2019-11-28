@@ -121,7 +121,7 @@ public class ViewProfileActivity extends AppCompatActivity {
         });
 
         followersLayout.setOnClickListener(view -> {
-
+            startActivity(new Intent(this, ConnectionsActivity.class));
         });
 
         followingLayout.setOnClickListener(view -> {
