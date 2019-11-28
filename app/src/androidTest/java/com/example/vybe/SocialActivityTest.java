@@ -37,9 +37,7 @@ import static org.hamcrest.Matchers.containsString;
 /**
  * This tests for a user being able to send a follow request to another user and accepting a
  * request
- * Tests for requirements of a users personal vibe history, Vibe Events will be here,
- * as well as Other Vibe Details
- *
+ * Tests for requirements of Mood Following and Sharing
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(AndroidJUnit4.class)
@@ -83,6 +81,7 @@ public class SocialActivityTest {
     public void initialize_db(){
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
+
     }
 
     private void LogIntoEspresso() throws InterruptedException {
@@ -182,21 +181,18 @@ public class SocialActivityTest {
         onView(new RecyclerViewMatcher(R.id.social_vibe_list)
                 .atPositionOnView(1, R.id.vibe_title_text_view))
                 .check(matches(withText("@mocha")));
-        // check that @Espresso is at the top
+        // check that @Espresso is at the top as it has the most recently posted vibe
         onView(new RecyclerViewMatcher(R.id.social_vibe_list)
                 .atPositionOnView(0, R.id.vibe_title_text_view))
                 .check(matches(withText("@espresso")));
-    }
 
-    @AfterClass
-    public static void DeleteFollower(){
-        db.collection("Users").document(decafUID)
-                .update("following", FieldValue.arrayRemove(espressoUID));
-
+        // Delete Entries from follower and following lists
         db.collection("Users").document(espressoUID)
                 .update("followers", FieldValue.arrayRemove(decafUID));
-
+        db.collection("Users").document(decafUID)
+                .update("following", FieldValue.arrayRemove(espressoUID));
     }
+
 
     @After
     public void Exit(){

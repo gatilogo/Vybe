@@ -376,16 +376,33 @@ public class MyVibesActivityTest {
 
 
     @Test
-    public void Test07_DeleteVibes() throws InterruptedException, UiObjectNotFoundException {
+    public void Test07_DeleteVibe() throws InterruptedException, UiObjectNotFoundException {
         LogIntoActivity();
+
+        // Check we have two vibes in our list
+        onView(withId(R.id.my_vibe_list)).check(new RecyclerViewItemCountAssertion(2));
+
+        // Delete Older Vibe
         onView(withId(R.id.my_vibe_list)).perform(RecyclerViewActions.actionOnItemAtPosition(1, RightSwipe()));
         Thread.sleep(2000);
-        onView(withId(R.id.my_vibe_list)).perform(RecyclerViewActions.actionOnItemAtPosition(0, RightSwipe()));
+
+
+        // Check we have one vibe in our list
+        onView(withId(R.id.my_vibe_list)).check(new RecyclerViewItemCountAssertion(1));
+    }
+
+    @Test
+    public void Temp_Test_FigureOutPhotos() throws InterruptedException, UiObjectNotFoundException {
+        LogIntoActivity();
+
+        onView(withId(R.id.add_vibe_event_btn)).perform(click());
+
+        Thread.sleep(3000);
+
+        onView(withId(R.id.image_field_fragment)).perform(click());
+
         Thread.sleep(2000);
 
-        // Check Vibe list is empty
-        onView(withId(R.id.image_view))
-                .check((doesNotExist()));
     }
 
     private static ViewAction RightSwipe() {
