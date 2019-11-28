@@ -16,6 +16,10 @@
     <string name="save">Save</string>
     <string name="search">Search</string>
     <string name="send_request">Send Request</string>
+    <string name="log_out">Log Out</string>
+    <string name="following">Following</string>
+    <string name="followers">Followers</string>
+    <string name="vibes">Vibes</string>
 
     <string name="google_map_api_key">AIzaSyAQ0WGTWMUV_WBRCfc7B-_HifGn9sXIUV4</string>
 

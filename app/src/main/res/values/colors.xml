@@ -15,4 +15,7 @@
     <color name="Salmon">#EC5F67</color>
     <color name="Baby">#92D3F5</color>
     <color name="Black">#000000</color>
+
+    <color name="ProfileGradientStart">#B993D6</color>
+    <color name="ProfileGradientEnd">#8CA6DB</color>
 </resources>
