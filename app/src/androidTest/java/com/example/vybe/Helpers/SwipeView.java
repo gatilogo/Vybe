@@ -18,4 +18,6 @@ public class SwipeView {
                 GeneralLocation.CENTER_RIGHT, Press.FINGER);
     }
 
+
+
 }
