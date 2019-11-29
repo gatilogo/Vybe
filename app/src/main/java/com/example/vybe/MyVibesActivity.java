@@ -11,7 +11,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -144,7 +143,7 @@ public class MyVibesActivity extends AppCompatActivity implements VibeFilterFrag
 
 
     private void buildRecyclerView() {
-        myVibesAdapter = new MyVibesAdapter(this, R.layout.my_vibe_item, shownVibeEvents);
+        myVibesAdapter = new MyVibesAdapter(this, R.layout.vibe_event_item, shownVibeEvents);
         vibesRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         vibesRecyclerView.setAdapter(myVibesAdapter);
 
