@@ -239,17 +239,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
      */
     private BitmapDescriptor emoticonVectorToBitmap(Context context, @DrawableRes  int markerID) {
 
-        Drawable background = ContextCompat.getDrawable(context, R.drawable.ic_map_marker_vibe);
-        background.setBounds(0, 0, background.getIntrinsicWidth(), background.getIntrinsicHeight());
-        Bitmap bitmap = Bitmap.createBitmap(background.getIntrinsicWidth(),
-                background.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        background.draw(canvas);
-
         Drawable emoticon = ContextCompat.getDrawable(context, markerID);
-        int bg_width = background.getIntrinsicWidth() * 4 / 5;
-        int bg_height = background.getIntrinsicHeight() * 4 / 5;
-        emoticon.setBounds(20, 0, bg_width + 20, bg_height);
+        emoticon.setBounds(0, 0, emoticon.getIntrinsicWidth() * 3/5, emoticon.getIntrinsicHeight() *3/5);
+        Bitmap bitmap = Bitmap.createBitmap(emoticon.getIntrinsicWidth() * 3/5,
+                emoticon.getIntrinsicHeight() * 3/5, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
         emoticon.draw(canvas);
 
         return BitmapDescriptorFactory.fromBitmap(bitmap);
@@ -272,6 +266,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
+
+
 
     public void hideMap() {
         getView().setVisibility(View.GONE);
