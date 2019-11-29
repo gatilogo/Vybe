@@ -30,6 +30,7 @@ import com.example.vybe.Models.Vibe;
 import com.example.vybe.Models.VibeEvent;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -61,7 +62,7 @@ public class MyVibesActivity extends AppCompatActivity implements VibeFilterFrag
     private MyVibesAdapter myVibesAdapter;
 
     // ------------ XML ------------
-    private Button addVibeEventBtn;
+    private FloatingActionButton addVibeEventBtn;
     private Button myMapBtn;
     private Button socialBtn;
     private Button requestBtn;
