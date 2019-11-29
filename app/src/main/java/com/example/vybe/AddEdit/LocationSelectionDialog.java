@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,6 +37,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.example.vybe.util.Constants.*;
+
+/**
+ * This dialog allows the user to select a location
+ * to be added to the vibe
+ */
 
 public class LocationSelectionDialog extends DialogFragment {
 
@@ -78,42 +84,32 @@ public class LocationSelectionDialog extends DialogFragment {
         openLocationAutofill = view.findViewById(R.id.btn_find_location);
         useCurrentLocation = view.findViewById(R.id.btn_current_location);
 
+        //create dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         dialog = builder
                 .setCustomTitle(customTitle())
                 .setView(view)
                 .create();
 
+        //opens the find location fragment
         openLocationAutofill.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Set the fields to specify which types of place data to
-                // return after the user has made a selection.
-                List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG);
-
-                //get location for bias area
-                Location currentLoc = LocationController.getUserLocation(getContext());
-                double currentLat = currentLoc.getLatitude();
-                double currentLng = currentLoc.getLongitude();
-                double biasOffset = 0.1;
-
-                // Start the autocomplete intent.
-                Intent intent = new Autocomplete.IntentBuilder(
-                        AutocompleteActivityMode.OVERLAY, fields)
-                        .setLocationBias(RectangularBounds.newInstance(
-                        new LatLng(currentLat - biasOffset, currentLng - biasOffset),
-                        new LatLng(currentLat + biasOffset, currentLng + biasOffset)))
-                        .build(getContext());
+                Intent intent = buildAutocompleteIntent();
                 startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
             }
         });
 
 
+        //sets location to current location
         useCurrentLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Location location = LocationController.getUserLocation(getContext());
-                if (location == null) {return;}
+                if (location == null) {
+                    Toast.makeText(getContext(), "We were unable to retrieve your location", Toast.LENGTH_SHORT);
+                    return;
+                }
                 double longitude = location.getLongitude();
                 double latitude = location.getLatitude();
                 onLocationSelectedListener.onLocationSelected(latitude, longitude);
@@ -126,6 +122,10 @@ public class LocationSelectionDialog extends DialogFragment {
         return dialog;
     }
 
+    /**
+     * Creates custom title for the dialog
+     * @return
+     */
     private TextView customTitle() {
         TextView title = new TextView(getContext());
         title.setText("Add a Location");
@@ -136,6 +136,15 @@ public class LocationSelectionDialog extends DialogFragment {
         return title;
     }
 
+    /**
+     * Checks that the autocomplete fragment worked properly
+     * @param requestCode
+     * activity that requested this method
+     * @param resultCode
+     * code that was returned after finishing
+     * @param data
+     * data retrieved from the activity
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d(TAG, "onActivityResult: result retrieved " + resultCode);
@@ -152,5 +161,42 @@ public class LocationSelectionDialog extends DialogFragment {
                 Log.i(TAG, status.getStatusMessage());
             }
         }
+    }
+
+    /**
+     * builds the google autocomplete fragment
+     * @return
+     * the intent of the autocomplete fragment to be started
+     */
+    private Intent buildAutocompleteIntent() {
+        // Set the fields to specify which types of place data to
+        // return after the user has made a selection.
+        List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG);
+
+        //get location for bias area
+        Location currentLoc = LocationController.getUserLocation(getContext());
+        if (currentLoc != null) {
+            //if user has location, add bias
+            Log.d(TAG, "onClick: user has location, adding search bias");
+            double currentLat = currentLoc.getLatitude();
+            double currentLng = currentLoc.getLongitude();
+            double biasOffset = 0.1;
+
+            // Start the autocomplete intent with bias
+            Intent intent = new Autocomplete.IntentBuilder(
+                    AutocompleteActivityMode.OVERLAY, fields)
+                    .setLocationBias(RectangularBounds.newInstance(
+                            new LatLng(currentLat - biasOffset, currentLng - biasOffset),
+                            new LatLng(currentLat + biasOffset, currentLng + biasOffset)))
+                    .build(getContext());
+            return intent;
+        }
+
+        // Intent without bias
+        Log.d(TAG, "onClick: location not found, no bias added");
+        Intent intent = new Autocomplete.IntentBuilder(
+                AutocompleteActivityMode.OVERLAY, fields)
+                .build(getContext());
+        return intent;
     }
 }
