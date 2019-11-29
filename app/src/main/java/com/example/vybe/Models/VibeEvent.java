@@ -159,26 +159,46 @@ public class VibeEvent implements Serializable {
     public void setImage(String image) { this.image = image; }
 
     /**
-     * This
-     * @return
+     * This gets the latitude of a user's current location
+     * @return the latitude for a user's current location
      */
     public Double getLatitude() {
         return latitude;
     }
 
+    /**
+     * This sets the latitude of a user's current location
+     * @param latitude the latitude of a user's location
+     */
     public void setLatitude(Double latitude) {
         this.latitude = latitude;
     }
 
+    /**
+     * This gets the longitude of a user's current location
+     * @return the longitude for a user's current location
+     */
     public Double getLongitude() {
         return longitude;
     }
 
+    /**
+     * This sets the longitude of a user's current location
+     * @param longitude the latitude of a user's location
+     */
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
     }
 
+    /**
+     * This gets the owner of vibe event
+     * @return returns the owner's username
+     */
     public String getOwner() { return owner; }
 
+    /**
+     * This sets the owner of a vibe event
+     * @param owner username of who owns the vibe event
+     */
     public void setOwner(String owner) { this.owner = owner; }
 }
