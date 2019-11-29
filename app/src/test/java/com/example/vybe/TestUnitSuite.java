@@ -11,5 +11,5 @@ import org.junit.runners.Suite;
         VibeEventTest.class
 })
 
-public class TestSuite {
+public class TestUnitSuite {
 }

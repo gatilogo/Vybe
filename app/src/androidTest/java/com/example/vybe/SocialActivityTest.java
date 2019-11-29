@@ -14,11 +14,11 @@ import androidx.test.uiautomator.UiSelector;
 import com.example.vybe.Helpers.ClickOnInternalView;
 import com.example.vybe.Helpers.RecyclerViewItemCountAssertion;
 import com.example.vybe.Helpers.RecyclerViewMatcher;
-import com.example.vybe.Helpers.SwipeView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Rule;
@@ -50,12 +50,11 @@ public class SocialActivityTest {
     public static FirebaseFirestore db;
     public static FirebaseAuth mAuth;
 
-    private String cappuccinoEmail = "espresso@test.ca";
-    private String cappuccinoUser = "espresso";
+    private String cappuccinoEmail = "cappuccino@test.ca";
+    private String cappuccinoUser = "cappuccino";
     public static String cappuccinoUID = "ifjnKGTifnaU40iVq5tghK7LRup2";
 
     private String decafEmail = "decaf@test.ca";
-    private String decafUser = "decaf";
     public static String decafUID = "ka1gQkqFcvYjmFl8FAKNV4Ewvx13";
 
     private String mochaUser = "mocha";
@@ -86,12 +85,11 @@ public class SocialActivityTest {
     public void initialize_db() throws InterruptedException {
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
-        mAuth.getInstance().signOut();
-        Thread.sleep(500);
+
 
     }
 
-    private void LogIntoEspresso() throws InterruptedException {
+    private void LogIntoCappuccino() throws InterruptedException {
         // Log in To Activity
         onView(withId(R.id.email_edit_text))
                 .perform(typeText(cappuccinoEmail), closeSoftKeyboard());
@@ -157,7 +155,7 @@ public class SocialActivityTest {
 
         Thread.sleep(2000);
 
-        LogIntoEspresso();
+        LogIntoCappuccino();
 
         // Post a new vibe
         PostVibe();
@@ -194,6 +192,11 @@ public class SocialActivityTest {
         UiObject obj = device.findObject(new UiSelector().textContains("OK").clickable(true));
         obj.click();
         Thread.sleep(500);
+
+        onView(withId(R.id.add_btn)).perform(click());
+
+        Thread.sleep(2000);
+
     }
 
     @Test
@@ -226,12 +229,32 @@ public class SocialActivityTest {
         db.collection("Users").document(decafUID)
                 .update("following", FieldValue.arrayRemove(cappuccinoUID));
 
-        Thread.sleep(3000);
-        mAuth.getInstance().signOut();
-        Thread.sleep(500);
+        // Log out of decaf
+        pressBack();
+        Thread.sleep(1000);
+
+        onView(withId(R.id.profile_btn)).perform(click());
+
+        Thread.sleep(1000);
+
+        onView(withId(R.id.logout_btn)).perform(click());
+
+        Thread.sleep(2000);
+
+        LogIntoCappuccino();
+
+        //  Delete the vibe created
+        onView(withId(R.id.my_vibe_list)).perform(RecyclerViewActions.actionOnItemAtPosition(0, RightSwipe()));
+
+        Thread.sleep(1000);
 
     }
 
+    @After
+    public void SignOut() throws InterruptedException {
+        mAuth.getInstance().signOut();
+        Thread.sleep(500);
+    }
 
 }
 

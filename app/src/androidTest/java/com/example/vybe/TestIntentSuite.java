@@ -1,5 +1,4 @@
 package com.example.vybe;
-
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -14,5 +13,5 @@ import org.junit.runners.Suite;
         MapFragmentTest.class
 })
 
-public class TestSuite {
+public class TestIntentSuite {
 }
