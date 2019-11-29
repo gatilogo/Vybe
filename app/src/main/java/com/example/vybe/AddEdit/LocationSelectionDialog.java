@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -101,7 +102,10 @@ public class LocationSelectionDialog extends DialogFragment {
             @Override
             public void onClick(View v) {
                 Location location = LocationController.getUserLocation(getContext());
-                if (location == null) {return;}
+                if (location == null) {
+                    Toast.makeText(getContext(), "We were unable to retrieve your location", Toast.LENGTH_SHORT);
+                    return;
+                }
                 double longitude = location.getLongitude();
                 double latitude = location.getLatitude();
                 onLocationSelectedListener.onLocationSelected(latitude, longitude);
@@ -160,7 +164,7 @@ public class LocationSelectionDialog extends DialogFragment {
                     .build(getContext());
             return intent;
         }
-        
+
         // Intent without bias
         Log.d(TAG, "onClick: location not found, no bias added");
         Intent intent = new Autocomplete.IntentBuilder(
