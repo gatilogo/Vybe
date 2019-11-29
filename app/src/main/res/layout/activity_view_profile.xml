@@ -85,7 +85,6 @@
                     android:id="@+id/vibe_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="10"
                     android:textSize="30sp" />
 
                 <TextView
@@ -108,7 +107,6 @@
                     android:id="@+id/follower_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="15"
                     android:textSize="30sp" />
 
                 <TextView
@@ -130,7 +128,6 @@
                     android:id="@+id/following_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="20"
                     android:textSize="30sp" />
 
                 <TextView

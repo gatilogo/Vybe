@@ -1,5 +1,6 @@
 package com.example.vybe;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -53,7 +54,10 @@ public class FollowersFragment extends Fragment {
         profileAdapter.setOnItemClickLister(new ProfileAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                Toast.makeText(getContext(), "HOALFEH:OIGFEW", Toast.LENGTH_LONG).show();
+                User user = followersList.get(position);
+                Intent intent = new Intent(getContext(), ViewProfileActivity.class);
+                intent.putExtra("user", user);
+                startActivity(intent);
             }
         });
 

@@ -15,6 +15,9 @@ import android.view.View;
 import com.example.vybe.Models.User;
 import com.google.android.material.tabs.TabLayout;
 
+/**
+ * ConnectionsActivity displays the follower and following lists
+ */
 public class ConnectionsActivity extends AppCompatActivity {
 
     private TabLayout connectionsTabLayout;
