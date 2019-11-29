@@ -1,7 +1,5 @@
 package com.example.vybe;
 
-import android.util.Log;
-
 import com.example.vybe.Models.User;
 import com.example.vybe.Models.VibeEvent;
 import com.google.android.gms.tasks.Task;
@@ -63,7 +61,6 @@ public class VibeEventListController {
 
                     notifyMyVibeEventsListener();
 
-                    Log.d(TAG, "MyVibeEvents Updated");
                 });
     }
 

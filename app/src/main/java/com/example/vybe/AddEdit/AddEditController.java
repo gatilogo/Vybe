@@ -16,6 +16,7 @@ import com.example.vybe.Models.SocSit;
 import com.example.vybe.Models.Vibe;
 import com.example.vybe.Models.VibeEvent;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -31,8 +32,9 @@ public class AddEditController {
     private AddEditVibeEventActivity activity;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseUser mUser = mAuth.getCurrentUser();
     private StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-    private String vibeEventDBPath = "Users/" + mAuth.getCurrentUser().getUid() + "/VibeEvents";
+    private String vibeEventDBPath = "Users/" + mUser.getUid() + "/VibeEvents";
     private VibeEvent vibeEvent;
 
     private AddEditController() {
@@ -76,7 +78,7 @@ public class AddEditController {
     }
 
     public void saveVibeEvent(Vibe vibe, String reason, SocSit socSit, Bitmap image, Double latitude, Double longitude) {
-        vibeEvent.setOwner(mAuth.getCurrentUser().getDisplayName());
+        vibeEvent.setOwner(mUser.getDisplayName());
         vibeEvent.setVibe(vibe.toString());
         vibeEvent.setReason(reason);
 
@@ -166,7 +168,7 @@ public class AddEditController {
         data.put("image", vibeEvent.getImage());
         data.put("latitude", vibeEvent.getLatitude());
         data.put("longitude", vibeEvent.getLongitude());
-        data.put("owner", mAuth.getCurrentUser().getDisplayName());
+        data.put("owner", mUser.getDisplayName());
 
         db.collection(vibeEventDBPath).document(vibeEvent.getID()).set(data);
     }

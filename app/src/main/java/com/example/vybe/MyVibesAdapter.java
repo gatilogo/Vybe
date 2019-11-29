@@ -69,8 +69,6 @@ public class MyVibesAdapter extends RecyclerView.Adapter<MyVibesAdapter.VibeEven
         holder.vibeImage.setImageResource(vibeEvent.getVibe().getEmoticon());
 
         String itemText = vibeEvent.getVibe().getName();
-        Log.d(TAG, "onBindViewHolder: mUsername: " + mUsername);
-        Log.d(TAG, "onBindViewHolder: Owner: " + vibeEvent.getOwner());
         if (!vibeEvent.getOwner().equals(mUsername)) {
             itemText = "@" + vibeEvent.getOwner();
         }
