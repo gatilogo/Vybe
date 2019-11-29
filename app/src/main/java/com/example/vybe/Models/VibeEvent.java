@@ -8,7 +8,7 @@ import java.util.Date;
 /**
  * A class that implements Serializable and keeps track of vibe events. A vibe event is an event
  * triggered by a particular vibe in the form of a {@link Vibe} at a particular Date and Time,
- * in the form of a {@link java.time.LocalDate} object. Every vibe event is kept track of through
+ * in the form of a {@link Date} object. Every vibe event is kept track of through
  * a unique ID which is passed into and from the FireStore database and also optionally
  * keeps track of other details including a reasoning (in the form of text or a photograph) for
  * the event, and the social situation in which the event occurred in.

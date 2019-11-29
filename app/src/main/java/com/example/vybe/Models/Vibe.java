@@ -8,6 +8,10 @@ import com.example.vybe.R;
 
 import java.util.ArrayList;
 
+/**
+ * Enum representing a user's emotional state or "vibe" and all
+ * functionality relating to using said vibe in reference to what a user has selected
+ */
 public enum Vibe {
     NONE        ("None", R.color.Black, R.drawable.ic_no_vibe),
     ANGRY       ("Angry", R.color.Red, R.drawable.ic_angry),
