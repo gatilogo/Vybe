@@ -159,13 +159,13 @@ public class LocationSelectionDialog extends DialogFragment {
                             new LatLng(currentLat + biasOffset, currentLng + biasOffset)))
                     .build(getContext());
             return intent;
-        } else {
-            // Intent without bias
-            Log.d(TAG, "onClick: location not found, no bias added");
-            Intent intent = new Autocomplete.IntentBuilder(
-                    AutocompleteActivityMode.OVERLAY, fields)
-                    .build(getContext());
-            return intent;
         }
+        
+        // Intent without bias
+        Log.d(TAG, "onClick: location not found, no bias added");
+        Intent intent = new Autocomplete.IntentBuilder(
+                AutocompleteActivityMode.OVERLAY, fields)
+                .build(getContext());
+        return intent;
     }
 }
