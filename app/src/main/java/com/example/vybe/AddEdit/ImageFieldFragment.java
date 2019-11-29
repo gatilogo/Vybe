@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -31,7 +32,7 @@ public class ImageFieldFragment extends Fragment {
     private Context context;
     private OnImageSelectedListener onImageSelectedListener;
     private Bitmap imageBitmap;
-    private Button removeImageBtn;
+    private ImageButton removeImageBtn;
 
     interface OnImageSelectedListener {
         void onImageSelected(Bitmap selectedImageBitmap);
@@ -63,6 +64,7 @@ public class ImageFieldFragment extends Fragment {
         removeImageBtn.setOnClickListener((View v) -> {
             imageView.setImageBitmap(null);
             onImageSelectedListener.onImageSelected(null);
+            removeImageBtn.setVisibility(View.GONE);
         });
 
 
@@ -79,6 +81,7 @@ public class ImageFieldFragment extends Fragment {
                 imageBitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), selectedImageUri);
                 onImageSelectedListener.onImageSelected(imageBitmap);
                 imageView.setImageBitmap(imageBitmap);
+                removeImageBtn.setVisibility(View.VISIBLE);
 
             } catch (IOException e) {
                 e.printStackTrace();
