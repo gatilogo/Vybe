@@ -47,6 +47,7 @@ import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentat
 import static com.example.vybe.Helpers.SwipeView.RightSwipe;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 
@@ -64,6 +65,8 @@ public class MapFragmentTest {
 
     private String validLoginEmail = "decaf@test.ca";
     private String validLoginPassword = "vibecheck";
+    private String latteEmail = "latte@test.ca";
+    private String beanEmail = "bean@test.ca";
 
     @Rule
     public GrantPermissionRule permissionRule = GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION);
@@ -94,16 +97,49 @@ public class MapFragmentTest {
                 .check(matches(isDisplayed()));
     }
 
-    // Test Passes if user can get to the mapview switch to social view and click on a followed
-    // Users vibe
-    @Test
-    public void Test01_AddVibeWithLocation() throws InterruptedException, UiObjectNotFoundException {
-        LogIntoActivity();
+    private void LogIntoLatte() throws InterruptedException {
+        // Log in To Activity
+        onView(withId(R.id.email_edit_text))
+                .perform(typeText(latteEmail), closeSoftKeyboard());
+        onView(withId(R.id.password_edit_text))
+                .perform(typeText(validLoginPassword), closeSoftKeyboard());
+        onView(withId(R.id.login_button)).perform(click());
 
-        onView(withId(R.id.add_vibe_event_btn)).perform(click());
+        Thread.sleep(5000);
 
-        Thread.sleep(3000);
+        // Check we logged in and we are on myVibes page
+        onView(withId(R.id.vibe_filter_dropdown))
+                .check(matches(isDisplayed()));
+    }
 
+    private void LogIntoBean() throws InterruptedException {
+        // Log in To Activity
+        onView(withId(R.id.email_edit_text))
+                .perform(typeText(beanEmail), closeSoftKeyboard());
+        onView(withId(R.id.password_edit_text))
+                .perform(typeText(validLoginPassword), closeSoftKeyboard());
+        onView(withId(R.id.login_button)).perform(click());
+
+        Thread.sleep(5000);
+
+        // Check we logged in and we are on myVibes page
+        onView(withId(R.id.vibe_filter_dropdown))
+                .check(matches(isDisplayed()));
+    }
+
+    private void LogoutBean() throws InterruptedException {
+        onView(withId(R.id.profile_btn)).perform(click());
+
+        Thread.sleep(1000);
+
+        // Confirm profile information is correct
+        onView(withId(R.id.email_profile)).check(matches(withText(containsString(beanEmail))));
+
+        // Try signing out
+        onView(withId(R.id.logout_btn)).perform(click());
+    }
+
+    private void AddVibeWithLocation() throws InterruptedException, UiObjectNotFoundException {
 
         // Add a sad vibe
         onView(withId(R.id.vibe_image)).perform(click());
@@ -139,6 +175,20 @@ public class MapFragmentTest {
         onView(withId(R.id.vibe_filter_dropdown))
                 .check(matches(isDisplayed()));
 
+    }
+
+    // Test Passes if user can get to the mapview switch to social view and click on a followed
+    // Users vibe
+    @Test
+    public void Test01_AddVibeWithLocation() throws InterruptedException, UiObjectNotFoundException {
+        LogIntoLatte();
+
+        onView(withId(R.id.add_vibe_event_btn)).perform(click());
+
+        Thread.sleep(3000);
+
+        AddVibeWithLocation();
+
         // View Activity and check we can see the map
         onView(withId(R.id.my_vibe_list)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
@@ -149,7 +199,18 @@ public class MapFragmentTest {
 
     @Test
     public void Test02_DisplayMapFragment() throws InterruptedException, UiObjectNotFoundException {
-        LogIntoActivity();
+
+        // Log into Bean and add a vibe event with current location
+        LogIntoBean();
+        AddVibeWithLocation();
+
+        // logout of bean
+        Thread.sleep(3000);
+        LogoutBean();
+
+        Thread.sleep(2000);
+
+        LogIntoLatte();
         // Click on Map Button
         onView(withId(R.id.my_map_btn)).perform(click());
 
@@ -164,7 +225,7 @@ public class MapFragmentTest {
 
         //Check we can click and see the social vibe
         UiDevice device = UiDevice.getInstance(getInstrumentation());
-        UiObject marker = device.findObject(new UiSelector().descriptionContains("mocha"));
+        UiObject marker = device.findObject(new UiSelector().descriptionContains("bean"));
         marker.click();
         Thread.sleep(1000);
 
