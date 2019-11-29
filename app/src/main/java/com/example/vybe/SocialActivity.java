@@ -37,7 +37,10 @@ public class SocialActivity extends AppCompatActivity implements VibeEventListCo
 
     private ArrayList<VibeEvent> vibeEventList = VibeEventListController.setOnSocialVibeEventsUpdatedListener(this);
     private MyVibesAdapter socialVibesAdapter;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
+    private ImageButton profileBtn;
     private ImageButton myVibesBtn;
     private ImageButton mapBtn;
     private ImageButton searchBtn;
@@ -49,12 +52,25 @@ public class SocialActivity extends AppCompatActivity implements VibeEventListCo
         setContentView(R.layout.activity_social);
         Log.d(TAG, "onCreate: In social");
 
+        profileBtn = findViewById(R.id.profile_btn);
         myVibesBtn = findViewById(R.id.my_vibes_btn);
         mapBtn = findViewById(R.id.social_map_btn);
         searchBtn = findViewById(R.id.search_btn);
         socialVibesRecyclerView = findViewById(R.id.social_vibe_list);
 
         buildRecyclerView();
+
+        profileBtn.setOnClickListener((View v) -> {
+            Intent intent = new Intent(SocialActivity.this, ViewProfileActivity.class);
+            // Get the current user's profile information
+            db.collection("Users").document(mAuth.getCurrentUser().getUid()).get()
+                    .addOnSuccessListener((DocumentSnapshot doc) -> {
+                        User user = doc.toObject(User.class);
+                        user.setUserID(doc.getId());
+                        intent.putExtra("user", user);
+                        startActivity(intent);
+                    });
+        });
 
         myVibesBtn.setOnClickListener((View v) -> {
             finish();
