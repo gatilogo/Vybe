@@ -109,6 +109,8 @@ public class MyVibesActivity extends AppCompatActivity {
                             User user = new User(username, email);
                             user.setFollowers(followers);
                             user.setFollowing(following);
+                            user = doc.toObject(User.class);
+                            user.setUserID(doc.getId());
                             intent.putExtra("user", user);
                             startActivity(intent);
                         });

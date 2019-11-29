@@ -19,6 +19,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -94,6 +95,15 @@ public class ViewProfileActivity extends AppCompatActivity {
             if (user.getFollowing() != null) {
                 followingSize = user.getFollowing().size();
             }
+
+            db.collection("Users/" + user.getUserID() + "/VibeEvents")
+                    .get()
+                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            vibeCount.setText(Integer.toString(queryDocumentSnapshots.size()));
+                        }
+                    });
 
             usernameTextView.setText(user.getUsername());
             emailTextView.setText(user.getEmail());
