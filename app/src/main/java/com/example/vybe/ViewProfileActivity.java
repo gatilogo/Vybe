@@ -107,7 +107,6 @@ public class ViewProfileActivity extends AppCompatActivity {
 
             usernameTextView.setText(user.getUsername());
             emailTextView.setText(user.getEmail());
-//            vibeCount.setText()
             followerCount.setText(Integer.toString(followerSize));
             followingCount.setText(Integer.toString(followingSize));
         }
