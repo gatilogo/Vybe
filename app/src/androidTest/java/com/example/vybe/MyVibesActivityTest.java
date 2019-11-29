@@ -415,9 +415,6 @@ public class MyVibesActivityTest {
 
     @After
     public void SignOut() throws InterruptedException {
-//        mAuth.getInstance().signOut();
-//        Thread.sleep(500);
-
 
         onView(withId(R.id.profile_btn)).perform(click());
 
