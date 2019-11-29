@@ -39,7 +39,7 @@ class CreateAccountActivity <<View>> {
     - createAccount(username: String, email: String, password: String)
 }
 
-class MyVibesActivity <<View>> {
+class MyVibesActivity <<View>> <<VibeFilterFragment.OnVibeSelectedListener>> <<VibeEventListController.OnMyVibeEventsUpdatedListener>> {
     - profileBtn: ImageButton
     - addVibeEventBtn: FloatingActionButton
     - socialBtn: ImageButton
@@ -56,7 +56,7 @@ class MyVibesActivity <<View>> {
     - getLocationPermission()
 }
 
-class MyVibeAdapter <<Controller>> {
+class MyVibeAdapter <<Controller>> <<RecyclerView.Adapter>>{
     - vibeEventList: VibeEventList
     + getItemCount()
     + deleteItem(position: int, vibeEventDBPath: String) 
@@ -78,7 +78,7 @@ class ViewVibeActivity <<View>> {
     + loadImageFirebase(imageView: ImageView, imagePath: String)
 }
 
-class VibeEventListController <<Controller >> {
+class VibeEventListController <<Controller>> {
     - instance: VibeEventListController
 
     - myVibeEventsListener: OnMyVibeEventsUpdatedListener
@@ -101,7 +101,7 @@ class VibeFilterFragment <<View>> {
     - selectedVibe: Vibe
 }
 
-class MapViewActivity <<View>> {
+class MapViewActivity <<View>> <<MapFragment.OnMapFragmentReadyListener>> {
     - mapFragment: MapFragment
 
     + addMyVibeLocations()
@@ -164,7 +164,7 @@ class FollowingFragment <<View>> {
     - profileAdapter: ProfileAdapter
 }
 
-class ProfileAdapter <<Controller>> {
+class ProfileAdapter <<Controller>> <<RecyclerView.Adapter>>{
     - itemClickListener: OnItemClickListener
     - requestClickListener: OnRequestClickListener
 }
@@ -193,7 +193,7 @@ class ViewProfileActivity <<View>> {
     - logoutBtn: Button
 }
 
-class AddEditVibeEventActivity <<View>> {
+class AddEditVibeEventActivity <<View>> <<SocSitFieldFragment.OnSocSitSelectedListener>> <<ImageFieldFragment.OnImageSelectedListener>> <<VibeCarouselDialogFragment.OnVibeSelectedListener>> <<LocationSelectionDialog.OnLocationSelectedListener>> <<MapFragment.OnMapFragmentReadyListener>> {
     - vibePicker: VibeCarouselDialogFragment
     - dateField: DatePicker
     - reasonField: EditText
