@@ -26,7 +26,6 @@ public class MyRequestsActivity extends AppCompatActivity {
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     private RequestController requestController = RequestController.getInstance(MyRequestsActivity.this);
-    private ArrayList<String> myRequestList = requestController.getMyRequestList();
     private ArrayList<User> userRequestList = requestController.getMyUserRequestList();
 
     @Override
@@ -69,11 +68,6 @@ public class MyRequestsActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-//        ArrayList<String> myRequestList = requestController.getMyRequestList();
-//
-//        if (myRequestList != null) {
-//            displayMyRequests(myRequestList);
-//        }
 
         // get most recent list of requests
         CollectionReference collectionReference = db.collection("Users");
@@ -90,7 +84,6 @@ public class MyRequestsActivity extends AppCompatActivity {
     }
 
     protected void displayMyRequests(ArrayList<String> myRequests) {
-        // TODO: fill in requestController.displayMyRequests() and replace all below with that
 
         userRequestList.clear();
         for (String uid: myRequests){

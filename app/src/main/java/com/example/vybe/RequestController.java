@@ -1,12 +1,9 @@
 package com.example.vybe;
 
-import android.util.Log;
 import android.widget.Toast;
 
 import com.example.vybe.Models.User;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -23,7 +20,6 @@ public class RequestController {
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private String myUID = mAuth.getCurrentUser().getUid();
 
-    private ArrayList<String> myRequestList = new ArrayList<>();
     private ArrayList<User> myUserRequestList = new ArrayList<>();
 
     private RequestController() {
@@ -53,19 +49,6 @@ public class RequestController {
         instance.setActivity(viewProfileActivity);
         instance.myUID = instance.mAuth.getCurrentUser().getUid();
         return instance;
-    }
-
-    public ArrayList<String> getMyRequestList() {
-
-        CollectionReference collectionReference = db.collection("Users");
-
-        // TODO: move getting own information into profile controller?
-        collectionReference.document(myUID).get().addOnSuccessListener((DocumentSnapshot doc) -> {
-            User myProfile = doc.toObject(User.class);
-            myRequestList = myProfile.getRequests();
-        });
-
-        return myRequestList;
     }
 
     public ArrayList<User> getMyUserRequestList() {
