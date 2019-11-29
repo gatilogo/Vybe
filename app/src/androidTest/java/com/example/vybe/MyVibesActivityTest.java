@@ -184,6 +184,7 @@ public class MyVibesActivityTest {
 
         onView(withId(R.id.view_date_text_view)).check(matches(withText(containsString(formatter.format(date1).split(" ")[0]))));
 
+        pressBack();
     }
 
     @Test
@@ -248,6 +249,7 @@ public class MyVibesActivityTest {
         onView(withId(R.id.view_reason_text_view)).check(matches(withText(containsString("I'm Now Surprised"))));
         onView(withId(R.id.view_soc_sit_text_view)).check(matches(withText(containsString(SocSit.WITH_SEVERAL_PEOPLE.getDesc()))));
 
+        pressBack();
     }
 
     @Test
@@ -330,6 +332,8 @@ public class MyVibesActivityTest {
         onView(withId(R.id.view_reason_text_view)).check(matches(withText(containsString("I am Scared"))));
         onView(withId(R.id.view_soc_sit_text_view)).check(matches(withText(containsString(SocSit.ALONE.getDesc()))));
 
+        pressBack();
+
     }
 
     @Test
@@ -352,6 +356,8 @@ public class MyVibesActivityTest {
 
         // Verify it has the less recent date
         onView(withId(R.id.view_date_text_view)).check(matches(withText(containsString(formatter.format(date1).split(" ")[0]))));
+
+        pressBack();
 
     }
 
@@ -405,8 +411,6 @@ public class MyVibesActivityTest {
         // Check we have No vibes in our list
         onView(withId(R.id.my_vibe_list)).check(new RecyclerViewItemCountAssertion(0));
 
-        mAuth.getInstance().signOut();
-        Thread.sleep(500);
     }
 
     @After
