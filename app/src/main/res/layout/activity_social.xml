@@ -46,7 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="My Vibes"
+            android:text="@string/my_vibes"
             android:textColor="@android:color/white" />
 
         <Button
@@ -55,7 +55,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Map"
+            android:text="@string/map"
             android:textColor="@android:color/white" />
 
         <Button
@@ -64,7 +64,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Search"
+            android:text="@string/search"
             android:textColor="@android:color/white" />
     </LinearLayout>
 
