@@ -32,102 +32,111 @@
                 android:textSize="30sp" />
         </androidx.appcompat.widget.Toolbar>
 
-        <ImageView
-            android:id="@+id/view_vibe_image_view"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_vibeless" />
+            android:orientation="vertical"
+            android:padding="16dp">
 
-        <TableLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp" >
-
-            <TableRow
-                android:id="@+id/view_date_layout"
+            <ImageView
+                android:id="@+id/view_vibe_image_view"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingTop="15dp"
-                android:paddingBottom="15dp">
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_vibeless" />
 
-                <TextView
-                    android:id="@+id/view_date_time_label"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/date_time"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/view_date_text_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:textSize="14sp" />
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/view_reason_layout"
+            <TableLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingTop="15dp"
-                android:paddingBottom="15dp">
+                android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/view_reason_label"
-                    android:layout_width="wrap_content"
+                <TableRow
+                    android:id="@+id/view_date_layout"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/reason"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp">
 
-                <TextView
-                    android:id="@+id/view_reason_text_view"
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:id="@+id/view_date_time_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/date_time"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/view_date_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="14sp" />
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/view_reason_layout"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="14sp" />
-            </TableRow>
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp">
 
-            <TableRow
-                android:id="@+id/view_soc_sit_layout"
+                    <TextView
+                        android:id="@+id/view_reason_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/reason"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/view_reason_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="14sp" />
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/view_soc_sit_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp">
+
+                    <TextView
+                        android:id="@+id/view_soc_sit_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/social_situation"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/view_soc_sit_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="14sp" />
+                </TableRow>
+
+            </TableLayout>
+
+            <ImageView
+                android:id="@+id/reason_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="16dp"
+                android:adjustViewBounds="true" />
+
+            <fragment
+                android:id="@+id/view_vibe_map"
+                android:name="com.example.vybe.MapFragment"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingTop="15dp"
-                android:paddingBottom="15dp">
+                android:layout_height="300dp" />
 
-                <TextView
-                    android:id="@+id/view_soc_sit_label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/social_situation"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/view_soc_sit_text_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="14sp" />
-            </TableRow>
-
-        </TableLayout>
-
-        <ImageView
-            android:id="@+id/reason_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:adjustViewBounds="true" />
-
-        <fragment
-            android:id="@+id/view_vibe_map"
-            android:name="com.example.vybe.MapFragment"
-            android:layout_width="match_parent"
-            android:layout_height="300dp" />
+        </LinearLayout>
 
     </LinearLayout>
 </com.example.vybe.CustomScrollView>
