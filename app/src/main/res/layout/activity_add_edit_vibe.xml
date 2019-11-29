@@ -71,7 +71,7 @@
                 android:name="com.example.vybe.AddEdit.ImageFieldFragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Pick Image" />
+                android:text="@string/pick_image" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -83,14 +83,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Pick Location" />
+                    android:text="@string/pick_location" />
 
                 <ImageButton
                     android:id="@+id/btn_remove_location"
-                    android:layout_width="48dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_weight="0"
-                    android:background="@color/Red"
                     app:srcCompat="@drawable/quantum_ic_clear_grey600_24" />
 
             </LinearLayout>

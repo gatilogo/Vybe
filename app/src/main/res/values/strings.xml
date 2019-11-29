@@ -21,6 +21,20 @@
     <string name="following">Following</string>
     <string name="followers">Followers</string>
     <string name="vibes">Vibes</string>
+    <string name="pick_image">Pick Image</string>
+    <string name="pick_location">Pick Location</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="social">Social</string>
+    <string name="map">Map</string>
+    <string name="add">Add</string>
+    <string name="reqs">Reqs</string>
+    <string name="username">Username</string>
+    <string name="my_vibes">My Vibes</string>
+    <string name="find_location">Find A Location</string>
+    <string name="current_location">Use Current Location</string>
 
     <string name="google_map_api_key">AIzaSyAQ0WGTWMUV_WBRCfc7B-_HifGn9sXIUV4</string>
 

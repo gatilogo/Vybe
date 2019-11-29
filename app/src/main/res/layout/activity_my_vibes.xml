@@ -67,7 +67,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Social"
+            android:text="@string/social"
             android:textColor="@android:color/white" />
 
         <Button
@@ -76,7 +76,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Map"
+            android:text="@string/map"
             android:textColor="@android:color/white" />
 
         <Button
@@ -85,7 +85,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Add"
+            android:text="@string/add"
             android:textColor="@android:color/white" />
 
         <Button
@@ -94,8 +94,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Reqs"
-            android:textColor="@android:color/white"/>
+            android:text="@string/reqs"
+            android:textColor="@android:color/white" />
     </LinearLayout>
 
 </RelativeLayout>
