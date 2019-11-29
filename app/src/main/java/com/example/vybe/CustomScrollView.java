@@ -5,6 +5,9 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.ScrollView;
 
+/**
+ * Allows the user to interact with a map fragment inside a scroll view
+ */
 public class CustomScrollView extends ScrollView {
 
     public CustomScrollView(Context context) {

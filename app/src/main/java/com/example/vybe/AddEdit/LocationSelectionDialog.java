@@ -42,7 +42,6 @@ import static com.example.vybe.util.Constants.*;
  * This dialog allows the user to select a location
  * to be added to the vibe
  */
-
 public class LocationSelectionDialog extends DialogFragment {
 
     private static final String TAG = "LocationSelector";

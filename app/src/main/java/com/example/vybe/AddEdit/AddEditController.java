@@ -25,6 +25,12 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 
+/**
+ * This class sets initial Vibe Event information in the AddEditVibeEventActivity
+ * and uploads and saves the new Vibe Event information to Firestore
+ * This class also implements the singleton pattern to ensure there is only
+ * ever one instance of the class throughout application use
+ */
 public class AddEditController {
     private static final String TAG = "AddEditController";
     private static AddEditController instance;
@@ -33,13 +39,14 @@ public class AddEditController {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-    private String vibeEventDBPath = "Users/" + mAuth.getCurrentUser().getUid() + "/VibeEvents";
+    private String vibeEventDBPath;
     private VibeEvent vibeEvent;
 
     private AddEditController() {
     }
 
     private void setActivity(AddEditVibeEventActivity activity) {
+        vibeEventDBPath = "Users/" + mAuth.getCurrentUser().getUid() + "/VibeEvents";
         this.activity = activity;
     }
 
@@ -47,10 +54,16 @@ public class AddEditController {
         if (instance == null)
             instance = new AddEditController();
 
+
         instance.setActivity(activity);
         return instance;
     }
 
+    /**
+     * This method takes in a VibeEvent and uses it to set initial
+     * fields in the AddEditVibeEventActivity
+     * @param vibeEvent the Vibe Event to edit/set values for
+     */
     public void editVibeEvent(VibeEvent vibeEvent) {
         this.vibeEvent = vibeEvent;
         Vibe vibe = vibeEvent.getVibe();
@@ -69,6 +82,10 @@ public class AddEditController {
         }
     }
 
+    /**
+     * This method creates a new vibe event and initializes it
+     * in Firestore by assigning an ID
+     */
     public void addVibeEvent() {
         vibeEvent = new VibeEvent();
 
@@ -76,6 +93,16 @@ public class AddEditController {
         vibeEvent.setID(id);
     }
 
+    /**
+     * This method saves the Vibe Event using all user inputs from
+     * editText fields
+     * @param vibe
+     * @param reason
+     * @param socSit
+     * @param image
+     * @param latitude
+     * @param longitude
+     */
     public void saveVibeEvent(Vibe vibe, String reason, SocSit socSit, Bitmap image, Double latitude, Double longitude) {
         vibeEvent.setOwner(mAuth.getCurrentUser().getDisplayName());
         vibeEvent.setVibe(vibe.toString());
@@ -101,6 +128,11 @@ public class AddEditController {
         uploadVibeEvent();
     }
 
+    /**
+     * This method initializes the Map Fragment nested inside the
+     * AddEditVibeEvent activity page, if the Vibe Event that the user
+     * is modifying has a location
+     */
     public void onMapFragmentReady() {
         if (vibeEvent.getLatitude() != null && vibeEvent.getLongitude() != null) {
             activity.setLocation(vibeEvent.getLatitude(), vibeEvent.getLongitude());
@@ -110,6 +142,11 @@ public class AddEditController {
         }
     }
 
+    /**
+     * This method loads and sets an image if available and/or part of the current
+     * Vibe Event being added/edited
+     * @param imagePath URL path to Firebase storage for images
+     */
     private void loadAndSetImage(String imagePath) {
         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
         StorageReference imageRef = storageRef.child(imagePath);
@@ -132,6 +169,12 @@ public class AddEditController {
         });
     }
 
+    /**
+     * This method takes in a bitmap of an image to return a
+     * path to the image in Firestore
+     * @param bitmap image to upload
+     * @return image path/URL to image in Firestore
+     */
     private String uploadImage(Bitmap bitmap) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
@@ -152,11 +195,18 @@ public class AddEditController {
 
     }
 
+    /**
+     * This method deletes an image from Firestore
+     * @param imagePath takes in URL/image path to an image in Firestore
+     */
     private void deleteImageFromDB(String imagePath) {
         StorageReference imageRef = storageRef.child(imagePath);
         imageRef.delete();
     }
 
+    /**
+     * This method uploads a Vibe Event to Firestoreß
+     */
     private void uploadVibeEvent() {
         HashMap<String, Object> data = new HashMap<>();
         data.put("ID", vibeEvent.getID());

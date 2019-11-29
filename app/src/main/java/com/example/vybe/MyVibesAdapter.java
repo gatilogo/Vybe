@@ -21,7 +21,7 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 
 /**
- * MyVibesAdapter is a CustomList used for the ListAdapter in the main activity that serves as the
+ * MyVibesAdapter is a CustomList used for the RecyclerViewAdapter in the main activity that serves as the
  * list for storing vibe events
  */
 public class MyVibesAdapter extends RecyclerView.Adapter<MyVibesAdapter.VibeEventHolder> {
@@ -86,9 +86,13 @@ public class MyVibesAdapter extends RecyclerView.Adapter<MyVibesAdapter.VibeEven
         return vibeEventList.size();
     }
 
+    /**
+     * This method deletes a Vibe Event selected/swiped on by a user
+     * @param position position of selected Vibe Event in the adapter
+     * @param vibeEventDBPath path to document referring to Vibe Event in Firestore
+     */
     public void deleteItem(int position, String vibeEventDBPath) {
         VibeEvent vibeEvent = vibeEventList.get(position);
-        // TODO: Stub this out as it is the exact same code in AddEditVibeEventActivity but it should go in the Controller
         if (vibeEvent.getImage() != null){
             StorageReference imageRef = storageRef.child(vibeEvent.getImage());
             imageRef.delete();

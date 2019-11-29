@@ -8,7 +8,7 @@ import java.util.Date;
 /**
  * A class that implements Serializable and keeps track of vibe events. A vibe event is an event
  * triggered by a particular vibe in the form of a {@link Vibe} at a particular Date and Time,
- * in the form of a {@link java.time.LocalDate} object. Every vibe event is kept track of through
+ * in the form of a {@link Date} object. Every vibe event is kept track of through
  * a unique ID which is passed into and from the FireStore database and also optionally
  * keeps track of other details including a reasoning (in the form of text or a photograph) for
  * the event, and the social situation in which the event occurred in.
@@ -158,23 +158,47 @@ public class VibeEvent implements Serializable {
      */
     public void setImage(String image) { this.image = image; }
 
+    /**
+     * This gets the latitude of a user's current location
+     * @return the latitude for a user's current location
+     */
     public Double getLatitude() {
         return latitude;
     }
 
+    /**
+     * This sets the latitude of a user's current location
+     * @param latitude the latitude of a user's location
+     */
     public void setLatitude(Double latitude) {
         this.latitude = latitude;
     }
 
+    /**
+     * This gets the longitude of a user's current location
+     * @return the longitude for a user's current location
+     */
     public Double getLongitude() {
         return longitude;
     }
 
+    /**
+     * This sets the longitude of a user's current location
+     * @param longitude the latitude of a user's location
+     */
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
     }
 
+    /**
+     * This gets the owner of vibe event
+     * @return returns the owner's username
+     */
     public String getOwner() { return owner; }
 
+    /**
+     * This sets the owner of a vibe event
+     * @param owner username of who owns the vibe event
+     */
     public void setOwner(String owner) { this.owner = owner; }
 }

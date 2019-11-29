@@ -27,7 +27,6 @@ import in.goodiebag.carouselpicker.CarouselPicker;
  */
 public class VibeCarouselDialogFragment extends DialogFragment {
 
-    private Context context;
     private int selectedPosition = 0;
     private OnVibeSelectedListener onVibeSelectedListener;
 

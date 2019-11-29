@@ -124,7 +124,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
 
     }
 
-    // ------------- Validation -------------
+    // ------------- Field Validation -------------
     public boolean fieldAreValid() {
         return vibeFieldIsValid() && reasonFieldIsValid();
     }
@@ -151,7 +151,6 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
     }
 
     // ------------- Setters --------------
-
     public void setVibe(Vibe vibe) {
         this.vibe = vibe;
         vibeImage.setImageResource(vibe.getEmoticon());

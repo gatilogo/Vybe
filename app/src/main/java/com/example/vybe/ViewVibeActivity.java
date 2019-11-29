@@ -128,6 +128,11 @@ public class ViewVibeActivity extends AppCompatActivity implements MapFragment.O
         });
     }
 
+    /**
+     * This method initializes the Map Fragment nested inside the
+     * ViewVibeActivity page, if the Vibe Event that the user
+     * is modifying has a location
+     */
     @Override
     public void onMapFragmentReady() {
         //if the vibe has a location, show it on the map

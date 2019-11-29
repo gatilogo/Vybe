@@ -184,6 +184,7 @@ public class MyVibesActivityTest {
 
         onView(withId(R.id.view_date_text_view)).check(matches(withText(containsString(formatter.format(date1).split(" ")[0]))));
 
+        pressBack();
     }
 
     @Test
@@ -248,6 +249,7 @@ public class MyVibesActivityTest {
         onView(withId(R.id.view_reason_text_view)).check(matches(withText(containsString("I'm Now Surprised"))));
         onView(withId(R.id.view_soc_sit_text_view)).check(matches(withText(containsString(SocSit.WITH_SEVERAL_PEOPLE.getDesc()))));
 
+        pressBack();
     }
 
     @Test
@@ -330,6 +332,8 @@ public class MyVibesActivityTest {
         onView(withId(R.id.view_reason_text_view)).check(matches(withText(containsString("I am Scared"))));
         onView(withId(R.id.view_soc_sit_text_view)).check(matches(withText(containsString(SocSit.ALONE.getDesc()))));
 
+        pressBack();
+
     }
 
     @Test
@@ -352,6 +356,8 @@ public class MyVibesActivityTest {
 
         // Verify it has the less recent date
         onView(withId(R.id.view_date_text_view)).check(matches(withText(containsString(formatter.format(date1).split(" ")[0]))));
+
+        pressBack();
 
     }
 
@@ -392,8 +398,8 @@ public class MyVibesActivityTest {
         onView(withId(R.id.my_vibe_list)).check(new RecyclerViewItemCountAssertion(2));
 
         // Delete Older Vibe
-        onView(withId(R.id.my_vibe_list)).perform(RecyclerViewActions.actionOnItemAtPosition(1, RightSwipe()));
-        Thread.sleep(2000);
+        onView(withId(R.id.my_vibe_list)).perform(RecyclerViewActions.actionOnItemAtPosition(0, RightSwipe()));
+        Thread.sleep(5000);
 
         // Check we have one vibe in our list
         onView(withId(R.id.my_vibe_list)).check(new RecyclerViewItemCountAssertion(1));
@@ -405,14 +411,21 @@ public class MyVibesActivityTest {
         // Check we have No vibes in our list
         onView(withId(R.id.my_vibe_list)).check(new RecyclerViewItemCountAssertion(0));
 
-        mAuth.getInstance().signOut();
-        Thread.sleep(500);
     }
 
     @After
     public void SignOut() throws InterruptedException {
-        mAuth.getInstance().signOut();
-        Thread.sleep(500);
+
+        onView(withId(R.id.profile_btn)).perform(click());
+
+        Thread.sleep(1000);
+
+        // Confirm profile information is correct
+        onView(withId(R.id.username_profile)).check(matches(withText(containsString(validUsername))));
+        onView(withId(R.id.email_profile)).check(matches(withText(containsString(validLoginEmail))));
+
+        // Try signing out
+        onView(withId(R.id.logout_btn)).perform(click());
     }
 
  }
