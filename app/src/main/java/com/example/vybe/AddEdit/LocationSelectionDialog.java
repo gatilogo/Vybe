@@ -91,19 +91,7 @@ public class LocationSelectionDialog extends DialogFragment {
                 // return after the user has made a selection.
                 List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG);
 
-                //get location for bias area
-                Location currentLoc = LocationController.getUserLocation(getContext());
-                double currentLat = currentLoc.getLatitude();
-                double currentLng = currentLoc.getLongitude();
-                double biasOffset = 0.1;
-
-                // Start the autocomplete intent.
-                Intent intent = new Autocomplete.IntentBuilder(
-                        AutocompleteActivityMode.OVERLAY, fields)
-                        .setLocationBias(RectangularBounds.newInstance(
-                        new LatLng(currentLat - biasOffset, currentLng - biasOffset),
-                        new LatLng(currentLat + biasOffset, currentLng + biasOffset)))
-                        .build(getContext());
+                Intent intent = buildAutocompleteIntent(fields);
                 startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
             }
         });
@@ -151,6 +139,32 @@ public class LocationSelectionDialog extends DialogFragment {
                 Status status = Autocomplete.getStatusFromIntent(data);
                 Log.i(TAG, status.getStatusMessage());
             }
+        }
+    }
+
+    private Intent buildAutocompleteIntent(List fields) {
+        //get location for bias area
+        Location currentLoc = LocationController.getUserLocation(getContext());
+        if (currentLoc != null) {
+            Log.d(TAG, "onClick: user has location, add search bias");
+            double currentLat = currentLoc.getLatitude();
+            double currentLng = currentLoc.getLongitude();
+            double biasOffset = 0.1;
+
+            // Start the autocomplete intent.
+            Intent intent = new Autocomplete.IntentBuilder(
+                    AutocompleteActivityMode.OVERLAY, fields)
+                    .setLocationBias(RectangularBounds.newInstance(
+                            new LatLng(currentLat - biasOffset, currentLng - biasOffset),
+                            new LatLng(currentLat + biasOffset, currentLng + biasOffset)))
+                    .build(getContext());
+            return intent;
+        } else {
+            Log.d(TAG, "onClick: location not found, no bias added");
+            Intent intent = new Autocomplete.IntentBuilder(
+                    AutocompleteActivityMode.OVERLAY, fields)
+                    .build(getContext());
+            return intent;
         }
     }
 }
