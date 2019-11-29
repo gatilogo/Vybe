@@ -120,7 +120,7 @@ public class MapFragmentTest {
         UiObject obj = device.findObject(new UiSelector().textContains("OK").clickable(true));
         obj.click();
 
-        Thread.sleep(2000);
+        Thread.sleep(5000);
 
         // Add Current Location
         onView(withId(R.id.btn_add_location)).perform(click());

@@ -392,8 +392,8 @@ public class MyVibesActivityTest {
         onView(withId(R.id.my_vibe_list)).check(new RecyclerViewItemCountAssertion(2));
 
         // Delete Older Vibe
-        onView(withId(R.id.my_vibe_list)).perform(RecyclerViewActions.actionOnItemAtPosition(1, RightSwipe()));
-        Thread.sleep(2000);
+        onView(withId(R.id.my_vibe_list)).perform(RecyclerViewActions.actionOnItemAtPosition(0, RightSwipe()));
+        Thread.sleep(5000);
 
         // Check we have one vibe in our list
         onView(withId(R.id.my_vibe_list)).check(new RecyclerViewItemCountAssertion(1));
@@ -411,8 +411,20 @@ public class MyVibesActivityTest {
 
     @After
     public void SignOut() throws InterruptedException {
-        mAuth.getInstance().signOut();
-        Thread.sleep(500);
+//        mAuth.getInstance().signOut();
+//        Thread.sleep(500);
+
+
+        onView(withId(R.id.profile_btn)).perform(click());
+
+        Thread.sleep(1000);
+
+        // Confirm profile information is correct
+        onView(withId(R.id.username_profile)).check(matches(withText(containsString(validUsername))));
+        onView(withId(R.id.email_profile)).check(matches(withText(containsString(validLoginEmail))));
+
+        // Try signing out
+        onView(withId(R.id.logout_btn)).perform(click());
     }
 
  }

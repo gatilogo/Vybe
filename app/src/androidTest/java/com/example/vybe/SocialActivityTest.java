@@ -191,7 +191,7 @@ public class SocialActivityTest {
         UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         UiObject obj = device.findObject(new UiSelector().textContains("OK").clickable(true));
         obj.click();
-        Thread.sleep(500);
+        Thread.sleep(5000);
 
         onView(withId(R.id.add_btn)).perform(click());
 

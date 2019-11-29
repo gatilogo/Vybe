@@ -66,7 +66,7 @@ public class LoginActivityTest {
 
         // Check we are still in login page
         onView(withId(R.id.signup_button))
-                .check(matches(withText("Sign Up")));
+                .check(matches(withText("No account yet? Create one")));
 
     }
 
