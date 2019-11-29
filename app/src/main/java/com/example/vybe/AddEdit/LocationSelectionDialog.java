@@ -88,11 +88,7 @@ public class LocationSelectionDialog extends DialogFragment {
         openLocationAutofill.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Set the fields to specify which types of place data to
-                // return after the user has made a selection.
-                List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG);
-
-                Intent intent = buildAutocompleteIntent(fields);
+                Intent intent = buildAutocompleteIntent();
                 startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
             }
         });
@@ -146,10 +142,15 @@ public class LocationSelectionDialog extends DialogFragment {
         }
     }
 
-    private Intent buildAutocompleteIntent(List fields) {
+    private Intent buildAutocompleteIntent() {
+        // Set the fields to specify which types of place data to
+        // return after the user has made a selection.
+        List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG);
+
         //get location for bias area
         Location currentLoc = LocationController.getUserLocation(getContext());
         if (currentLoc != null) {
+            //if user has location, add bias
             Log.d(TAG, "onClick: user has location, adding search bias");
             double currentLat = currentLoc.getLatitude();
             double currentLng = currentLoc.getLongitude();
