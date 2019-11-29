@@ -38,6 +38,11 @@ import java.util.List;
 
 import static com.example.vybe.util.Constants.*;
 
+/**
+ * This dialog allows the user to select a location
+ * to be added to the vibe
+ */
+
 public class LocationSelectionDialog extends DialogFragment {
 
     private static final String TAG = "LocationSelector";
@@ -79,12 +84,14 @@ public class LocationSelectionDialog extends DialogFragment {
         openLocationAutofill = view.findViewById(R.id.btn_find_location);
         useCurrentLocation = view.findViewById(R.id.btn_current_location);
 
+        //create dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         dialog = builder
                 .setCustomTitle(customTitle())
                 .setView(view)
                 .create();
 
+        //opens the find location fragment
         openLocationAutofill.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,6 +101,7 @@ public class LocationSelectionDialog extends DialogFragment {
         });
 
 
+        //sets location to current location
         useCurrentLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -114,6 +122,10 @@ public class LocationSelectionDialog extends DialogFragment {
         return dialog;
     }
 
+    /**
+     * Creates custom title for the dialog
+     * @return
+     */
     private TextView customTitle() {
         TextView title = new TextView(getContext());
         title.setText("Add a Location");
@@ -124,6 +136,15 @@ public class LocationSelectionDialog extends DialogFragment {
         return title;
     }
 
+    /**
+     * Checks that the autocomplete fragment worked properly
+     * @param requestCode
+     * activity that requested this method
+     * @param resultCode
+     * code that was returned after finishing
+     * @param data
+     * data retrieved from the activity
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d(TAG, "onActivityResult: result retrieved " + resultCode);
@@ -142,6 +163,11 @@ public class LocationSelectionDialog extends DialogFragment {
         }
     }
 
+    /**
+     * builds the google autocomplete fragment
+     * @return
+     * the intent of the autocomplete fragment to be started
+     */
     private Intent buildAutocompleteIntent() {
         // Set the fields to specify which types of place data to
         // return after the user has made a selection.
