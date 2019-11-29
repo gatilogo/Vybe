@@ -25,6 +25,10 @@ import java.io.IOException;
 import static android.app.Activity.RESULT_OK;
 import static com.example.vybe.util.Constants.GET_FROM_GALLERY;
 
+/**
+ * This class represents a fragment that allows a user to
+ * select and view an image from their device storage/gallery
+ */
 public class ImageFieldFragment extends Fragment {
 
     private Button pickImageBtn;
@@ -89,6 +93,10 @@ public class ImageFieldFragment extends Fragment {
         }
     }
 
+    /**
+     * Set the image view to display image on the fragment
+     * @param image bitmap of an image
+     */
     public void setImage(Bitmap image) {
         imageView.setImageBitmap(image);
     }

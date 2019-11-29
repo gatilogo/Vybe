@@ -130,6 +130,7 @@ public class MyVibesActivity extends AppCompatActivity implements VibeFilterFrag
         updateShownVibes();
     }
 
+    // Re populates the vibe events to show using the vibe to be filtered
     private void updateShownVibes() {
         shownVibeEvents.clear();
         for (VibeEvent event : myVibeEvents) {
@@ -141,7 +142,7 @@ public class MyVibesActivity extends AppCompatActivity implements VibeFilterFrag
         myVibesAdapter.notifyDataSetChanged();
     }
 
-
+    // builds RecyclerView to display for the activity
     private void buildRecyclerView() {
         myVibesAdapter = new MyVibesAdapter(this, R.layout.vibe_event_item, shownVibeEvents);
         vibesRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));

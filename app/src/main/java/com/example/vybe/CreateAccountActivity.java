@@ -25,7 +25,7 @@ import java.util.HashMap;
 
 /**
  * This activity gets the username and password and validates said fields
- * with Firestore. Still WIP
+ * with Firestore.
  */
 public class CreateAccountActivity extends AppCompatActivity {
 

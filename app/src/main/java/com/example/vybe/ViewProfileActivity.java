@@ -28,7 +28,7 @@ import java.util.HashMap;
 import java.util.Locale;
 
 /**
- * This activity still does nothing but will be fixed later
+ * This activity shows the user how many follwers they have, how many people they are following and the total amount of vibes they have
  */
 public class ViewProfileActivity extends AppCompatActivity {
 
@@ -70,7 +70,6 @@ public class ViewProfileActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
 
         if (extras.containsKey("user")) {
-            // TODO: move this logic to a profile controller
             user = (User) extras.getSerializable("user");
 
             if (user.getEmail().equals(mUser.getEmail())) {

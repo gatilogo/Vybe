@@ -9,6 +9,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
+/**
+ * This class sets initial follower request information in the MyRequestsActivity
+ * and handles actions related to follow request functionality
+ * This class also implements the singleton pattern to ensure there is only
+ * ever one instance of the class throughout application use
+ */
 public class RequestController {
 
     private static RequestController instance;

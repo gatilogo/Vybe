@@ -149,6 +149,9 @@ public class VibeEventListController {
         return instance.socialVibeEvents;
     }
 
+    /**
+     * This method updates the social vibe events that are displayed on the view
+     */
     public static void updateSocialVibeEvents() {
         instance.onUpdateSocialVibeEvents();
     }

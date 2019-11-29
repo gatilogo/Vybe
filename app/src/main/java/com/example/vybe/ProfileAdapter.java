@@ -104,6 +104,10 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.UserHold
         return usersList.isEmpty();
     }
 
+    /**
+     * This method deletes a user from a list depending on where it is used
+     * @param position position of user to delete from view
+     */
     public void deleteItem(int position) {
         usersList.remove(position);
         notifyItemRemoved(position);

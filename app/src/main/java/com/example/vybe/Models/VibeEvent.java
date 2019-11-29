@@ -158,6 +158,10 @@ public class VibeEvent implements Serializable {
      */
     public void setImage(String image) { this.image = image; }
 
+    /**
+     * This
+     * @return
+     */
     public Double getLatitude() {
         return latitude;
     }
