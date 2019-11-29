@@ -57,6 +57,8 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static com.example.vybe.Helpers.SwipeView.LeftSwipe;
+import static com.example.vybe.Helpers.SwipeView.RightSwipe;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
@@ -72,14 +74,13 @@ import static org.hamcrest.Matchers.is;
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(AndroidJUnit4.class)
-@LargeTest
 public class MyVibesActivityTest {
 
     FirebaseFirestore db;
     FirebaseAuth mAuth;
 
-    private String validLoginEmail = "espresso@test.ca";
-    private String validUsername = "espresso";
+    private String validLoginEmail = "cappuccino@test.ca";
+    private String validUsername = "cappuccino";
     private String validLoginPassword = "vibecheck";
     private SimpleDateFormat formatter = new SimpleDateFormat("MMMM dd, yyyy hh:mm a");
     private static Date date1;
@@ -90,7 +91,7 @@ public class MyVibesActivityTest {
             new ActivityTestRule<>(MainActivity.class);
 
     @Before
-    public void initialize_db(){
+    public void initialize_db() throws InterruptedException {
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
     }
@@ -116,8 +117,8 @@ public class MyVibesActivityTest {
         LogIntoActivity();
 
         // Check Vibe list is empty
-        onView(withId(R.id.image_view))
-                .check((doesNotExist()));
+        onView(withId(R.id.my_vibe_list)).check(new RecyclerViewItemCountAssertion(0));
+
     }
 
     @Test
@@ -142,7 +143,7 @@ public class MyVibesActivityTest {
         onView(withId(R.id.add_edit_vibes_toolbar))
                 .check(matches(isDisplayed()));
 
-        // Add a disgusted vibe
+        // Add a Happy vibe
         onView(withId(R.id.vibe_image)).perform(click());
 
         Thread.sleep(1000);
@@ -156,7 +157,6 @@ public class MyVibesActivityTest {
         obj.click();
         Thread.sleep(500);
 
-        // TODO: Add checks for color and emoticon changes
         // Check we are in add/edit activity
         onView(withId(R.id.add_edit_vibes_toolbar))
                 .check(matches(isDisplayed()));
@@ -263,8 +263,7 @@ public class MyVibesActivityTest {
         onView(withId(R.id.add_edit_vibes_toolbar))
                 .check(matches(isDisplayed()));
 
-
-        // Add a sad vibe
+        // Add a Scared vibe
         onView(withId(R.id.vibe_image)).perform(click());
 
         Thread.sleep(1000);
@@ -285,7 +284,7 @@ public class MyVibesActivityTest {
 
         // Add textual reason with invalid amount of words
         onView(withId(R.id.reason_edit_text))
-                .perform(typeText("I am Very Sad"), closeSoftKeyboard());
+                .perform(typeText("I am Scared to fail"), closeSoftKeyboard());
 
         onView(withId(R.id.add_btn)).perform(click());
 
@@ -297,35 +296,13 @@ public class MyVibesActivityTest {
 
         // Add valid textual reason
         onView(withId(R.id.reason_edit_text))
-                .perform(replaceText("I am Sad"), closeSoftKeyboard());
+                .perform(replaceText("I am Scared"), closeSoftKeyboard());
 
         // Click on spinner and select alone
         onView(withId(R.id.soc_sit_field_fragment)).perform(click());
         Thread.sleep(500);
         onData(allOf(is(instanceOf(String.class)), is(SocSit.ALONE.getDesc()))).perform(click());
         Thread.sleep(500);
-//          TODO: Implement espresso-intents and test for adding an image using this:
-        https://www.tutorialspoint.com/espresso_testing/espresso_testing_intents.htm
-//        // Click on image Fragment
-//        onView(withId(R.id.image_field_fragment)).perform(click());
-//
-//        Thread.sleep(2000);
-//
-//        // Check We are no longer in activity
-//        onView(withId(R.id.add_edit_vibes_toolbar))
-//                .check((doesNotExist()));
-//        // Go back
-//        pressBack();
-//        Thread.sleep(1000);
-
-
-        // Add Current Location
-        onView(withId(R.id.btn_add_location)).perform(click());
-        Thread.sleep(2000);
-        onView(withText("Add a Location")).check(matches(isDisplayed()));
-
-        onView(withId(R.id.btn_current_location)).perform(click());
-        Thread.sleep(2000);
 
         // Get date vibe was created
         date2 = new Date();
@@ -350,16 +327,11 @@ public class MyVibesActivityTest {
 
         // Check details of vibe are correct
         onView(withId(R.id.view_date_text_view)).check(matches(withText(containsString(formatter.format(date2).split(" ")[0]))));
-        onView(withId(R.id.view_reason_text_view)).check(matches(withText(containsString("I am Sad"))));
+        onView(withId(R.id.view_reason_text_view)).check(matches(withText(containsString("I am Scared"))));
         onView(withId(R.id.view_soc_sit_text_view)).check(matches(withText(containsString(SocSit.ALONE.getDesc()))));
-
-        // Check we can see the map view of the location
-        onView(withId(R.id.view_vibe_map))
-                .check(matches(isDisplayed()));
 
     }
 
-    // TODO: Get dates of two items and compare their dates to verify ordering
     @Test
     public void Test05_ConfirmCorrectListOrder() throws InterruptedException, ParseException {
         LogIntoActivity();
@@ -375,7 +347,7 @@ public class MyVibesActivityTest {
         pressBack();
         Thread.sleep(2000);
         // Click on index 1 list item
-        onView(withId(R.id.my_vibe_list)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        onView(withId(R.id.my_vibe_list)).perform(RecyclerViewActions.actionOnItemAtPosition(1, click()));
         Thread.sleep(2000);
 
         // Verify it has the less recent date
@@ -386,7 +358,6 @@ public class MyVibesActivityTest {
     @Test
     public void Test06_Filter_VerifyList() throws InterruptedException, ParseException {
         LogIntoActivity();
-
         // Click on spinner and select angry (no vibes)
         onView(withId(R.id.vibe_filter_dropdown)).perform(click());
         Thread.sleep(500);
@@ -394,19 +365,19 @@ public class MyVibesActivityTest {
         Thread.sleep(500);
 
         // Check Vibe list is empty
-        onView(withId(R.id.image_view))
-                .check((doesNotExist()));
+        onView(withId(R.id.my_vibe_list)).check(new RecyclerViewItemCountAssertion(0));
 
-        // Click on spinner and select disgusted (1 vibe)
+
+        // Click on spinner and select Surprised (1 vibe)
         onView(withId(R.id.vibe_filter_dropdown)).perform(click());
         Thread.sleep(500);
         onData(allOf(is(instanceOf(String.class)), is(Vibe.SURPRISED.getName()))).perform(click());
         Thread.sleep(3000);
         onView(withId(R.id.my_vibe_list)).check(new RecyclerViewItemCountAssertion(1));
-        // Click on spinner and select sad (1 vibe)
+        // Click on spinner and select Scared (1 vibe)
         onView(withId(R.id.vibe_filter_dropdown)).perform(click());
         Thread.sleep(500);
-        onData(allOf(is(instanceOf(String.class)), is(Vibe.SAD.getName()))).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is(Vibe.SCARED.getName()))).perform(click());
         Thread.sleep(3000);
         onView(withId(R.id.my_vibe_list)).check(new RecyclerViewItemCountAssertion(1));
 
@@ -424,25 +395,24 @@ public class MyVibesActivityTest {
         onView(withId(R.id.my_vibe_list)).perform(RecyclerViewActions.actionOnItemAtPosition(1, RightSwipe()));
         Thread.sleep(2000);
 
-
         // Check we have one vibe in our list
         onView(withId(R.id.my_vibe_list)).check(new RecyclerViewItemCountAssertion(1));
-    }
 
+        // Delete Last Vibe
+        onView(withId(R.id.my_vibe_list)).perform(RecyclerViewActions.actionOnItemAtPosition(0, RightSwipe()));
+        Thread.sleep(2000);
 
-    private static ViewAction RightSwipe() {
-        return new GeneralSwipeAction(Swipe.SLOW, GeneralLocation.CENTER_RIGHT,
-                GeneralLocation.CENTER_LEFT, Press.FINGER);
-    }
+        // Check we have No vibes in our list
+        onView(withId(R.id.my_vibe_list)).check(new RecyclerViewItemCountAssertion(0));
 
-    private static ViewAction LeftSwipe() {
-        return new GeneralSwipeAction(Swipe.SLOW, GeneralLocation.CENTER_LEFT,
-                GeneralLocation.CENTER_RIGHT, Press.FINGER);
+        mAuth.getInstance().signOut();
+        Thread.sleep(500);
     }
 
     @After
-    public void Exit(){
+    public void SignOut() throws InterruptedException {
         mAuth.getInstance().signOut();
+        Thread.sleep(500);
     }
 
  }
