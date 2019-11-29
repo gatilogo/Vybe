@@ -40,32 +40,31 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <Button
+        <ImageButton
             android:id="@+id/my_vibes_btn"
             style="?android:buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/my_vibes"
-            android:textColor="@android:color/white" />
+            android:src="@drawable/button_toggle_personal" />
 
-        <Button
+        <ImageButton
             android:id="@+id/social_map_btn"
             style="?android:buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/map"
-            android:textColor="@android:color/white" />
+            android:src="@drawable/button_map"
+            android:tint="@color/White" />
 
-        <Button
+        <ImageButton
             android:id="@+id/search_btn"
             style="?android:buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/search"
-            android:textColor="@android:color/white" />
+            android:src="@drawable/quantum_ic_search_grey600_24"
+            android:tint="@color/White" />
     </LinearLayout>
 
 </RelativeLayout>

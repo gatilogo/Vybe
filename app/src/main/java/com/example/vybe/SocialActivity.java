@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.vybe.Models.User;
@@ -37,11 +38,10 @@ public class SocialActivity extends AppCompatActivity implements VibeEventListCo
     private ArrayList<VibeEvent> vibeEventList = VibeEventListController.setOnSocialVibeEventsUpdatedListener(this);
     private MyVibesAdapter socialVibesAdapter;
 
-    private Button myVibesBtn;
-    private Button searchBtn;
-    private Button mapBtn;
+    private ImageButton myVibesBtn;
+    private ImageButton mapBtn;
+    private ImageButton searchBtn;
     private RecyclerView socialVibesRecyclerView;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +50,8 @@ public class SocialActivity extends AppCompatActivity implements VibeEventListCo
         Log.d(TAG, "onCreate: In social");
 
         myVibesBtn = findViewById(R.id.my_vibes_btn);
-        searchBtn = findViewById(R.id.search_btn);
         mapBtn = findViewById(R.id.social_map_btn);
+        searchBtn = findViewById(R.id.search_btn);
         socialVibesRecyclerView = findViewById(R.id.social_vibe_list);
 
         buildRecyclerView();
@@ -60,18 +60,14 @@ public class SocialActivity extends AppCompatActivity implements VibeEventListCo
             finish();
         });
 
-        searchBtn.setOnClickListener((View v) -> {
-            startActivity(new Intent(SocialActivity.this, SearchProfilesActivity.class));
+        mapBtn.setOnClickListener((View v) -> {
+            Intent MapViewIntent = new Intent(SocialActivity.this, MapViewActivity.class);
+            MapViewIntent.putExtra("MapViewMode", "Social");
+            startActivity(MapViewIntent);
         });
 
-
-        mapBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent MapViewIntent = new Intent(SocialActivity.this, MapViewActivity.class);
-                MapViewIntent.putExtra("MapViewMode", "Social");
-                startActivity(MapViewIntent);
-            }
+        searchBtn.setOnClickListener((View v) -> {
+            startActivity(new Intent(SocialActivity.this, SearchProfilesActivity.class));
         });
     }
 
