@@ -46,23 +46,23 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.UserHold
             acceptBtn = view.findViewById(R.id.accept_btn);
             rejectBtn = view.findViewById(R.id.reject_btn);
 
-            if (view.getContext() instanceof SearchProfilesActivity) {
-                acceptBtn.setVisibility(View.GONE);
-                rejectBtn.setVisibility(View.GONE);
+            if (view.getContext() instanceof MyRequestsActivity) {
+                acceptBtn.setVisibility(View.VISIBLE);
+                rejectBtn.setVisibility(View.VISIBLE);
 
+                acceptBtn.setOnClickListener((View) -> {
+                    requestClickListener.onAcceptClick(getAdapterPosition());
+                });
+
+                rejectBtn.setOnClickListener((View) -> {
+                    requestClickListener.onRejectClick(getAdapterPosition());
+                });
+            } else {
                 itemView.setOnClickListener((View) -> {
                     itemClickListener.onItemClick(getAdapterPosition());
                 });
             }
 
-            // TODO: make this more generic and stub it out if possible?
-            acceptBtn.setOnClickListener((View) -> {
-                requestClickListener.onAcceptClick(getAdapterPosition());
-            });
-
-            rejectBtn.setOnClickListener((View) -> {
-                requestClickListener.onRejectClick(getAdapterPosition());
-            });
         }
 
     }

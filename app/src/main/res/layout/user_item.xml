@@ -13,7 +13,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="5dp"
-            android:src="@drawable/ic_vibeless" />
+            android:src="@drawable/account_default_icon_search" />
 
         <TextView
             android:id="@+id/username_text_view"
@@ -39,14 +39,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
-                android:background="@drawable/ic_check" />
+                android:background="@drawable/ic_check"
+                android:visibility="gone" />
 
             <ImageButton
                 android:id="@+id/reject_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
-                android:background="@drawable/ic_reject" />
+                android:background="@drawable/ic_reject"
+                android:visibility="gone" />
         </LinearLayout>
 
     </RelativeLayout>

@@ -104,7 +104,14 @@ public class MyVibesActivity extends AppCompatActivity {
                         .addOnSuccessListener((DocumentSnapshot doc) -> {
                             String username = (String) doc.get("username");
                             String email = (String) doc.get("email");
-                            intent.putExtra("user", new User(username, email));
+                            ArrayList<String> followers = (ArrayList) doc.get("followers");
+                            ArrayList<String> following = (ArrayList) doc.get("following");
+                            User user = new User(username, email);
+                            user.setFollowers(followers);
+                            user.setFollowing(following);
+                            user = doc.toObject(User.class);
+                            user.setUserID(doc.getId());
+                            intent.putExtra("user", user);
                             startActivity(intent);
                         });
         });
