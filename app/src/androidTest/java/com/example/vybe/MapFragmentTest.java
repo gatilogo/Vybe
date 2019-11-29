@@ -44,6 +44,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
+import static com.example.vybe.Helpers.SwipeView.RightSwipe;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.is;
@@ -175,11 +176,6 @@ public class MapFragmentTest {
 
         Thread.sleep(1000);
 
-    }
-
-    private static ViewAction RightSwipe() {
-        return new GeneralSwipeAction(Swipe.SLOW, GeneralLocation.CENTER_RIGHT,
-                GeneralLocation.CENTER_LEFT, Press.FINGER);
     }
 
     @After

@@ -60,7 +60,6 @@ public class CreateAccountActivityTest {
     public void initialize_db(){
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
-
     }
 
     @Test

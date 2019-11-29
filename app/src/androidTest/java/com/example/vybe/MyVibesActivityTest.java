@@ -57,6 +57,8 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static com.example.vybe.Helpers.SwipeView.LeftSwipe;
+import static com.example.vybe.Helpers.SwipeView.RightSwipe;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
@@ -78,8 +80,8 @@ public class MyVibesActivityTest {
     FirebaseFirestore db;
     FirebaseAuth mAuth;
 
-    private String validLoginEmail = "espresso@test.ca";
-    private String validUsername = "espresso";
+    private String validLoginEmail = "cappuccino@test.ca";
+    private String validUsername = "cappuccino";
     private String validLoginPassword = "vibecheck";
     private SimpleDateFormat formatter = new SimpleDateFormat("MMMM dd, yyyy hh:mm a");
     private static Date date1;
@@ -90,9 +92,11 @@ public class MyVibesActivityTest {
             new ActivityTestRule<>(MainActivity.class);
 
     @Before
-    public void initialize_db(){
+    public void initialize_db() throws InterruptedException {
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
+        mAuth.getInstance().signOut();
+        Thread.sleep(500);
     }
 
     private void LogIntoActivity() throws InterruptedException {
@@ -116,8 +120,8 @@ public class MyVibesActivityTest {
         LogIntoActivity();
 
         // Check Vibe list is empty
-        onView(withId(R.id.image_view))
-                .check((doesNotExist()));
+        onView(withId(R.id.my_vibe_list)).check(new RecyclerViewItemCountAssertion(0));
+
     }
 
     @Test
@@ -142,7 +146,7 @@ public class MyVibesActivityTest {
         onView(withId(R.id.add_edit_vibes_toolbar))
                 .check(matches(isDisplayed()));
 
-        // Add a disgusted vibe
+        // Add a Happy vibe
         onView(withId(R.id.vibe_image)).perform(click());
 
         Thread.sleep(1000);
@@ -332,7 +336,6 @@ public class MyVibesActivityTest {
 
     }
 
-    // TODO: Get dates of two items and compare their dates to verify ordering
     @Test
     public void Test05_ConfirmCorrectListOrder() throws InterruptedException, ParseException {
         LogIntoActivity();
@@ -397,25 +400,11 @@ public class MyVibesActivityTest {
         onView(withId(R.id.my_vibe_list)).perform(RecyclerViewActions.actionOnItemAtPosition(1, RightSwipe()));
         Thread.sleep(2000);
 
-
         // Check we have one vibe in our list
         onView(withId(R.id.my_vibe_list)).check(new RecyclerViewItemCountAssertion(1));
-    }
 
-
-    private static ViewAction RightSwipe() {
-        return new GeneralSwipeAction(Swipe.SLOW, GeneralLocation.CENTER_RIGHT,
-                GeneralLocation.CENTER_LEFT, Press.FINGER);
-    }
-
-    private static ViewAction LeftSwipe() {
-        return new GeneralSwipeAction(Swipe.SLOW, GeneralLocation.CENTER_LEFT,
-                GeneralLocation.CENTER_RIGHT, Press.FINGER);
-    }
-
-    @After
-    public void Exit(){
         mAuth.getInstance().signOut();
+        Thread.sleep(500);
     }
 
  }
