@@ -94,15 +94,6 @@
             android:textColor="@android:color/white" />
 
         <Button
-            android:id="@+id/test"
-            style="?android:buttonBarButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/add"
-            android:textColor="@android:color/white" />
-
-        <Button
             android:id="@+id/request_btn"
             style="?android:buttonBarButtonStyle"
             android:layout_width="wrap_content"
