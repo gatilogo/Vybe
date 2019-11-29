@@ -6,6 +6,10 @@ import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 
+/**
+ * Enum representing a social situation and various functionality relating
+ * to a user's selection for said social situation
+ */
 public enum SocSit {
     ALONE("Alone"),
     WITH_ANOTHER_PERSON("With one other person"),

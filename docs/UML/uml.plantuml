@@ -24,56 +24,169 @@ skinparam class {
 }
 
 class MainActivity <<View>> {
-    - usernameField: EditText
+    - emailField: EditText
     - passwordField: EditText
     - loginBtn: Button
     - signUpBtn: Button
-
-    - onLoginBtnPressed(username: String, password: String)
-    - onSignUpBtnPressed(username: String, password: String)
-    - onAccountCreated(username: String, password: String)    
 }
 
-class LoginController <<Controller>> {
-    + login(username: String, password: String)
-}
-
-class CreateProfileFragment <<View>> {
+class CreateAccountActivity <<View>> {
     - usernameField: EditText
+    - emailField: EditText
     - passwordField: EditText
-    - confirmPasswordField: EditText
     - confirmBtn: Button
 
-    - onConfirm()
-}
-
-interface CreateProfileFragment.onAccountCreatedListener <<View>> {
-    - onAccountCreated(username: String, password: String)    
+    - createAccount(username: String, email: String, password: String)
 }
 
 class MyVibesActivity <<View>> {
-    - vibeEventsAdapter: VibeEventsAdapter
-    - filterField: EditText
-    - socialBtn: Button
-    - myProfileBtn: Button
-    - followingVibesBtn: Button
-    - mapBtn: Button
-    - addVibeEventBtn: Button
+    - profileBtn: ImageButton
+    - addVibeEventBtn: FloatingActionButton
+    - socialBtn: ImageButton
+    - myMapBtn: ImageButton
+    - requestBtn:ImageButton
+    - vibesRecyclerView:RecyclerView
 
-    - viewVibeEvent(vibeEvent: VibeEvent)
-    - editVibeEvent(vibeEvent: VibeEvent)
-    - filterVibes(text: String)
+    - vibeEventsAdapter: VibeEventsAdapter
+    - filterVibe: Vibe
+
+    + onVibeSelected(vibe: Vibe)
+    + updateShownVibes()
+    + onMyVibeEventsUpdated()
     - getLocationPermission()
 }
 
-class ViewVibeEventActivity <<View>> {
-    - vibeEmoticonField: ImageView
-    - vibeNameField: TextView
+class MyVibeAdapter <<Controller>> {
+    - vibeEventList: VibeEventList
+    + getItemCount()
+    + deleteItem(position: int, vibeEventDBPath: String) 
+    + getItem(position: int)
+}
+
+class ViewVibeActivity <<View>> {
+    - vibeImage: ImageView
     - dateField: TextView
     - reasonField: TextView
-    - pictureField: ImageView
-    - socialSituationField: TextView
+    - reasonLabel: TextView
+    - socSitField: TextView
+    - socSitLabel: TextView
+    - reasonImage: ImageView
+    - toolbar: Toolbar
+    - mapFragment: MapFragment
+
+    + populateVibeEventDetails(vibeEvent: VibeEvent)
+    + loadImageFirebase(imageView: ImageView, imagePath: String)
 }
+
+class VibeEventListController <<Controller >> {
+    - instance: VibeEventListController
+
+    - myVibeEventsListener: OnMyVibeEventsUpdatedListener
+    - myVibeEvents: ArrayList<VibeEvent>
+    - socialVibeEventsListener: OnSocialVibeEventsUpdatedListener
+    - socialVibeEvents: ArrayList<VibeEvent>
+
+    - notifySocialVibeEventsListener()
+    - notifyMyVibeEventsListener()
+
+    + setOnMyVibeEventsUpdatedListener(activity: Activity)
+    + setOnSocialVibeEventsUpdatedListener(activity: Activity)
+
+    - updateSocialVibeEvents()
+    - updateMyVibeEvents()
+
+}
+
+class VibeFilterFragment <<View>> {
+    - selectedVibe: Vibe
+}
+
+class MapViewActivity <<View>> {
+    - mapFragment: MapFragment
+
+    + addMyVibeLocations()
+    + addFollowedVibeLocations()
+}
+
+class MyRequestActivity <<View>> {
+    - profileAdapter: ProfileAdapter
+    - recyclerView: RecyclerView
+    - requestController: RequestController
+    - requestList: ArrayList<User>
+
+    - displayMyRequests(requests: ArrayList<String>)
+}
+
+class ViewProfileActivity <<View>> {
+    - usernameTextView: usernameTextView
+    - emailTextView: emailTextView
+    - logoutBtn: logoutBtn
+    - sendRequestBtn: sendRequestBtn
+    - followersLayout: followersLayout
+    - followingLayout: followingLayout
+    - statisticsLayout: statisticsLayout
+    - vibeCount: vibeCount
+    - followerCount: followerCount
+    - followingCount: followingCount
+    - user: user
+
+}
+
+class RequestController <<Controller>> {
+    - instance: RequestController
+
+    - viewProfileActivity: ViewProfileActivity
+    - userRequestList: ArrayList<User>
+}
+
+class ConnectionsActivity <<View>> {
+    - connectionsTabLayout: TabLayout
+    - connectionsViewPager: ViewPager
+    - pageAdapter: ConnectionsPageAdapter
+}
+
+class ConnectionsPageAdapter <<Controller>> {
+    - resources: Resources
+    - user: User
+
+    + getCount()
+    + getPageTitle(position: int)
+    + getItem(position: int)
+}
+
+class FollowersFragment <<View>> {
+    - followersList: ArrayList<User>
+    - profileAdapter: ProfileAdapter
+}
+
+class FollowingFragment <<View>> {
+    - followeingList: ArrayList<User>
+    - profileAdapter: ProfileAdapter
+}
+
+class ProfileAdapter <<Controller>> {
+    - itemClickListener: OnItemClickListener
+    - requestClickListener: OnRequestClickListener
+}
+
+class SocialActivity <<View>> {
+    - vibeEventList: ArrayList<VibeEvent>
+    - socialVibesAdapter: MyVibesAdapter
+    - myVibesBtn: ImageButton
+    - mapBtn: ImageButton
+    - searchBtn: ImageButton
+    - socialVibesRecyclerView: RecyclerView
+
+    + onSocialVibeEventsUpdated()
+}
+
+class SearchProfilesActivity <<View>> {
+    - usersList: ArrayList<User>
+    - searchList: ArrayLis<User>
+    - profileAdapter: ProfileAdapter
+    - searchView: SearchView
+}
+
 
 class ViewProfileActivity <<View>> {
     - usernameField: TextView
@@ -81,230 +194,159 @@ class ViewProfileActivity <<View>> {
 }
 
 class AddEditVibeEventActivity <<View>> {
-    - vibePicker: VibePickerFragment
+    - vibePicker: VibeCarouselDialogFragment
     - dateField: DatePicker
     - reasonField: EditText
     - pictureField: ImageView
     - socialSituationField: String
     - saveBtn: Button
     - deleteBtn: Button
+
 }
 
-class VibeEventsAdapter <<Controller>> {
-    - vibeEventListController: VibeEventListController
-    + showMyVibeEvents(vibeEventListController: VibeEventListController)
-    + showFollowingVibeEvents(vibeEventListController: VibeEventListController)
+class ImageFieldFragment <<View>> {
+    - image: Bitmap
+
 }
 
-class FollowingVibesActivity <<Controller>> {
-    - vibeEventsAdapter: VibeEventsAdapter
-    - socialBtn: Button
-    - myProfileBtn: Button
-    - followingVibesBtn: Button
-    - mapBtn: Button
+class LocationSelectionDialog <<View>> {
+    - latitude: Double
+    - longitude: Double
 
-    - requestFollowingVibeEvents()
-    - viewVibeEvent(vibeEvent: VibeEvent)
 }
 
-class MapActivity <<View>> {
-    - vibeEventsAdapter: VibeEventsAdapter
+class SocSitFieldFragment <<View>> {
+    - socSit: SocSit
+
 }
 
-class MyVibeEventsMapFragment <<View>> {
-    - map: GoogleMap
-    - db: FirebaseFirestore
+class VibeCarouselDialogFragment <<View>> {
+    - vibe: Vibe
 
-    - addVibeMarkers(map: GoogleMap)
 }
 
-class SocialActivity <<View>> {
-    - requests: ArrayList<Profile>
-    - following: ArrayList<Profile>
-    - followers: ArrayList<Profile>
+class LocationController <<Controller>> {
+    - getUserLocation(context: Context)
 
-    - getRelationships()
-    - openRequestsFragment(requests: ArrayList<Profile>)
-    - openFollowingFragment(following: ArrayList<Profile>)
-    - openFollowersFragment(followers: ArrayList<Profile>)
 }
 
-class VibePickerFragment <<View>> {
-    - vibePickerAdapter: VibePickerAdapter
-    <<get>> - selectedVibe: Vibe
-}
-
-interface VibeEventController <<Controller>> {
-    + pushToDatabase(vibeEvent: VibeEvent)
-}
-
-class VibeEventListController <<Controller>> {
-    + requestMyVibeEvents()
-    + requestFollowingVibeEvents()
+class MapFragment <<View>> {
+    + setToLocation(latLng: LatLng)
+    + addMarker(latLng: LatLng, drawableRes: int, owner: String)
+    + setCamera(latLng: LatLng)
+    + hideMap()
+    + showMap()
 }
 
 
-class VibePickerAdapter <<Controller>> {
-    - vibeList: ArrayList<Vibe>
+class VibeEvent <<Model>> {
+    <<get, set>> - vibe: Vibe
+    <<get, set>> - datetime: Date
+    <<get, set>> - reason: String
+    <<get, set>> - socSit: SocSit
+    <<get, set>> - ID: String
+    <<get, set>> - image: String
+    <<get, set>> - latitude: Double
+    <<get, set>> - longitude: Double
+    <<get, set>> - owner: String
+
 }
 
-
-class FollowersFragment <<View>> {
-    - profileAdapter: ProfileAdapter
-}
-
-class FollowingFragment <<View>> {
-    - profileAdapter: ProfileAdapter
-}
-
-class RequestsFragment <<View>> {
-    - profileAdapter: ProfileAdapter
-}
-
-class SearchProfilesActivity <<View>> {
-    - searchField: EditText
-    - profileAdapter: ProfileAdapter
-}
-
-interface Vibe <<Model>> {
+Enum Vibe <<Model>> {
     <<get>> - emoticon: int
     <<get>> - color: int
     <<get>> - name: String
+
+    + ofName(name: String)
+    + ofEmoticon(emoticon: int)
+    + getEmoticons()
+    + getNames()
 }
 
-class VibeFactory <<Controller>> {
-    + getVibe(selectedVibe: String)
-    + getVibe(selectedVibe: int)
+Enum SocSit <<Model>> {
+    <<get>> - desc: String
+
+    + at(position: int)
+    + of(name: String)
+    + stringValues()
 }
 
-class AddVibeEventController <<Controller>> {
+class User <<Model>> {
+    <<get, set>> - username: String
+    <<get, set>> - followers: ArrayList<User>
+    <<get, set>> - following: ArrayList<User>
+}
+
+class AddEditVibeEventController <<Controller>> {
     + addVibeEvent(Vibe, date: LocaleDateTime, reason: String, picture: ImageView, socSit: String)
-    + pushToDatabase(vibeEvent: VibeEvent)
-}
-
-class EditVibeEventController <<Controller>> {
     + editVibeEvent(vibe: Vibe, date: LocaleDateTime, reason: String, picture: ImageView, socSit: String)
     + pushToDatabase(vibeEvent: VibeEvent)
 }
 
-class ProfileAdapter <<Controller>> {
-    - profileController: ProfileController
-    - showProfileRequests()
-    - showFollowingList()
-    - showFollowersList()
-    - showSearchProfileResults()
-}
+MainActivity "1" -- "1" CreateAccountActivity
+MainActivity "1" -- "1" MyVibesActivity
 
-class HappyVibe <<Model>> {
-    <<get>> - emoticon: int
-    <<get>> - color: int
-    <<get>> - name: String   
-}
-
-class SadVibe <<Model>> {
-    <<get>> - emoticon: int
-    <<get>> - color: int
-    <<get>> - name: String   
-}
-
-class ScaredVibe <<Model>> {
-    <<get>> - emoticon: int
-    <<get>> - color: int
-    <<get>> - name: String   
-}
-
-class DisgustedVibe <<Model>> {
-    <<get>> - emoticon: int
-    <<get>> - color: int
-    <<get>> - name: String   
-}
-
-class SupriseVibe <<Model>> {
-    <<get>> - emoticon: int
-    <<get>> - color: int
-    <<get>> - name: String   
-}
-
-class AngerVibe <<Model>> {
-    <<get>> - emoticon: int
-    <<get>> - color: int
-    <<get>> - name: String   
-}
-
-class ProfileController <<Controller>> {
-    - profile: Profile
-    - requestProfileRequests()
-    - requestFollowingList()
-    - requestFollowersList()
-    - requestSearchProfileResults()
-}
-
-class Profile <<Model>> {
-    - username: String
-    - followers: ArrayList<Profile>
-    - following: ArrayList<Profile>
-}
-
-CreateProfileFragment.onAccountCreatedListener <|.. MainActivity
-MainActivity "1" -- "1" LoginController
-MainActivity "1" -- "1" CreateProfileFragment
-MainActivity "1"-- "1" MyVibesActivity
-
-MyVibesActivity "1" -- "1" ViewVibeEventActivity
+MyVibesActivity "1" o-- "1" VibeFilterFragment
+MyVibesActivity "1" o-- "1" MyVibeAdapter
+MyVibesActivity "1" -- "1" VibeEventListController
+MyVibesActivity "1" -- "1" MapViewActivity
+MyVibesActivity "1" -- "1" MyRequestActivity
 MyVibesActivity "1" -- "1" ViewProfileActivity
-MyVibesActivity "1" -- "1" AddEditVibeEventActivity
-MyVibesActivity "1" o-- "1" VibeEventsAdapter
-MyVibesActivity "1" -- "1" FollowingVibesActivity
-MyVibesActivity "1" -- "1" MapActivity
 MyVibesActivity "1" -- "1" SocialActivity
+MyVibesActivity "1" -- "1" AddEditVibeEventActivity
 
-ViewVibeEventActivity "1" -- "1" AddEditVibeEventActivity
+MyVibeAdapter "1" -- "1" ViewVibeActivity
 
-AddEditVibeEventActivity "1" o-- "1" VibePickerFragment
-AddEditVibeEventActivity "1" o-- "1" VibeEventController
+MapViewActivity "1" -- "1" MapFragment
 
-VibeEventsAdapter "1" o-- "1" VibeEventListController
-VibeEventsAdapter "1" o-- "1" VibePickerAdapter
+MapFragment "1" -- "1" LocationController
 
-FollowingVibesActivity "1" o-- "1" VibeEventsAdapter
-FollowingVibesActivity "1" -- "1" MapActivity
+MyRequestActivity "1" -- "1" RequestController
 
-SocialActivity "1" -- "1" FollowersFragment
-SocialActivity "1" -- "1" FollowingFragment
-SocialActivity "1" -- "1" RequestsFragment
+ViewProfileActivity "1" -- "1" RequestController
+ViewProfileActivity "1" -- "1" ConnectionsActivity
+
+ConnectionsActivity "1" o-- "1" ConnectionsPageAdapter
+
+ConnectionsPageAdapter "1" -- "1" FollowersFragment
+ConnectionsPageAdapter "1" -- "1" FollowingFragment
+
+FollowersFragment "1" o-- "1" ProfileAdapter
+FollowingFragment "1" o-- "1" ProfileAdapter
+
+SocialActivity "1" -- "1" VibeEventListController
+SocialActivity "1" -- "1" MapViewActivity
+SocialActivity "1" -- "1" ViewVibeActivity
 SocialActivity "1" -- "1" SearchProfilesActivity
-SocialActivity "1" -- "1" MapActivity
 
-VibePickerFragment "1" -- "0..*" VibeFactory
-VibePickerFragment "1" o-- "1" VibePickerAdapter
+SearchProfilesActivity "1" -- "1" ViewProfileActivity
 
-VibeEventController <|-- AddVibeEventController
-VibeEventController <|-- EditVibeEventController
+AddEditVibeEventActivity "1" -- "1" AddEditVibeEventController
+AddEditVibeEventActivity "1" -- "1" ImageFieldFragment
+AddEditVibeEventActivity "1" -- "1" LocationSelectionDialog
+AddEditVibeEventActivity "1" -- "1" SocSitFieldFragment
+AddEditVibeEventActivity "1" -- "1" VibeCarouselDialogFragment
+AddEditVibeEventActivity "1" -- "1" LocationController
+AddEditVibeEventActivity "1" -- "1" MapFragment
 
-VibeEventListController "1" -- "0..*" VibeFactory
+MapFragment "1" -- "1" LocationController
 
-MapActivity "1" -- "1" VibeEventListController
-MapActivity "1" o-- "1" MyVibeEventsMapFragment
 
-FollowersFragment "1" -- "1" ProfileAdapter
-FollowingFragment "1" -- "1" ProfileAdapter
-RequestsFragment "1" -- "1" ProfileAdapter
-SearchProfilesActivity "1" -- "1" ProfileAdapter
+' ------ Models --------
+VibeEventListController "1" -- "0..*" VibeEvent
+AddEditVibeEventController "1" -- "0..*" VibeEvent
+MyVibeAdapter "1" -- "0..*" VibeEvent
 
-VibeFactory "1" o-- "0..*" Vibe
+VibeEvent "1" -- "0..*" Vibe
+VibeEvent "1" -- "0..*" SocSit
 
-Vibe <|.. HappyVibe
-Vibe <|.. SadVibe
-Vibe <|.. ScaredVibe
-Vibe <|.. DisgustedVibe
-Vibe <|.. SupriseVibe
-Vibe <|.. AngerVibe
+VibeCarouselDialogFragment "1" -- "0..*" Vibe
+SocSitFieldFragment "1" -- "0..*" SocSit
 
-ProfileAdapter "1" o-- "1" ProfileController
+ProfileAdapter "1" -- "0..*" User
+RequestController "1" -- "0..*" User
 
-ProfileController "1" -- "0..*" Profile
-
-Profile -- Profile: Followers
-Profile -- Profile: Following
+User "0..*" -- "0..*" User: Followers
+User "0..*" -- "0..*" User: Following
     
 @enduml

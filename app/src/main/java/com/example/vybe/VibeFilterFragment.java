@@ -15,6 +15,9 @@ import androidx.fragment.app.Fragment;
 
 import com.example.vybe.Models.Vibe;
 
+/**
+ * Allows the user to filter the vibes they would like to view
+ */
 public class VibeFilterFragment extends Fragment {
 
     private Context context;

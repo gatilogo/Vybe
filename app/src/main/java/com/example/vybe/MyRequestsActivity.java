@@ -15,6 +15,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
+/**
+ * This activity allows the user to send a follow request to another user.
+ */
 public class MyRequestsActivity extends AppCompatActivity {
 
     private static final String TAG = "MyRequestsActivity";
@@ -38,7 +41,6 @@ public class MyRequestsActivity extends AppCompatActivity {
 
         profileAdapter.setRequestClickListener(new ProfileAdapter.OnRequestClickListener() {
 
-            // TODO: move deleteItem calls from profileAdapter into controller? - use listener
             @Override
             public void onAcceptClick(int position) {
                 User selectedUser = userRequestList.get(position);
@@ -83,8 +85,11 @@ public class MyRequestsActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * This method queries for a user's follow requests
+     * @param myRequests list of User IDs who have requested to follow current user
+     */
     protected void displayMyRequests(ArrayList<String> myRequests) {
-
         userRequestList.clear();
         for (String uid: myRequests){
             db.collection("Users").document(uid).get()

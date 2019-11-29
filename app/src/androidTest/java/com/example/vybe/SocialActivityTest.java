@@ -167,6 +167,8 @@ public class SocialActivityTest {
         // Accept users request
         onView(withId(R.id.my_request_list)).perform(RecyclerViewActions.actionOnItemAtPosition(0, new ClickOnInternalView(R.id.accept_btn)));
         Thread.sleep(3000);
+
+        pressBack();
     }
 
     private void PostVibe() throws UiObjectNotFoundException, InterruptedException {
@@ -191,7 +193,7 @@ public class SocialActivityTest {
         UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         UiObject obj = device.findObject(new UiSelector().textContains("OK").clickable(true));
         obj.click();
-        Thread.sleep(500);
+        Thread.sleep(5000);
 
         onView(withId(R.id.add_btn)).perform(click());
 
@@ -252,8 +254,17 @@ public class SocialActivityTest {
 
     @After
     public void SignOut() throws InterruptedException {
-        mAuth.getInstance().signOut();
-        Thread.sleep(500);
+
+        onView(withId(R.id.profile_btn)).perform(click());
+
+        Thread.sleep(1000);
+
+        // Confirm profile information is correct
+        onView(withId(R.id.username_profile)).check(matches(withText(containsString(cappuccinoUser))));
+        onView(withId(R.id.email_profile)).check(matches(withText(containsString(cappuccinoEmail))));
+
+        // Try signing out
+        onView(withId(R.id.logout_btn)).perform(click());
     }
 
 }

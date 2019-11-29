@@ -20,6 +20,10 @@ import com.example.vybe.R;
 
 import java.util.List;
 
+/**
+ * This fragment represents a custom spinner to allow a user to select
+ * a social situation to add to a Vibe Event
+ */
 public class SocSitFieldFragment extends Fragment {
 
     private OnSocSitSelectedListener onSocSitSelectedListener;
@@ -77,6 +81,11 @@ public class SocSitFieldFragment extends Fragment {
     }
 
 
+    /**
+     * This method initializes the social situation adapter which will display
+     * a spinner/list for selecting a type of social situation
+     * @return returns a custom adapter
+     */
     private ArrayAdapter<String> createSocSitAdapter() {
         // List of all the social situation options
         List<String> options = SocSit.stringValues();

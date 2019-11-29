@@ -23,7 +23,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 
 /**
- * A simple FollowersFragment subclass.
+ * A simple FollowersFragment subclass. Holds the followers.
  */
 public class FollowersFragment extends Fragment {
 

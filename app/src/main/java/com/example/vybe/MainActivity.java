@@ -57,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
                 }
         };
 
+        // If the user is logged in, go to my vibes activity
+        // otherwise display the error message
         loginButton.setOnClickListener(view -> {
 
             // Check that the email and password fields are entered
@@ -81,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+        // Go to the signup page
         signupButton.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, CreateAccountActivity.class);
             startActivity(intent);

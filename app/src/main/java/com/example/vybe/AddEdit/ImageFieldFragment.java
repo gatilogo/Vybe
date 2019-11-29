@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -24,6 +25,10 @@ import java.io.IOException;
 import static android.app.Activity.RESULT_OK;
 import static com.example.vybe.util.Constants.GET_FROM_GALLERY;
 
+/**
+ * This class represents a fragment that allows a user to
+ * select and view an image from their device storage/gallery
+ */
 public class ImageFieldFragment extends Fragment {
 
     private Button pickImageBtn;
@@ -31,7 +36,7 @@ public class ImageFieldFragment extends Fragment {
     private Context context;
     private OnImageSelectedListener onImageSelectedListener;
     private Bitmap imageBitmap;
-    private Button removeImageBtn;
+    private ImageButton removeImageBtn;
 
     interface OnImageSelectedListener {
         void onImageSelected(Bitmap selectedImageBitmap);
@@ -63,6 +68,7 @@ public class ImageFieldFragment extends Fragment {
         removeImageBtn.setOnClickListener((View v) -> {
             imageView.setImageBitmap(null);
             onImageSelectedListener.onImageSelected(null);
+            removeImageBtn.setVisibility(View.GONE);
         });
 
 
@@ -79,6 +85,7 @@ public class ImageFieldFragment extends Fragment {
                 imageBitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), selectedImageUri);
                 onImageSelectedListener.onImageSelected(imageBitmap);
                 imageView.setImageBitmap(imageBitmap);
+                removeImageBtn.setVisibility(View.VISIBLE);
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -86,6 +93,10 @@ public class ImageFieldFragment extends Fragment {
         }
     }
 
+    /**
+     * Set the image view to display image on the fragment
+     * @param image bitmap of an image
+     */
     public void setImage(Bitmap image) {
         imageView.setImageBitmap(image);
     }

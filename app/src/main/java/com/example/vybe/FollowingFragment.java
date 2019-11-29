@@ -22,7 +22,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 
 /**
- * A simple FollowingFragment subclass.
+ * A simple FollowingFragment subclass. Holds the following.
  */
 public class FollowingFragment extends Fragment {
 
