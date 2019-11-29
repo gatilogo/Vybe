@@ -7,6 +7,7 @@ import androidx.test.espresso.action.GeneralLocation;
 import androidx.test.espresso.action.GeneralSwipeAction;
 import androidx.test.espresso.action.Press;
 import androidx.test.espresso.action.Swipe;
+import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
@@ -31,6 +32,7 @@ import org.junit.runners.MethodSorters;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
@@ -42,6 +44,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
+import static com.example.vybe.Helpers.SwipeView.RightSwipe;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.is;
@@ -50,6 +53,7 @@ import static org.hamcrest.Matchers.not;
 /**
  * This tests to see if the Google Map is loaded when navigating to the Map section
  * Tests for requirements related to Geolocation and Maps
+ * DISCLAIMER: Google Maps Location Authentication must be enabled for these tests to pass
  */
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -59,7 +63,6 @@ public class MapFragmentTest {
     FirebaseAuth mAuth;
 
     private String validLoginEmail = "decaf@test.ca";
-    private String validUsername = "decaf";
     private String validLoginPassword = "vibecheck";
 
     @Rule
@@ -117,6 +120,8 @@ public class MapFragmentTest {
         UiObject obj = device.findObject(new UiSelector().textContains("OK").clickable(true));
         obj.click();
 
+        Thread.sleep(2000);
+
         // Add Current Location
         onView(withId(R.id.btn_add_location)).perform(click());
         Thread.sleep(2000);
@@ -132,6 +137,12 @@ public class MapFragmentTest {
 
         // Check we get back to my vibes activity
         onView(withId(R.id.vibe_filter_dropdown))
+                .check(matches(isDisplayed()));
+
+        // View Activity and check we can see the map
+        onView(withId(R.id.my_vibe_list)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+
+        onView(withId(R.id.view_vibe_map))
                 .check(matches(isDisplayed()));
 
     }
@@ -153,14 +164,18 @@ public class MapFragmentTest {
 
         //Check we can click and see the social vibe
         UiDevice device = UiDevice.getInstance(getInstrumentation());
-        UiObject marker = device.findObject(new UiSelector().descriptionContains("espresso"));
+        UiObject marker = device.findObject(new UiSelector().descriptionContains("mocha"));
         marker.click();
         Thread.sleep(1000);
-    }
 
-    private static ViewAction RightSwipe() {
-        return new GeneralSwipeAction(Swipe.SLOW, GeneralLocation.CENTER_RIGHT,
-                GeneralLocation.CENTER_LEFT, Press.FINGER);
+        // Go back to MyVibesActivity and Delete the vibe created
+        pressBack();
+        Thread.sleep(1000);
+
+        onView(withId(R.id.my_vibe_list)).perform(RecyclerViewActions.actionOnItemAtPosition(0, RightSwipe()));
+
+        Thread.sleep(1000);
+
     }
 
     @After

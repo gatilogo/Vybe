@@ -35,8 +35,8 @@ public class ViewProfileActivityTest {
     FirebaseFirestore db;
     FirebaseAuth mAuth;
 
-    private String validLoginEmail = "espresso@test.ca";
-    private String validUsername = "espresso";
+    private String validLoginEmail = "cappuccino@test.ca";
+    private String validUsername = "cappuccino";
     private String validLoginPassword = "vibecheck";
 
 
@@ -45,13 +45,15 @@ public class ViewProfileActivityTest {
             new ActivityTestRule<>(MainActivity.class);
 
     @Before
-    public void initialize_db(){
+    public void initialize_db() throws InterruptedException {
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
+        mAuth.getInstance().signOut();
+        Thread.sleep(500);
+
     }
 
 
-    // Tests US 03.01.01
     @Test
     public void Test01_ViewPersonalProfile() throws InterruptedException {
         onView(withId(R.id.email_edit_text))

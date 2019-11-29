@@ -57,10 +57,11 @@ public class CreateAccountActivityTest {
             new ActivityTestRule<>(CreateAccountActivity.class);
 
     @Before
-    public void initialize_db(){
+    public void initialize_db() throws InterruptedException {
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
-
+        mAuth.signOut();
+        Thread.sleep(1000);
     }
 
     @Test
