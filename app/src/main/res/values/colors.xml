@@ -18,4 +18,6 @@
 
     <color name="ProfileGradientStart">#B993D6</color>
     <color name="ProfileGradientEnd">#8CA6DB</color>
+    <color name="MainGradientStart">#4568DC</color>
+    <color name="MainGradientEnd">#B06AB3</color>
 </resources>
