@@ -7,9 +7,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -26,6 +28,7 @@ import static org.hamcrest.Matchers.containsString;
  * a user's details are correct and is able to sign out and return to the login page
  *
  */
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(AndroidJUnit4.class)
 public class ViewProfileActivityTest {
 
@@ -47,8 +50,10 @@ public class ViewProfileActivityTest {
         mAuth = FirebaseAuth.getInstance();
     }
 
+
+    // Tests US 03.01.01
     @Test
-    public void ViewPersonalProfile() throws InterruptedException {
+    public void Test01_ViewPersonalProfile() throws InterruptedException {
         onView(withId(R.id.email_edit_text))
                 .perform(typeText(validLoginEmail), closeSoftKeyboard());
         onView(withId(R.id.password_edit_text))
@@ -67,7 +72,7 @@ public class ViewProfileActivityTest {
         Thread.sleep(1000);
 
         // Confirm profile information is correct
-        onView(withId(R.id.username_profile)).check(matches(withText(containsString(validUsername))));
+        onView(withId(R.id.view_date_text_view)).check(matches(withText(containsString(validUsername))));
         onView(withId(R.id.email_profile)).check(matches(withText(containsString(validLoginEmail))));
 
         // Try signing out
