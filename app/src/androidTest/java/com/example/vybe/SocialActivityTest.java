@@ -72,7 +72,7 @@ public class SocialActivityTest {
         Thread.sleep(5000);
 
         // Check we logged in and we are on myVibes page
-        onView(withId(R.id.filter_spinner))
+        onView(withId(R.id.vibe_filter_dropdown))
                 .check(matches(isDisplayed()));
 
     }
@@ -95,7 +95,7 @@ public class SocialActivityTest {
         Thread.sleep(5000);
 
         // Check we logged in and we are on myVibes page
-        onView(withId(R.id.filter_spinner))
+        onView(withId(R.id.vibe_filter_dropdown))
                 .check(matches(isDisplayed()));
 
     }
@@ -159,7 +159,7 @@ public class SocialActivityTest {
 
         // Accept users request
         onView(withId(R.id.my_request_list)).perform(RecyclerViewActions.actionOnItemAtPosition(0, new ClickOnInternalView(R.id.accept_btn)));
-
+        Thread.sleep(3000);
     }
 
     @Test
@@ -191,6 +191,8 @@ public class SocialActivityTest {
                 .update("followers", FieldValue.arrayRemove(decafUID));
         db.collection("Users").document(decafUID)
                 .update("following", FieldValue.arrayRemove(espressoUID));
+
+        Thread.sleep(3000);
     }
 
 

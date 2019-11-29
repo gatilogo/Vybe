@@ -175,7 +175,7 @@ public class CreateAccountActivityTest {
         Thread.sleep(10000);
 
         // Check we logged in and we are on myVibes page
-        onView(withId(R.id.filter_spinner))
+        onView(withId(R.id.vibe_filter_dropdown))
                 .check(matches(isDisplayed()));
 
         // Check Vibe list is empty

@@ -2,6 +2,7 @@ package com.example.vybe;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,7 +69,7 @@ public class MyVibesAdapter extends RecyclerView.Adapter<MyVibesAdapter.VibeEven
         holder.vibeImage.setImageResource(vibeEvent.getVibe().getEmoticon());
 
         String itemText = vibeEvent.getVibe().getName();
-        if (vibeEvent.getOwner() != mUsername) {
+        if (!vibeEvent.getOwner().equals(mUsername)) {
             itemText = "@" + vibeEvent.getOwner();
         }
         holder.vibeTitleField.setText(itemText);
@@ -92,7 +93,7 @@ public class MyVibesAdapter extends RecyclerView.Adapter<MyVibesAdapter.VibeEven
             StorageReference imageRef = storageRef.child(vibeEvent.getImage());
             imageRef.delete();
         }
-        db.collection(vibeEventDBPath).document(vibeEvent.getId()).delete();
+        db.collection(vibeEventDBPath).document(vibeEvent.getID()).delete();
         vibeEventList.remove(position);
         notifyItemRemoved(position);
     }

@@ -60,7 +60,7 @@ public class LoginActivityTest {
     // Log In Tests
     @Test
     public void Test01_InvalidLogin_EmptyParameters() throws InterruptedException {
-        onView(withId(R.id.confirm_button)).perform(click());
+        onView(withId(R.id.login_button)).perform(click());
 
         Thread.sleep(1000);
 
@@ -115,7 +115,7 @@ public class LoginActivityTest {
         Thread.sleep(2000);
 
         // Check we logged in and we are on myVibes page
-        onView(withId(R.id.filter_spinner))
+        onView(withId(R.id.vibe_filter_dropdown))
                 .check(matches(isDisplayed()));
 
         mAuth.getInstance().signOut();

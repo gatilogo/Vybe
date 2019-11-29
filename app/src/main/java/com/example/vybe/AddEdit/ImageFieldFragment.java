@@ -31,6 +31,7 @@ public class ImageFieldFragment extends Fragment {
     private Context context;
     private OnImageSelectedListener onImageSelectedListener;
     private Bitmap imageBitmap;
+    private Button removeImageBtn;
 
     interface OnImageSelectedListener {
         void onImageSelected(Bitmap selectedImageBitmap);
@@ -51,10 +52,17 @@ public class ImageFieldFragment extends Fragment {
 
         pickImageBtn = view.findViewById(R.id.pick_image_btn);
         imageView = view.findViewById(R.id.image_view);
+        removeImageBtn = view.findViewById(R.id.remove_image_btn);
 
         pickImageBtn.setOnClickListener(v -> {
             Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
             startActivityForResult(galleryIntent, GET_FROM_GALLERY);
+        });
+
+        // ---Remove Image Button---
+        removeImageBtn.setOnClickListener((View v) -> {
+            imageView.setImageBitmap(null);
+            onImageSelectedListener.onImageSelected(null);
         });
 
 
@@ -76,5 +84,9 @@ public class ImageFieldFragment extends Fragment {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void setImage(Bitmap image) {
+        imageView.setImageBitmap(image);
     }
 }

@@ -25,6 +25,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 /**
  * This activity still does nothing but will be fixed later
@@ -35,7 +36,7 @@ public class ViewProfileActivity extends AppCompatActivity {
     private TextView emailTextView;
     private Button logoutBtn;
     private Button sendRequestBtn;
-    private LinearLayout vibesLayout;
+
     private LinearLayout followersLayout;
     private LinearLayout followingLayout;
     private LinearLayout statisticsLayout;
@@ -46,7 +47,9 @@ public class ViewProfileActivity extends AppCompatActivity {
     private User user;
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseUser mUser = mAuth.getCurrentUser();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private RequestController requestController = RequestController.getInstance(ViewProfileActivity.this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +60,6 @@ public class ViewProfileActivity extends AppCompatActivity {
         emailTextView = findViewById(R.id.email_profile);
         logoutBtn = findViewById(R.id.logout_btn);
         sendRequestBtn = findViewById(R.id.send_request_btn);
-        vibesLayout = findViewById(R.id.profile_vibes_layout);
         followersLayout = findViewById(R.id.profile_followers_layout);
         followingLayout = findViewById(R.id.profile_following_layout);
         vibeCount = findViewById(R.id.vibe_count);
@@ -65,28 +67,29 @@ public class ViewProfileActivity extends AppCompatActivity {
         followingCount = findViewById(R.id.following_count);
         statisticsLayout = findViewById(R.id.statistics_layout);
 
-        Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
+        Bundle extras = getIntent().getExtras();
 
         if (extras.containsKey("user")) {
+            // TODO: move this logic to a profile controller
             user = (User) extras.getSerializable("user");
 
-            if (user.getEmail().equals(mAuth.getCurrentUser().getEmail())) {
+            if (user.getEmail().equals(mUser.getEmail())) {
                 sendRequestBtn.setVisibility(View.GONE);
                 statisticsLayout.setVisibility(View.VISIBLE);
             } else {
                 logoutBtn.setVisibility(View.GONE);
 
-                if (user.getFollowers() != null){
-                    if (user.getFollowers().contains(mAuth.getCurrentUser().getUid())) {
+
+                if (user.getFollowers() != null) {
+                    if (user.getFollowers().contains(mUser.getUid())) {
                         sendRequestBtn.setVisibility(View.GONE);
                         statisticsLayout.setVisibility(View.VISIBLE);
                     }
                 }
             }
 
-            int followerSize = 0;
-            int followingSize = 0;
+            Integer followerSize = 0;
+            Integer followingSize = 0;
 
             if (user.getFollowers() != null) {
                 followerSize = user.getFollowers().size();
@@ -98,17 +101,16 @@ public class ViewProfileActivity extends AppCompatActivity {
 
             db.collection("Users/" + user.getUserID() + "/VibeEvents")
                     .get()
-                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                        @Override
-                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                            vibeCount.setText(Integer.toString(queryDocumentSnapshots.size()));
-                        }
+                    .addOnSuccessListener((QuerySnapshot queryDocumentSnapshots) -> {
+                        String vibeCountText = String.format(Locale.CANADA,"%d", queryDocumentSnapshots.size());
+                        vibeCount.setText(vibeCountText);
                     });
 
             usernameTextView.setText(user.getUsername());
             emailTextView.setText(user.getEmail());
-            followerCount.setText(Integer.toString(followerSize));
-            followingCount.setText(Integer.toString(followingSize));
+
+            followerCount.setText(followerSize.toString());
+            followingCount.setText(followingSize.toString());
         }
 
         logoutBtn.setOnClickListener(view -> {
@@ -119,16 +121,8 @@ public class ViewProfileActivity extends AppCompatActivity {
             startActivity(restart);
         });
 
-        sendRequestBtn.setOnClickListener(view -> {
-            String otherUserID = user.getUserID();
-            FirebaseUser selfFB = mAuth.getCurrentUser();
-
-            db.collection("Users").document(otherUserID)
-                    .update("requests", FieldValue.arrayUnion(selfFB.getUid()));
-
-            // TODO: set the correct username/display name from/for mAuth.getCurrentUser()
-            Toast.makeText(this,"Request sent!", Toast.LENGTH_LONG).show();
-        });
+        sendRequestBtn.setOnClickListener((view)
+                -> requestController.sendFollowRequest(user));
 
         followersLayout.setOnClickListener(view -> {
             Intent followersIntent = new Intent(this, ConnectionsActivity.class);

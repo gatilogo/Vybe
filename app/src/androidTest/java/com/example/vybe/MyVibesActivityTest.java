@@ -106,7 +106,7 @@ public class MyVibesActivityTest {
         Thread.sleep(5000);
 
         // Check we logged in and we are on myVibes page
-        onView(withId(R.id.filter_spinner))
+        onView(withId(R.id.vibe_filter_dropdown))
                 .check(matches(isDisplayed()));
     }
 
@@ -154,6 +154,7 @@ public class MyVibesActivityTest {
         UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         UiObject obj = device.findObject(new UiSelector().textContains("OK").clickable(true));
         obj.click();
+        Thread.sleep(500);
 
         // TODO: Add checks for color and emoticon changes
         // Check we are in add/edit activity
@@ -169,7 +170,7 @@ public class MyVibesActivityTest {
         Thread.sleep(2000);
 
         // Check we get back to my vibes activity
-        onView(withId(R.id.filter_spinner))
+        onView(withId(R.id.vibe_filter_dropdown))
                 .check(matches(isDisplayed()));
 
         // Click on created vibe list item to check it exists
@@ -210,9 +211,9 @@ public class MyVibesActivityTest {
         onView(withId(R.id.carousel_picker)).perform(RightSwipe());
         Thread.sleep(1000);
 
-//        UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
-//        UiObject obj = device.findObject(new UiSelector().textContains("OK").clickable(true));
-//        obj.click();
+        UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        UiObject obj = device.findObject(new UiSelector().textContains("OK").clickable(true));
+        obj.click();
 
         Thread.sleep(1000);
 
@@ -223,7 +224,7 @@ public class MyVibesActivityTest {
         // Click on spinner and select with others
         onView(withId(R.id.soc_sit_field_fragment)).perform(click());
         Thread.sleep(500);
-        onData(allOf(is(instanceOf(String.class)), is(SocSit.WITH_SEVERAL_PEOPLE.toString()))).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is(SocSit.WITH_SEVERAL_PEOPLE.getDesc()))).perform(click());
         Thread.sleep(500);
 
         // Save our Vybe
@@ -232,7 +233,7 @@ public class MyVibesActivityTest {
         Thread.sleep(2000);
 
         // Check we get back to my vibes activity
-        onView(withId(R.id.filter_spinner))
+        onView(withId(R.id.vibe_filter_dropdown))
                 .check(matches(isDisplayed()));
 
         // Click on created vibe list item to check it exists
@@ -245,7 +246,7 @@ public class MyVibesActivityTest {
         Thread.sleep(1000);
 
         onView(withId(R.id.view_reason_text_view)).check(matches(withText(containsString("I'm Now Surprised"))));
-        onView(withId(R.id.view_soc_sit_text_view)).check(matches(withText(containsString(SocSit.WITH_SEVERAL_PEOPLE.toString()))));
+        onView(withId(R.id.view_soc_sit_text_view)).check(matches(withText(containsString(SocSit.WITH_SEVERAL_PEOPLE.getDesc()))));
 
     }
 
@@ -301,7 +302,7 @@ public class MyVibesActivityTest {
         // Click on spinner and select alone
         onView(withId(R.id.soc_sit_field_fragment)).perform(click());
         Thread.sleep(500);
-        onData(allOf(is(instanceOf(String.class)), is(SocSit.ALONE.toString()))).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is(SocSit.ALONE.getDesc()))).perform(click());
         Thread.sleep(500);
 //          TODO: Implement espresso-intents and test for adding an image using this:
         https://www.tutorialspoint.com/espresso_testing/espresso_testing_intents.htm
@@ -335,7 +336,7 @@ public class MyVibesActivityTest {
         Thread.sleep(2000);
 
         // Check we get back to my vibes activity
-        onView(withId(R.id.filter_spinner))
+        onView(withId(R.id.vibe_filter_dropdown))
                 .check(matches(isDisplayed()));
 
         // Click on created vibe list item to check it exists
@@ -350,7 +351,7 @@ public class MyVibesActivityTest {
         // Check details of vibe are correct
         onView(withId(R.id.view_date_text_view)).check(matches(withText(containsString(formatter.format(date2).split(" ")[0]))));
         onView(withId(R.id.view_reason_text_view)).check(matches(withText(containsString("I am Sad"))));
-        onView(withId(R.id.view_soc_sit_text_view)).check(matches(withText(containsString(SocSit.ALONE.toString()))));
+        onView(withId(R.id.view_soc_sit_text_view)).check(matches(withText(containsString(SocSit.ALONE.getDesc()))));
 
         // Check we can see the map view of the location
         onView(withId(R.id.view_vibe_map))
@@ -387,9 +388,9 @@ public class MyVibesActivityTest {
         LogIntoActivity();
 
         // Click on spinner and select angry (no vibes)
-        onView(withId(R.id.filter_spinner)).perform(click());
+        onView(withId(R.id.vibe_filter_dropdown)).perform(click());
         Thread.sleep(500);
-        onData(allOf(is(instanceOf(String.class)), is(Vibe.ANGRY.toString()))).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is(Vibe.ANGRY.getName()))).perform(click());
         Thread.sleep(500);
 
         // Check Vibe list is empty
@@ -397,15 +398,15 @@ public class MyVibesActivityTest {
                 .check((doesNotExist()));
 
         // Click on spinner and select disgusted (1 vibe)
-        onView(withId(R.id.filter_spinner)).perform(click());
+        onView(withId(R.id.vibe_filter_dropdown)).perform(click());
         Thread.sleep(500);
-        onData(allOf(is(instanceOf(String.class)), is(Vibe.SURPRISED.toString()))).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is(Vibe.SURPRISED.getName()))).perform(click());
         Thread.sleep(3000);
         onView(withId(R.id.my_vibe_list)).check(new RecyclerViewItemCountAssertion(1));
         // Click on spinner and select sad (1 vibe)
-        onView(withId(R.id.filter_spinner)).perform(click());
+        onView(withId(R.id.vibe_filter_dropdown)).perform(click());
         Thread.sleep(500);
-        onData(allOf(is(instanceOf(String.class)), is(Vibe.SAD.toString()))).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is(Vibe.SAD.getName()))).perform(click());
         Thread.sleep(3000);
         onView(withId(R.id.my_vibe_list)).check(new RecyclerViewItemCountAssertion(1));
 

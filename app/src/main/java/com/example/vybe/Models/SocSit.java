@@ -26,9 +26,8 @@ public enum SocSit {
      *
      * @return The desc of the Social Situation
      */
-    @Override
     @NonNull
-    public String toString() {
+    public String getDesc() {
         return desc;
     }
 
@@ -51,7 +50,7 @@ public enum SocSit {
         ArrayList<String> stringValues = new ArrayList<>();
 
         for (int i = 0; i < socSits.length; ++i) {
-            stringValues.add(socSits[i].toString());
+            stringValues.add(socSits[i].desc);
         }
 
         return stringValues;

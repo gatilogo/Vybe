@@ -37,8 +37,9 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <Spinner
-        android:id="@+id/filter_spinner"
+    <fragment
+        android:id="@+id/vibe_filter_fragment"
+        android:name="com.example.vybe.VibeFilterFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/my_vibes_toolbar"
@@ -49,7 +50,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/my_vibe_menu_layout"
-        android:layout_below="@id/filter_spinner" />
+        android:layout_below="@id/vibe_filter_fragment" />
 
     <LinearLayout
         android:id="@+id/my_vibe_menu_layout"

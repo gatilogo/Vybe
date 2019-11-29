@@ -130,27 +130,27 @@ public class VibeTest {
 
     @Test
     public void GetBlankVibe() {
-        Vibe blank = Vibe.BLANK;
-        assertEquals("Blank", blank.getName());
-        assertEquals(R.color.Black, blank.getColor());
-        assertEquals(R.drawable.ic_no_vibe, blank.getEmoticon());
+        Vibe none = Vibe.NONE;
+        assertEquals("None", none.getName());
+        assertEquals(R.color.Black, none.getColor());
+        assertEquals(R.drawable.ic_no_vibe, none.getEmoticon());
 
-        blank = Vibe.ofName("blank");
-        assertEquals("Blank", blank.getName());
-        assertEquals(R.color.Black, blank.getColor());
-        assertEquals(R.drawable.ic_no_vibe, blank.getEmoticon());
+        none = Vibe.ofName("none");
+        assertEquals("None", none.getName());
+        assertEquals(R.color.Black, none.getColor());
+        assertEquals(R.drawable.ic_no_vibe, none.getEmoticon());
 
-        blank = Vibe.ofEmoticon(R.drawable.ic_no_vibe);
-        assertEquals("Blank", blank.getName());
-        assertEquals(R.color.Black, blank.getColor());
-        assertEquals(R.drawable.ic_no_vibe, blank.getEmoticon());
+        none = Vibe.ofEmoticon(R.drawable.ic_no_vibe);
+        assertEquals("None", none.getName());
+        assertEquals(R.color.Black, none.getColor());
+        assertEquals(R.drawable.ic_no_vibe, none.getEmoticon());
 
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void InvalidVibeInputs_ThrowException() {
-        // Invalid names should result in the BLANK Vibe
-        assertEquals(Vibe.BLANK,  Vibe.ofName("AntiVibe"));
+        // Invalid names should result in the NONE Vibe
+        assertEquals(Vibe.NONE,  Vibe.ofName("AntiVibe"));
 
         // Invalid emoticons should throw an error
         Vibe.ofEmoticon(20);

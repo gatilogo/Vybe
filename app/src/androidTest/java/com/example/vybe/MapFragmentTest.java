@@ -1,4 +1,5 @@
 package com.example.vybe;
+
 import android.content.Intent;
 
 import androidx.test.espresso.ViewAction;
@@ -9,6 +10,7 @@ import androidx.test.espresso.action.Swipe;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
+import androidx.test.rule.GrantPermissionRule;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObjectNotFoundException;
@@ -60,13 +62,15 @@ public class MapFragmentTest {
     private String validUsername = "decaf";
     private String validLoginPassword = "vibecheck";
 
+    @Rule
+    public GrantPermissionRule permissionRule = GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION);
 
     @Rule
     public ActivityTestRule<MainActivity> activityRule =
             new ActivityTestRule<>(MainActivity.class);
 
     @Before
-    public void initialize_db(){
+    public void initialize_db() {
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
 
@@ -83,7 +87,7 @@ public class MapFragmentTest {
         Thread.sleep(5000);
 
         // Check we logged in and we are on myVibes page
-        onView(withId(R.id.filter_spinner))
+        onView(withId(R.id.vibe_filter_dropdown))
                 .check(matches(isDisplayed()));
     }
 
@@ -127,7 +131,7 @@ public class MapFragmentTest {
         Thread.sleep(2000);
 
         // Check we get back to my vibes activity
-        onView(withId(R.id.filter_spinner))
+        onView(withId(R.id.vibe_filter_dropdown))
                 .check(matches(isDisplayed()));
 
     }
@@ -153,13 +157,14 @@ public class MapFragmentTest {
         marker.click();
         Thread.sleep(1000);
     }
+
     private static ViewAction RightSwipe() {
         return new GeneralSwipeAction(Swipe.SLOW, GeneralLocation.CENTER_RIGHT,
                 GeneralLocation.CENTER_LEFT, Press.FINGER);
     }
 
     @After
-    public void Exit(){
+    public void Exit() {
         mAuth.getInstance().signOut();
     }
 }

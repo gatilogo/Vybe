@@ -63,7 +63,7 @@ public class ViewProfileActivityTest {
         Thread.sleep(5000);
 
         // Check we logged in and we are on myVibes page
-        onView(withId(R.id.filter_spinner))
+        onView(withId(R.id.vibe_filter_dropdown))
                 .check(matches(isDisplayed()));
 
         // Click on profile icon
@@ -72,7 +72,7 @@ public class ViewProfileActivityTest {
         Thread.sleep(1000);
 
         // Confirm profile information is correct
-        onView(withId(R.id.view_date_text_view)).check(matches(withText(containsString(validUsername))));
+        onView(withId(R.id.username_profile)).check(matches(withText(containsString(validUsername))));
         onView(withId(R.id.email_profile)).check(matches(withText(containsString(validLoginEmail))));
 
         // Try signing out

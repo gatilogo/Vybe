@@ -99,7 +99,7 @@ public class ViewVibeActivity extends AppCompatActivity implements MapFragment.O
             socSitLabel.setVisibility(TextView.GONE);
             socSitField.setVisibility(TextView.GONE);
         } else {
-            socSitField.setText(socSit.toString());
+            socSitField.setText(socSit.getDesc());
         }
 
     }

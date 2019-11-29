@@ -18,7 +18,7 @@ public class VibeEvent implements Serializable {
     private Date datetime;
     private String reason;
     private SocSit socSit;
-    private String id;
+    private String ID;
     private String image;
     private Double latitude;
     private Double longitude;
@@ -43,7 +43,7 @@ public class VibeEvent implements Serializable {
      *      This is the reason a vibe event occurred
      * @param socSit
      *      This is the social situation in which a vibe event occurred
-     * @param id
+     * @param ID
      *      This is the unique identifier for a particular instance of a vibe event
      * @param image
      *      This is a photograph expressing the reason a vibe event occurred
@@ -53,12 +53,12 @@ public class VibeEvent implements Serializable {
      *      This is the longitude coordinate of where a vibe event occurred
      */
 
-    public VibeEvent(Vibe vibe, Date datetime, String reason, SocSit socSit, String id, String image, Double latitude, Double longitude) {
+    public VibeEvent(Vibe vibe, Date datetime, String reason, SocSit socSit, String ID, String image, Double latitude, Double longitude) {
         this.vibe = vibe;
         this.datetime = datetime;
         this.reason = reason;
         this.socSit = socSit;
-        this.id = id;
+        this.ID = ID;
         this.image = image;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -130,21 +130,21 @@ public class VibeEvent implements Serializable {
      * This sets the social situation of the VibeEvent
      * @param socSit The social situation in which the event occurred
      */
-    public void setSocSit(SocSit socSit) {
-        this.socSit = socSit;
+    public void setSocSit(String socSit) {
+        this.socSit = SocSit.of(socSit);
     }
 
     /**
      * This gets the unique ID for the VibeEvent
      * @return The unique ID for a vibe event
      */
-    public String getId() { return id; }
+    public String getID() { return ID; }
 
     /**
      * This sets the unique ID for the VibeEvent
-     * @param id The ID number of an event
+     * @param ID The ID number of an event
      */
-    public void setId(String id) { this.id = id; }
+    public void setID(String ID) { this.ID = ID; }
 
     /**
      * This gets the path to the image for the VibeEvent
