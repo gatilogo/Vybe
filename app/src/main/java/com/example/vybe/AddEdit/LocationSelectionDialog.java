@@ -146,12 +146,12 @@ public class LocationSelectionDialog extends DialogFragment {
         //get location for bias area
         Location currentLoc = LocationController.getUserLocation(getContext());
         if (currentLoc != null) {
-            Log.d(TAG, "onClick: user has location, add search bias");
+            Log.d(TAG, "onClick: user has location, adding search bias");
             double currentLat = currentLoc.getLatitude();
             double currentLng = currentLoc.getLongitude();
             double biasOffset = 0.1;
 
-            // Start the autocomplete intent.
+            // Start the autocomplete intent with bias
             Intent intent = new Autocomplete.IntentBuilder(
                     AutocompleteActivityMode.OVERLAY, fields)
                     .setLocationBias(RectangularBounds.newInstance(
@@ -160,6 +160,7 @@ public class LocationSelectionDialog extends DialogFragment {
                     .build(getContext());
             return intent;
         } else {
+            // Intent without bias
             Log.d(TAG, "onClick: location not found, no bias added");
             Intent intent = new Autocomplete.IntentBuilder(
                     AutocompleteActivityMode.OVERLAY, fields)
