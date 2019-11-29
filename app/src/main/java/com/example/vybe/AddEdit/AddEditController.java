@@ -33,19 +33,21 @@ public class AddEditController {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-    private String vibeEventDBPath = "Users/" + mAuth.getCurrentUser().getUid() + "/VibeEvents";
+    private String vibeEventDBPath;
     private VibeEvent vibeEvent;
 
     private AddEditController() {
     }
 
     private void setActivity(AddEditVibeEventActivity activity) {
+        vibeEventDBPath = "Users/" + mAuth.getCurrentUser().getUid() + "/VibeEvents";
         this.activity = activity;
     }
 
     public static AddEditController getInstance(AddEditVibeEventActivity activity) {
         if (instance == null)
             instance = new AddEditController();
+
 
         instance.setActivity(activity);
         return instance;

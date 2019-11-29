@@ -26,7 +26,7 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
-    <string name="sign_up">No account yet? Create one</string>
+    <string name="create_one">No account yet? Create one</string>
     <string name="social">Social</string>
     <string name="map">Map</string>
     <string name="add">Add</string>
@@ -35,6 +35,8 @@
     <string name="my_vibes">My Vibes</string>
     <string name="find_location">Find A Location</string>
     <string name="current_location">Use Current Location</string>
+    <string name="confirm">Confirm</string>
+    <string name="sign_up">Sign Up</string>
 
     <string name="google_map_api_key">AIzaSyAQ0WGTWMUV_WBRCfc7B-_HifGn9sXIUV4</string>
 
