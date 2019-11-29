@@ -28,6 +28,13 @@ import static com.example.vybe.util.Constants.PERMISSIONS_REQUEST_ENABLE_GPS;
 
 public class LocationController {
 
+    /**
+     * retrieves the user's location and returns it
+     * @param context
+     * context from which the controller was called
+     * @return Location
+     * location of the user
+     */
     public static Location getUserLocation(Context context) {
         LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)

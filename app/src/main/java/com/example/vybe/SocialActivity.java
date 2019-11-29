@@ -34,11 +34,8 @@ public class SocialActivity extends AppCompatActivity implements VibeEventListCo
 
     private static final String TAG = "SocialActivity";
 
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private ArrayList<VibeEvent> vibeEventList = VibeEventListController.setOnSocialVibeEventsUpdatedListener(this);
     private MyVibesAdapter socialVibesAdapter;
-
 
     private Button myVibesBtn;
     private Button searchBtn;

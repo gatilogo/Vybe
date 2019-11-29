@@ -158,7 +158,6 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
         toolbar.setBackgroundResource(vibe.getColor());
         addBtn.setBackgroundResource(vibe.getColor());
     }
-
     public void setReason(String reason) {
         reasonField.setText(reason);
     }
@@ -167,6 +166,7 @@ public class AddEditVibeEventActivity extends AppCompatActivity implements SocSi
         this.socSit = socSit;
         socSitFragment.setDefaultSocSit(socSit);
     }
+
 
     public void setImage(Bitmap image) {
         this.image = image;

@@ -44,8 +44,8 @@ import static com.example.vybe.util.Constants.MAPVIEW_BUNDLE_KEY;
 import static com.example.vybe.util.Constants.MAP_ZOOM_LEVEL;
 
 /**
- * This fragment displays the map view for your personal vibes. Will
- * be changed in the future to specify so.
+ * This fragment displays the map
+ * the activity that calls it can add/remove markers
  */
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
@@ -91,6 +91,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         return view;
     }
 
+    /**
+     * initialized the google map to a default state
+     * @param savedInstanceState
+     * parameters passed into the map
+     */
     private void initGoogleMap(Bundle savedInstanceState) {
         // *** IMPORTANT ***
         // MapView requires that the Bundle you pass contain _ONLY_ MapView SDK
@@ -168,6 +173,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mMapView.onLowMemory();
     }
 
+    /**
+     * sets the camera around a location
+     * @param latLng
+     * the coordinates the map should be centered at
+     */
     public void setToLocation(LatLng latLng) {
         Log.d(TAG, "setToLocation: Here");
         clearMap();
@@ -175,6 +185,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         setCamera(latLng);
     }
 
+    /**
+     * sets the camera to the user's current location
+     */
     public void setToCurrentLocation() {
         Location location = LocationController.getUserLocation(getContext());
         if (location == null) {
@@ -183,9 +196,23 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         setCamera(new LatLng(location.getLatitude(), location.getLongitude()));
     }
 
+    /**
+     * Adds a marker to the map
+     * @param latLng
+     * coordinates where the marker should be placed
+     * @param drawableRes
+     * icon for the marker
+     * @param owner
+     * user who created the vibe
+     */
     public void addMarker(LatLng latLng, @DrawableRes int drawableRes, String owner) {
-//        BitmapDescriptor marker = vectorToBitmap(drawableRes);
-        BitmapDescriptor marker = vectorToBitmap(getContext(), drawableRes);
+        BitmapDescriptor marker;
+
+        if (drawableRes != R.drawable.ic_map_marker) {
+            marker = emoticonVectorToBitmap(getContext(), drawableRes);
+        } else {
+            marker = defaultVectorToBitmap(getContext());
+        }
         MarkerOptions markerOptions = new MarkerOptions().position(latLng).icon(marker);
 
         if (owner != currUsername) {
@@ -210,22 +237,38 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
      * @param markerID the drawable vector asset to convert
      * @return BitmapDescriptor generated from provided vector asset
      */
-    private BitmapDescriptor vectorToBitmap(Context context, @DrawableRes  int markerID) {
-        Drawable background = ContextCompat.getDrawable(context, R.drawable.ic_map_marker);
-        // TODO: change marker background color
+    private BitmapDescriptor emoticonVectorToBitmap(Context context, @DrawableRes  int markerID) {
+
+        Drawable background = ContextCompat.getDrawable(context, R.drawable.ic_map_marker_vibe);
         background.setBounds(0, 0, background.getIntrinsicWidth(), background.getIntrinsicHeight());
-        Drawable emoticon = ContextCompat.getDrawable(context, markerID);
-        int bgwidth = background.getIntrinsicWidth() * 4 / 5;
-        int bgheight = background.getIntrinsicHeight() * 4 / 5;
-        emoticon.setBounds(20, 0, bgwidth + 20, bgheight);
         Bitmap bitmap = Bitmap.createBitmap(background.getIntrinsicWidth(),
                 background.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         background.draw(canvas);
 
-        if (markerID != R.drawable.ic_map_marker) {
-            emoticon.draw(canvas);
-        }
+        Drawable emoticon = ContextCompat.getDrawable(context, markerID);
+        int bg_width = background.getIntrinsicWidth() * 4 / 5;
+        int bg_height = background.getIntrinsicHeight() * 4 / 5;
+        emoticon.setBounds(20, 0, bg_width + 20, bg_height);
+        emoticon.draw(canvas);
+
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
+    }
+
+    /**
+     * Demonstrates converting a {@link Drawable} to a {@link BitmapDescriptor},
+     * for use as a marker icon.
+     * @param context the context for which the bitmap descriptor is to be drawn on
+     * @return BitmapDescriptor generated from provided vector asset
+     */
+    private BitmapDescriptor defaultVectorToBitmap(Context context) {
+
+        Drawable background = ContextCompat.getDrawable(context, R.drawable.ic_map_marker);
+        background.setBounds(0, 0, background.getIntrinsicWidth(), background.getIntrinsicHeight());
+        Bitmap bitmap = Bitmap.createBitmap(background.getIntrinsicWidth(),
+                background.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        background.draw(canvas);
 
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
