@@ -195,6 +195,8 @@ public class MapFragmentTest {
         onView(withId(R.id.view_vibe_map))
                 .check(matches(isDisplayed()));
 
+        pressBack();
+
     }
 
     @Test
@@ -237,11 +239,23 @@ public class MapFragmentTest {
 
         Thread.sleep(1000);
 
+        pressBack();
+
     }
 
     @After
     public void Exit() {
-        mAuth.getInstance().signOut();
+
+        onView(withId(R.id.profile_btn)).perform(click());
+
+//        Thread.sleep(1000);
+
+        // Confirm profile information is correct
+        onView(withId(R.id.email_profile)).check(matches(withText(containsString(latteEmail))));
+
+        // Try signing out
+        onView(withId(R.id.logout_btn)).perform(click());
+
     }
 }
 
