@@ -1,5 +1,6 @@
 package com.example.vybe;
 
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.vybe.Models.User;
@@ -25,7 +26,8 @@ public class RequestController {
     private ArrayList<String> myRequestList = new ArrayList<>();
     private ArrayList<User> myUserRequestList = new ArrayList<>();
 
-    private RequestController() { }
+    private RequestController() {
+    }
 
     private void setActivity(MyRequestsActivity requestsActivity) {
         this.myRequestsActivity = requestsActivity;
@@ -40,6 +42,7 @@ public class RequestController {
             instance = new RequestController();
 
         instance.setActivity(requestsActivity);
+        instance.myUID = instance.mAuth.getCurrentUser().getUid();
         return instance;
     }
 
@@ -48,6 +51,7 @@ public class RequestController {
             instance = new RequestController();
 
         instance.setActivity(viewProfileActivity);
+        instance.myUID = instance.mAuth.getCurrentUser().getUid();
         return instance;
     }
 
@@ -62,23 +66,6 @@ public class RequestController {
         });
 
         return myRequestList;
-    }
-
-    protected void displayMyRequests() {
-
-        ArrayList<String> myRequests = getMyRequestList();
-        // userRequestList.clear();
-        if (myRequests != null) {
-            for (String uid : myRequests) {
-                db.collection("Users").document(uid).get()
-                        .addOnSuccessListener((DocumentSnapshot documentSnapshot) -> {
-                            User user = documentSnapshot.toObject(User.class);
-                            user.setUserID(uid);
-//                            userRequestList.add(user);
-//                            profileAdapter.notifyDataSetChanged();
-                        });
-            }
-        }
     }
 
     public ArrayList<User> getMyUserRequestList() {

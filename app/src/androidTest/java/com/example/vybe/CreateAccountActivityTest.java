@@ -10,9 +10,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
@@ -33,6 +35,7 @@ import static org.hamcrest.Matchers.not;
  * This tests for user Registration and on the sign up activity
  *
  */
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(AndroidJUnit4.class)
 public class CreateAccountActivityTest {
     FirebaseFirestore db;
@@ -44,8 +47,8 @@ public class CreateAccountActivityTest {
     private String existingEmail = "espresso@test.ca";
     private String existingUsername = "espresso";
 
-    private String validNewEmail = "espresso_CAATest@test.ca";
-    private String validNewUsername = "espresso_CAATest";
+    private String validNewEmail = "vibe_kill@test.ca";
+    private String validNewUsername = "vibekill_test";
     private String validPassword = "StrongPassword";
 
 
@@ -61,7 +64,7 @@ public class CreateAccountActivityTest {
     }
 
     @Test
-    public void InvalidSignUp_EmptyParameters() throws InterruptedException {
+    public void Test01_InvalidSignUp_EmptyParameters() throws InterruptedException {
         onView(withId(R.id.confirm_button)).perform(click());
 
         Thread.sleep(1000);
@@ -72,7 +75,7 @@ public class CreateAccountActivityTest {
     }
 
     @Test
-    public void InvalidSignUp_Password() throws InterruptedException {
+    public void Test02_InvalidSignUp_Password() throws InterruptedException {
         onView(withId(R.id.username_create))
                 .perform(typeText(validNewUsername), closeSoftKeyboard());
 
@@ -93,7 +96,7 @@ public class CreateAccountActivityTest {
     }
 
     @Test
-    public void InvalidSignUp_BadEmail() throws InterruptedException {
+    public void Test03_InvalidSignUp_BadEmail() throws InterruptedException {
         onView(withId(R.id.username_create))
                 .perform(typeText(validNewUsername), closeSoftKeyboard());
 
@@ -114,7 +117,7 @@ public class CreateAccountActivityTest {
     }
 
     @Test
-    public void InvalidSignUp_TakenEmail() throws InterruptedException {
+    public void Test04_InvalidSignUp_TakenEmail() throws InterruptedException {
         onView(withId(R.id.username_create))
                 .perform(typeText(validNewUsername), closeSoftKeyboard());
 
@@ -135,7 +138,7 @@ public class CreateAccountActivityTest {
     }
 
     @Test
-    public void InvalidSignUp_TakenUsername() throws InterruptedException {
+    public void Test05_InvalidSignUp_TakenUsername() throws InterruptedException {
         onView(withId(R.id.username_create))
                 .perform(typeText(existingUsername), closeSoftKeyboard());
 
@@ -156,7 +159,7 @@ public class CreateAccountActivityTest {
     }
 
     @Test
-    public void ValidRegistration() throws InterruptedException {
+    public void Test06_ValidRegistration() throws InterruptedException {
         onView(withId(R.id.username_create))
                 .perform(typeText(validNewUsername), closeSoftKeyboard());
 
@@ -172,7 +175,7 @@ public class CreateAccountActivityTest {
         Thread.sleep(10000);
 
         // Check we logged in and we are on myVibes page
-        onView(withId(R.id.filter_spinner))
+        onView(withId(R.id.vibe_filter_dropdown))
                 .check(matches(isDisplayed()));
 
         // Check Vibe list is empty

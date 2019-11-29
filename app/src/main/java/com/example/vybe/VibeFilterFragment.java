@@ -46,7 +46,7 @@ public class VibeFilterFragment extends Fragment {
 
         vibeFilterDropdown = view.findViewById(R.id.vibe_filter_dropdown);
 
-        ArrayAdapter<Vibe> vibesAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, Vibe.values());
+        ArrayAdapter<String> vibesAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, Vibe.getNames());
         vibeFilterDropdown.setAdapter(vibesAdapter);
         vibeFilterDropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

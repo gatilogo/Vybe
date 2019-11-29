@@ -78,6 +78,16 @@ public enum Vibe {
         return emoticons;
     }
 
+    public static ArrayList<String> getNames() {
+        ArrayList<String> names = new ArrayList<>();
+
+        for (Vibe vibe : Vibe.values()) {
+            names.add(vibe.getName());
+        }
+
+        return names;
+    }
+
     @NonNull
     public String getName() {
         return name;

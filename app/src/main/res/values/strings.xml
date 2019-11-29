@@ -7,6 +7,7 @@
     <string name="social_name">Social</string>
     <string name="explore_vibes_name">Explore Vibes</string>
     <string name="follower_requests">Follower Requests</string>
+    <string name="connections">Connections</string>
 
     <string name="date_time">Date/Time</string>
     <string name="reason">Reason</string>
@@ -16,6 +17,10 @@
     <string name="save">Save</string>
     <string name="search">Search</string>
     <string name="send_request">Send Request</string>
+    <string name="log_out">Log Out</string>
+    <string name="following">Following</string>
+    <string name="followers">Followers</string>
+    <string name="vibes">Vibes</string>
 
     <string name="google_map_api_key">AIzaSyAQ0WGTWMUV_WBRCfc7B-_HifGn9sXIUV4</string>
 

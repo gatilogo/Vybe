@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -81,16 +82,16 @@ public class MyVibesActivity extends AppCompatActivity implements VibeFilterFrag
 
         buildRecyclerView();
 
-        profileBtn.setOnClickListener(view -> {
-            Intent intent = new Intent(MyVibesActivity.this, ViewProfileActivity.class);
-            // Get the current user's profile information
-            db.collection("Users").document(mAuth.getCurrentUser().getUid()).get()
-                    .addOnSuccessListener((DocumentSnapshot doc) -> {
-                        String username = (String) doc.get("username");
-                        String email = (String) doc.get("email");
-                        intent.putExtra("user", new User(username, email));
-                        startActivity(intent);
-                    });
+        profileBtn.setOnClickListener((View v) -> {
+                Intent intent = new Intent(MyVibesActivity.this, ViewProfileActivity.class);
+                // Get the current user's profile information
+                db.collection("Users").document(mAuth.getCurrentUser().getUid()).get()
+                        .addOnSuccessListener((DocumentSnapshot doc) -> {
+                            User user = doc.toObject(User.class);
+                            user.setUserID(doc.getId());
+                            intent.putExtra("user", user);
+                            startActivity(intent);
+                        });
         });
 
         addVibeEventBtn.setOnClickListener(view -> {

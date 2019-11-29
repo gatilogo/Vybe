@@ -67,7 +67,7 @@ public class VibeEventTest {
         assertEquals("just really happy", testVibeEvent.getReason());
         assertEquals(testDate.getClass(), testVibeEvent.getDateTime().getClass());
         assertEquals(formatter.format(testDate), testVibeEvent.getDateTimeString());
-        assertEquals("Alone", testVibeEvent.getSocSit().toString());
+        assertEquals("ALONE", testVibeEvent.getSocSit().toString());
         assertEquals("", testVibeEvent.getID());
         assertEquals("image", testVibeEvent.getImage());
         assertEquals(2.0, testVibeEvent.getLongitude(), 0);
@@ -149,7 +149,7 @@ public class VibeEventTest {
     public void GetSocialSituation() {
         VibeEvent testVibeEvent = mockVibeEvent();
 
-        assertEquals("Alone", testVibeEvent.getSocSit().toString());
+        assertEquals("ALONE", testVibeEvent.getSocSit().toString());
 
     }
 
@@ -157,9 +157,9 @@ public class VibeEventTest {
     public void SetSocialSituation() {
         VibeEvent testVibeEvent = mockEmptyVibeEvent();
 
-        testVibeEvent.setSocSit(SocSit.WITH_A_CROWD);
+        testVibeEvent.setSocSit(SocSit.WITH_A_CROWD.toString());
 
-        assertEquals("With a crowd", testVibeEvent.getSocSit().toString());
+        assertEquals("WITH_A_CROWD", testVibeEvent.getSocSit().toString());
 
     }
 
@@ -211,7 +211,7 @@ public class VibeEventTest {
     public void testNonEmptyConstructor() {
         assertEquals(mockVibe().getName(), mockVibeEvent().getVibe().getName());
         assertEquals("just really happy", mockVibeEvent().getReason());
-        assertEquals("Alone", mockVibeEvent().getSocSit().toString());
+        assertEquals("ALONE", mockVibeEvent().getSocSit().toString());
         assertEquals("", mockVibeEvent().getID());
         assertEquals("image", mockVibeEvent().getImage());
     }

@@ -58,10 +58,12 @@ public class SearchProfilesActivity extends AppCompatActivity {
                 String username = (String) doc.getData().get("username");
                 String email = (String) doc.getData().get("email");
                 ArrayList<String> followers = (ArrayList) doc.getData().get("followers");
+                ArrayList<String> following = (ArrayList) doc.getData().get("following");
                 String uid = doc.getId();
                 User searchedUser = new User(username, email);
                 searchedUser.setUserID(uid);
                 searchedUser.setFollowers(followers);
+                searchedUser.setFollowing(following);
                 usersList.add(searchedUser);   // Populate users list
             }
         });

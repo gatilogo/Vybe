@@ -130,20 +130,20 @@ public class VibeTest {
 
     @Test
     public void GetBlankVibe() {
-        Vibe blank = Vibe.NONE;
-        assertEquals("NONE", blank.getName());
-        assertEquals(R.color.Black, blank.getColor());
-        assertEquals(R.drawable.ic_no_vibe, blank.getEmoticon());
+        Vibe none = Vibe.NONE;
+        assertEquals("None", none.getName());
+        assertEquals(R.color.Black, none.getColor());
+        assertEquals(R.drawable.ic_no_vibe, none.getEmoticon());
 
-        blank = Vibe.ofName("none");
-        assertEquals("Blank", blank.getName());
-        assertEquals(R.color.Black, blank.getColor());
-        assertEquals(R.drawable.ic_no_vibe, blank.getEmoticon());
+        none = Vibe.ofName("none");
+        assertEquals("None", none.getName());
+        assertEquals(R.color.Black, none.getColor());
+        assertEquals(R.drawable.ic_no_vibe, none.getEmoticon());
 
-        blank = Vibe.ofEmoticon(R.drawable.ic_no_vibe);
-        assertEquals("Blank", blank.getName());
-        assertEquals(R.color.Black, blank.getColor());
-        assertEquals(R.drawable.ic_no_vibe, blank.getEmoticon());
+        none = Vibe.ofEmoticon(R.drawable.ic_no_vibe);
+        assertEquals("None", none.getName());
+        assertEquals(R.color.Black, none.getColor());
+        assertEquals(R.drawable.ic_no_vibe, none.getEmoticon());
 
     }
 

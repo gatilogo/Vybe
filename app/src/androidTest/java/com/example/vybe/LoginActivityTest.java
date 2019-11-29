@@ -11,9 +11,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -32,6 +34,7 @@ import static org.hamcrest.Matchers.not;
  * This also tests for getting to the registration screen
  *
  */
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(AndroidJUnit4.class)
 public class LoginActivityTest {
     FirebaseFirestore db;
@@ -56,8 +59,8 @@ public class LoginActivityTest {
 
     // Log In Tests
     @Test
-    public void InvalidLogin_EmptyParameters() throws InterruptedException {
-        onView(withId(R.id.confirm_button)).perform(click());
+    public void Test01_InvalidLogin_EmptyParameters() throws InterruptedException {
+        onView(withId(R.id.login_button)).perform(click());
 
         Thread.sleep(1000);
 
@@ -68,7 +71,7 @@ public class LoginActivityTest {
     }
 
     @Test
-    public void InvalidLogin_NonExistantUser() throws InterruptedException {
+    public void Test02_InvalidLogin_NonExistantUser() throws InterruptedException {
         onView(withId(R.id.email_edit_text))
                 .perform(typeText(invalidLoginEmailNoExist), closeSoftKeyboard());
         onView(withId(R.id.password_edit_text))
@@ -87,7 +90,7 @@ public class LoginActivityTest {
     }
 
     @Test
-    public void InvalidLogin_TooShortPassword() throws InterruptedException {
+    public void Test03_InvalidLogin_TooShortPassword() throws InterruptedException {
         onView(withId(R.id.email_edit_text))
                 .perform(typeText(invalidLoginEmailNoExist), closeSoftKeyboard());
         onView(withId(R.id.password_edit_text))
@@ -102,7 +105,7 @@ public class LoginActivityTest {
     }
 
     @Test
-    public void Login_AuthorizationPasses() throws InterruptedException {
+    public void Test04_Login_AuthorizationPasses() throws InterruptedException {
         onView(withId(R.id.email_edit_text))
                 .perform(typeText(validLoginEmail), closeSoftKeyboard());
         onView(withId(R.id.password_edit_text))
@@ -112,7 +115,7 @@ public class LoginActivityTest {
         Thread.sleep(2000);
 
         // Check we logged in and we are on myVibes page
-        onView(withId(R.id.filter_spinner))
+        onView(withId(R.id.vibe_filter_dropdown))
                 .check(matches(isDisplayed()));
 
         mAuth.getInstance().signOut();
@@ -120,7 +123,7 @@ public class LoginActivityTest {
 
 
     @Test
-    public void Signup_GetToActivity() throws InterruptedException {
+    public void Test05_Signup_GetToActivity() throws InterruptedException {
         // Click on Signup button
         onView(withId(R.id.signup_button)).perform(click());
 
