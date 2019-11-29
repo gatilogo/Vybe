@@ -62,11 +62,11 @@ public class MyVibesActivity extends AppCompatActivity implements VibeFilterFrag
     private MyVibesAdapter myVibesAdapter;
 
     // ------------ XML ------------
-    private FloatingActionButton addVibeEventBtn;
-    private Button myMapBtn;
-    private Button socialBtn;
-    private Button requestBtn;
     private ImageButton profileBtn;
+    private FloatingActionButton addVibeEventBtn;
+    private ImageButton socialBtn;
+    private ImageButton myMapBtn;
+    private ImageButton requestBtn;
     private RecyclerView vibesRecyclerView;
 
     @Override
@@ -74,12 +74,12 @@ public class MyVibesActivity extends AppCompatActivity implements VibeFilterFrag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_vibes);
 
-        vibesRecyclerView = findViewById(R.id.my_vibe_list);
-        addVibeEventBtn = findViewById(R.id.add_vibe_event_btn);
-        myMapBtn = findViewById(R.id.my_map_btn);
-        socialBtn = findViewById(R.id.social_btn);
         profileBtn = findViewById(R.id.profile_btn);
+        addVibeEventBtn = findViewById(R.id.add_vibe_event_btn);
+        socialBtn = findViewById(R.id.social_btn);
+        myMapBtn = findViewById(R.id.my_map_btn);
         requestBtn = findViewById(R.id.request_btn);
+        vibesRecyclerView = findViewById(R.id.my_vibe_list);
 
         buildRecyclerView();
 

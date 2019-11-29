@@ -75,32 +75,31 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <Button
+        <ImageButton
             android:id="@+id/social_btn"
             style="?android:buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/social"
-            android:textColor="@android:color/white" />
+            android:src="@drawable/button_group" />
 
-        <Button
+        <ImageButton
             android:id="@+id/my_map_btn"
             style="?android:buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/map"
-            android:textColor="@android:color/white" />
+            android:src="@drawable/button_map"
+            android:tint="@color/White" />
 
-        <Button
+        <ImageButton
             android:id="@+id/request_btn"
             style="?android:buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/reqs"
-            android:textColor="@android:color/white" />
+            android:src="@drawable/button_follow_req"
+            android:tint="@color/White" />
     </LinearLayout>
 
 </RelativeLayout>
