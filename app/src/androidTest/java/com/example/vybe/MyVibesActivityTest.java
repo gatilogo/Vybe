@@ -156,7 +156,6 @@ public class MyVibesActivityTest {
         obj.click();
         Thread.sleep(500);
 
-        // TODO: Add checks for color and emoticon changes
         // Check we are in add/edit activity
         onView(withId(R.id.add_edit_vibes_toolbar))
                 .check(matches(isDisplayed()));
@@ -304,28 +303,6 @@ public class MyVibesActivityTest {
         Thread.sleep(500);
         onData(allOf(is(instanceOf(String.class)), is(SocSit.ALONE.getDesc()))).perform(click());
         Thread.sleep(500);
-//          TODO: Implement espresso-intents and test for adding an image using this:
-        https://www.tutorialspoint.com/espresso_testing/espresso_testing_intents.htm
-//        // Click on image Fragment
-//        onView(withId(R.id.image_field_fragment)).perform(click());
-//
-//        Thread.sleep(2000);
-//
-//        // Check We are no longer in activity
-//        onView(withId(R.id.add_edit_vibes_toolbar))
-//                .check((doesNotExist()));
-//        // Go back
-//        pressBack();
-//        Thread.sleep(1000);
-
-
-        // Add Current Location
-        onView(withId(R.id.btn_add_location)).perform(click());
-        Thread.sleep(2000);
-        onView(withText("Add a Location")).check(matches(isDisplayed()));
-
-        onView(withId(R.id.btn_current_location)).perform(click());
-        Thread.sleep(2000);
 
         // Get date vibe was created
         date2 = new Date();
@@ -352,10 +329,6 @@ public class MyVibesActivityTest {
         onView(withId(R.id.view_date_text_view)).check(matches(withText(containsString(formatter.format(date2).split(" ")[0]))));
         onView(withId(R.id.view_reason_text_view)).check(matches(withText(containsString("I am Sad"))));
         onView(withId(R.id.view_soc_sit_text_view)).check(matches(withText(containsString(SocSit.ALONE.getDesc()))));
-
-        // Check we can see the map view of the location
-        onView(withId(R.id.view_vibe_map))
-                .check(matches(isDisplayed()));
 
     }
 

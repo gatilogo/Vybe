@@ -44,7 +44,7 @@ public class LoginActivityTest {
     private String invalidLengthPassword = "1234";
 
 
-    private String validLoginEmail = "espresso@test.ca";
+    private String validLoginEmail = "cappuccino@test.ca";
     private String validLoginPassword = "vibecheck";
 
     @Rule
@@ -79,10 +79,6 @@ public class LoginActivityTest {
         onView(withId(R.id.login_button)).perform(click());
 
         Thread.sleep(1000);
-
-        /* TODO: try to confirm toast displays message using
-          https://stackoverflow.com/questions/28390574/checking-toast-message-in-android-espresso
-          If time allows */
 
         // Check we are still in login page
         onView(withId(R.id.login_button))
@@ -129,7 +125,7 @@ public class LoginActivityTest {
 
         Thread.sleep(2000);
 
-        // Check we logged in and we are on myVibes page
+        // Check we are on the sign up page
         onView(withId(R.id.username_create))
                 .check(matches(isDisplayed()));
     }
