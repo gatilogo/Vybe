@@ -1,0 +1,44 @@
+<resources>
+    <string name="app_name">Vybe</string>
+
+    <string name="add_vibe_name">Add Vibe</string>
+    <string name="view_vibe_name">View Vibe</string>
+    <string name="edit_vibe_name">Edit Vibe</string>
+    <string name="social_name">Social</string>
+    <string name="explore_vibes_name">Explore Vibes</string>
+    <string name="follower_requests">Follower Requests</string>
+    <string name="connections">Connections</string>
+
+    <string name="date_time">Date/Time</string>
+    <string name="reason">Reason</string>
+    <string name="reason_hint">Reason (20 char max)</string>
+    <string name="location">Location</string>
+    <string name="social_situation">Social Situation</string>
+    <string name="save">Save</string>
+    <string name="search">Search</string>
+    <string name="send_request">Send Request</string>
+    <string name="log_out">Log Out</string>
+    <string name="following">Following</string>
+    <string name="followers">Followers</string>
+    <string name="vibes">Vibes</string>
+    <string name="pick_image">Pick Image</string>
+    <string name="pick_location">Pick Location</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="create_one">No account yet? Create one</string>
+    <string name="social">Social</string>
+    <string name="map">Map</string>
+    <string name="add">Add</string>
+    <string name="reqs">Reqs</string>
+    <string name="username">Username</string>
+    <string name="my_vibes">My Vibes</string>
+    <string name="find_location">Find A Location</string>
+    <string name="current_location">Use Current Location</string>
+    <string name="confirm">Confirm</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="image">Image</string>
+
+    <string name="google_map_api_key">AIzaSyAQ0WGTWMUV_WBRCfc7B-_HifGn9sXIUV4</string>
+
+</resources>
